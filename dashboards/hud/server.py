@@ -45,5 +45,17 @@ def unkill():
     os.path.exists(p) and os.remove(p)
     return jsonify({"killed": False})
 
+def _weekly_reminder_thread():
+    """Fire the weekly retrain reminder (audit R9: alerts were disconnected)."""
+    import threading, time as _t
+    from alerts import notify
+    def loop():
+        while True:
+            _t.sleep(7 * 24 * 3600)
+            notify.weekly_retrain_reminder()
+    threading.Thread(target=loop, daemon=True).start()
+
+
 if __name__ == "__main__":
+    _weekly_reminder_thread()
     app.run(host="0.0.0.0", port=8750)

@@ -15,7 +15,7 @@
 | 2 Telemetry | DONE | span tracer + run cards; dummy traced run emitted spans for all doctrine stages |
 | 3 Data & Features | DONE | 4-Set engine: 323 columns, MT5-shift-exact, masks, states, events; no-look-ahead mutation test green |
 | 4 Simulator + Gauntlet | DONE | paranoid fills, Shell v2, oracle + baseline + audit run end-to-end |
-| 5 Training | DONE (machine) | goal-conditioned recurrent PPO, full reward doctrine, meta-proposer, trophy case, CANARY PASS, smoke run complete |
+| 5 Training | DONE (machine) | goal-conditioned recurrent PPO, full reward doctrine, meta-proposer, trophy case, smoke run complete. NOTE: see docs/AUDIT_FIXES_2026-07-19.md — the overnight canary was a coin-flip that later failed; it was rebuilt as a real plumbing gate (now PASS). |
 | 6 MT5 Bridge | SKELETON | dry-run mode works; live order path deliberately locked until Phase 8 with you |
 | 7 JARVIS HUD | WORKING v1 | server + dark HUD page + working two-tap KILL switch (tested) |
 
@@ -40,7 +40,7 @@ The 121MB gold CSV failed the upload pipe 4×. Everything below ran on clearly-l
 - Gauntlet oracle (future-seeing probe, full Shell): **~2.5%/day mean, zero breaches** — the ratchet and heat-guard visibly cap and protect exactly as designed.
 - Baseline (your 4 strategies, dumb exits): ~breakeven after paranoid costs.
 - Boot-camp smoke (3 PPO updates): full loop trains, evaluates vs the +5% bar, Shell rejected 100s of illegal intents along the way. PERFECT=false, as expected for a smoke on fake data.
-- Canary (planted pattern): **PASS** — reward improved across updates.
+- Canary: the overnight version was statistically unsound (single first-vs-last compare) and later FAILED on a fair run. It has been rebuilt (training/canary.py v3) as a proper plumbing gate on the real Brain+PPO and now PASSES decisively (+0.94). See docs/AUDIT_FIXES_2026-07-19.md.
 
 **None of these numbers mean anything about real gold yet. First thing after you wake: zip the CSV (right-click → Send to → Compressed folder), and the Gauntlet + boot camp re-run on truth with one command each.**
 

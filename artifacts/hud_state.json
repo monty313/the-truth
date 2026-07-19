@@ -1,0 +1,1 @@
+{"ts": 1784479083.2907329, "mode": "dry_run", "killed": false, "goal": 2.5, "floor": 4.0, "eq_pct": -3.8024, "ratchet": 0.0, "day_trades": 41, "positions": 0, "close": 2481.3348068715004, "mask_buy_blocked": false, "mask_sell_blocked": false, "last_action": {"op": 2, "size": 0.455}, "dead": false}

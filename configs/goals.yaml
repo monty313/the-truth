@@ -10,6 +10,8 @@ flat_at_reset: true
 ratchet:
   enabled: true
   mode: peak            # after goal: floor rises to goal, then trails every new peak
+  trail_keep_frac: 0.25 # giveback allowed = this fraction of the floor (audit S6 — Monty may retune)
+  activation_buffer_heat_aware: true   # activate only when flatten cost still leaves >= goal
 goal_conditioning:      # ANY-X promise (ADR-0001/0007)
   randomize_in_training: true
   goal_range: [0.5, 4.0]

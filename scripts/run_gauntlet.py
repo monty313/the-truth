@@ -1,56 +1,105 @@
-"""Phase-4 driver: audit -> oracle -> baseline -> evidence report.
-5W+I: WHO Claude/Monty gate. WHAT runs the Gauntlet on real data if present,
-else synthetic (ADR-0010, clearly labeled). WHEN 2026-07-19. WHY hard gate
-before training. INTERCONNECTED: gauntlet.py, tracker, artifacts/gauntlet/.
+"""Phase-4 driver: audit -> oracle -> baseline -> evidence + VERDICT.
+5W+I: WHO Claude/Monty gate. WHAT runs the Gauntlet (real data if present,
+synthetic else — labeled), writes evidence_report.json + VERDICT.json; boot
+camp refuses to run without a verdict (audit R14: the HARD GATE gated
+nothing). WHEN 2026-07-19 v2. WHERE any cwd (ROOT-anchored, audit R3).
+WHY evidence before training money. INTERCONNECTED: gauntlet.py, tracker,
+artifacts/gauntlet/, scripts/train_bootcamp.py (reads VERDICT).
 """
-import sys, os, json, glob
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import pandas as pd
-from data_io.loader import read_mt5_m1, synthetic_m1, trading_days
-from features.engine import build_features
-from backtesting.gauntlet.gauntlet import data_audit, oracle_day, baseline_day, run_over_days
-from experiments.tracker import Run
-from telemetry.logging_setup import setup
+import glob
+import json
+import os
+import sys
 
-log = setup("gauntlet")
-GOAL, FLOOR = 2.5, 4.0     # configs/goals.yaml boot-camp values
-OUT = "artifacts/gauntlet"; os.makedirs(OUT, exist_ok=True)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
 
-real = sorted(glob.glob("../data/XAUUSD_M1_*.csv") + glob.glob("data/XAUUSD_M1_*.csv"))
-if real:
-    src, m1 = "REAL_XAUUSD", read_mt5_m1(real[0])
-    m1 = m1.last("30D")   # audit window; week picking uses full file separately
-else:
-    src, m1 = "SYNTHETIC (gold-like — ADR-0010, replace when zip lands)", synthetic_m1(days=10, seed=7)
-log.info("source: %s rows=%d", src, len(m1))
+import pandas as pd                                              # noqa: E402
+from core.configs import goals_cfg, load as cfg, path as rpath   # noqa: E402
+from data_io.loader import read_mt5_m1, synthetic_m1, trading_days  # noqa: E402
+from features.engine import build_features                       # noqa: E402
+from backtesting.gauntlet.gauntlet import (                      # noqa: E402
+    data_audit, oracle_day, baseline_day, run_over_days)
+from experiments.tracker import Run                              # noqa: E402
+from telemetry.logging_setup import setup                        # noqa: E402
 
-run = Run("gauntlet", symbols=["XAUUSD" if real else "SYNTH"], timeframes=["all-matrix"],
-          data_window=f"{m1.index[0]}..{m1.index[-1]}", seed=7,
-          assumptions={"fills": "paranoid(ADR-0009)", "spread": "recorded column",
-                       "source": src})
-audit = data_audit(m1)
-json.dump(audit, open(f"{OUT}/audit.json", "w"), indent=2)
-log.info("audit: %s", audit)
 
-F = build_features(m1)
-days = trading_days(F)[1:]           # drop warmup day
-oracle = run_over_days(days, oracle_day, GOAL, FLOOR, "oracle")
-base   = run_over_days(days, baseline_day, GOAL, FLOOR, "baseline")
-oracle.to_csv(f"{OUT}/oracle_days.csv", index=False)
-base.to_csv(f"{OUT}/baseline_days.csv", index=False)
+def main():
+    log = setup("gauntlet")
+    g = goals_cfg()
+    GOAL, FLOOR = float(g["goal_pct"]), float(g["floor_pct"])
+    BAR = 2.0 * GOAL
+    OUT = rpath("artifacts", "gauntlet")
+    os.makedirs(OUT, exist_ok=True)
 
-def summary(df):
-    return {"days": len(df), "mean_pnl_pct": round(df.pnl_pct.mean(), 3),
-            "min": round(df.pnl_pct.min(), 3), "max": round(df.pnl_pct.max(), 3),
-            "goal_hit_rate": round(df.goal_hit.mean(), 3),
-            "double_goal_days": int((df.pnl_pct >= 2*GOAL).sum()),
-            "breaches": int(df.breached.sum())}
-report = {"source": src, "goal": GOAL, "floor": FLOOR, "bar": f"+{2*GOAL}% EVERY day, zero -{FLOOR}% touches",
-          "oracle": summary(oracle), "baseline": summary(base), "audit": audit}
-json.dump(report, open(f"{OUT}/evidence_report.json", "w"), indent=2)
-run.log(**{f"oracle_{k}": v for k, v in report["oracle"].items() if isinstance(v,(int,float))})
-run.log(**{f"base_{k}": v for k, v in report["baseline"].items() if isinstance(v,(int,float))})
-run.artifact(f"{OUT}/evidence_report.json")
-run.finish(f"gauntlet on {src}: oracle mean {report['oracle']['mean_pnl_pct']}%/day, "
-           f"baseline mean {report['baseline']['mean_pnl_pct']}%/day")
-print(json.dumps(report, indent=2))
+    pats = [os.path.join(rpath("..", "data"), "XAUUSD_M1_*.csv"),
+            rpath("data", "XAUUSD_M1_*.csv")]
+    real = sorted(sum((glob.glob(p) for p in pats), []))
+    if real:
+        src = "REAL_XAUUSD"
+        m1 = read_mt5_m1(real[0])
+        m1 = m1.loc[m1.index >= m1.index.max() - pd.Timedelta("30D")]  # audit R1
+    else:
+        src = "SYNTHETIC (gold-like — ADR-0010, replace when zip lands)"
+        m1 = synthetic_m1(days=10, seed=7)
+    log.info("source: %s rows=%d", src, len(m1))
+
+    run = Run("gauntlet", symbols=["XAUUSD" if real else "SYNTH"],
+              timeframes=["all-matrix"],
+              data_window=f"{m1.index[0]}..{m1.index[-1]}", seed=7,
+              assumptions={"fills": "paranoid(ADR-0009)",
+                           "spread": "recorded column", "source": src})
+    audit = data_audit(m1)
+    json.dump(audit, open(os.path.join(OUT, "audit.json"), "w"), indent=2)
+    log.info("audit: %s", audit)
+
+    F = build_features(m1)
+    days = trading_days(F)[1:]
+    oracle = run_over_days(days, oracle_day, GOAL, FLOOR, "oracle")
+    base = run_over_days(days, baseline_day, GOAL, FLOOR, "baseline")
+    oracle.to_csv(os.path.join(OUT, "oracle_days.csv"), index=False)
+    base.to_csv(os.path.join(OUT, "baseline_days.csv"), index=False)
+
+    def summary(df):
+        return {"days": len(df), "mean_pnl_pct": round(df.pnl_pct.mean(), 3),
+                "min": round(df.pnl_pct.min(), 3),
+                "max": round(df.pnl_pct.max(), 3),
+                "goal_hit_rate": round(df.goal_hit.mean(), 3),
+                "double_goal_days": int((df.pnl_pct >= BAR).sum()),
+                "breaches": int(df.breached.sum())}
+
+    rep = {"source": src, "goal": GOAL, "floor": FLOOR,
+           "bar": f"+{BAR}% EVERY day, zero -{FLOOR}% touches",
+           "oracle": summary(oracle), "baseline": summary(base),
+           "audit": audit}
+    json.dump(rep, open(os.path.join(OUT, "evidence_report.json"), "w"),
+              indent=2)
+
+    # ---- VERDICT (audit R14): the gate the bootcamp actually reads ----
+    o = rep["oracle"]
+    oracle_clears_bar = (o["double_goal_days"] == o["days"]
+                         and o["breaches"] == 0 and o["days"] > 0)
+    verdict = {
+        "source": src, "bar": rep["bar"],
+        "oracle_clears_bar_every_day": oracle_clears_bar,
+        "oracle_mean_pnl_pct": o["mean_pnl_pct"],
+        "ruling_required_from_monty": not oracle_clears_bar,
+        "note": ("Oracle (a LOWER-BOUND probe) cleared the bar every day."
+                 if oracle_clears_bar else
+                 "Oracle could NOT clear the bar every day — Monty must rule "
+                 "on the bar before boot camp is trusted (the bar bends only "
+                 "by his hand). Boot camp will run but stamps this warning "
+                 "on every report."),
+    }
+    json.dump(verdict, open(os.path.join(OUT, "VERDICT.json"), "w"), indent=2)
+    run.log(**{f"oracle_{k}": v for k, v in o.items()})
+    run.log(**{f"base_{k}": v for k, v in rep["baseline"].items()})
+    run.artifact(os.path.join(OUT, "evidence_report.json"))
+    run.finish(f"gauntlet on {src}: oracle {o['mean_pnl_pct']}%/day, "
+               f"clears bar={oracle_clears_bar}")
+    print(json.dumps(rep, indent=2))
+    print(json.dumps(verdict, indent=2))
+
+
+if __name__ == "__main__":
+    main()

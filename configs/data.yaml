@@ -3,3 +3,7 @@ m1_csv_dir: ../data              # Fable5_Foundation/data on Monty's machine
 symbols: {bootcamp: XAUUSD, expansion: [EURUSD, GBPUSD, US30]}
 audit: {max_gap_minutes_flag: 120, spread_spike_flag_mult: 8}
 synthetic_fallback: true         # ADR-0010: used overnight until the zip lands
+point_size: 0.01                 # gold; per-symbol table at expansion
+contract_size: 100.0             # gold oz per 1.0 lot (0.01 lot = 1 unit)
+broker_tz: Europe/Athens         # FTMO-style EET/EEST assumption — VERIFY on real data (audit S2)
+convert_to_day_tz: true          # convert stamps to goals.day_boundary_tz before day-split

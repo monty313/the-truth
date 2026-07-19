@@ -1,28 +1,36 @@
-"""Reward engine — Monty's doctrine (ADR-0005), every weight in configs.
+"""Reward engine v2 — Monty's doctrine (ADR-0005), post-audit rebuild.
 
 5W+I -----------------------------------------------------------------
 WHO:   Claude for Monty; weights from configs/rewards.yaml, changes only
        via meta-optimizer PROPOSALS approved by Monty.
-WHAT:  Two layers: (1) per-step: closed-trade payments (pay ONLY on
-       close), idleness hunger, anti-gravity training wheels (decaying);
-       (2) day-end: goal/consistency/streak/death terms.
-WHEN:  2026-07-19 overnight build.
-WHERE: training/env.py calls on_step/on_day_end each episode.
-WHY:   The reward IS the bot's personality: capitalist, steady, hates
-       losing days, streak-hungry, pays for discipline not paper riches.
-INTERCONNECTED WITH: backtesting/simulator (closed_trades records),
-       configs/rewards.yaml, training/trophy_case.py, ADR-0005.
+WHAT:  Closed-trades-only payments (Monty verbatim: "the trade has to be
+       closed in order to get any rewards"). v2 fixes from the 2026-07-19
+       audit round 2: pyramid + no-drawdown bonuses pay ONLY on FULL
+       stack closes (T2 farm: 231 half-closes once paid 169.6 reward);
+       pullback bonus moved from entry-queue time to CLOSE time via
+       stack tags (T3: was paid for phantom never-filled orders);
+       idleness hunger only when FLAT (T4: was taxing bank-and-ride);
+       day-DD extra + consistency target scale from configs and the
+       EPISODE's own floor (T9/S8, any-X correctness); update_idx and
+       streak/record persist via state_dict (T8: wheels now actually
+       dissolve across capped runs).
+WHEN:  2026-07-19 (v2, same day as audit).
+WHERE: training/env.py calls on_step/on_day_end; ppo.save/load carries
+       state_dict.
+WHY:   The reward IS the personality; every audit hole here was a
+       personality disorder waiting to be learned.
+INTERCONNECTED WITH: backtesting/simulator (closed-trade records incl.
+       full/tags), configs/rewards.yaml, training/trophy_case.py,
+       training/ppo.py (state persistence), ADR-0005.
 ----------------------------------------------------------------------
 """
 from __future__ import annotations
-import yaml, os
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from core.configs import load as _load_cfg
 
 
 def load_weights() -> dict:
-    with open(os.path.join(ROOT, "configs", "rewards.yaml")) as f:
-        return {k: v for k, v in yaml.safe_load(f).items()}
+    return dict(_load_cfg("rewards"))
 
 
 class RewardEngine:
@@ -30,39 +38,51 @@ class RewardEngine:
 
     def __init__(self, weights: dict | None = None):
         self.w = weights or load_weights()
-        self.streak_days = 0          # consecutive goal-met-no-breach days
-        self.record_win_pct = 0.0     # trophy-case ladder (per run)
-        self.update_idx = 0           # PPO update counter (anti-gravity decay)
+        assert self.w.get("pay_only_on_close", True), \
+            "ADR-0005: pay_only_on_close is a ruled invariant"
+        self.streak_days = 0
+        self.record_win_pct = 0.0
+        self.update_idx = 0
+
+    # ---------- persistence (audit T8) ----------
+    def state_dict(self) -> dict:
+        return {"streak_days": self.streak_days,
+                "record_win_pct": self.record_win_pct,
+                "update_idx": self.update_idx}
+
+    def load_state(self, d: dict) -> None:
+        self.streak_days = int(d.get("streak_days", 0))
+        self.record_win_pct = float(d.get("record_win_pct", 0.0))
+        self.update_idx = int(d.get("update_idx", 0))
 
     # ---------- per step ----------
-    def on_step(self, closed_now: list[dict], acted: bool,
-                anti_gravity: bool) -> float:
-        """closed_now: trades closed at THIS bar (from DayResult.closed_trades).
-        Pay ONLY on close (ADR-0005). Idleness hunger when no position and
-        no action. Anti-gravity wheels decay to zero."""
+    def on_step(self, closed_now: list[dict], acted: bool, anti_gravity: bool,
+                flat: bool) -> float:
+        """closed_now: trades closed at THIS bar. Closed-only payments.
+        FULL closes carry the stack bonuses; partials pay pure P/L only."""
         w = self.w
         r = 0.0
         for tr in closed_now:
             r += w["w_net_profit"] * tr["pnl_pct"]
-            if tr["pnl"] > 0 and tr["max_adverse"] <= 0:
-                r += w["w_no_drawdown_close"]
-            if tr["adds"] > 0 and tr["stack_green"]:
-                r += w["w_pyramid_stack_green"] * min(tr["adds"], 5)
-        if not acted and not closed_now:
+            if tr.get("full"):
+                if tr["pnl"] > 0 and tr["max_adverse"] <= w.get(
+                        "no_drawdown_tolerance", 0.0):
+                    r += w["w_no_drawdown_close"]
+                if tr["adds"] > 0 and tr["stack_green"]:
+                    r += w["w_pyramid_stack_green"] * min(tr["adds"], 5)
+                if tr.get("tags", {}).get("pullback") and not tr.get("probe"):
+                    r += w["w_pullback_with_htf"]          # paid at close (T3)
+        if flat and not acted and not closed_now:          # T4: only when flat
             r += w["w_idleness_hunger"]
         if anti_gravity:
-            decay = max(0.0, 1.0 - self.update_idx / max(1, w["antigravity_decay_updates"]))
+            decay = max(0.0, 1.0 - self.update_idx /
+                        max(1, w["antigravity_decay_updates"]))
             r += w["w_antigravity_penalty"] * decay
         return r
 
-    def on_entry_quality(self, pullback_with_htf: bool) -> float:
-        """Small immediate shaping for the Gravity-framework entry Monty
-        rewards explicitly (pullback on LTF while HTF trend is strong)."""
-        return self.w["w_pullback_with_htf"] if pullback_with_htf else 0.0
-
     # ---------- per day ----------
-    def on_day_end(self, day) -> tuple[float, dict]:
-        """day: DayResult. Returns (reward, info). Updates streak + records."""
+    def on_day_end(self, day, floor: float) -> tuple[float, dict]:
+        """day: DayResult; floor: the EPISODE's floor (any-X correct, T9)."""
         w = self.w
         r, info = 0.0, {}
         pnls = [t["pnl_pct"] for t in day.closed_trades if not t["probe"]]
@@ -71,10 +91,9 @@ class RewardEngine:
             info["death"] = True
         if day.goal_hit:
             r += w["w_day_goal_hit"]
-            # profit-with-less-intraday-drawdown extra: goal days paid more
-            # when the equity path never went deep (ADR-0005)
             min_eq = min(day.equity_curve) if day.equity_curve else 0.0
-            r += w["w_day_goal_hit"] * max(0.0, 1.0 + min_eq / 4.0) * 0.5
+            r += (w["w_day_goal_hit"] * max(0.0, 1.0 + min_eq / max(floor, 1e-6))
+                  * w.get("day_dd_extra_scale", 0.5))
             self.streak_days += 1
             r += w["w_streak_per_day"] * self.streak_days   # climbs FOREVER
         else:
@@ -82,8 +101,8 @@ class RewardEngine:
         if len(pnls) > 1:
             import statistics
             spread = statistics.pstdev(pnls)
-            r += w["w_trade_consistency"] * max(0.0, 0.3 - spread)
-        # trophy: record win pays ONLY on a won day (critic round, ADR record)
+            r += w["w_trade_consistency"] * max(
+                0.0, w.get("trade_consistency_target", 0.3) - spread)
         best = max((t["pnl_pct"] for t in day.closed_trades), default=0.0)
         if day.goal_hit and best > self.record_win_pct:
             self.record_win_pct = best

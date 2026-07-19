@@ -1,5 +1,6 @@
 # WHAT: live/demo execution behavior (Phases 6-9).
 mode: dry_run                    # dry_run -> demo -> live (Monty advances)
+dry_run_bars_per_sec: 0          # 0 = as fast as possible; >0 throttles the paper loop
 broker: {name: TBD_by_Monty, login: null, server: null}   # broker-agnostic
 order_type: brain_decides        # market vs limit per trade
 slippage: brain_decides

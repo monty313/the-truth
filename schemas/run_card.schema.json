@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Momentum One run card (experiments/tracker.py)",
+  "type": "object",
+  "required": ["run_id","kind","code_version","config_version","seed","assumptions"],
+  "properties": {
+    "run_id": {"type":"string"}, "kind": {"type":"string"},
+    "code_version": {"type":"string"}, "config_version": {"type":"string"},
+    "reward_version": {"type":"string"}, "mask_version": {"type":"string"},
+    "registry_version": {"type":"string"}, "model_version": {"type":["string","null"]},
+    "checkpoint_lineage": {"type":"array"}, "data_window": {"type":"string"},
+    "symbols": {"type":"array"}, "timeframes": {"type":"array"},
+    "seed": {"type":"integer"}, "assumptions": {"type":"object"},
+    "metrics": {"type":"object"}, "artifacts": {"type":"array"},
+    "summary": {"type":["string","null"]}
+  }
+}

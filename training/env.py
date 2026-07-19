@@ -22,11 +22,12 @@ from __future__ import annotations
 import numpy as np
 
 from backtesting.simulator import DaySim
+from core.configs import load as _cfg
 from features.engine import obs_columns
 from training.rewards import RewardEngine
 
 N_OPS = 11
-FRAME = 10                     # configs/features.yaml frame_stack
+FRAME = int(_cfg("features").get("frame_stack", 10))   # audit R11: from config
 SELF_DIM = 12
 
 
@@ -84,10 +85,13 @@ class TradingEnv:
 
     def _obs(self):
         t = self.sim.t
+        cur = self._self_state()
+        self._self_hist[t] = cur
         rows = []
         for k in range(FRAME - 1, -1, -1):
             i = max(0, t - k)
-            rows.append(np.concatenate([self.M[i], self._self_state()]))
+            past_self = self._self_hist.get(i, cur)   # history, not clones (T10)
+            rows.append(np.concatenate([self.M[i], past_self]))
         return np.concatenate(rows)
 
     # ---------- gym-style ----------
@@ -103,6 +107,7 @@ class TradingEnv:
         self.sim = DaySim(F_day, self.goal, self.floor, self.shell_cfg)
         self.M = self._obs_matrix(F_day)
         self._closed_seen = 0
+        self._self_hist: dict[int, np.ndarray] = {}
         return self._obs()
 
     def step(self, op: int, size: float):
@@ -110,46 +115,49 @@ class TradingEnv:
         sim = self.sim
         risk = float(np.clip(size, 0.05, 1.0)) * sim.cap
         row = sim.row
-        acted, anti_grav, entry_bonus = False, False, 0.0
+        acted, anti_grav = False, False
+        was_flat = not sim.stacks
 
-        def biggest(side):
-            c = [st for st in sim.stacks if st.side == side and not st.is_probe]
+        def biggest(side, include_probes):
+            c = [st for st in sim.stacks if st.side == side
+                 and (include_probes or not st.is_probe)]
             return max(c, key=lambda st: st.units) if c else None
 
         if op in (1, 2, 9, 10):
             side = +1 if op in (1, 9) else -1
-            ok, _ = sim.try_open(side, risk, probe=op >= 9)
+            tag = "buy" if side > 0 else "sell"
+            pull = any(row.get(f"set{k}::pull_{tag}", 0) > 0 for k in (1, 2, 3, 4))
+            ok, _ = sim.try_open(side, risk, probe=op >= 9,
+                                 tags={"pullback": bool(pull)})   # paid at CLOSE (T3)
             acted = ok
             if ok:
-                tag = "buy" if side > 0 else "sell"
-                pull = any(row.get(f"set{k}::pull_{tag}", 0) > 0 for k in (1, 2, 3, 4))
-                entry_bonus = self.re.on_entry_quality(bool(pull))
-                # anti-gravity: acting against the highest set showing gravity
                 s4 = row.get("set4::cont_buy", 0) - row.get("set4::cont_sell", 0)
                 anti_grav = (s4 > 0 and side < 0) or (s4 < 0 and side > 0)
         elif op in (3, 4):
             side = +1 if op == 3 else -1
-            tgt = biggest(side)
+            tgt = biggest(side, include_probes=False)   # adds: real stacks only
             if tgt is not None:
                 ok, _ = sim.try_open(side, risk, add_to=tgt)
                 acted = ok
         elif op in (5, 6, 7, 8):
             side = +1 if op in (5, 6) else -1
-            tgt = biggest(side)
+            tgt = biggest(side, include_probes=True)    # closes reach probes (T5)
             if tgt is not None:
                 acted = sim.try_close(tgt, 0.5 if op in (5, 7) else 1.0)
 
         alive = sim.step()
         closed_now = sim.res.closed_trades[self._closed_seen:]
         self._closed_seen = len(sim.res.closed_trades)
-        r = self.re.on_step(closed_now, acted, anti_grav) + entry_bonus
+        r = self.re.on_step(closed_now, acted, anti_grav,
+                            flat=was_flat and not sim.stacks)      # T4
 
         done = not alive
         info = {}
         if done:
             day = sim.finish()
-            day_r, info = self.re.on_day_end(day)
+            day_r, info = self.re.on_day_end(day, floor=self.floor)  # T9
             r += day_r
+            info["day_result"] = day
             info.update({"pnl_pct": day.pnl_pct, "goal_hit": day.goal_hit,
                          "breached": day.breached, "trades": day.trades,
                          "rejected": day.rejected})

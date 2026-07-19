@@ -80,7 +80,3 @@ def envelope(o: pd.DataFrame, n: int = 4, shift: int = 4):
     return sma_shifted(o["high"], n, shift), sma_shifted(o["low"], n, shift)
 
 
-def norm_dist(a: pd.Series, b: pd.Series, scale: pd.Series) -> pd.Series:
-    """Tension feature: (a-b)/scale, the 'rubber band stretch' in comparable
-    units. scale is typically ATR or band width; guarded against zero."""
-    return (a - b) / scale.replace(0.0, np.nan)

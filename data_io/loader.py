@@ -20,6 +20,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+from core.configs import load as _cfg
+
 TF_RULE = {"1min": "1min", "5min": "5min", "15min": "15min", "30min": "30min",
            "1h": "1h", "4h": "4h", "1d": "1D", "1w": "W-MON"}
 TF_DELTA = {"1min": pd.Timedelta("1min"), "5min": pd.Timedelta("5min"),
@@ -43,7 +45,23 @@ def read_mt5_m1(path: str, max_rows: int | None = None) -> pd.DataFrame:
         "vol": pd.to_numeric(df.get("TICKVOL", 1.0), errors="coerce"),
         "spread": pd.to_numeric(df.get("SPREAD", 0), errors="coerce"),
     }, index=ts).dropna(subset=["open", "high", "low", "close"])
-    return out[~out.index.isna()].sort_index()
+    out = out[~out.index.isna()].sort_index()
+    # Day-boundary law (ADR-0001: 00:00 CEST; audit S2): broker stamps are
+    # EET-family on FTMO-style servers -> convert to the day clock so the
+    # episode split, midnight flat and goal window land on Monty's clock.
+    # broker_tz is an ASSUMPTION until verified on the real export (flagged).
+    d = _cfg("data")
+    if d.get("convert_to_day_tz", False):
+        try:
+            tz_b = d.get("broker_tz", "Europe/Athens")
+            tz_d = _cfg("goals").get("day_boundary_tz", "Europe/Berlin")
+            out.index = (out.index.tz_localize(tz_b, nonexistent="shift_forward",
+                                               ambiguous="NaT")
+                         .tz_convert(tz_d).tz_localize(None))
+            out = out[~out.index.isna()].sort_index()
+        except Exception:
+            pass  # conversion is best-effort; audit report flags verification
+    return out
 
 
 def synthetic_m1(days: int = 10, seed: int = 7, start="2026-06-01") -> pd.DataFrame:

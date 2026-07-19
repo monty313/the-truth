@@ -5,7 +5,7 @@ weekly_retrain_reminder, (offline_heartbeat pending Monty OK). WHEN 2026-07-19.
 WHY hands-off operator must hear the two sounds that matter. INTERCONNECTED:
 bridge, HUD server (scheduler thread), telemetry events.
 """
-import json, os, time, urllib.request
+import json, os, time, urllib.parse, urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGP = os.path.join(ROOT, "logs", "alerts.jsonl")
 

@@ -201,9 +201,6 @@ def build_features(m1: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([F, pd.DataFrame(new, index=F.index)], axis=1)
 
 
-OBS_SIGNAL_COLS = None  # resolved lazily by obs_columns()
-
-
 def obs_columns(F: pd.DataFrame) -> list[str]:
     """Observation columns fed to the brain (signals + states + masks + senses)."""
     sig = [c for c in F.columns

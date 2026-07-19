@@ -4,3 +4,4 @@ artifacts/runs/
 logs/*.jsonl
 data_io/cache/
 .pytest_cache/
+logs/app.log

@@ -1,6 +1,9 @@
 # WHO: ADR-0005 (Monty's reward doctrine). WHAT: every reward weight. WHEN: 2026-07-18.
 # NOTE: weights are STARTING values; meta-optimizer PROPOSES changes; Monty approves.
-pay_only_on_close: true
+pay_only_on_close: true          # invariant asserted by training/rewards.py
+day_dd_extra_scale: 0.5          # goal-day less-intraday-DD extra (audit S8/T9)
+trade_consistency_target: 0.3    # pstdev of trade pnl%s under this earns the bonus
+no_drawdown_tolerance: 0.0       # adverse (net of entry spread) <= this earns the bonus
 w_net_profit: 1.0
 w_trade_consistency: 0.35        # low variance across closed trades, same day
 w_day_goal_hit: 2.0              # day closes >= goal without breach
@@ -13,4 +16,3 @@ w_record_win: 0.25               # trophy bonus, ONLY if day won (goal met, no b
 w_antigravity_penalty: -0.50     # training wheels vs highest-set gravity...
 antigravity_decay_updates: 300   # ...dissolving to 0 over this many PPO updates
 w_death_penalty: -10.0           # floor breach: episode over + this
-w_spread_cost_scale: 1.0         # costs felt at full weight (capitalist honesty)

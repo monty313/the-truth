@@ -32,11 +32,13 @@ import pandas as pd
 
 from telemetry import tracer
 
-POINT_SIZE = 0.01          # gold; per-symbol via configs/data.yaml at expansion
-CONTRACT_SIZE = 100.0      # gold: 100 oz per 1.0 lot -> 0.01 lot = 1 unit
-ATR_STOP_MULT = 6.0        # wide stop (configs/masks_shell.yaml broker_stop)
-KILL_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                         "artifacts", "KILL")
+from core.configs import shell_cfg as _shell_cfg_load, goals_cfg as _goals_load, path as _rpath
+_SC = _shell_cfg_load()
+POINT_SIZE = _SC["point_size"]           # from configs/data.yaml (audit S7)
+CONTRACT_SIZE = _SC["contract_size"]
+ATR_STOP_MULT = _SC.get("broker_stop", {}).get("atr_mult", 6.0)
+PROBE_LOT = _SC.get("probe_lot", 0.01)
+KILL_FILE = _rpath(*_SC.get("kill_switch_file", "artifacts/KILL").split("/"))
 
 
 @dataclass
@@ -47,7 +49,9 @@ class Stack:
     stop: float = 0.0
     bars_open: int = 0
     is_probe: bool = False
-    max_adverse: float = 0.0
+    max_adverse: float = 0.0       # adverse NET of entry spread (audit S3)
+    entry_sp: float = 0.0          # spread paid at first fill
+    tags: dict = field(default_factory=dict)      # e.g. {"pullback": True} (audit T3)
 
     @property
     def units(self): return sum(u for _, u in self.entries)
@@ -85,7 +89,9 @@ class DaySim:
                  shell_cfg: dict | None = None, start_equity: float = 100_000.0):
         if len(F_day) == 0:
             raise ValueError("empty day (holiday/data gap) — filter upstream")
-        cfg = shell_cfg or {}
+        cfg = shell_cfg if shell_cfg is not None else _SC
+        g = _goals_load().get("ratchet", {})
+        self._trail_keep = float(g.get("trail_keep_frac", 0.25))
         self.F = F_day
         self.n = len(F_day)
         self.goal, self.floor = goal, floor
@@ -169,7 +175,7 @@ class DaySim:
 
     # ---------- intents ----------
     def try_open(self, side: int, risk_frac: float, add_to: Stack | None = None,
-                 probe: bool = False) -> tuple[bool, str]:
+                 probe: bool = False, tags: dict | None = None) -> tuple[bool, str]:
         ok, why = self._shell_check(side, risk_frac, add_to, self.row)
         with tracer.span("mask_check", side="buy" if side > 0 else "sell",
                          ok=ok, why=why):
@@ -178,7 +184,8 @@ class DaySim:
             self.res.rejected += 1
             return False, why
         self._pending.append({"kind": "open", "side": side, "risk": risk_frac,
-                              "add_to": add_to, "probe": probe})
+                              "add_to": add_to, "probe": probe,
+                              "tags": tags or {}})
         return True, "queued"
 
     def try_close(self, stack: Stack, fraction: float = 1.0) -> bool:
@@ -237,10 +244,12 @@ class DaySim:
                     stop_dist = ATR_STOP_MULT * atr
                     units = (risk_frac * self.eq0) / (stop_dist + sp)
                     if order["probe"]:            # true 0.01-lot probe (R3#11)
-                        units = min(units, 0.01 * CONTRACT_SIZE)
+                        units = min(units, PROBE_LOT * CONTRACT_SIZE)
                     s = Stack(side=side, is_probe=order["probe"])
                     s.entries.append((fill, units))
                     s.stop = fill - side * stop_dist
+                    s.entry_sp = sp
+                    s.tags = dict(order.get("tags") or {})
                     self.stacks.append(s)
                 self.trades_used += 1
                 with tracer.span("order_submission", side=side, ok=True,
@@ -267,7 +276,8 @@ class DaySim:
         self.res.equity_curve.append(eq)
         for s in self.stacks:
             s.bars_open += 1
-            s.max_adverse = max(s.max_adverse, s.side * (s.avg_price - close))
+            s.max_adverse = max(s.max_adverse,
+                                s.side * (s.avg_price - close) - s.entry_sp)
 
         worst = self.worst_eq_pct(hi, lo, sp)
         eff = self._eff_floor()
@@ -285,7 +295,7 @@ class DaySim:
                                 for s in self.stacks) / self.eq0
         if eq - flat_cost >= self.goal or self.ratchet_floor >= self.goal:
             peak = max(self.res.equity_curve)
-            trail = peak - (self.floor * 0.25)
+            trail = peak - (self.floor * self._trail_keep)
             self.ratchet_floor = max(self.ratchet_floor, self.goal, trail)
 
         if self.killed:
@@ -303,8 +313,9 @@ class DaySim:
         self.res.closed_trades.append(
             {"side": s.side, "units": units, "pnl": pnl,
              "pnl_pct": 100.0 * pnl / self.eq0, "bars": s.bars_open, "why": why,
-             "probe": s.is_probe, "adds": len(s.entries) - 1,
-             "max_adverse": s.max_adverse, "stack_green": pnl > 0})
+             "probe": s.is_probe, "adds": len(s.entries) - 1, "full": full,
+             "max_adverse": s.max_adverse, "stack_green": pnl > 0,
+             "tags": dict(s.tags)})
         with tracer.span("fill_handling", why=why, pnl_pct=100.0 * pnl / self.eq0):
             pass
         if full:

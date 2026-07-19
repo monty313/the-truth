@@ -27,7 +27,7 @@ _CTX = threading.local()
 STAGES = ("data_ingestion", "feature_generation", "state_classification",
           "mask_check", "policy_inference", "action_selection",
           "reward_computation", "order_submission", "fill_handling",
-          "state_update", "checkpoint", "error", "recovery")
+          "state_update", "checkpoint", "ppo_update", "error", "recovery")
 
 
 def _write(rec: dict) -> None:
@@ -43,7 +43,11 @@ def set_run(run_id: str) -> None:
 
 @contextmanager
 def span(name: str, **attrs):
-    """Trace one unit of work. Usage: with span('mask_check', side='buy'): ..."""
+    """Trace one unit of work. Usage: with span('mask_check', side='buy'): ...
+    Names outside STAGES are recorded but tagged nonstandard=True so drift
+    from the doctrine vocabulary is visible (audit R15)."""
+    if name not in STAGES:
+        attrs = {**attrs, "nonstandard": True}
     sid = uuid.uuid4().hex[:12]
     parent = getattr(_CTX, "stack", [])
     rec = {"span_id": sid, "name": name, "parent": parent[-1] if parent else None,
