@@ -1,0 +1,47 @@
+{
+  "source": "SYNTHETIC (ADR-0010 \u2014 rerun when zip lands)",
+  "bar": "+5.0% every day, zero -4.0% touches",
+  "eval_days": [
+    {
+      "streak_days": 0,
+      "pnl_pct": 0.837,
+      "goal_hit": false,
+      "breached": false,
+      "trades": 44,
+      "rejected": 699
+    },
+    {
+      "streak_days": 0,
+      "pnl_pct": 0.362,
+      "goal_hit": false,
+      "breached": false,
+      "trades": 57,
+      "rejected": 905
+    },
+    {
+      "streak_days": 0,
+      "pnl_pct": 2.466,
+      "goal_hit": false,
+      "breached": false,
+      "trades": 80,
+      "rejected": 656
+    },
+    {
+      "streak_days": 0,
+      "pnl_pct": -3.8,
+      "goal_hit": false,
+      "breached": false,
+      "trades": 107,
+      "rejected": 469
+    },
+    {
+      "streak_days": 0,
+      "pnl_pct": -0.488,
+      "goal_hit": false,
+      "breached": false,
+      "trades": 102,
+      "rejected": 276
+    }
+  ],
+  "PERFECT": false
+}

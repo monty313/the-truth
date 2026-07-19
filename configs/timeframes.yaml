@@ -1,0 +1,7 @@
+# WHAT: the 4-Set Interlocking Matrix (ADR-0004). 1W observation-only.
+sets:
+  set1: {ltf: 1min,  htfs: [15min, 30min], extra: 1h}
+  set2: {ltf: 5min,  htfs: [30min, 1h],    extra: 4h}
+  set3: {ltf: 15min, htfs: [1h, 4h],       extra: 1d}
+  set4: {ltf: 30min, htfs: [4h, 1d],       extra: 1w}
+observation_only: [1w]

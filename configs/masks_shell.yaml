@@ -1,0 +1,21 @@
+# WHO: Monty rulings + ADR-0002/0003. WHAT: Shell + forever masks. WHEN: 2026-07-18.
+per_trade_risk_cap_pct: 0.25
+max_adds_per_stack: 5
+max_trades_per_day: 400          # after this: close-only
+after_budget_mode: close_only
+probe_lot: 0.01
+probes_count_toward_limits: true
+hedging_allowed: true
+heat_guard:                       # engineering addition, flagged (ADR-0002)
+  enabled: true
+  rule: open_risk_leq_distance_to_floor
+kill_switch_file: artifacts/KILL   # touch this file => freeze + close all
+forever_masks:
+  sma_period: 4
+  sma_shift: 4
+  applied_to: [high, low]
+  timeframes: [15min, 30min, 1h]
+  fail_closed_on_warmup: true
+broker_stop:
+  enabled: true
+  atr_mult: 6.0                  # wide stop: 6 x ATR(14) of the LTF (momentum needs room)

@@ -1,0 +1,12 @@
+# WHAT: live/demo execution behavior (Phases 6-9).
+mode: dry_run                    # dry_run -> demo -> live (Monty advances)
+broker: {name: TBD_by_Monty, login: null, server: null}   # broker-agnostic
+order_type: brain_decides        # market vs limit per trade
+slippage: brain_decides
+crash_recovery: resume           # reconnect + resume managing
+weekly_retrain_reminder: true
+alerts:
+  floor_hit: true
+  trading_stopped: true
+  offline_heartbeat: pending_monty_ok
+hud: {host: 0.0.0.0, port: 8750}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOMENTUM ONE — HUD</title>
+<!-- 5W+I: WHO Claude for Monty. WHAT the JARVIS command center v1: P/L needle
+between floor and goal, ratchet, masks, budget, kill switch, latest run,
+trophy ladder. WHEN 2026-07-19. WHERE served by server.py on the laptop,
+PC browser + phone. WHY the glanceable face of a hands-off system.
+INTERCONNECTED: /state (bridge + runs + trophies), /kill, /unkill. -->
+<style>
+  :root { --bg:#04070c; --panel:rgba(10,22,36,.55); --line:rgba(111,217,255,.22);
+    --line2:rgba(111,217,255,.55); --cyan:#6fd9ff; --ink:#d7e6f4; --dim:#7f99b4;
+    --good:#4de39c; --bad:#ff5c5c; --amber:#ffc24d;
+    --mono:"Consolas","Cascadia Mono",monospace; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(900px 420px at 50% -10%,rgba(20,60,95,.35),transparent 60%),var(--bg);
+    color:var(--ink);font-family:"Segoe UI",Arial,sans-serif;font-weight:300;
+    padding:26px 14px 60px;font-size:15px}
+  .wrap{max-width:860px;margin:0 auto}
+  h1{font-weight:200;font-size:20px;letter-spacing:7px;color:#eaf6ff;text-align:center}
+  .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:2.5px;color:var(--dim);
+    text-transform:uppercase;text-align:center;margin:6px 0 20px}
+  .panel{position:relative;border:1px solid var(--line);background:var(--panel);
+    padding:16px 20px;margin-bottom:16px}
+  .panel::before,.panel::after{content:"";position:absolute;width:8px;height:8px;
+    border-color:var(--line2);border-style:solid}
+  .panel::before{top:-1px;left:-1px;border-width:1px 0 0 1px}
+  .panel::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0}
+  h2{font-family:var(--mono);font-size:10.5px;letter-spacing:3px;color:var(--cyan);
+    text-transform:uppercase;margin-bottom:10px}
+  .gauge{display:flex;justify-content:center}
+  svg{width:min(430px,100%);height:auto}
+  .row{display:flex;flex-wrap:wrap;gap:8px 26px;font-family:var(--mono);
+    font-size:12px;color:var(--dim)}
+  .row b{color:#fff;font-weight:500}
+  .g{color:var(--good)} .r{color:var(--bad)} .a{color:var(--amber)}
+  #killbtn{display:block;width:100%;padding:14px;margin-top:4px;
+    background:rgba(255,92,92,.12);border:1px solid rgba(255,92,92,.55);
+    color:var(--bad);font-family:var(--mono);font-size:14px;letter-spacing:4px;
+    cursor:pointer;text-transform:uppercase}
+  #killbtn.armed{background:rgba(255,92,92,.5);color:#fff}
+  .foot{text-align:center;font-family:var(--mono);font-size:10px;
+    letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MOMENTUM ONE</h1>
+  <div class="sub" id="mode">connecting…</div>
+
+  <div class="panel">
+    <h2>Today — P/L vs objective</h2>
+    <div class="gauge">
+      <svg viewBox="0 0 430 240">
+        <path d="M 45 210 A 170 170 0 0 1 385 210" fill="none"
+              stroke="rgba(111,217,255,.14)" stroke-width="14" stroke-linecap="round"/>
+        <path id="arcneg" d="" fill="none" stroke="rgba(255,92,92,.6)"
+              stroke-width="14" stroke-linecap="round"/>
+        <path id="arcpos" d="" fill="none" stroke="rgba(77,227,156,.75)"
+              stroke-width="14" stroke-linecap="round"/>
+        <line id="needle" x1="215" y1="210" x2="215" y2="60"
+              stroke="#cfeeff" stroke-width="2"/>
+        <circle cx="215" cy="210" r="5" fill="#cfeeff"/>
+        <text x="45"  y="232" fill="rgba(255,92,92,.9)"  font-family="Consolas" font-size="13" id="lblfloor">−4%</text>
+        <text x="352" y="232" fill="rgba(77,227,156,.9)" font-family="Consolas" font-size="13" id="lblgoal">+2.5%</text>
+        <text x="215" y="150" text-anchor="middle" fill="#eaf6ff" font-family="Consolas" font-size="30" id="pnl">+0.00%</text>
+        <text x="215" y="176" text-anchor="middle" fill="rgba(127,153,180,.9)" font-family="Consolas" font-size="10" letter-spacing="2" id="ratchet">RATCHET —</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Systems</h2>
+    <div class="row" id="sys">loading…</div>
+  </div>
+
+  <div class="panel">
+    <h2>Latest run</h2>
+    <div class="row" id="run">—</div>
+  </div>
+
+  <div class="panel">
+    <h2>Trophy ladder</h2>
+    <div class="row" id="trophy">—</div>
+  </div>
+
+  <button id="killbtn">KILL — FREEZE + CLOSE ALL</button>
+  <div class="foot">tap kill twice to arm+fire · state refreshes every 2s</div>
+</div>
+<script>
+let armed=false, killed=false;
+const btn=document.getElementById('killbtn');
+btn.onclick=async()=>{
+  if(killed){ await fetch('/unkill',{method:'POST'}); killed=false;
+    btn.textContent='KILL — FREEZE + CLOSE ALL'; btn.classList.remove('armed'); return; }
+  if(!armed){ armed=true; btn.textContent='TAP AGAIN TO CONFIRM KILL';
+    btn.classList.add('armed'); setTimeout(()=>{armed=false;
+      btn.textContent='KILL — FREEZE + CLOSE ALL';btn.classList.remove('armed');},4000);
+    return; }
+  await fetch('/kill',{method:'POST'}); killed=true; armed=false;
+  btn.textContent='KILLED — TAP TO RE-ARM SYSTEM';
+};
+function arc(a0,a1,color){ // angles in [0,180]; 0=left(floor) 180=right(goal)
+  const r=170,cx=215,cy=210;
+  const x=a=>cx - r*Math.cos(a*Math.PI/180), y=a=>cy - r*Math.sin(a*Math.PI/180);
+  return `M ${x(a0)} ${y(a0)} A ${r} ${r} 0 0 1 ${x(a1)} ${y(a1)}`;
+}
+async function refresh(){
+  try{
+    const s=await (await fetch('/state')).json();
+    const b=s.bridge||{}; killed=s.killed;
+    document.getElementById('mode').textContent=
+      (b.mode||'no bridge')+' · '+(s.killed?'KILLED':'alive')+' · '+new Date().toLocaleTimeString();
+    // needle: demo values until bridge feeds eq (bridge v2 adds eq fields)
+    const goal=2.5, floor=4.0, eq=(b.eq_pct??0);
+    const frac=Math.max(0,Math.min(1,(eq+floor)/(goal+floor)));
+    const ang=frac*180;
+    const nx=215-150*Math.cos(ang*Math.PI/180), ny=210-150*Math.sin(ang*Math.PI/180);
+    const nd=document.getElementById('needle'); nd.setAttribute('x2',nx); nd.setAttribute('y2',ny);
+    document.getElementById('pnl').textContent=(eq>=0?'+':'')+eq.toFixed(2)+'%';
+    document.getElementById('arcneg').setAttribute('d',arc(2,Math.min(178,Math.max(2,(floor-0)/(goal+floor)*180*0.999))+0,''));
+    document.getElementById('arcpos').setAttribute('d',arc(Math.max(2,180*floor/(goal+floor)),178));
+    document.getElementById('ratchet').textContent='RATCHET '+(b.ratchet??'—');
+    document.getElementById('sys').innerHTML=
+      `<span>trades today <b>${b.day_trades??'—'} / 400</b></span>`+
+      `<span>positions <b>${b.positions??'—'}</b></span>`+
+      `<span class="${b.mask_buy_blocked?'r':'g'}">buy mask ${b.mask_buy_blocked?'BLOCKED':'clear'}</span>`+
+      `<span class="${b.mask_sell_blocked?'r':'g'}">sell mask ${b.mask_sell_blocked?'BLOCKED':'clear'}</span>`;
+    const r=s.latest_run;
+    document.getElementById('run').innerHTML= r?
+      `<span><b>${r.kind}</b> ${r.run_id}</span><span>${r.summary??''}</span>`:'—';
+    document.getElementById('trophy').innerHTML=(s.trophies&&s.trophies.length)?
+      s.trophies.map(t=>`<span class="a">+${(t.pnl_pct).toFixed(2)}% · ${t.day}</span>`).join(''):
+      'no records yet — the ladder starts in boot camp';
+  }catch(e){ document.getElementById('mode').textContent='server offline'; }
+}
+setInterval(refresh,2000); refresh();
+</script>
+</body>
+</html>

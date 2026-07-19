@@ -1,0 +1,27 @@
+# WHAT: boot camp + PPO + meta settings (ADR-0006/0007).
+bootcamp:
+  symbol: XAUUSD
+  week_source: claude_picks       # after data audit; mixed week preferred
+  bar_multiplier: 2.0             # perfect = 2x goal EVERY day, zero breaches
+  second_week_proof: true
+  explorative_week1: {entropy_coef: 0.05}
+episode: one_trading_day
+ppo:
+  gamma: 0.999
+  lam: 0.95
+  clip: 0.2
+  lr: 3.0e-4
+  epochs: 4
+  minibatch: 512
+  rollout_days_per_update: 5
+  entropy_coef: 0.01              # after week-1 exploration phase
+policy:
+  hidden: 128
+  gru_layers: 1                   # compact: 2-core laptop reality (ADR-0007)
+meta_optimizer:
+  mode: propose_only              # NEVER auto-adopt (Monty approves)
+  search: random+evolution
+  trials_per_batch: 8
+run_limits:
+  max_hours_per_run: 3            # Monty's cap before review
+seed: 20260718

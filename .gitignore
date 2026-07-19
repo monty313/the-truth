@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+artifacts/runs/
+logs/*.jsonl
+data_io/cache/
+.pytest_cache/

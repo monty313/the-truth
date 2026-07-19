@@ -1,0 +1,9 @@
+numpy>=1.24
+pandas>=2.0
+pyyaml>=6.0
+torch>=2.0        # CPU build is fine (laptop) — training core
+flask>=3.0        # HUD server
+pytest>=7.0       # tests
+# optional (auto-detected, local fallback used if absent):
+# mlflow>=2.9     # experiment UI; run-cards work without it
+# MetaTrader5     # WINDOWS ONLY — live bridge (pip install MetaTrader5)

@@ -1,0 +1,17 @@
+# WHAT: observation space per ADR-0004/0008 + Monty's physics spec.
+frame_stack: 10                 # sliding window bars (LTF) — "video, not photo"
+no_raw_prices: true             # indicators + distances only (normalized)
+include:
+  cci: {periods: [30, 100], applied_sma: {period: 2, shift: 2}}
+  s2_bb: {wide: {period: 100, dev: 0.5, shift: 2}, fast: {period: 10, dev: 0.5, shift: 2}, sma_filter: 50}
+  envelope: {period: 4, htf_shift: 4, ltf_shift: 2}
+  s4_rsi: {fast: 2, slow: 20, bb: {period: 20, dev: 0.5, shift: 2}}
+  atr: {periods: [5, 14]}
+  state_flags_and_strengths: true
+  spread: true
+  session_clock: true
+  self_state: [goal, floor, dist_to_goal, dist_to_floor, ratchet_level, win_rate_today,
+               streak_days, open_risk, position, unrealized_pnl, bars_in_trade,
+               trades_used_today]
+  sauces_observation_only: {dimension_jump: true, mcflurry: true}
+normalization: per_feature_rolling   # z-scored on rolling stats, clipped +-5

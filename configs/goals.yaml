@@ -1,0 +1,16 @@
+# WHO: Monty's typed inputs. WHAT: goal/floor + day rules. WHEN: 2026-07-18.
+# WHY: ADR-0001. INTERCONNECTED: shell, rewards, env, HUD.
+goal_pct: 2.5          # boot-camp training value; live value typed by Monty
+floor_pct: 4.0         # boot-camp training value (daily max drawdown, equity)
+equity_basis: equity   # open+closed P/L counts
+currency: USD
+day_boundary_tz: Europe/Berlin   # 00:00 CEST/CET day clock
+midnight_buffer_min: 0
+flat_at_reset: true
+ratchet:
+  enabled: true
+  mode: peak            # after goal: floor rises to goal, then trails every new peak
+goal_conditioning:      # ANY-X promise (ADR-0001/0007)
+  randomize_in_training: true
+  goal_range: [0.5, 4.0]
+  floor_range: [1.0, 6.0]

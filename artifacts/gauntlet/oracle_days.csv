@@ -1,0 +1,10 @@
+date,pnl_pct,goal_hit,breached,trades,closed
+2026-06-02,2.488,False,False,90,90
+2026-06-03,2.288,False,False,57,57
+2026-06-04,2.459,False,False,191,191
+2026-06-05,2.467,False,False,121,121
+2026-06-06,2.348,False,False,169,169
+2026-06-07,2.979,True,False,90,90
+2026-06-08,2.579,True,False,221,221
+2026-06-09,2.426,False,False,56,56
+2026-06-10,2.401,False,False,135,135

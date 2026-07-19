@@ -1,0 +1,5 @@
+# WHAT: data sources + audit thresholds (Phase 3).
+m1_csv_dir: ../data              # Fable5_Foundation/data on Monty's machine
+symbols: {bootcamp: XAUUSD, expansion: [EURUSD, GBPUSD, US30]}
+audit: {max_gap_minutes_flag: 120, spread_spike_flag_mult: 8}
+synthetic_fallback: true         # ADR-0010: used overnight until the zip lands

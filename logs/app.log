@@ -1,0 +1,15 @@
+2026-07-19 03:03:51,608 INFO    dummy_run :: run card at /home/claude/momentum_one/artifacts/runs/20260719_030351_847b4c/run_card.json
+2026-07-19 03:08:17,685 INFO    gauntlet :: source: SYNTHETIC (gold-like — ADR-0010, replace when zip lands) rows=14400
+2026-07-19 03:08:17,705 INFO    gauntlet :: audit: {'rows': 14400, 'start': '2026-06-01 00:00:00', 'end': '2026-06-10 23:59:00', 'bad_candles': 0, 'gaps_over_120min_weekday': 0, 'spread_median_pts': 12.964140063836691, 'spread_p95_pts': 17.865949541407, 'spread_max_pts': 24.12720605631728}
+2026-07-19 03:08:46,438 INFO    gauntlet :: source: SYNTHETIC (gold-like — ADR-0010, replace when zip lands) rows=14400
+2026-07-19 03:08:46,445 INFO    gauntlet :: audit: {'rows': 14400, 'start': '2026-06-01 00:00:00', 'end': '2026-06-10 23:59:00', 'bad_candles': 0, 'gaps_over_120min_weekday': 0, 'spread_median_pts': 12.964140063836691, 'spread_p95_pts': 17.865949541407, 'spread_max_pts': 24.12720605631728}
+2026-07-19 03:09:28,955 INFO    gauntlet :: source: SYNTHETIC (gold-like — ADR-0010, replace when zip lands) rows=14400
+2026-07-19 03:09:28,968 INFO    gauntlet :: audit: {'rows': 14400, 'start': '2026-06-01 00:00:00', 'end': '2026-06-10 23:59:00', 'bad_candles': 0, 'gaps_over_120min_weekday': 0, 'spread_median_pts': 12.964140063836691, 'spread_p95_pts': 17.865949541407, 'spread_max_pts': 24.12720605631728}
+2026-07-19 03:10:08,862 INFO    gauntlet :: source: SYNTHETIC (gold-like — ADR-0010, replace when zip lands) rows=14400
+2026-07-19 03:10:08,870 INFO    gauntlet :: audit: {'rows': 14400, 'start': '2026-06-01 00:00:00', 'end': '2026-06-10 23:59:00', 'bad_candles': 0, 'gaps_over_120min_weekday': 0, 'spread_median_pts': 12.964140063836691, 'spread_p95_pts': 17.865949541407, 'spread_max_pts': 24.12720605631728}
+2026-07-19 03:28:12,932 INFO    gauntlet :: source: SYNTHETIC (gold-like — ADR-0010, replace when zip lands) rows=14400
+2026-07-19 03:28:12,943 INFO    gauntlet :: audit: {'rows': 14400, 'start': '2026-06-01 00:00:00', 'end': '2026-06-10 23:59:00', 'bad_candles': 0, 'gaps_over_120min_weekday': 0, 'spread_median_pts': 12.964140063836691, 'spread_p95_pts': 17.865949541407, 'spread_max_pts': 24.12720605631728}
+2026-07-19 03:40:19,383 INFO    bootcamp :: source=SYNTHETIC (ADR-0010 — rerun when zip lands) week_days=5
+2026-07-19 03:41:37,229 INFO    bootcamp :: update 1/3 reward=0.540 pnl=[-1.45, -0.73, -0.51, -1.94, -1.26] goals=0/5 breaches=0 ent=0.050
+2026-07-19 03:42:55,135 INFO    bootcamp :: update 2/3 reward=0.454 pnl=[-1.36, -0.92, -0.31, -1.18, -1.52] goals=0/5 breaches=0 ent=0.033
+2026-07-19 03:44:14,175 INFO    bootcamp :: update 3/3 reward=1.129 pnl=[-1.52, -1.23, -1.27, -2.08, -1.22] goals=0/5 breaches=0 ent=0.017
