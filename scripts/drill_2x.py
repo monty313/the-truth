@@ -17,6 +17,7 @@ import argparse
 import glob
 import json
 import os
+import statistics
 import sys
 import time
 
@@ -56,11 +57,13 @@ def main():
     re_engine = RewardEngine()
     env = TradingEnv(week, GOAL, FLOOR, reward_engine=re_engine, goal_ranges=None)
     ppo = PPO(env)
-    try:
-        ppo.load(a.ckpt)
-        print("resumed checkpoint:", a.ckpt, flush=True)
-    except Exception as e:
-        print("fresh start (%s)" % type(e).__name__, flush=True)
+    loaded = None
+    for name in (a.ckpt, "best_trading"):   # resume working ckpt; else warm-start from best
+        try:
+            ppo.load(name); loaded = name; break
+        except Exception:
+            continue
+    print(("resumed: " + loaded) if loaded else "fresh start (no checkpoint found)", flush=True)
 
     def evaluate():
         env.goal_ranges = None
@@ -74,9 +77,10 @@ def main():
 
     prog = rpath("artifacts", "drill2x_progress.json")
     t0, u, best = time.time(), 0, -1e9
-    # best_trade = the checkpoint "where the bot was trading well" (Monty 2026-07-19).
-    # Judged by REAL trading, not reward: most days>=2x, then biggest week %, 0 breaches.
-    best_trade = (-1, -1e9)
+    # best_trading is kept by CONSISTENCY (Monty 2026-07-19: "any checkpoint saved has to
+    # do better relative to consistency"). Rank = (#days>=2x, #days>=goal, #days>=0, -stdev),
+    # and it is NEVER replaced by a worse-consistency or breaching policy.
+    best_cons = (-1, -1, -1, -1e9)
     hit = False
     while time.time() - t0 < a.minutes * 60:
         batch = [ppo.play_day(i) for i in range(len(week))]
@@ -88,20 +92,24 @@ def main():
         if u % a.eval_every == 0:
             pnls, br, ok, b = evaluate()
             hits = sum(1 for p in pnls if p >= BAR)
+            dgoal = sum(1 for p in pnls if p >= GOAL)
+            dpos = sum(1 for p in pnls if p >= 0)
+            sd = round(statistics.pstdev(pnls), 3) if len(pnls) > 1 else 0.0
             wk = round(float(sum(pnls)), 3)
-            print("upd %4d | reward %8.2f | week pnl%% %s | >=2x %d/%d | week %+.2f%% | breaches %d"
-                  % (u, mean_r, pnls, hits, len(week), wk, br), flush=True)
-            ppo.save(a.ckpt)                                   # latest — resume next chunk here
-            if br == 0 and (hits, wk) > best_trade:
-                best_trade = (hits, wk)
-                ppo.save("best_trading")                       # <-- the good-trading checkpoint
-                print("   ^ NEW best-trading checkpoint: %d/%d days at 2x, week %+.2f%%, 0 breaches"
-                      % (hits, len(week), wk), flush=True)
+            cons = (hits, dgoal, dpos, -sd)
+            print("upd %4d | reward %7.2f | pnl%% %s | 2x %d/%d goal %d/%d +%d/%d sd %.2f | wk %+.2f%% | br %d"
+                  % (u, mean_r, pnls, hits, len(week), dgoal, len(week), dpos, len(week), sd, wk, br), flush=True)
+            ppo.save(a.ckpt)                                   # latest — resume here
+            if br == 0 and cons > best_cons:
+                best_cons = cons
+                ppo.save("best_trading")                       # kept ONLY on better consistency
+                print("   ^ NEW best_trading (more consistent): 2x %d/%d, goal %d/%d, +%d/%d, sd %.2f"
+                      % (hits, len(week), dgoal, len(week), dpos, len(week), sd), flush=True)
             json.dump({"updates_run": u, "week_pnl_pct": pnls, "days_at_2x": hits,
-                       "of": len(week), "week_pct": wk, "breaches": br, "BAR": BAR,
-                       "hit_2x_everyday": ok,
-                       "best_trading_days_at_2x": best_trade[0],
-                       "best_trading_week_pct": best_trade[1]}, open(prog, "w"), indent=2)
+                       "days_at_goal": dgoal, "days_positive": dpos, "stdev": sd,
+                       "week_pct": wk, "breaches": br, "BAR": BAR, "hit_2x_everyday": ok,
+                       "best_consistency_2x": best_cons[0], "best_consistency_goal": best_cons[1]},
+                      open(prog, "w"), indent=2)
             if ok:
                 print(">>> SUCCESS: 2x every day, 0 breaches", flush=True)
                 ppo.save("best_trading")
