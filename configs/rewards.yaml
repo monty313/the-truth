@@ -4,13 +4,13 @@ pay_only_on_close: true          # invariant asserted by training/rewards.py
 day_dd_extra_scale: 0.5          # goal-day less-intraday-DD extra (audit S8/T9)
 trade_consistency_target: 0.3    # pstdev of trade pnl%s under this earns the bonus
 no_drawdown_tolerance: 0.0       # adverse (net of entry spread) <= this earns the bonus
-w_net_profit: 1.0
-w_trade_consistency: 0.35        # low variance across closed trades, same day
+w_net_profit: 6.0                # 2026-07-19: 1.0->6.0 — profit magnitude must DOMINATE (Monty's doctrine: net profit FIRST). Bot was netting ~0% while farming flat per-green bonuses; a real move must out-pay many tiny greens.
+w_trade_consistency: 0.10        # 2026-07-19: 0.35->0.10 — low-variance bonus was rewarding flat/tiny-trade churn; profit leads now, consistency is secondary
 w_day_goal_hit: 2.0              # day closes >= goal without breach
 w_streak_per_day: 0.15           # bonus * streak_length (goal-met days), climbs forever
-w_no_drawdown_close: 0.10        # close without adding intraday DD
+w_no_drawdown_close: 0.02        # 2026-07-19: 0.10->0.02 — was THE farm (0.10 per tiny green x ~40 trades = flat-scalp farming that ignored trade size); shrunk so profit magnitude wins
 w_pyramid_stack_green: 0.20      # <=5 adds, whole stack closes net green
-w_pullback_with_htf: 0.10        # entry = LTF pullback aligned with strong HTF trend
+w_pullback_with_htf: 0.02        # 2026-07-19: 0.10->0.02 — flat per-close bonus; shrunk so profit magnitude leads (still a positive nudge toward good entries)
 w_idleness_hunger: -0.002        # per idle decision step (slightly hungry)
 w_record_win: 0.25               # trophy bonus, ONLY if day won (goal met, no breach)
 w_antigravity_penalty: -0.50     # training wheels vs highest-set gravity...
