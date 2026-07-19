@@ -37,13 +37,16 @@ def read_mt5_m1(path: str, max_rows: int | None = None) -> pd.DataFrame:
     df.columns = [c.strip().strip("<>").upper() for c in df.columns]
     ts = pd.to_datetime(df["DATE"].astype(str) + " " + df["TIME"].astype(str),
                         format="mixed", errors="coerce")
+    # .to_numpy() strips the source RangeIndex; without it pandas re-aligns each
+    # Series to the DatetimeIndex `ts` (no label overlap -> every value NaN ->
+    # dropna wipes the frame, so real MT5 exports parsed to 0 rows).
     out = pd.DataFrame({
-        "open": pd.to_numeric(df["OPEN"], errors="coerce"),
-        "high": pd.to_numeric(df["HIGH"], errors="coerce"),
-        "low": pd.to_numeric(df["LOW"], errors="coerce"),
-        "close": pd.to_numeric(df["CLOSE"], errors="coerce"),
-        "vol": pd.to_numeric(df.get("TICKVOL", 1.0), errors="coerce"),
-        "spread": pd.to_numeric(df.get("SPREAD", 0), errors="coerce"),
+        "open": pd.to_numeric(df["OPEN"], errors="coerce").to_numpy(),
+        "high": pd.to_numeric(df["HIGH"], errors="coerce").to_numpy(),
+        "low": pd.to_numeric(df["LOW"], errors="coerce").to_numpy(),
+        "close": pd.to_numeric(df["CLOSE"], errors="coerce").to_numpy(),
+        "vol": pd.to_numeric(df.get("TICKVOL", 1.0), errors="coerce").to_numpy(),
+        "spread": pd.to_numeric(df.get("SPREAD", 0), errors="coerce").to_numpy(),
     }, index=ts).dropna(subset=["open", "high", "low", "close"])
     out = out[~out.index.isna()].sort_index()
     # Day-boundary law (ADR-0001: 00:00 CEST; audit S2): broker stamps are

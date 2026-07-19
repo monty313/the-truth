@@ -1,0 +1,245 @@
+{
+  "note": "PROPOSALS ONLY \u2014 Monty approves adoption (ADR-0007)",
+  "trials": [
+    {
+      "trial": 0,
+      "weights": {
+        "pay_only_on_close": true,
+        "day_dd_extra_scale": 0.5,
+        "trade_consistency_target": 0.3,
+        "no_drawdown_tolerance": 0.0,
+        "w_net_profit": 1.0,
+        "w_trade_consistency": 0.82677,
+        "w_day_goal_hit": 1.67182,
+        "w_streak_per_day": 0.38821,
+        "w_no_drawdown_close": 0.1,
+        "w_pyramid_stack_green": 0.2,
+        "w_pullback_with_htf": 0.1,
+        "w_idleness_hunger": -0.00285,
+        "w_record_win": 0.25,
+        "w_antigravity_penalty": -0.5,
+        "antigravity_decay_updates": 300,
+        "w_death_penalty": -12.43153
+      },
+      "hparams": {
+        "gamma": 0.999,
+        "lam": 0.95,
+        "clip": 0.2,
+        "lr": 0.000454,
+        "epochs": 4,
+        "rollout_days_per_update": 5,
+        "entropy_coef": 0.027806
+      }
+    },
+    {
+      "trial": 1,
+      "weights": {
+        "pay_only_on_close": true,
+        "day_dd_extra_scale": 0.5,
+        "trade_consistency_target": 0.3,
+        "no_drawdown_tolerance": 0.0,
+        "w_net_profit": 1.0,
+        "w_trade_consistency": 0.13179,
+        "w_day_goal_hit": 4.94362,
+        "w_streak_per_day": 0.08301,
+        "w_no_drawdown_close": 0.1,
+        "w_pyramid_stack_green": 0.2,
+        "w_pullback_with_htf": 0.1,
+        "w_idleness_hunger": -0.00842,
+        "w_record_win": 0.25,
+        "w_antigravity_penalty": -0.5,
+        "antigravity_decay_updates": 300,
+        "w_death_penalty": -11.49151
+      },
+      "hparams": {
+        "gamma": 0.999,
+        "lam": 0.95,
+        "clip": 0.2,
+        "lr": 0.000707,
+        "epochs": 4,
+        "rollout_days_per_update": 5,
+        "entropy_coef": 0.005074
+      }
+    },
+    {
+      "trial": 2,
+      "weights": {
+        "pay_only_on_close": true,
+        "day_dd_extra_scale": 0.5,
+        "trade_consistency_target": 0.3,
+        "no_drawdown_tolerance": 0.0,
+        "w_net_profit": 1.0,
+        "w_trade_consistency": 0.32118,
+        "w_day_goal_hit": 3.22694,
+        "w_streak_per_day": 0.33722,
+        "w_no_drawdown_close": 0.1,
+        "w_pyramid_stack_green": 0.2,
+        "w_pullback_with_htf": 0.1,
+        "w_idleness_hunger": -0.00947,
+        "w_record_win": 0.25,
+        "w_antigravity_penalty": -0.5,
+        "antigravity_decay_updates": 300,
+        "w_death_penalty": -18.52141
+      },
+      "hparams": {
+        "gamma": 0.999,
+        "lam": 0.95,
+        "clip": 0.2,
+        "lr": 0.000115,
+        "epochs": 4,
+        "rollout_days_per_update": 5,
+        "entropy_coef": 0.005891
+      }
+    },
+    {
+      "trial": 3,
+      "weights": {
+        "pay_only_on_close": true,
+        "day_dd_extra_scale": 0.5,
+        "trade_consistency_target": 0.3,
+        "no_drawdown_tolerance": 0.0,
+        "w_net_profit": 1.0,
+        "w_trade_consistency": 0.46524,
+        "w_day_goal_hit": 3.70706,
+        "w_streak_per_day": 0.42536,
+        "w_no_drawdown_close": 0.1,
+        "w_pyramid_stack_green": 0.2,
+        "w_pullback_with_htf": 0.1,
+        "w_idleness_hunger": -0.00248,
+        "w_record_win": 0.25,
+        "w_antigravity_penalty": -0.5,
+        "antigravity_decay_updates": 300,
+        "w_death_penalty": -11.33175
+      },
+      "hparams": {
+        "gamma": 0.999,
+        "lam": 0.95,
+        "clip": 0.2,
+        "lr": 0.000114,
+        "epochs": 4,
+        "rollout_days_per_update": 5,
+        "entropy_coef": 0.012759
+      }
+    },
+    {
+      "trial": 4,
+      "weights": {
+        "pay_only_on_close": true,
+        "day_dd_extra_scale": 0.5,
+        "trade_consistency_target": 0.3,
+        "no_drawdown_tolerance": 0.0,
+        "w_net_profit": 1.0,
+        "w_trade_consistency": 0.32526,
+        "w_day_goal_hit": 3.18944,
+        "w_streak_per_day": 0.2458,
+        "w_no_drawdown_close": 0.1,
+        "w_pyramid_stack_green": 0.2,
+        "w_pullback_with_htf": 0.1,
+        "w_idleness_hunger": -0.00262,
+        "w_record_win": 0.25,
+        "w_antigravity_penalty": -0.5,
+        "antigravity_decay_updates": 300,
+        "w_death_penalty": -8.28172
+      },
+      "hparams": {
+        "gamma": 0.999,
+        "lam": 0.95,
+        "clip": 0.2,
+        "lr": 0.000462,
+        "epochs": 4,
+        "rollout_days_per_update": 5,
+        "entropy_coef": 0.015142
+      }
+    },
+    {
+      "trial": 5,
+      "weights": {
+        "pay_only_on_close": true,
+        "day_dd_extra_scale": 0.5,
+        "trade_consistency_target": 0.3,
+        "no_drawdown_tolerance": 0.0,
+        "w_net_profit": 1.0,
+        "w_trade_consistency": 0.63085,
+        "w_day_goal_hit": 1.10745,
+        "w_streak_per_day": 0.38422,
+        "w_no_drawdown_close": 0.1,
+        "w_pyramid_stack_green": 0.2,
+        "w_pullback_with_htf": 0.1,
+        "w_idleness_hunger": -0.00657,
+        "w_record_win": 0.25,
+        "w_antigravity_penalty": -0.5,
+        "antigravity_decay_updates": 300,
+        "w_death_penalty": -7.78859
+      },
+      "hparams": {
+        "gamma": 0.999,
+        "lam": 0.95,
+        "clip": 0.2,
+        "lr": 0.000894,
+        "epochs": 4,
+        "rollout_days_per_update": 5,
+        "entropy_coef": 0.035098
+      }
+    },
+    {
+      "trial": 6,
+      "weights": {
+        "pay_only_on_close": true,
+        "day_dd_extra_scale": 0.5,
+        "trade_consistency_target": 0.3,
+        "no_drawdown_tolerance": 0.0,
+        "w_net_profit": 1.0,
+        "w_trade_consistency": 0.7868,
+        "w_day_goal_hit": 1.60445,
+        "w_streak_per_day": 0.17974,
+        "w_no_drawdown_close": 0.1,
+        "w_pyramid_stack_green": 0.2,
+        "w_pullback_with_htf": 0.1,
+        "w_idleness_hunger": -0.00723,
+        "w_record_win": 0.25,
+        "w_antigravity_penalty": -0.5,
+        "antigravity_decay_updates": 300,
+        "w_death_penalty": -19.04661
+      },
+      "hparams": {
+        "gamma": 0.999,
+        "lam": 0.95,
+        "clip": 0.2,
+        "lr": 0.000432,
+        "epochs": 4,
+        "rollout_days_per_update": 5,
+        "entropy_coef": 0.034051
+      }
+    },
+    {
+      "trial": 7,
+      "weights": {
+        "pay_only_on_close": true,
+        "day_dd_extra_scale": 0.5,
+        "trade_consistency_target": 0.3,
+        "no_drawdown_tolerance": 0.0,
+        "w_net_profit": 1.0,
+        "w_trade_consistency": 0.66026,
+        "w_day_goal_hit": 4.35153,
+        "w_streak_per_day": 0.16786,
+        "w_no_drawdown_close": 0.1,
+        "w_pyramid_stack_green": 0.2,
+        "w_pullback_with_htf": 0.1,
+        "w_idleness_hunger": -0.00887,
+        "w_record_win": 0.25,
+        "w_antigravity_penalty": -0.5,
+        "antigravity_decay_updates": 300,
+        "w_death_penalty": -17.69296
+      },
+      "hparams": {
+        "gamma": 0.999,
+        "lam": 0.95,
+        "clip": 0.2,
+        "lr": 0.000499,
+        "epochs": 4,
+        "rollout_days_per_update": 5,
+        "entropy_coef": 0.025615
+      }
+    }
+  ]
+}

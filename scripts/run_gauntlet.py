@@ -15,7 +15,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
 import pandas as pd                                              # noqa: E402
-from core.configs import goals_cfg, load as cfg, path as rpath   # noqa: E402
+from core.configs import goals_cfg, path as rpath               # noqa: E402
 from data_io.loader import read_mt5_m1, synthetic_m1, trading_days  # noqa: E402
 from features.engine import build_features                       # noqa: E402
 from backtesting.gauntlet.gauntlet import (                      # noqa: E402

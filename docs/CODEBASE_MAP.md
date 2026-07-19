@@ -10,16 +10,16 @@ read its 5W+I header for WHO/WHAT/WHY/INTERCONNECTED. -->
 | Symptom | First file(s) | Then |
 |---|---|---|
 | Indicator value != MT5 chart | features/indicators.py | tests/test_indicators.py |
-| A signal fires wrong / never | features/engine.py (`_strategy_conditions`) | codex/regimes/strategy_*.md |
-| A mask lets a trade through | features/engine.py (mask cols) + backtesting/simulator.py (`_shell_check`) | tests/test_masks.py, test_shell.py |
-| Risk/floor/ratchet wrong | backtesting/simulator.py (DaySim) | configs/masks_shell.yaml, goals.yaml, tests/test_shell.py |
+| A signal fires wrong / never | features/engine.py | codex/regimes/strategy_*.md |
+| A mask lets a trade through | features/engine.py + backtesting/simulator.py (`_shell_check`) | tests/test_masks.py, test_shell.py |
+| Risk/floor/ratchet wrong | backtesting/simulator.py (DaySim) | configs/masks_shell.yaml, goals.yaml |
 | Reward looks gamed | training/rewards.py | tests/test_rewards.py, ADR-0005 |
-| Brain won't learn | training/canary.py (plumbing), training/ppo.py | tests/test_training_fixes.py |
+| Brain won't learn | training/canary.py, training/ppo.py | tests/test_training_fixes.py |
 | Any-X / goal not honored | training/env.py + configs/goals.yaml | tests/test_training_fixes.py |
 | A number won't change | core/configs.py (is it loaded?) | configs/*.yaml, tests/test_configs.py |
+| Real gold CSV won't load | data_io/loader.py (read_mt5_m1) | tests/test_data.py |
 | Live/HUD shows nothing | execution_bridge/mt5_bridge.py, scripts/run_live.py | dashboards/hud/ |
 | Gauntlet gate | scripts/run_gauntlet.py -> artifacts/gauntlet/VERDICT.json | backtesting/gauntlet/gauntlet.py |
-| No telemetry for a stage | telemetry/tracer.py (STAGES) | the module missing the span |
 
 
 ### `data_io/loader.py`

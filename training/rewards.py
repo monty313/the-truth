@@ -65,8 +65,8 @@ class RewardEngine:
         for tr in closed_now:
             r += w["w_net_profit"] * tr["pnl_pct"]
             if tr.get("full"):
-                if tr["pnl"] > 0 and tr["max_adverse"] <= w.get(
-                        "no_drawdown_tolerance", 0.0):
+                if (tr["pnl"] > 0 and not tr.get("probe")
+                        and tr["max_adverse"] <= w.get("no_drawdown_tolerance", 0.0)):
                     r += w["w_no_drawdown_close"]
                 if tr["adds"] > 0 and tr["stack_green"]:
                     r += w["w_pyramid_stack_green"] * min(tr["adds"], 5)

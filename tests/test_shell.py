@@ -7,7 +7,7 @@ import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 import pandas as pd
-from backtesting.simulator import DaySim, Stack
+from backtesting.simulator import DaySim
 
 
 def mkday(n=200, price=2000.0, spread=10.0, atr_ok=True):

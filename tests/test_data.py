@@ -23,3 +23,20 @@ def test_alignment_visibility():
     # bar 00:00-00:30 closes at 00:29 close: usable on the 00:29 row
     assert al.loc[m1.index[29]] == o30["close"].iloc[0]
     assert np.isnan(al.loc[m1.index[28]]) or al.loc[m1.index[28]] != o30["close"].iloc[0]
+
+
+def test_read_mt5_m1_roundtrip(tmp_path):
+    """Audit re-round: read_mt5_m1 must NOT return 0 rows on real MT5 format
+    (pandas index-alignment bug wiped every row -> real-data path crashed)."""
+    import pandas as pd, numpy as np
+    from data_io.loader import read_mt5_m1
+    idx = pd.date_range("2026-05-01", periods=300, freq="1min")
+    df = pd.DataFrame({
+        "<DATE>": idx.strftime("%Y.%m.%d"), "<TIME>": idx.strftime("%H:%M:%S"),
+        "<OPEN>": 2400.0, "<HIGH>": 2401.0, "<LOW>": 2399.0, "<CLOSE>": 2400.5,
+        "<TICKVOL>": 100, "<VOL>": 0, "<SPREAD>": 12})
+    p = tmp_path / "XAUUSD_M1_x.csv"
+    df.to_csv(p, sep="\t", index=False)
+    out = read_mt5_m1(str(p))
+    assert len(out) > 0, "real MT5 CSV must parse to non-empty (index-alignment bug)"
+    assert list(out.columns) == ["open", "high", "low", "close", "vol", "spread"]

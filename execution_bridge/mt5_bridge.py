@@ -30,7 +30,7 @@ import json
 import os
 import time
 
-from core.configs import path as rpath, load as cfg
+from core.configs import path as rpath
 from telemetry import tracer
 
 STATE = rpath("artifacts", "hud_state.json")

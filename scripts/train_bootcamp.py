@@ -27,7 +27,7 @@ from training.env import TradingEnv                              # noqa: E402
 from training.ppo import PPO                                     # noqa: E402
 from training.rewards import RewardEngine                        # noqa: E402
 from training import trophy_case                                 # noqa: E402
-from evaluation.champion import bench, score_days                # noqa: E402
+from evaluation.champion import bench                            # noqa: E402
 from experiments.tracker import Run                              # noqa: E402
 from telemetry.logging_setup import setup                        # noqa: E402
 

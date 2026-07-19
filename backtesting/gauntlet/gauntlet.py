@@ -15,7 +15,6 @@ INTERCONNECTED WITH: simulator.DaySim (same physics as training/live),
 ----------------------------------------------------------------------
 """
 from __future__ import annotations
-import numpy as np
 import pandas as pd
 
 from backtesting.simulator import DaySim, POINT_SIZE

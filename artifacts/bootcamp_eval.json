@@ -1,102 +1,34 @@
 {
-  "source": "SYNTHETIC (ADR-0010 \u2014 rerun when zip lands)",
+  "source": "REAL_XAUUSD",
   "bar": "+5.0% every day, zero -4.0% touches",
   "gauntlet_warning_ruling_required": true,
   "train_week": {
-    "days": 5,
+    "days": 2,
     "consistency_winning_rate": 0.0,
     "breaches": 0,
-    "total_pnl_pct": -7.162,
+    "total_pnl_pct": 0.116,
     "day_details": [
       {
         "streak_days": 0,
-        "pnl_pct": -0.013,
+        "pnl_pct": 0.071,
         "goal_hit": false,
         "breached": false,
-        "trades": 84,
-        "rejected": 83
+        "trades": 17,
+        "rejected": 0
       },
       {
         "streak_days": 0,
-        "pnl_pct": -1.156,
+        "pnl_pct": 0.045,
         "goal_hit": false,
         "breached": false,
-        "trades": 115,
-        "rejected": 315
-      },
-      {
-        "streak_days": 0,
-        "pnl_pct": -2.227,
-        "goal_hit": false,
-        "breached": false,
-        "trades": 135,
-        "rejected": 190
-      },
-      {
-        "streak_days": 0,
-        "pnl_pct": -3.766,
-        "goal_hit": false,
-        "breached": false,
-        "trades": 109,
-        "rejected": 249
-      },
-      {
-        "streak_days": 0,
-        "pnl_pct": 0.0,
-        "goal_hit": false,
-        "breached": false,
-        "trades": 0,
+        "trades": 7,
         "rejected": 0
       }
     ]
   },
   "second_week": {
-    "days": 5,
-    "consistency_winning_rate": 0.0,
-    "breaches": 0,
-    "total_pnl_pct": -0.063,
-    "day_details": [
-      {
-        "streak_days": 0,
-        "pnl_pct": -0.156,
-        "goal_hit": false,
-        "breached": false,
-        "trades": 38,
-        "rejected": 2
-      },
-      {
-        "streak_days": 0,
-        "pnl_pct": 0.701,
-        "goal_hit": false,
-        "breached": false,
-        "trades": 141,
-        "rejected": 105
-      },
-      {
-        "streak_days": 0,
-        "pnl_pct": -0.151,
-        "goal_hit": false,
-        "breached": false,
-        "trades": 123,
-        "rejected": 68
-      },
-      {
-        "streak_days": 0,
-        "pnl_pct": 1.398,
-        "goal_hit": false,
-        "breached": false,
-        "trades": 274,
-        "rejected": 552
-      },
-      {
-        "streak_days": 0,
-        "pnl_pct": -1.855,
-        "goal_hit": false,
-        "breached": false,
-        "trades": 66,
-        "rejected": 29
-      }
-    ]
+    "days": 0,
+    "note": "no second week in data window"
   },
   "PERFECT_train_week": false,
   "PERFECT_second_week": false,
