@@ -24,6 +24,11 @@ INTERCONNECTED WITH: training/env.TradingEnv + backtesting/simulator
        (physics), inference/loader.load_brain, dashboards/hud (state file),
        alerts/notify, core.configs.
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  drives DaySim (one physics), emits HUD gauge fields  — WHY: v1 bypassed masks/close-only and HUD gauge was dead (audit S1/S5/R12/R13).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import json

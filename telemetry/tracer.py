@@ -12,6 +12,11 @@ WHY:   Doctrine law: telemetry before strategy code; silent failure is
 INTERCONNECTED WITH: logs/spans.jsonl (out), telemetry/logging_setup.py,
        experiments/tracker.py (run_id joins spans to runs).
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import json, os, time, threading, uuid

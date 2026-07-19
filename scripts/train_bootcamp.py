@@ -7,6 +7,11 @@ cfg from training.yaml, Gauntlet VERDICT gate (audit R14), trophy wiring
 bar, honestly. INTERCONNECTED: env/ppo/rewards/tracker/evaluation.champion,
 training/trophy_case, artifacts/gauntlet/VERDICT.json.
 USAGE: python scripts/train_bootcamp.py [--updates N] [--smoke] [--force]
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import argparse
 import glob

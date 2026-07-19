@@ -5,6 +5,11 @@ camp refuses to run without a verdict (audit R14: the HARD GATE gated
 nothing). WHEN 2026-07-19 v2. WHERE any cwd (ROOT-anchored, audit R3).
 WHY evidence before training money. INTERCONNECTED: gauntlet.py, tracker,
 artifacts/gauntlet/, scripts/train_bootcamp.py (reads VERDICT).
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import glob
 import json

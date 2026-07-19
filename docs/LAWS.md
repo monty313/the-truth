@@ -11,3 +11,5 @@ WHY master doctrine + interview. INTERCONNECTED WITH configs/*, codex/*. -->
 6. Everything versioned — code, configs, rewards, masks, models, data, seeds.
 7. Docs before advancement — a phase without docs is unfinished.
 8. JARVIS + dyslexia-friendly reporting — visual, short blocks, scannable.
+9. In-code change log (ADR-0011) — every edit appends a dated WHY line to the
+   file's CHANGE LOG block; keep the NEXT EDITOR instruction. We never get lost.

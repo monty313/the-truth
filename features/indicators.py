@@ -16,6 +16,11 @@ NOTE:  ATR uses simple rolling mean of True Range (matches Monty's v2
        foundation script); if golden tests vs MT5 show Wilder smoothing,
        flip ATR_WILDER=True — one switch, documented here.
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  RSI all-gains=100, CCI flat=0  — WHY: MT5 edge-case parity (audit R1#6/#7).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import numpy as np

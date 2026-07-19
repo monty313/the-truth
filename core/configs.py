@@ -16,6 +16,11 @@ WHY:   One door means the meta-optimizer's approved proposals and
 INTERCONNECTED WITH: configs/*.yaml (in), everything else (out),
        tests/test_configs.py (proof the door is real).
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created  — WHY: 6/8 config files were decorative; one door so typing a config changes the machine (audit S7/R11).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import os

@@ -6,6 +6,11 @@ loop didn't exist). WHERE any cwd (ROOT-anchored). WHY the champion must
 actually meet a price stream through the Shell. INTERCONNECTED: bridge, env,
 inference/loader, features/engine, data_io/loader, HUD.
 USAGE: python scripts/run_live.py [--days N]
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import argparse, glob, os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

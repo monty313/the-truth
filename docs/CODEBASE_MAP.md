@@ -6,22 +6,6 @@ read its 5W+I header for WHO/WHAT/WHY/INTERCONNECTED. -->
 
 16 documented modules.
 
-## If something breaks — where to look (symptom -> file)
-| Symptom | First file(s) | Then |
-|---|---|---|
-| Indicator value != MT5 chart | features/indicators.py | tests/test_indicators.py |
-| A signal fires wrong / never | features/engine.py | codex/regimes/strategy_*.md |
-| A mask lets a trade through | features/engine.py + backtesting/simulator.py (`_shell_check`) | tests/test_masks.py, test_shell.py |
-| Risk/floor/ratchet wrong | backtesting/simulator.py (DaySim) | configs/masks_shell.yaml, goals.yaml |
-| Reward looks gamed | training/rewards.py | tests/test_rewards.py, ADR-0005 |
-| Brain won't learn | training/canary.py, training/ppo.py | tests/test_training_fixes.py |
-| Any-X / goal not honored | training/env.py + configs/goals.yaml | tests/test_training_fixes.py |
-| A number won't change | core/configs.py (is it loaded?) | configs/*.yaml, tests/test_configs.py |
-| Real gold CSV won't load | data_io/loader.py (read_mt5_m1) | tests/test_data.py |
-| Live/HUD shows nothing | execution_bridge/mt5_bridge.py, scripts/run_live.py | dashboards/hud/ |
-| Gauntlet gate | scripts/run_gauntlet.py -> artifacts/gauntlet/VERDICT.json | backtesting/gauntlet/gauntlet.py |
-
-
 ### `data_io/loader.py`
 - **What:** (1) read_mt5_m1: parses MT5 M1 CSV exports (DATE TIME OHLC TICKVOL VOL SPREAD, tab/comma tolerant). (2) synthetic_m1: gold-like fake data for pipeline proof while the real zip is pending (ADR-0010). (3) resample: M1 -> any TF, left-labeled, no look-ahead. (4) align_to_m1: HTF frame -> M1 timeline vi
 - **Why:** Clean, honest data with exact day boundaries is the foundation; look-ahead here would poison everything above it.
@@ -39,6 +23,7 @@ read its 5W+I header for WHO/WHAT/WHY/INTERCONNECTED. -->
 
 ### `training/canary.py`
 - **What:** Proves the REAL Brain + PPO.update machinery can (a) read an observation feature and (b) shift its policy toward reward. Uses a minimal bandit env (BanditEnv) that exercises the identical code paths — Brain.forward, joint_logprob, GAE, clipped update, Adam — on a task whose optimal action is UNAMBIG
+- **Why:** v1 was a coin-flip that failed (audit T7/R2).
 - **Touches:** training/policy.Brain, training/ppo.PPO (unchanged code paths), tests/test_training_fixes.py.
 
 ### `training/env.py`

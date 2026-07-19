@@ -5,6 +5,11 @@ KILL file (freeze + close all); POST /unkill -> remove it. WHEN 2026-07-19.
 WHERE laptop, http://localhost:8750 (+ phone on same network). WHY the
 command center + the one red button. INTERCONNECTED: bridge (state file),
 artifacts/runs, trophy_case.jsonl, alerts.
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import glob, json, os
 from flask import Flask, jsonify, send_from_directory

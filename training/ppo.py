@@ -17,6 +17,11 @@ INTERCONNECTED WITH: env, policy (joint_logprob), rewards.state_dict,
        experiments/tracker, telemetry (span 'ppo_update' — in STAGES),
        artifacts/checkpoints/.
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  joint op+size log-prob, config-driven, checkpoint carries reward state  — WHY: audit T1/T8/R11.
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import os

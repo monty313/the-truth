@@ -5,6 +5,11 @@ future LLM can locate any component and its failure modes instantly (Monty:
 'the llm will know exactly what the issue is'). WHEN 2026-07-19. WHERE run
 after structural changes. WHY the doctrine's LLM-readability requirement.
 INTERCONNECTED: every *.py 5W header; docs/CODEBASE_MAP.md (out).
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import os, re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

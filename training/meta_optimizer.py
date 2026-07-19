@@ -4,6 +4,11 @@ search over reward weights and PPO hparams; each trial = short training probe;
 proposals + evidence written to artifacts/proposals/. WHEN 2026-07-19.
 WHY 'a ML to help optimize the weights... set it up right the first time'.
 INTERCONNECTED: rewards.load_weights, ppo, tracker, docs/adr (adoption ADRs).
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import json, os, random, copy
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

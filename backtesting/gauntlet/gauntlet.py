@@ -13,6 +13,11 @@ WHY:   If the oracle can't reach 2x goal, no brain ever will — Monty
 INTERCONNECTED WITH: simulator.DaySim (same physics as training/live),
        features/engine, experiments/tracker (run cards).
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import pandas as pd

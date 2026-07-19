@@ -2,6 +2,11 @@
 5W+I: WHO Claude/ADR-0008. WHAT dummy end-to-end traced run producing a full
 run card + spans for every doctrine stage. WHEN 2026-07-19. WHY doctrine gate.
 INTERCONNECTED: telemetry/tracer, experiments/tracker.
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import sys, os, random
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

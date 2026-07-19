@@ -15,6 +15,11 @@ WHY:   Clean, honest data with exact day boundaries is the foundation;
 INTERCONNECTED WITH: configs/data.yaml, configs/goals.yaml (day tz),
        tests/test_data.py (shuffle/no-look-ahead proofs).
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  read_mt5_m1 .to_numpy() + day-tz conversion  — WHY: real MT5 CSV parsed to 0 rows (index-align bug); ADR-0001 day clock.
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import numpy as np

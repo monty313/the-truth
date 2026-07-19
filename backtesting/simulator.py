@@ -22,6 +22,11 @@ UNITS: prices in quote units; spread column = POINTS * POINT_SIZE.
        0.01 * CONTRACT_SIZE units (gold: 1 oz). Lot conversion for real
        orders happens only at the live bridge.
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  Shell v3, config-driven, stop-anchored risk, intrabar floor  — WHY: audit rounds 1+2 proved v1 law breakable; numbers moved to configs (S7).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field

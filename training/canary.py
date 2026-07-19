@@ -19,6 +19,11 @@ WHERE: run directly; boot camp trusts it as the learning gate.
 INTERCONNECTED WITH: training/policy.Brain, training/ppo.PPO (unchanged
        code paths), tests/test_training_fixes.py.
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  rebuilt as bandit plumbing gate with noise margin  — WHY: v1 was a coin-flip that failed (audit T7/R2).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import os

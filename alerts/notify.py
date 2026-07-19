@@ -4,6 +4,11 @@ configs/execution.yaml -> env vars), events: floor_hit, trading_stopped,
 weekly_retrain_reminder, (offline_heartbeat pending Monty OK). WHEN 2026-07-19.
 WHY hands-off operator must hear the two sounds that matter. INTERCONNECTED:
 bridge, HUD server (scheduler thread), telemetry events.
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import json, os, time, urllib.parse, urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

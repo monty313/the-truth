@@ -17,6 +17,11 @@ INTERCONNECTED WITH: data_io/loader (align rules), features/indicators
        (MT5 math), configs/features.yaml + timeframes.yaml,
        telemetry spans (feature_generation, state_classification).
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  masks fail-closed on warmup, event edges, live-line variants, S2 reload to spec  — WHY: audit R1/R2 fidelity + no-look-ahead fixes.
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import numpy as np

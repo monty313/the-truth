@@ -15,6 +15,11 @@ WHY:   The chair goes to the metric, not to the newest brain — protects
 INTERCONNECTED WITH: training/ppo.PPO (play_day greedy), inference/
        loader, experiments/tracker (results into run cards).
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  created  — WHY: champion-vs-challenger metric was referenced but missing (audit R6/S12).
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 

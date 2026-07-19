@@ -23,6 +23,11 @@ INTERCONNECTED WITH: backtesting/simulator (closed-trade records incl.
        full/tags), configs/rewards.yaml, training/trophy_case.py,
        training/ppo.py (state persistence), ADR-0005.
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  pay only on FULL close, pullback via tags, idleness only when flat, config-scaled  — WHY: audit T2/T3/T4/T9 reward-farm fixes.
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 

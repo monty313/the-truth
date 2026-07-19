@@ -17,6 +17,11 @@ OPS:   0 hold · 1 open_long · 2 open_short · 3 add_long · 4 add_short ·
        5 close_half_long · 6 close_long · 7 close_half_short ·
        8 close_short · 9 probe_long · 10 probe_short
 ----------------------------------------------------------------------
+
+CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
+keep this instruction so we never lose the thread):
+- 2026-07-19  probe-closable, self-state history, tags to sim, config frame  — WHY: audit T5/T10/T3/R11.
+# NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 from __future__ import annotations
 import numpy as np
