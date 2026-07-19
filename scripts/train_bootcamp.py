@@ -10,6 +10,7 @@ USAGE: python scripts/train_bootcamp.py [--updates N] [--smoke] [--force]
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-19  bar-ruling wired — WHY: Monty reviewed the REAL_XAUUSD Gauntlet (oracle cleared the 2x bar on 9/21 days) and ruled KEEP (ADR-0013). Boot camp now reads goals.yaml:bar_ruling and stamps HIS decision instead of an open "ruling_required" question.
 - 2026-07-19  created/last-major  — WHY: v0.1 build + v0.2 audit fixes (see docs/AUDIT_FIXES_2026-07-19.md).
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
@@ -59,6 +60,19 @@ def main():
     GOAL, FLOOR = float(g["goal_pct"]), float(g["floor_pct"])
     tc = training_cfg()
     BAR = GOAL * float(tc.get("bootcamp", {}).get("bar_multiplier", 2.0))
+    # Monty's ruling on the 2x bar (ADR-0013, 2026-07-19). The Gauntlet flags
+    # ruling_required when the oracle can't clear the bar every day; once Monty
+    # rules, we stamp HIS decision instead of an open question. WHY: the bar
+    # bends only by his hand — reports must say whether he has spoken.
+    ruling = g.get("bar_ruling") or {}
+    bar_acknowledged = (ruling.get("decision") == "keep"
+                        and bool(ruling.get("acknowledged_warning")))
+    ruling_stamp = (
+        f"Monty ruled KEEP the {ruling.get('bar', '2x')} bar on "
+        f"{ruling.get('decided', '?')} — acknowledged the oracle cannot clear it "
+        f"every day (aspirational north-star)"
+        if bar_acknowledged else "OPEN — Monty has not ruled on the bar")
+    open_ruling = warning and not bar_acknowledged
     gc = g.get("goal_conditioning", {})
     ranges = ((tuple(gc["goal_range"]), tuple(gc["floor_range"]))
               if gc.get("randomize_in_training") else None)     # audit T6/R10
@@ -85,7 +99,8 @@ def main():
               data_window=f"{week[0][0]}..{week[-1][0]}", seed=tc.get("seed"),
               assumptions={"fills": "paranoid", "source": src,
                            "bar": f"+{BAR}%/day",
-                           "gauntlet_warning": warning})
+                           "gauntlet_warning": open_ruling,
+                           "monty_bar_ruling": ruling_stamp})
     re_engine = RewardEngine()
     env = TradingEnv(week, GOAL, FLOOR, reward_engine=re_engine,
                      goal_ranges=ranges)
@@ -137,7 +152,8 @@ def main():
                 all(d.get("pnl_pct", 0) >= BAR for d in b.get("day_details", [])))
 
     summary = {"source": src, "bar": f"+{BAR}% every day, zero -{FLOOR}% touches",
-               "gauntlet_warning_ruling_required": warning,
+               "gauntlet_warning_ruling_required": open_ruling,
+               "monty_bar_ruling": ruling_stamp,
                "train_week": train_bench, "second_week": week2_bench,
                "PERFECT_train_week": perfect(train_bench),
                "PERFECT_second_week": perfect(week2_bench),

@@ -17,6 +17,20 @@ goal_conditioning:      # ANY-X promise (ADR-0001/0007)
   goal_range: [0.5, 4.0]
   floor_range: [1.0, 6.0]
 
+# Monty's ruling on the boot-camp BAR (ADR-0013, 2026-07-19). He reviewed the
+# first real-XAUUSD Gauntlet — oracle averaged +4.63%/day with 0 floor breaches,
+# but could clear the 2x bar (+5%/day) on only 9 of 21 days — and ruled KEEP:
+# the 2x-goal-every-day bar stands as the aspirational north-star. The honest
+# "unreachable on low-range days" warning stays on reports, now ACKNOWLEDGED.
+# WHY here: goals.yaml is Monty's config; boot camp reads it (the bar bends only
+# by his hand). NEXT EDITOR: never edit this silently — a re-rule needs a new ADR.
+bar_ruling:
+  decided: 2026-07-19
+  bar: "2x-goal-every-day"
+  decision: keep                 # keep | average | daily_goal | (future)
+  acknowledged_warning: true     # Monty has seen the oracle 9/21 evidence
+  evidence: "gauntlet REAL_XAUUSD 2026-04-27..05-26 (21d): oracle +4.63%/day avg, min +2.08%, 0 breaches, cleared +5% on 9/21 days"
+
 # Account mode (ADR-0012, Monty 2026-07-19): PERSONAL first (adjustable goal/floor
 # + keep-trading ratchet). FTMO is a future switchable mode, NOT yet active.
 account_mode: personal            # personal | ftmo_challenge (future)
