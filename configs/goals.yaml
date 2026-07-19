@@ -16,3 +16,16 @@ goal_conditioning:      # ANY-X promise (ADR-0001/0007)
   randomize_in_training: true
   goal_range: [0.5, 4.0]
   floor_range: [1.0, 6.0]
+
+# Account mode (ADR-0012, Monty 2026-07-19): PERSONAL first (adjustable goal/floor
+# + keep-trading ratchet). FTMO is a future switchable mode, NOT yet active.
+account_mode: personal            # personal | ftmo_challenge (future)
+# When ftmo_challenge is built: target 2.5, daily_loss 5.0, max_loss 10.0,
+# trailing 4.0, stop_at_target true, early_flatten_buffer 0.1 (flatten at -%(daily-0.1)).
+ftmo_future:
+  target_pct: 2.5
+  daily_loss_pct: 5.0
+  max_loss_pct: 10.0
+  trailing_pct: 4.0
+  stop_at_target: true
+  early_flatten_buffer_pct: 0.1
