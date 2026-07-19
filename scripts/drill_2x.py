@@ -57,13 +57,6 @@ def main():
     re_engine = RewardEngine()
     env = TradingEnv(week, GOAL, FLOOR, reward_engine=re_engine, goal_ranges=None)
     ppo = PPO(env)
-    loaded = None
-    for name in (a.ckpt, "best_trading"):   # resume working ckpt; else warm-start from best
-        try:
-            ppo.load(name); loaded = name; break
-        except Exception:
-            continue
-    print(("resumed: " + loaded) if loaded else "fresh start (no checkpoint found)", flush=True)
 
     def evaluate():
         env.goal_ranges = None
@@ -75,12 +68,38 @@ def main():
         ok = (br == 0 and len(pnls) == len(week) and all(p >= BAR for p in pnls))
         return pnls, br, ok, b
 
+    def cons_of(pnls, br):
+        # consistency rank (Monty): 0 breaches REQUIRED, then #days>=2x, #days>=goal,
+        # #days>=0, then lower stdev. A higher tuple = more consistent.
+        if br != 0 or not pnls:
+            return (-1, -1, -1, -1e9)
+        sd = round(statistics.pstdev(pnls), 3) if len(pnls) > 1 else 0.0
+        return (sum(1 for p in pnls if p >= BAR), sum(1 for p in pnls if p >= GOAL),
+                sum(1 for p in pnls if p >= 0), -sd)
+
+    # Seed the consistency BAR from the EXISTING best_trading so a worse policy can NEVER
+    # overwrite it (Monty's rule). The bar persists across runs via best_trading.pt.
+    best_cons = (-1, -1, -1, -1e9)
+    try:
+        ppo.load("best_trading")
+        p0, br0, _, _ = evaluate()
+        best_cons = cons_of(p0, br0)
+        print("existing best_trading bar: 2x=%d goal=%d +=%d sd=%.2f"
+              % (best_cons[0], best_cons[1], best_cons[2], -best_cons[3]), flush=True)
+    except Exception:
+        print("no existing best_trading yet - bar starts at zero", flush=True)
+
+    # Load the WORKING checkpoint to CONTINUE training (warm-start from best_trading if none).
+    loaded = None
+    for name in (a.ckpt, "best_trading"):
+        try:
+            ppo.load(name); loaded = name; break
+        except Exception:
+            continue
+    print(("resumed working: " + loaded) if loaded else "fresh start (no checkpoint)", flush=True)
+
     prog = rpath("artifacts", "drill2x_progress.json")
     t0, u, best = time.time(), 0, -1e9
-    # best_trading is kept by CONSISTENCY (Monty 2026-07-19: "any checkpoint saved has to
-    # do better relative to consistency"). Rank = (#days>=2x, #days>=goal, #days>=0, -stdev),
-    # and it is NEVER replaced by a worse-consistency or breaching policy.
-    best_cons = (-1, -1, -1, -1e9)
     hit = False
     while time.time() - t0 < a.minutes * 60:
         batch = [ppo.play_day(i) for i in range(len(week))]
@@ -96,7 +115,7 @@ def main():
             dpos = sum(1 for p in pnls if p >= 0)
             sd = round(statistics.pstdev(pnls), 3) if len(pnls) > 1 else 0.0
             wk = round(float(sum(pnls)), 3)
-            cons = (hits, dgoal, dpos, -sd)
+            cons = cons_of(pnls, br)
             print("upd %4d | reward %7.2f | pnl%% %s | 2x %d/%d goal %d/%d +%d/%d sd %.2f | wk %+.2f%% | br %d"
                   % (u, mean_r, pnls, hits, len(week), dgoal, len(week), dpos, len(week), sd, wk, br), flush=True)
             ppo.save(a.ckpt)                                   # latest — resume here
