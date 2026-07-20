@@ -120,6 +120,7 @@ class FastSim:
                        else torch.as_tensor(record_in, dtype=torch.float32, device=dev).clone())
         self.min_eq = torch.zeros(N, device=dev)
         self.max_eq = torch.zeros(N, device=dev)
+        self.min_worst = torch.zeros(N, device=dev)   # running min of intrabar worst-case eq% (true breach basis)
         self.cnt_np = torch.zeros(N, device=dev)
         self.wins_np = torch.zeros(N, device=dev)
         self.sum_pnl = torch.zeros(N, device=dev)
@@ -370,6 +371,7 @@ class FastSim:
 
         # ===== floor LAW (intrabar worst-case) =====
         worst = self._worst_eq(hi, lo, sp)
+        self.min_worst = torch.minimum(self.min_worst, worst)   # true distance-to-breach for the surrogate
         stand = live & ((worst <= eff) | (eqp <= eff))
         if stand.any():
             fpx = torch.where(self.side > 0, (lo - sp)[:, None], (hi + sp)[:, None])
@@ -439,8 +441,12 @@ class FastSim:
         return rr * just.float()
 
     def results(self):
-        return {"day_pnl": self.day_pnl, "goal_hit": self.goal_hit,
-                "breached": self.breached, "streak": self.streak, "record": self.record}
+        # clone so callers can hold the dict across a later rollout (review: no aliasing)
+        return {"day_pnl": self.day_pnl.clone(), "goal_hit": self.goal_hit.clone(),
+                "breached": self.breached.clone(), "streak": self.streak.clone(),
+                "record": self.record.clone(), "min_eq": self.min_eq.clone(),
+                "min_worst": self.min_worst.clone(),
+                "target": self.goal.clone(), "risk": self.floor.clone()}
 
 
 # --------------------- tiny smoke test (random policy) ---------------------
