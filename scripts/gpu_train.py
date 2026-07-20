@@ -44,7 +44,7 @@ def now():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--instances", type=int, default=8000)      # Monty: 8000
-    ap.add_argument("--minutes", type=float, default=600.0)
+    ap.add_argument("--minutes", type=float, default=1440.0)    # hardcoded: run until Colab stops it
     ap.add_argument("--max-updates", type=int, default=0)       # 0 = unlimited (time-bound)
     ap.add_argument("--csv", default=rpath("data", "XAUUSD_curriculum_2026.csv"))
     ap.add_argument("--target-lo", type=float, default=2.5)     # Monty's ranges
@@ -54,15 +54,15 @@ def main():
     ap.add_argument("--focus-frac", type=float, default=0.6)    # 2026-07-20 Monty: 60% of practice on one realistic pair
     ap.add_argument("--focus-target", type=float, default=3.0)  # ...target 3%
     ap.add_argument("--focus-risk", type=float, default=3.5)    # ...risk 3.5% (rest stays random across the ranges)
-    ap.add_argument("--decide-every", type=int, default=1)      # act every N bars (speed lever); 5 = every 5 min
+    ap.add_argument("--decide-every", type=int, default=5)      # hardcoded: decide every 5 min (speed)
     ap.add_argument("--target-days", type=int, default=365)     # the finish line
-    ap.add_argument("--eval-every", type=int, default=3)        # updates between streak checks
+    ap.add_argument("--eval-every", type=int, default=30)       # hardcoded: check record ~once an hour
     ap.add_argument("--eval-envs", type=int, default=512)
     ap.add_argument("--eval-rounds", type=int, default=24)      # grows toward 365 as brain improves
-    ap.add_argument("--patience", type=int, default=60)         # evals w/o a record -> stop
+    ap.add_argument("--patience", type=int, default=100000)     # hardcoded: don't plateau-stop; run until Colab stops
     ap.add_argument("--env-mb", type=int, default=256)          # PPO update env minibatch (L4-safe)
-    ap.add_argument("--epochs", type=int, default=2)
-    ap.add_argument("--K", type=int, default=48)
+    ap.add_argument("--epochs", type=int, default=1)            # hardcoded: leaner/faster update
+    ap.add_argument("--K", type=int, default=24)               # hardcoded: fewer position slots (faster)
     ap.add_argument("--warm", default="best_trading")           # COPY of the proof (never overwritten)
     ap.add_argument("--ckpt", default="gpu_live")
     ap.add_argument("--device", default="auto")
