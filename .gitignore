@@ -25,3 +25,11 @@ artifacts/checkpoints/curric_live.pt
 artifacts/checkpoints/curric_L*.pt
 artifacts/curriculum_progress.json
 artifacts/CURRICULUM_HISTORY.md
+
+# GPU Edition (Bot 1.5) transient outputs — regenerated each run
+artifacts/gpu_cache_*.npz
+artifacts/gpu_progress.json
+artifacts/GPU_TRAINING_HISTORY.md
+artifacts/checkpoints/gpu_live.pt
+artifacts/checkpoints/gpu_best.pt
+artifacts/checkpoints/gpu_progress.json
