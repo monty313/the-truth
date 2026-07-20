@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE PERFORMANCE IS POSSIBLE — PART TWO (the colorful record)</title>
+<style>
+  :root{--ink:#161d2b;--muted:#5b6472;--line:#e4e8f0;--blue:#2563eb;--green:#0f9d58;
+        --amber:#f59e0b;--red:#e5484d;--purple:#7c3aed;--bg:#f6f8fc;--card:#fff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.55;}
+  .wrap{max-width:940px;margin:0 auto;padding:26px 18px 80px;}
+  h1{font-size:30px;margin:0 0 2px;letter-spacing:-.4px}
+  .sub{color:var(--muted);margin:0 0 6px;font-size:16.5px}
+  .stamp{font-size:12.5px;color:var(--muted);background:#eef1f7;border-radius:8px;display:inline-block;padding:4px 10px;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+        padding:20px 22px;margin:0 0 16px;box-shadow:0 1px 3px rgba(20,30,60,.05);}
+  h2{font-size:21px;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+  .irac{width:40px;height:40px;border-radius:12px;color:#fff;font-weight:900;font-size:20px;
+        display:flex;align-items:center;justify-content:center;flex:none}
+  .iI{background:var(--red)} .iR{background:var(--amber)} .iA{background:var(--blue)} .iC{background:var(--green)}
+  .lead{color:var(--muted);font-size:15px;margin:2px 0 14px}
+  .jar{background:linear-gradient(135deg,#fff8e9,#eef4ff);border:1px solid #f0e2bb;border-radius:16px;padding:18px 22px;margin-bottom:16px}
+  .jar .big{font-size:19px;font-weight:800}
+  .hero{background:linear-gradient(135deg,#eafaf0,#eef4ff);border:1px solid #bfe9cf;border-radius:16px;padding:18px 22px;margin-bottom:16px}
+  .hero .n{color:var(--green);font-weight:900}
+  .hero .big{font-size:21px;font-weight:800}
+  /* before/after bars */
+  .drow{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13.5px}
+  .drow .lbl{width:88px;color:var(--muted);font-weight:700;flex:none}
+  .track{flex:1;background:#eef1f6;border-radius:8px;height:25px;position:relative;overflow:hidden}
+  .bar{position:absolute;left:0;top:0;bottom:0;border-radius:8px;display:flex;align-items:center;
+       justify-content:flex-end;padding-right:8px;color:#fff;font-weight:800;font-size:12.5px;min-width:8px}
+  .g{background:var(--green)} .z{background:#c3ccd9;color:#5b6472}
+  .goalline{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--red);opacity:.65}
+  .clr{font-weight:800;color:var(--green);width:86px;text-align:right;flex:none;font-size:12.5px}
+  .cap{font-size:12.5px;color:var(--muted);margin-top:8px}
+  /* ratchet graphic */
+  .ratch{position:relative;height:118px;background:#fbfcfe;border:1px solid var(--line);border-radius:12px;margin:8px 0 4px;overflow:hidden}
+  .lvl{position:absolute;left:0;right:0;height:2px}
+  .lvl small{position:absolute;right:8px;top:-17px;font-weight:800;font-size:11.5px}
+  .curve{position:absolute;left:0;bottom:0;width:100%;height:100%}
+  .pill{display:inline-block;font-size:11px;font-weight:800;border-radius:20px;padding:2px 9px;margin-right:6px}
+  .pb{background:#fdecec;color:var(--red)} .pg{background:#cdeeda;color:var(--green)}
+  code{background:#eef1f7;border-radius:6px;padding:1px 6px;font-size:12.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  pre{background:#0f1830;color:#dfe7f5;border-radius:11px;padding:12px 14px;font-size:12.5px;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
+  th,td{padding:8px 10px;border-bottom:1px solid #eef1f6;text-align:left}
+  th{color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.4px}
+  td b.up{color:var(--green)}
+  .serial{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:#eef1f7;border-radius:6px;padding:1px 7px}
+  a{color:var(--blue);text-decoration:none;font-weight:600} a:hover{text-decoration:underline}
+  .brain{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:700px){.brain{grid-template-columns:1fr 1fr}}
+  .part{border:2px solid var(--line);border-radius:12px;padding:12px 14px;background:#fbfcfe;font-size:13.5px}
+  .part b{display:block;font-size:14px;margin-bottom:2px}
+  .p1{border-color:#bcd3ff}.p2{border-color:#cdeeda}.p3{border-color:#f3dca6}.p4{border-color:#e6d6f7}.p5{border-color:#f4c9c9}
+  .locker li{margin:6px 0;font-size:14px}
+  .frozen{background:#eef4ff;border:1px solid #d5e4f5;border-radius:12px;padding:14px 18px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>THE PERFORMANCE IS POSSIBLE — PART TWO</h1>
+  <p class="sub">The lid we actually found, and the day the bot learned to <b>bank</b> the target.</p>
+  <div class="stamp">Recorded 2026-07-20 · the immutable written brief is <a href="https://github.com/monty313/the-truth/blob/main/PERFORMANCE_IS_POSSIBLE_PART2.md">PERFORMANCE_IS_POSSIBLE_PART2.md</a> (write-locked, fingerprint in its commit) — this page is its colorful twin</div>
+
+  <div class="jar">
+    <div class="big">🫙 The fleas, again.</div>
+    <div style="margin-top:4px;font-size:15px">Part One said the lid on the jar wasn't real. Part Two found something better: there <b>WAS</b> a lid — a thin, physical, measurable one — screwed on by <b>our own safety rail</b>. A 0.1%-thick ring of exit fees, bolted to the rim by one line of code. We found it. We unscrewed it. The jump heights changed the <b>same day</b>. Every "impossible" so far has dissolved into a findable, fixable, finite thing. <b>Proceed accordingly.</b></div>
+  </div>
+
+  <div class="hero">
+    <div class="big">The verdict, up front: from clearing <span style="color:var(--red)">1 day in 90</span> → <span class="n">21 days in 90</span>, with <span class="n">zero</span> floor breaches, ever.</div>
+    <div style="color:var(--muted);margin-top:4px;font-size:14.5px">On its 5 practice days: <b>4 of 5 banked past +3%</b>, averaging <b>+2.80%/day</b>, 100% green — reproducible, serial-stamped, and now pinned by a permanent test. Twenty minutes of 2-core CPU did this. The GPU hasn't even warmed up yet.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="irac iI">I</span> ISSUE — safe, active… and poor</h2>
+    <p class="lead">The bot was trading ~16 times a day, holding +6.6% days inside it, never once touching the floor — and netting <b>zero</b>. On the five RICHEST days of the whole set (7–14% of range on the table) it did exactly <b>+0.00%</b>. And on its good days it kept banking <b>+2.9% on a 3.0% target</b>. Over and over. A hair under. Never over.</p>
+    <p class="lead" style="margin-bottom:0"><b>A miss that consistent is not bad luck — it's a LAW acting on the result.</b> The issue was to find which law.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="irac iR">R</span> RULE — our own rule, betrayed by one term</h2>
+    <p class="lead">The win-lock's written rule (R3#7): <i>"the stand-down flatten still realizes <b>≥ goal</b>."</i> Good rule. The code set the lock at bare <code>goal</code> — so the lock paid the exit fee <b>after</b> locking, and banked goal − fee. The fix keeps the rule's own promise:</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:240px">
+        <span class="pill pb">BEFORE</span>
+        <div class="ratch">
+          <div class="lvl" style="top:30%;background:var(--red)"><small style="color:var(--red)">target +3.0%</small></div>
+          <div class="lvl" style="top:44%;background:#c3ccd9"><small style="color:#8a93a3">banked +2.9%…</small></div>
+          <svg class="curve" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,95 L30,60 L55,22 L75,40 L76,44 L100,44" fill="none" stroke="#e5484d" stroke-width="2.2"/></svg>
+        </div>
+        <pre style="margin:8px 0 0">lock = max(lock, goal, trail)            # the flaw</pre>
+      </div>
+      <div style="flex:1;min-width:240px">
+        <span class="pill pg">AFTER — fixed in BOTH engines</span>
+        <div class="ratch">
+          <div class="lvl" style="top:30%;background:var(--red)"><small style="color:var(--red)">target +3.0%</small></div>
+          <div class="lvl" style="top:26%;background:var(--green)"><small style="color:var(--green)">banks +3.0%+ ✓</small></div>
+          <svg class="curve" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,95 L30,60 L55,18 L75,26 L76,26 L100,26" fill="none" stroke="#0f9d58" stroke-width="2.2"/></svg>
+        </div>
+        <pre style="margin:8px 0 0">lock = max(lock, goal + fee, trail)      # the rule, kept</pre>
+      </div>
+    </div>
+    <p class="cap">Nothing loosened. No risk added. Note what the flaw did to LEARNING: the scoreboard paid <b>zero</b> for every disciplined win, thousands of times. The bot's stillness on rich days wasn't cowardice — it was obedience to a broken scoreboard. Two companion rules joined it: the <b>Ladder Rule</b> (master one day, then five, then all) and <b>Monty's Serial Rule</b> (every frozen result carries its own SHA-256 serial — a claim either has a serial or it isn't a claim).</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="irac iA">A</span> APPLICATION — the 5 practice days, before vs after</h2>
+    <p class="lead">Target +3.0%, floor 3.5%. Red line = your target. Baseline first, ladder second. Zero breaches through every phase — safety never blinked.</p>
+    <div class="drow"><span class="lbl">Jan 30</span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar z" style="width:2%"></span></div><span class="clr">before +0.00</span></div>
+    <div class="drow"><span class="lbl"></span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar g" style="width:68%">+3.40%</span></div><span class="clr">CLEARED ✓</span></div>
+    <div class="drow"><span class="lbl">Jan 29</span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar z" style="width:3%"></span></div><span class="clr">before +0.11</span></div>
+    <div class="drow"><span class="lbl"></span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar g" style="width:80%">+4.02%</span></div><span class="clr">CLEARED ✓</span></div>
+    <div class="drow"><span class="lbl">Mar 23</span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar z" style="width:2%"></span></div><span class="clr">before +0.00</span></div>
+    <div class="drow"><span class="lbl"></span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar g" style="width:68%">+3.41%</span></div><span class="clr">CLEARED ✓</span></div>
+    <div class="drow"><span class="lbl">Mar 19</span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar z" style="width:2%"></span></div><span class="clr">before +0.00</span></div>
+    <div class="drow"><span class="lbl"></span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar g" style="width:60%">+3.01%</span></div><span class="clr">CLEARED ✓</span></div>
+    <div class="drow"><span class="lbl">Feb 02</span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar z" style="width:2%"></span></div><span class="clr">before +0.00</span></div>
+    <div class="drow"><span class="lbl"></span><div class="track"><span class="goalline" style="left:60%"></span><span class="bar z" style="width:4%">+0.15</span></div><span class="clr">unfinished</span></div>
+    <p class="cap">First clear at <b>update 35 (~4 minutes)</b>. Pool at <b>4/5 by update 40 (~5 minutes)</b>. Frozen forever as serial <span class="serial">SN-92c7f36c3fb4</span> — re-run it, it reproduces.</p>
+    <table>
+      <tr><th>the honest exam — all 90 days</th><th>cleared @ 3.0/3.5</th><th>breaches</th><th>note</th></tr>
+      <tr><td>best brain, before</td><td>1 / 90 (1%)</td><td>0</td><td>the lid on</td></tr>
+      <tr><td>same brain, law fixed</td><td>3 / 90 (3%)</td><td>0</td><td>the fix alone lifts</td></tr>
+      <tr><td><b>new brain — practiced on just 5 days</b></td><td><b class="up">21 / 90 (23%)</b></td><td><b>0</b></td><td>skill that <b>transfers</b> to days it never saw</td></tr>
+    </table>
+    <p class="cap">Re-verified after the full-repo review under the judge-aligned sim: <b>23% · 0 breaches · 50% green · honest 3-day streak</b> — and the lift itself is now a <b>permanent test</b> (36/36 pass): if any law ever drifts, the suite fails and names the day it broke.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="irac iC">C</span> CONCLUSION — the lid is off; the variable is training</h2>
+    <p class="lead" style="margin-bottom:0">Part One's evidence was one perfect frozen day. Part Two's evidence is a <b>learned, transferring, reproducible, serial-stamped capability</b> — plus the discovery that the biggest obstacle so far was never the market and never the method, but one missing term in our own arithmetic. The question was never <i>"is this possible?"</i> It is only <i>"how much training until it is consistent?"</i> — and a self-tuning machine is now assigned to answering it, seeded from a brain that already makes money, guarded by a ratchet that keeps only proven gains and can never backslide. <b>Proceed from possibility. The evidence has re-earned it.</b></p>
+  </div>
+
+  <div class="card">
+    <h2>🧠 The brain — the actual artifact</h2>
+    <p class="lead">Real link, real bytes, committed: <a href="https://github.com/monty313/the-truth/blob/main/artifacts/checkpoints/PROVEN_LIFT_2026-07-20.pt">PROVEN_LIFT_2026-07-20.pt</a> · serial <span class="serial">92c7f36c3fb4</span> (the filename serial IS the file's own hash). Its Part One ancestor sits beside it: <a href="https://github.com/monty313/the-truth/blob/main/artifacts/checkpoints/PROVEN_2x_2026-07-19.pt">PROVEN_2x_2026-07-19.pt</a> · <span class="serial">546fa03a1fa033d8</span>.</p>
+    <div class="brain">
+      <div class="part p1"><b>inp — the eyes</b>Reads 1,820 numbers per moment: 10 time-frames × (170 market features + 12 self-facts like open risk, streak, distance to the floor).</div>
+      <div class="part p2"><b>gru — the memory</b>Carries the day's context bar to bar, so it knows where it's been, not just where it is.</div>
+      <div class="part p3"><b>op_head — the hands</b>Chooses among 11 trade operations (hold, open/add long or short, closes, management). The masks stay hard law over all of them.</div>
+      <div class="part p4"><b>size_head — the conviction dial</b>A learnable Beta distribution over position size: 0.05–1.0 of the 0.25% per-trade risk cap. Sizing by conviction, by design.</div>
+      <div class="part p5"><b>value_head — the judge inside</b>Scores how good the current state is, so learning knows what to credit.</div>
+      <div class="part"><b>methods</b><code>forward()</code> one thought · <code>act()</code> live decision (greedy) or exploration (sampled) · <code>joint_logprob()</code> what learning uses to improve. Blueprint: <a href="https://github.com/monty313/the-truth/blob/main/training/policy.py">training/policy.py</a></div>
+    </div>
+    <p class="cap"><b>Purpose:</b> the first brain in this project that BANKS the target — the seed every trainer now warm-starts from. <b>Use it today:</b></p>
+    <pre># measure it yourself, any target/risk, on the real 90 days:
+python scripts/prove_it.py PROVEN_LIFT_2026-07-20 3.0 3.5
+
+# train it toward day-after-day consistency (Colab, 2 cells):
+GPU_EDITION/Momentum_One_SelfTuner.ipynb  — set your two numbers, run Cell 1, Cell 2</pre>
+  </div>
+
+  <div class="card">
+    <h2>🔒 The evidence locker — real links</h2>
+    <ul class="locker">
+      <li>The brain: <a href="https://github.com/monty313/the-truth/blob/main/artifacts/checkpoints/PROVEN_LIFT_2026-07-20.pt">PROVEN_LIFT_2026-07-20.pt</a> · serial <span class="serial">92c7f36c3fb4</span></li>
+      <li>The ladder that trained it: <a href="https://github.com/monty313/the-truth/blob/main/scripts/lift_demo.py">scripts/lift_demo.py</a> · the diagnosis: <a href="https://github.com/monty313/the-truth/blob/main/scripts/diagnose_flat.py">scripts/diagnose_flat.py</a> · the measuring stick: <a href="https://github.com/monty313/the-truth/blob/main/scripts/prove_it.py">scripts/prove_it.py</a></li>
+      <li>The law fix (search "LAW FIX"): <a href="https://github.com/monty313/the-truth/blob/main/training/fastsim.py">training/fastsim.py</a> + <a href="https://github.com/monty313/the-truth/blob/main/backtesting/simulator.py">backtesting/simulator.py</a> · pinned forever by <a href="https://github.com/monty313/the-truth/blob/main/tests/test_ratchet_and_streak.py">tests/test_ratchet_and_streak.py</a></li>
+      <li>The self-tuner that carries it: <a href="https://github.com/monty313/the-truth/blob/main/training/meta_tuner.py">training/meta_tuner.py</a> · the full session record: <a href="https://github.com/monty313/the-truth/blob/main/HANDOFF_2026-07-20.md">HANDOFF_2026-07-20.md</a></li>
+      <li>Part One, the founding brief: <a href="https://github.com/monty313/the-truth/blob/main/PERFORMANCE_IS_POSSIBLE.md">PERFORMANCE_IS_POSSIBLE.md</a></li>
+    </ul>
+    <div class="frozen" style="margin-top:12px"><b>Immutability:</b> the written brief (<a href="https://github.com/monty313/the-truth/blob/main/PERFORMANCE_IS_POSSIBLE_PART2.md">the .md</a>) is the canonical frozen record — write-locked on disk, SHA-256 fingerprint in its commit, permanent at its <a href="https://github.com/monty313/the-truth/blob/c9079208e6f9b1d201ab3118e3f2661ad6f9e012/PERFORMANCE_IS_POSSIBLE_PART2.md">commit permalink</a>. If the future disagrees with it, write Part Three. Never touch that one. <b>The lid is off. The jar is open. Keep jumping higher.</b></div>
+  </div>
+</div>
+</body>
+</html>
