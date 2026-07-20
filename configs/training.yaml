@@ -6,6 +6,8 @@ bootcamp:
   second_week_proof: true
   explorative_week1: {entropy_coef: 0.05}
 episode: one_trading_day
+decide_every: 5                   # decision cadence: act once per N bars, hold between (one door
+                                  # for training + eval + deployment — review 2026-07-20)
 ppo:                              # consumed by training/ppo.py via core.configs
   gamma: 0.999
   lam: 0.95

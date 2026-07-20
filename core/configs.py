@@ -58,3 +58,15 @@ def goals_cfg() -> dict:
 
 def training_cfg() -> dict:
     return load("training")
+
+
+def policy_hidden() -> int:
+    """ONE door for the brain's hidden size (review 2026-07-20: it was hardcoded as
+    128 in six call sites; a config change would have silently built mismatched brains)."""
+    return int(training_cfg().get("policy", {}).get("hidden", 128))
+
+
+def decide_every() -> int:
+    """ONE door for the decision cadence (act once per N bars, hold between). Semantics-
+    bearing: training and deployment must share it, so it lives in training.yaml."""
+    return int(training_cfg().get("decide_every", 5))

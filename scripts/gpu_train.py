@@ -30,11 +30,12 @@ import torch
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from core.configs import path as rpath, training_cfg           # noqa: E402
+from core.configs import path as rpath, training_cfg, policy_hidden, decide_every as cfg_decide  # noqa: E402
 from training.policy import Brain                              # noqa: E402
 from training.fastsim import FastSim, SELF_DIM                 # noqa: E402
 from training.gpu_rollout import rollout, ppo_update           # noqa: E402
 from training.gpu_data import build_day_tensors                # noqa: E402
+from evaluation.consistency import auto_ranges                 # noqa: E402
 
 
 def now():
@@ -47,14 +48,16 @@ def main():
     ap.add_argument("--minutes", type=float, default=1440.0)    # hardcoded: run until Colab stops it
     ap.add_argument("--max-updates", type=int, default=0)       # 0 = unlimited (time-bound)
     ap.add_argument("--csv", default=rpath("data", "XAUUSD_curriculum_2026.csv"))
-    ap.add_argument("--target-lo", type=float, default=2.5)     # Monty's ranges
-    ap.add_argument("--target-hi", type=float, default=70.3)
-    ap.add_argument("--risk-lo", type=float, default=1.0)
-    ap.add_argument("--risk-hi", type=float, default=4.4)
-    ap.add_argument("--focus-frac", type=float, default=0.6)    # 2026-07-20 Monty: 60% of practice on one realistic pair
-    ap.add_argument("--focus-target", type=float, default=3.0)  # ...target 3%
-    ap.add_argument("--focus-risk", type=float, default=3.5)    # ...risk 3.5% (rest stays random across the ranges)
-    ap.add_argument("--decide-every", type=int, default=5)      # hardcoded: decide every 5 min (speed)
+    # Monty's law lives in configs/goals.yaml (ONE door — review 2026-07-20: these were a
+    # hardcoded second copy that ignored his typed numbers). None => filled from auto_ranges().
+    ap.add_argument("--target-lo", type=float, default=None)
+    ap.add_argument("--target-hi", type=float, default=None)
+    ap.add_argument("--risk-lo", type=float, default=None)
+    ap.add_argument("--risk-hi", type=float, default=None)
+    ap.add_argument("--focus-frac", type=float, default=None)
+    ap.add_argument("--focus-target", type=float, default=None)
+    ap.add_argument("--focus-risk", type=float, default=None)
+    ap.add_argument("--decide-every", type=int, default=cfg_decide())   # one door (training.yaml)
     ap.add_argument("--target-days", type=int, default=365)     # the finish line
     ap.add_argument("--eval-every", type=int, default=30)       # hardcoded: check record ~once an hour
     ap.add_argument("--eval-envs", type=int, default=512)
@@ -69,6 +72,14 @@ def main():
     a = ap.parse_args()
 
     dev = ("cuda" if torch.cuda.is_available() else "cpu") if a.device == "auto" else a.device
+    _r = auto_ranges()                                          # Monty's law from goals.yaml (one door)
+    if a.target_lo is None: a.target_lo = _r["tgt_lo"]
+    if a.target_hi is None: a.target_hi = _r["tgt_hi"]
+    if a.risk_lo is None: a.risk_lo = _r["risk_lo"]
+    if a.risk_hi is None: a.risk_hi = _r["risk_hi"]
+    if a.focus_frac is None: a.focus_frac = _r["focus_frac"]
+    if a.focus_target is None: a.focus_target = _r["focus_target"]
+    if a.focus_risk is None: a.focus_risk = _r["focus_risk"]
     tc = training_cfg(); p = dict(tc.get("ppo", {}))
     gamma = float(p.get("gamma", 0.999)); lam = float(p.get("lam", 0.95))
     clip = float(p.get("clip", 0.2)); lr = float(p.get("lr", 3e-4))
@@ -89,20 +100,23 @@ def main():
     print("=" * 68, flush=True)
 
     sim = FastSim(do, dp, dl, cols, device=dev, K=a.K)
-    brain = Brain(obs_dim, hidden=128).to(dev)
+    brain = Brain(obs_dim, hidden=policy_hidden()).to(dev)
     opt = torch.optim.Adam(brain.parameters(), lr=lr)
 
-    # warm-start from a COPY of the proof; the original file is never touched
+    # warm-start: resume own progress first, then the proven-PROFITABLE seeds
+    # (lift_best -> the committed frozen PROVEN_LIFT), then ancestors.
     loaded = None
-    for name in ("gpu_best", a.ckpt, "lift_best", a.warm, "PROVEN_2x_2026-07-19", "best_meta"):  # resume best, then the proven-profitable seed
+    for name in ("gpu_best", a.ckpt, "lift_best", "PROVEN_LIFT_2026-07-20",
+                 a.warm, "PROVEN_2x_2026-07-19", "best_meta"):
         pth = rpath("artifacts", "checkpoints", name + ".pt")
         if os.path.exists(pth):
-            d = torch.load(pth, weights_only=False, map_location=dev)
-            if d.get("obs_dim") == obs_dim:
-                try:
+            try:                                     # guarded: a truncated file must not kill startup
+                d = torch.load(pth, weights_only=False, map_location=dev)
+                if d.get("obs_dim") == obs_dim:
                     brain.load_state_dict(d["model"]); loaded = name; break
-                except Exception:
-                    continue
+            except Exception as ex:
+                print("warm-start: skipping unreadable %s (%s)" % (name, ex), flush=True)
+                continue
     print("warm-start: %s" % (loaded or "fresh (no matching checkpoint)"), flush=True)
 
     histdir = rpath("artifacts", "checkpoints", "history"); os.makedirs(histdir, exist_ok=True)
@@ -138,8 +152,9 @@ def main():
         payload = {"model": brain.state_dict(), "obs_dim": obs_dim,
                    "reward_state": {}, "seed": seed}
         live = rpath("artifacts", "checkpoints", a.ckpt + ".pt")
-        torch.save(payload, live)
-        torch.save(payload, rpath("artifacts", "checkpoints", "gpu_best.pt"))
+        torch.save(payload, live + ".tmp"); os.replace(live + ".tmp", live)      # atomic (review)
+        gb = rpath("artifacts", "checkpoints", "gpu_best.pt")
+        torch.save(payload, gb + ".tmp"); os.replace(gb + ".tmp", gb)
         hh = hashlib.sha256(open(live, "rb").read()).hexdigest()[:12]
         stamp = now()
         frozen = "momentum_gpu_pass%04d_%s_%s.pt" % (int(streak_count), stamp, hh)
@@ -162,7 +177,11 @@ def main():
     t0 = time.time()
     best_streak = -1.0
     eval_rounds = a.eval_rounds
-    if os.path.exists(prog):                       # RESUME across sessions (Drive-persisted)
+    # RESUME across sessions (Drive-persisted). If we did NOT resume our own lineage
+    # (gpu_best/gpu_live), the prior best_streak belongs to a DIFFERENT brain — and any
+    # record from before the 2026-07-20 streak-metric fix is untrustworthy anyway — so
+    # a lift-seeded run starts its record book fresh instead of chasing a stale bar.
+    if os.path.exists(prog) and loaded in ("gpu_best", a.ckpt):
         try:
             _pr = json.load(open(prog))
             best_streak = float(_pr.get("best_streak", -1.0))
@@ -170,6 +189,8 @@ def main():
             print("resume: prior best streak = %d (eval depth %d)" % (int(best_streak), eval_rounds), flush=True)
         except Exception:
             pass
+    elif os.path.exists(prog):
+        print("note: fresh record book (seeded from %s, not resuming old streak bar)" % loaded, flush=True)
     evals_since_record = 0
     upd = 0
     while time.time() - t0 < a.minutes * 60:

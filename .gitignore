@@ -20,7 +20,6 @@ artifacts/checkpoints/best_meta.pt
 artifacts/checkpoints/history/
 artifacts/meta_progress.json
 artifacts/CHECKPOINT_HISTORY.md
-data/XAUUSD_curriculum_2026.csv
 artifacts/checkpoints/curric_live.pt
 artifacts/checkpoints/curric_L*.pt
 artifacts/curriculum_progress.json
@@ -33,3 +32,13 @@ artifacts/GPU_TRAINING_HISTORY.md
 artifacts/checkpoints/gpu_live.pt
 artifacts/checkpoints/gpu_best.pt
 artifacts/checkpoints/gpu_progress.json
+
+# self-tuner + lift transient outputs (review 2026-07-20). The FROZEN, serial-named
+# proofs (PROVEN_*.pt) stay committed; the MUTABLE working files must not churn git.
+artifacts/checkpoints/lift_best.pt
+artifacts/checkpoints/meta_champion.pt
+artifacts/checkpoints/meta_anchor.pt
+artifacts/checkpoints/meta_best.pt
+artifacts/checkpoints/meta_progress.json
+artifacts/META_TRAINING_HISTORY.md
+artifacts/symbol_cache/

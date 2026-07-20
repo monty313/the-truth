@@ -35,7 +35,7 @@ Top menu → **Runtime** → **Change runtime type** → under *Hardware acceler
 **L4 GPU** → **Save**.
 
 **STEP 3 — Run the cells, top to bottom**
-Click the little ▶ button on each cell, in order. The last cell starts training.
+Click the little ▶ button on each cell, in order. **Cell 2 starts training** (the cells after it are optional check-ups).
 Let it run. That is the whole thing.
 
 ---
@@ -45,7 +45,7 @@ Let it run. That is the whole thing.
 Each line is one training round, for example:
 
 ```
-upd  42 | 33s | rollout: mean pnl +1.20% | hit-target 8.0% | breach 0.3% | ploss ...
+upd  42 | 33s | pnl +1.20% | hit 8.0% | breach 0.3% | trades/day 14.2 | entropy 2.1
 ```
 
 - **mean pnl** — the average profit that round
@@ -89,7 +89,7 @@ These plug **straight into your real bot** — same brain shape, nothing to conv
 
 ## If it ever says "out of memory"
 
-Change **one number** in the last cell: `--instances 8000` → `--instances 4000`
+Change **one number** in Cell 2: `--instances 8000` → `--instances 4000`
 (or `2000`). Nothing else changes.
 
 ---

@@ -15,6 +15,10 @@ INTERCONNECTED WITH: training/fastsim.FastSim, training/policy.Brain,
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
+- 2026-07-20  (review note, no code change) gamma/lam discount PER DECISION under
+  decide_every>1 is the INTENDED semi-MDP choice: one decision = one credit step,
+  whatever the bar cadence. Changing cadence changes the effective per-bar horizon —
+  known, accepted, documented here so nobody "fixes" it silently.
 - 2026-07-20  created — WHY: batched rollout/PPO with obs-reconstruction so the
   8,000-env update fits in GPU memory; brain untouched.
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.

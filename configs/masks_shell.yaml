@@ -1,14 +1,14 @@
 # WHO: Monty rulings + ADR-0002/0003. WHAT: Shell + forever masks. WHEN: 2026-07-18.
 per_trade_risk_cap_pct: 0.25
 max_adds_per_stack: 5
-max_trades_per_day: 400          # after this: close-only
-after_budget_mode: close_only
+# NOTE (review 2026-07-20): these behaviors are HARDCODED LAW in both engines, not knobs —
+# after budget: CLOSE-ONLY; probes COUNT toward limits; hedging IS allowed; heat-guard rule
+# is open_risk <= distance_to_effective_floor. The old keys for them were decorative
+# (zero readers) and were removed so no one is misled into "tuning" a dead switch.
+max_trades_per_day: 400          # after this: close-only (hardcoded)
 probe_lot: 0.01
-probes_count_toward_limits: true
-hedging_allowed: true
 heat_guard:                       # engineering addition, flagged (ADR-0002)
-  enabled: true
-  rule: open_risk_leq_distance_to_floor
+  enabled: true                   # the one real heat-guard switch (read by both engines)
 kill_switch_file: artifacts/KILL   # touch this file => freeze + close all
 forever_masks:
   sma_period: 4

@@ -30,7 +30,7 @@ import torch
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from core.configs import path as rpath, training_cfg          # noqa: E402
+from core.configs import path as rpath, training_cfg, decide_every as cfg_decide  # noqa: E402
 from training.fastsim import FastSim, SELF_DIM                # noqa: E402
 from training.gpu_data import build_day_tensors               # noqa: E402
 from training.meta_tuner import run, hold_out_audit           # noqa: E402
@@ -42,13 +42,15 @@ def main():
     ap.add_argument("--minutes", type=float, default=1440.0)   # run until Colab stops it
     ap.add_argument("--device", default="auto")
     ap.add_argument("--K", type=int, default=24)               # position slots (match GPU trainer)
-    ap.add_argument("--decide-every", type=int, default=5)
+    ap.add_argument("--decide-every", type=int, default=None)  # None -> one door (training.yaml decide_every)
     ap.add_argument("--instances", type=int, default=2048)     # per-probe env count
     ap.add_argument("--n-updates", type=int, default=4)        # PPO updates per probe (short train)
     ap.add_argument("--smoke", action="store_true")            # tiny, fast end-to-end sanity run
     a = ap.parse_args()
 
     dev = ("cuda" if torch.cuda.is_available() else "cpu") if a.device == "auto" else a.device
+    if a.decide_every is None:
+        a.decide_every = cfg_decide()                          # one door (training.yaml)
     seed = int(training_cfg().get("seed", 20260718))
     torch.manual_seed(seed); np.random.seed(seed)
 
@@ -58,11 +60,13 @@ def main():
     D = do.shape[0]
 
     K, n_updates, instances, minutes = a.K, a.n_updates, a.instances, a.minutes
-    candidates, n_eval = None, None                            # None -> from configs/training.yaml self_tuner
+    candidates, n_eval, ckpt_dir = None, None, None            # None -> from configs/training.yaml self_tuner
     if a.smoke:                                                # tiny end-to-end proof (fast on CPU)
         do, dp, dl = do[:16], dp[:16], dl[:16]; D = 16
         K, n_updates, instances, minutes = 4, 1, 32, 0.2
         candidates, n_eval = 3, 24                             # shrink the per-generation cost drivers
+        ckpt_dir = "/tmp/selftune_smoke"                       # review: smoke must NEVER touch the
+        os.makedirs(ckpt_dir, exist_ok=True)                   # production checkpoints
 
     work, audit = hold_out_audit(D)          # audit is PERMANENTLY held out; select rotates inside the work pool
     print("=" * 70, flush=True)
@@ -76,7 +80,7 @@ def main():
     sim = FastSim(do, dp, dl, cols, device=dev, K=K)
     out = run(sim, obs_dim, work, audit, minutes=minutes, n_updates=n_updates,
               instances=instances, decide_every=a.decide_every, base_seed=seed,
-              candidates=candidates, n_eval=n_eval)
+              candidates=candidates, n_eval=n_eval, ckpt_dir=ckpt_dir)
     print("done:", out, flush=True)
 
 

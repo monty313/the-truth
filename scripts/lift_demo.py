@@ -4,10 +4,10 @@ Ladder: Phase 1 = master ONE rich day (2026-01-30, 14% range) to >= +3.0% with n
 Self-correcting: bumps exploration if stuck; fresh-restarts if dead. Every save gets a
 SERIAL NUMBER (sha256[:12]) so no result can ever be duplicated/confused (Monty's rule).
 """
-import os, sys, time, json, hashlib, datetime
+import os, sys, time, json, hashlib, datetime, shutil
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
 import torch
-from core.configs import path as rpath
+from core.configs import path as rpath, policy_hidden
 from training.gpu_data import build_day_tensors
 from training.fastsim import FastSim, SELF_DIM
 from training.gpu_rollout import rollout, ppo_update
@@ -46,7 +46,10 @@ def save_serial(tag, extra):
     name = "lift_%s_%s_SN-%s.pt" % (tag, stamp, sha)
     hist = rpath("artifacts","checkpoints","history"); os.makedirs(hist, exist_ok=True)
     os.replace(tmp, os.path.join(hist, name))
-    torch.save(payload, rpath("artifacts","checkpoints","lift_best.pt"))
+    # lift_best = a byte-copy of the serial file (review: re-torch.save embeds a different
+    # archive name -> hash mismatch; a COPY keeps Monty's Serial Rule exact) + atomic.
+    lb = rpath("artifacts","checkpoints","lift_best.pt")
+    shutil.copy2(os.path.join(hist, name), lb + ".tmp"); os.replace(lb + ".tmp", lb)
     print("   SAVED %s  (serial %s)  %s" % (name, sha, extra), flush=True)
     return name
 
@@ -55,6 +58,8 @@ def prog(d):
 
 def train_phase(name, days, n_env, max_upd, max_min, success_fn, eval_every=5):
     global ENT, brain, opt
+    ENT = 0.04                                    # review: reset exploration each phase
+    seed_state = {k: v.clone() for k, v in brain.state_dict().items()}   # for a true restart
     t0 = time.time(); best = -99; stuck = 0; ok_streak = 0; restarted = False
     pool = torch.tensor(days)
     for u in range(1, max_upd + 1):
@@ -86,9 +91,11 @@ def train_phase(name, days, n_env, max_upd, max_min, success_fn, eval_every=5):
             if stuck == 12 and ENT < 0.08:
                 ENT = 0.08; print("   (stuck -> exploration up: ent 0.08)", flush=True)
             if stuck == 22 and not restarted:
-                restarted = True; ENT = 0.06
-                brain = Brain(obs_dim, hidden=128); opt = torch.optim.Adam(brain.parameters(), lr=3e-4)
-                print("   (dead -> FRESH RESTART)", flush=True)
+                restarted = True; ENT = 0.06      # review: restart from the PHASE SEED, not random —
+                brain = Brain(obs_dim, hidden=policy_hidden())   # a random brain threw away the policy
+                brain.load_state_dict(seed_state)
+                opt = torch.optim.Adam(brain.parameters(), lr=3e-4)
+                print("   (stuck -> RESTART from phase seed, wider exploration)", flush=True)
     return False
 
 print("baseline (PROVEN, greedy):", flush=True)

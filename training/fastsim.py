@@ -30,6 +30,14 @@ INTERCONNECTED WITH: training/policy.Brain, training/gpu_data, core.configs
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
+- 2026-07-20  full-repo review fixes — WHY: (1) CRITICAL: streak/record updates in
+  _day_end_reward were not gated by `just`, so every finalize-event bumped the WHOLE
+  batch (inflated streak reward; counterfeit 'days in a row' records — any streak
+  record saved before this fix is untrustworthy); (2) add-target now matches the
+  judge exactly (biggest same-side stack or REJECT — no fallback to smaller winners).
+  Declared, accepted gaps (reviewed): policy actions blocked on the final bar (twin
+  conservative), shell checked at fill bar (not decision bar), K-slot cap, no
+  kill-switch, per-DECISION gamma under decide_every (semi-MDP choice).
 - 2026-07-20  ratchet lock line = goal + flat_cost (was bare goal) — WHY: lift demo
   proved the stand-down flatten banked goal - cost (~2.9% on a 3.0% target); R3#7's
   documented intent is "flatten still realizes >= goal". Mirrored in backtesting/simulator.
@@ -312,13 +320,17 @@ class FastSim:
             self.pull[e, si] = pull_tag[e].float()
             self.trades_used[e] += 1.0
 
-        # ===== ADD (3,4) — biggest same-side non-probe winner =====
+        # ===== ADD (3,4) — the JUDGE'S rule: target the biggest same-side non-probe
+        # stack, and REJECT the add outright if that stack is losing or add-maxed
+        # (review 2026-07-20: the twin used to fall back to smaller winning stacks,
+        # executing adds DaySim refuses — trained behavior must match the judge). =====
         add_long = (op == 3); add_short = (op == 4)
         aside = torch.where(add_long, 1.0, torch.where(add_short, -1.0, 0.0))
         same = (self.active > 0.5) & (self.side == aside[:, None]) & (self.probe < 0.5)
-        winner = same & (aside[:, None] * (mark[:, None] - self.avg) > 0) & (self.adds < self.max_adds)
-        big = torch.where(winner, self.units, torch.full_like(self.units, NEG)).argmax(1)
-        has_t = winner.any(1)
+        big = torch.where(same, self.units, torch.full_like(self.units, NEG)).argmax(1)
+        _rows = torch.arange(self.N, device=dev)
+        tgt_gain = aside * (mark - self.avg[_rows, big]) > 0
+        has_t = same.any(1) & tgt_gain & (self.adds[_rows, big] < self.max_adds)
         a_mask_block = ((aside > 0) & (mb > 0)) | ((aside < 0) & (ms > 0))
         a_heat = self.heat_on & (open_r + risk > dist + 1e-12)
         ok_add = (act_mask & (add_long | add_short) & has_t & ~a_mask_block
@@ -437,14 +449,18 @@ class FastSim:
                     * torch.clamp(1.0 + self.min_eq / torch.clamp(self.floor, min=1e-6), min=0.0)
                     * w["day_dd_extra_scale"])
         rr = rr + dd_extra * ghf
-        self.streak = torch.where(gh, self.streak + 1.0, torch.zeros_like(self.streak))
+        # streak/record must ONLY move for envs finalizing THIS bar (review 2026-07-20:
+        # ungated updates let every finalize-event bump the WHOLE batch — inflating the
+        # streak reward 10-100x and counterfeiting the 'days in a row' record metric).
+        self.streak = torch.where(just, torch.where(gh, self.streak + 1.0,
+                                                    torch.zeros_like(self.streak)), self.streak)
         rr = rr + w["w_streak_per_day"] * self.streak * ghf
         mean = self.sum_pnl / torch.clamp(self.cnt_np, min=1.0)
         var = torch.clamp(self.sumsq_pnl / torch.clamp(self.cnt_np, min=1.0) - mean ** 2, min=0.0)
         spread = torch.sqrt(var)
         cons = (self.cnt_np > 1).float()
         rr = rr + w["w_trade_consistency"] * torch.clamp(w["trade_consistency_target"] - spread, min=0.0) * cons
-        newrec = gh & (self.best_pnl > self.record)
+        newrec = just & gh & (self.best_pnl > self.record)
         self.record = torch.where(newrec, self.best_pnl, self.record)
         rr = rr + w["w_record_win"] * newrec.float()
         return rr * just.float()

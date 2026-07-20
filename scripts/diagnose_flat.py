@@ -16,11 +16,16 @@ torch.manual_seed(0)
 
 def load(name, obs_dim):
     if name == "fresh":
-        return Brain(obs_dim, hidden=128)
+        from core.configs import policy_hidden
+        return Brain(obs_dim, hidden=policy_hidden())
     b, _ = load_brain(name)
+    if b is None:
+        print("(%s not on this machine — skipping its rows)" % name, flush=True)
     return b
 
 def bench(tag, brain, sim, D, tg, rk, de):
+    if brain is None:                      # brain not present on this machine (fresh clone)
+        return None, None
     t0 = time.time()
     di = torch.arange(D)
     r = rollout(brain, sim, di, torch.full((D,), tg), torch.full((D,), rk),
@@ -53,7 +58,7 @@ bench("FRESH @3.0/3.5 de=1 (greedy)",  fresh,  sim, D, 3.0, 3.5, 1)
 
 # ---------- the sacred day: 2026-01-29 at native settings ----------
 tgt_day = [i for i, d in enumerate(dates) if "2026-01-29" in str(d)]
-if tgt_day:
+if tgt_day and proven is not None:
     i = tgt_day[0]
     r = rollout(proven, sim, torch.tensor([i]), torch.tensor([2.5]), torch.tensor([4.0]),
                 greedy=True, collect=False, decide_every=1)
@@ -72,7 +77,7 @@ print("-" * 128, flush=True)
 print("drill (home turf): %d days, %s .. %s" % (D2, dates2[0], dates2[-1]), flush=True)
 bench("PROVEN @2.5/4.0 de=1 on DRILL", proven, sim2, D2, 2.5, 4.0, 1)
 td = [i for i, d in enumerate(dates2) if "2026-01-29" in str(d)]
-if td:
+if td and proven is not None:
     r = rollout(proven, sim2, torch.tensor([td[0]]), torch.tensor([2.5]), torch.tensor([4.0]),
                 greedy=True, collect=False, decide_every=1)
     print("SACRED DAY on drill data: %+0.2f%% | trades %d" % (r["day_pnl"].item(), int(sim2.trades_used.item())), flush=True)

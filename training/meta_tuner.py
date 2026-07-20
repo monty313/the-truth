@@ -52,7 +52,7 @@ if _ROOT not in sys.path:
 from training.policy import Brain                           # noqa: E402
 from training.gpu_rollout import rollout, ppo_update        # noqa: E402
 from evaluation.consistency import evaluate, auto_ranges    # noqa: E402
-from core.configs import load, training_cfg, path            # noqa: E402
+from core.configs import load, training_cfg, path, policy_hidden  # noqa: E402
 
 
 # The knobs the tuner may move. BOUNDS keep every proposal sane and live HERE; the base
@@ -174,7 +174,7 @@ def probe(config: dict, sim, train_pool, brain0, n_updates: int, obs_dim: int,
     w_backup = dict(sim.w)                                 # snapshot the shared reward weights
     try:
         sim.w.update({k: float(v) for k, v in config.items() if k in sim.w})   # candidate rewards
-        brain = Brain(obs_dim, hidden=128).to(dev)
+        brain = Brain(obs_dim, hidden=policy_hidden()).to(dev)
         brain.load_state_dict(brain0.state_dict())                              # warm-start from champion
         opt = torch.optim.Adam(brain.parameters(), lr=float(config.get("lr", 3e-4)))
         r = ranges or auto_ranges()
@@ -352,28 +352,36 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
     hist_dir = os.path.join(ckpt_dir, "history"); os.makedirs(hist_dir, exist_ok=True)
     champ_path = os.path.join(ckpt_dir, "meta_champion.pt")
 
-    champ_brain = Brain(obs_dim, hidden=128).to(dev)
+    champ_brain = Brain(obs_dim, hidden=policy_hidden()).to(dev)
     champ_cfg = base_config()
     gen0 = 0; best_streak = 0; explore = scale0; stale = 0
+    data_fp = "%d:%d:%d" % (len(work_days), len(audit_days), base_seed)   # world fingerprint
     ck = load_champion(champ_path, obs_dim, dev)
     if ck is not None:                                      # RESUME (Drive-persisted)
         champ_brain.load_state_dict(ck["model"]); champ_cfg = {**champ_cfg, **ck.get("config", {})}
         m = ck.get("meta", {}); gen0 = int(m.get("gen", 0)); best_streak = int(m.get("best_streak", 0))
         explore = float(m.get("explore", scale0)); stale = int(m.get("stale", 0))
+        old_fp = str(m.get("data_fp", data_fp))
+        if old_fp != data_fp:                               # day pool or seed changed (e.g. new symbols)
+            best_streak = 0
+            log("*** WORLD CHANGED: checkpoint fingerprint %s != current %s (day pool or seed "
+                "moved). Champion kept; record book restarted so old streaks aren't compared "
+                "against a different world." % (old_fp, data_fp))
         log("resume: gen %d | best streak %d | explore %.3f" % (gen0, best_streak, explore))
     else:                                                  # else warm-start from the best PROFITABLE brain first
         # lift_best = the brain that PROVED it banks the target (2026-07-20 lift demo);
         # seeding the tuner from a brain that already makes money beats seeding from a
         # flat-but-safe one — the ratchet then hones consistency instead of digging out of zero.
-        for name in ("lift_best", "gpu_best", "PROVEN_2x_2026-07-19", "best_trading"):
+        for name in ("lift_best", "PROVEN_LIFT_2026-07-20", "gpu_best",
+                     "PROVEN_2x_2026-07-19", "best_trading"):
             p = os.path.join(ckpt_dir, name + ".pt")
             if os.path.exists(p):
-                d = torch.load(p, weights_only=False, map_location=dev)
-                if int(d.get("obs_dim", -1)) == obs_dim:
-                    try:
+                try:                                 # guarded: a truncated file must not kill startup
+                    d = torch.load(p, weights_only=False, map_location=dev)
+                    if int(d.get("obs_dim", -1)) == obs_dim:
                         champ_brain.load_state_dict(d["model"]); log("warm-start champion from %s" % name); break
-                    except Exception:
-                        pass
+                except Exception as ex:
+                    log("warm-start: skipping unreadable %s (%s)" % (name, ex))
 
     def _score(brain, days, seed):
         return evaluate(brain, sim, days, n_episodes=n_eval, gen=_gen(dev, seed),
@@ -394,10 +402,15 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
     # PAIRED-BEATS it out of sample, so it can't inflate on a lucky point estimate.
     audit_ref = _seed_from(base_seed, "audit-ref")
     anchor_path = os.path.join(ckpt_dir, "meta_anchor.pt")
-    anchor_brain = Brain(obs_dim, hidden=128).to(dev)
+    anchor_brain = Brain(obs_dim, hidden=policy_hidden()).to(dev)
     anc = load_champion(anchor_path, obs_dim, dev)
     if anc is not None:
         anchor_brain.load_state_dict(anc["model"])
+    elif ck is not None:                                   # resuming but anchor file missing/corrupt:
+        anchor_brain.load_state_dict(champ_brain.state_dict())   # LOUD — the safety floor was reset
+        save_champion(anchor_path, anchor_brain, champ_cfg, {"obs_dim": obs_dim})
+        log("*** ANCHOR RESET: meta_anchor.pt was missing or unreadable — the out-of-sample "
+            "floor has been re-baselined to the CURRENT champion. If this repeats, investigate.")
     else:                                                  # first ever: anchor = the warm-start champion
         anchor_brain.load_state_dict(champ_brain.state_dict())
         save_champion(anchor_path, anchor_brain, champ_cfg, {"obs_dim": obs_dim})
@@ -490,7 +503,7 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
         save_champion(champ_path, champ_brain, champ_cfg,   # checkpoint (resumable) every generation
                       {"obs_dim": obs_dim, "gen": g, "best_streak": best_streak,
                        "explore": explore, "stale": stale, "base_seed": base_seed,
-                       "anchor_cons": anchor_cons})
+                       "anchor_cons": anchor_cons, "data_fp": data_fp})
         json.dump({"gen": g, "best_streak": int(best_streak), "explore": round(explore, 4),
                    "stale": stale, "last_adopt": bool(adopt), "took": took,
                    "champ_sel_consistency": round(champ_conf["consistency"], 4),
