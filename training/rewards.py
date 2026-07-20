@@ -91,6 +91,11 @@ class RewardEngine:
         w = self.w
         r, info = 0.0, {}
         pnls = [t["pnl_pct"] for t in day.closed_trades if not t["probe"]]
+        # BIG penalty for DOING NOTHING (Monty 2026-07-20): a flat/~0-pnl or no-trade
+        # day must NOT be a safe option — the bot has to go make the goal, not sit out.
+        if len(pnls) == 0 or abs(getattr(day, "pnl_pct", 0.0)) < w.get("did_nothing_band", 0.25):
+            r += w.get("w_did_nothing", -6.0)
+            info["did_nothing"] = True
         if day.breached:
             r += w["w_death_penalty"]
             info["death"] = True

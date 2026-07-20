@@ -20,3 +20,8 @@ artifacts/checkpoints/best_meta.pt
 artifacts/checkpoints/history/
 artifacts/meta_progress.json
 artifacts/CHECKPOINT_HISTORY.md
+data/XAUUSD_curriculum_2026.csv
+artifacts/checkpoints/curric_live.pt
+artifacts/checkpoints/curric_L*.pt
+artifacts/curriculum_progress.json
+artifacts/CURRICULUM_HISTORY.md

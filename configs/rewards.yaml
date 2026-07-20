@@ -12,6 +12,8 @@ w_no_drawdown_close: 0.02        # 2026-07-19: 0.10->0.02 — was THE farm (0.10
 w_pyramid_stack_green: 0.20      # <=5 adds, whole stack closes net green
 w_pullback_with_htf: 0.02        # 2026-07-19: 0.10->0.02 — flat per-close bonus; shrunk so profit magnitude leads (still a positive nudge toward good entries)
 w_idleness_hunger: -0.002        # per idle decision step (slightly hungry)
+w_did_nothing: -6.0              # 2026-07-20 (Monty): BIG penalty for a flat / ~0-pnl (or no-trade) day. Doing nothing is nearly as bad as a breach, so the bot MUST go make the goal.
+did_nothing_band: 0.25           # a day with |pnl%| under this (or zero trades) counts as "did nothing"
 w_record_win: 0.25               # trophy bonus, ONLY if day won (goal met, no breach)
 w_antigravity_penalty: -0.50     # training wheels vs highest-set gravity...
 antigravity_decay_updates: 300   # ...dissolving to 0 over this many PPO updates
