@@ -41,20 +41,30 @@ def batched_act(brain, obs, h, greedy: bool):
 
 @torch.no_grad()
 def rollout(brain, sim, day_idx, goal, floor, greedy=False, collect=True,
-            streak_in=None, record_in=None):
-    """One batched day-episode. collect=True stores transitions for PPO."""
+            streak_in=None, record_in=None, decide_every=1):
+    """One batched day-episode. The brain DECIDES once per `decide_every` bars and
+    HOLDS in between — that shrinks the sequence length, so both the rollout and the
+    PPO update get faster (the safety Shell still runs on every bar inside the sim).
+    collect=True stores one transition per decision for PPO."""
     obs = sim.reset(day_idx, goal, floor, streak_in, record_in)
     h = None
+    hold = torch.zeros(sim.N, dtype=torch.long, device=sim.dev)   # op 0 = hold
     ops, sizes, logps, vals, rews, alives = [], [], [], [], [], []
     step = 0
     while True:
         alive = (~sim.dead & ~sim.finalized).float()          # real-transition mask
         op, size, logp, value, h = batched_act(brain, obs, h, greedy)
-        obs, r, done = sim.step(op, size)
+        r_acc = torch.zeros(sim.N, device=sim.dev)
+        done = None
+        for k in range(decide_every):                          # act once, then hold
+            obs, r, done = sim.step(op if k == 0 else hold, size)
+            r_acc = r_acc + r
+            step += 1
+            if bool(done.all()) or step >= sim.Lmax - 1:
+                break
         if collect:
             ops.append(op); sizes.append(size); logps.append(logp)
-            vals.append(value); rews.append(r); alives.append(alive)
-        step += 1
+            vals.append(value); rews.append(r_acc); alives.append(alive)
         if bool(done.all()) or step >= sim.Lmax - 1:
             break
     if not collect:
@@ -63,7 +73,7 @@ def rollout(brain, sim, day_idx, goal, floor, greedy=False, collect=True,
     return {"op": st(ops).long(), "size": st(sizes), "logp": st(logps),
             "value": st(vals), "reward": st(rews), "alive": st(alives),
             "self_hist": sim.self_hist.clone(), "day_idx": sim.day_idx.clone(),
-            "results": sim.results(), "T": step}
+            "results": sim.results(), "T": step, "decide_every": decide_every}
 
 
 def compute_gae(reward, value, alive, gamma, lam):
@@ -81,16 +91,18 @@ def compute_gae(reward, value, alive, gamma, lam):
     return adv, returns
 
 
-def _reconstruct(day_idx_mb, self_hist_mb, days_obs, T):
+def _reconstruct(day_idx_mb, self_hist_mb, days_obs, T, decide_every=1):
     """Rebuild (B,T,obs_dim) obs from saved self-state history + shared day_obs,
-    frame-stacked EXACTLY like FastSim._build_obs."""
+    frame-stacked EXACTLY like FastSim._build_obs. Decision i sits at bar
+    i*decide_every, and its 10 frames are the consecutive bars ending there."""
     B = day_idx_mb.shape[0]
     dev = days_obs.device
     C = days_obs.shape[2]
-    pos = torch.arange(T, device=dev)
+    Lmax = days_obs.shape[1]
+    pos = torch.arange(T, device=dev) * decide_every
     out = torch.empty(B, T, FRAME * (C + SELF_DIM), device=dev)
     for k in range(FRAME):
-        idx = torch.clamp(pos + (k - (FRAME - 1)), min=0)          # (T,)
+        idx = torch.clamp(pos + (k - (FRAME - 1)), min=0, max=Lmax - 1)   # (T,)
         m = days_obs[day_idx_mb[:, None], idx[None, :], :]         # (B,T,C)
         sh = self_hist_mb[:, idx, :]                               # (B,T,12)
         out[:, :, k * (C + SELF_DIM):(k + 1) * (C + SELF_DIM)] = torch.cat([m, sh], dim=2)
@@ -102,6 +114,7 @@ def ppo_update(brain, opt, stored, days_obs, gamma=0.999, lam=0.95, clip=0.2,
     op = stored["op"]; size = stored["size"]; logp_old = stored["logp"]
     value = stored["value"]; reward = stored["reward"]; alive = stored["alive"]
     self_hist = stored["self_hist"]; day_idx = stored["day_idx"]
+    de = int(stored.get("decide_every", 1))
     T, N = reward.shape
     adv, returns = compute_gae(reward, value, alive, gamma, lam)
     m = alive > 0.5
@@ -112,7 +125,7 @@ def ppo_update(brain, opt, stored, days_obs, gamma=0.999, lam=0.95, clip=0.2,
         perm = torch.randperm(N, device=reward.device)
         for s in range(0, N, env_mb):
             eb = perm[s:s + env_mb]
-            obs_seq = _reconstruct(day_idx[eb], self_hist[eb], days_obs, T)   # (B,T,D)
+            obs_seq = _reconstruct(day_idx[eb], self_hist[eb], days_obs, T, de)   # (B,T,D)
             op_d, sz_d, val, _ = brain(obs_seq)
             a = alive[:, eb].transpose(0, 1)                                  # (B,T)
             denom = a.sum().clamp(min=1.0)

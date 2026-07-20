@@ -51,6 +51,10 @@ def main():
     ap.add_argument("--target-hi", type=float, default=70.3)
     ap.add_argument("--risk-lo", type=float, default=1.0)
     ap.add_argument("--risk-hi", type=float, default=4.4)
+    ap.add_argument("--focus-frac", type=float, default=0.6)    # 2026-07-20 Monty: 60% of practice on one realistic pair
+    ap.add_argument("--focus-target", type=float, default=3.0)  # ...target 3%
+    ap.add_argument("--focus-risk", type=float, default=3.5)    # ...risk 3.5% (rest stays random across the ranges)
+    ap.add_argument("--decide-every", type=int, default=1)      # act every N bars (speed lever); 5 = every 5 min
     ap.add_argument("--target-days", type=int, default=365)     # the finish line
     ap.add_argument("--eval-every", type=int, default=3)        # updates between streak checks
     ap.add_argument("--eval-envs", type=int, default=512)
@@ -79,6 +83,8 @@ def main():
     print("BOT 1.5 GPU EDITION | device=%s | instances=%d | days-pool=%d" % (dev, a.instances, D), flush=True)
     print("target %.1f%%..%.1f%% | risk %.1f%%..%.1f%% | finish line = %d cleared days in a row"
           % (a.target_lo, a.target_hi, a.risk_lo, a.risk_hi, a.target_days), flush=True)
+    print("focus: %.0f%% of practice pinned to target %.1f%% / risk %.1f%% (rest random) | decide every %d bar(s)"
+          % (a.focus_frac * 100, a.focus_target, a.focus_risk, a.decide_every), flush=True)
     print("obs_dim=%d (same shape as PROVEN) | masks=LAW, strategy+size=free" % obs_dim, flush=True)
     print("=" * 68, flush=True)
 
@@ -106,6 +112,10 @@ def main():
     def rand_x(n):
         tg = torch.empty(n, device=dev).uniform_(a.target_lo, a.target_hi)
         rk = torch.empty(n, device=dev).uniform_(a.risk_lo, a.risk_hi)
+        if a.focus_frac > 0:                       # pin a fraction on one realistic pair
+            m = torch.rand(n, device=dev) < a.focus_frac
+            tg = torch.where(m, torch.full_like(tg, a.focus_target), tg)
+            rk = torch.where(m, torch.full_like(rk, a.focus_risk), rk)
         return tg, rk
 
     @torch.no_grad()
@@ -117,7 +127,7 @@ def main():
             di = torch.randint(0, D, (a.eval_envs,), device=dev)
             tg, rk = rand_x(a.eval_envs)
             res = rollout(brain, sim, di, tg, rk, greedy=True, collect=False,
-                          streak_in=streaks, record_in=records)
+                          streak_in=streaks, record_in=records, decide_every=a.decide_every)
             streaks = res["streak"]; records = res["record"]
             best = max(best, float(streaks.max().item()))
             if best >= a.target_days:
@@ -168,7 +178,8 @@ def main():
         # ---- one training rollout: N instances, each a random day + random X ----
         di = torch.randint(0, D, (a.instances,), device=dev)
         tg, rk = rand_x(a.instances)
-        stored = rollout(brain, sim, di, tg, rk, greedy=False, collect=True)
+        stored = rollout(brain, sim, di, tg, rk, greedy=False, collect=True,
+                         decide_every=a.decide_every)
         stats = ppo_update(brain, opt, stored, sim.days_obs, gamma=gamma, lam=lam,
                            clip=clip, epochs=a.epochs, ent_coef=ent, env_mb=a.env_mb)
         upd += 1
