@@ -88,7 +88,7 @@ def main():
 
     # warm-start from a COPY of the proof; the original file is never touched
     loaded = None
-    for name in (a.ckpt, a.warm, "PROVEN_2x_2026-07-19", "best_meta"):
+    for name in ("gpu_best", a.ckpt, a.warm, "PROVEN_2x_2026-07-19", "best_meta"):  # resume from BEST first
         pth = rpath("artifacts", "checkpoints", name + ".pt")
         if os.path.exists(pth):
             d = torch.load(pth, weights_only=False, map_location=dev)
@@ -101,7 +101,7 @@ def main():
 
     histdir = rpath("artifacts", "checkpoints", "history"); os.makedirs(histdir, exist_ok=True)
     histmd = rpath("artifacts", "GPU_TRAINING_HISTORY.md")
-    prog = rpath("artifacts", "gpu_progress.json")
+    prog = rpath("artifacts", "checkpoints", "gpu_progress.json")  # in checkpoints/ -> rides the Drive symlink, so it persists
 
     def rand_x(n):
         tg = torch.empty(n, device=dev).uniform_(a.target_lo, a.target_hi)
@@ -152,6 +152,14 @@ def main():
     t0 = time.time()
     best_streak = -1.0
     eval_rounds = a.eval_rounds
+    if os.path.exists(prog):                       # RESUME across sessions (Drive-persisted)
+        try:
+            _pr = json.load(open(prog))
+            best_streak = float(_pr.get("best_streak", -1.0))
+            eval_rounds = int(_pr.get("eval_rounds", a.eval_rounds))
+            print("resume: prior best streak = %d (eval depth %d)" % (int(best_streak), eval_rounds), flush=True)
+        except Exception:
+            pass
     evals_since_record = 0
     upd = 0
     while time.time() - t0 < a.minutes * 60:

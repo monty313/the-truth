@@ -79,10 +79,11 @@ These plug **straight into your real bot** — same brain shape, nothing to conv
 
 ## When does it stop?
 
-- **It wins** when it reaches **365 cleared days in a row**.
-- **It pauses on its own** if it stops setting records for a long stretch, so no GPU
-  hours are wasted. The file `artifacts/gpu_progress.json` shows how far it got and
-  where the streaks keep ending.
+- **It runs until Colab stops it** (free Colab lasts up to ~12 hours), or until it
+  **wins at 365 cleared days in a row**. The best brain saves to your Google Drive on
+  every record, so nothing is lost.
+- **To continue another day:** open the notebook, run Cell 1 (reconnects your Drive),
+  then the training cell — it picks up from your best brain automatically.
 
 ---
 
@@ -90,6 +91,26 @@ These plug **straight into your real bot** — same brain shape, nothing to conv
 
 Change **one number** in the last cell: `--instances 8000` → `--instances 4000`
 (or `2000`). Nothing else changes.
+
+---
+
+## When a brain gets good — keep it and use it
+
+When training reaches a high `pass` number (a long clean streak), do this:
+
+1. **It keeps itself.** The best brain auto-saves to your Google Drive at
+   `MyDrive/momentum_gpu/gpu_best.pt` every time it sets a record — nothing to do.
+   (Cell 4 also downloads a copy to your computer if you want one.)
+2. **Trust it.** Run **Cell 5**. It re-checks that brain on your **real** simulator (the
+   exact one, not the fast training copy), so you know the numbers are real.
+3. **It can't be lost.** Training only ever writes **new** `gpu_...` files. It never
+   overwrites a good one.
+
+The good file is the highest `pass####` number, and always `gpu_best.pt` (the latest best).
+
+**To trade it live on MT5:** the brain is the same shape as your real bot, so it drops
+straight in. Going live is a separate setup (Windows + your MT5 login + the safety gates) —
+just tell me *"wire up the good brain to MT5"* and we do it together.
 
 ---
 

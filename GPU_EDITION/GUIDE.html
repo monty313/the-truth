@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Momentum One — GPU Edition Guide</title>
+<style>
+  :root{--ink:#1a2233;--muted:#5b6472;--line:#e4e8f0;--blue:#2563eb;--green:#0f9d58;
+        --amber:#f59e0b;--bg:#f7f9fc;--card:#ffffff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       line-height:1.55;font-size:18px;}
+  .wrap{max-width:840px;margin:0 auto;padding:28px 20px 60px;}
+  h1{font-size:30px;margin:0 0 4px;}
+  .sub{color:var(--muted);font-size:18px;margin:0 0 22px;}
+  .flow{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px;}
+  .flow div{flex:1;min-width:150px;background:var(--card);border:2px solid var(--line);
+            border-radius:14px;padding:12px 14px;text-align:center;font-weight:700;}
+  .flow .n{display:inline-block;width:30px;height:30px;line-height:30px;border-radius:50%;
+           background:var(--blue);color:#fff;font-size:16px;margin-bottom:6px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+        padding:22px 24px;margin:0 0 20px;box-shadow:0 1px 3px rgba(20,30,60,.05);}
+  .card h2{margin:0 0 12px;font-size:23px;display:flex;align-items:center;gap:10px;}
+  .badge{width:34px;height:34px;line-height:34px;border-radius:50%;color:#fff;
+         text-align:center;font-size:18px;font-weight:800;flex:none;}
+  .b1{background:var(--blue)}.b2{background:#7c3aed}.b3{background:var(--green)}.b4{background:var(--amber)}
+  ol{margin:6px 0 0;padding-left:22px}
+  ol li{margin:9px 0}
+  .btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;
+       padding:14px 20px;border-radius:12px;font-weight:800;font-size:18px;margin:8px 0;}
+  code{background:#eef2f8;padding:2px 8px;border-radius:6px;font-size:16px;
+       font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .tip{background:#fff8e9;border:1px solid #f5dea6;border-radius:12px;padding:14px 18px;margin:14px 0 0;}
+  .safe{background:#eafaf0;border:1px solid #bfe8cd;border-radius:12px;padding:14px 18px;}
+  .k{color:var(--muted);font-size:15px}
+  .big{font-size:20px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Momentum One — GPU Edition</h1>
+  <p class="sub">Your simple guide. Open this anytime you feel lost.</p>
+
+  <div class="flow">
+    <div><span class="n">1</span><br>START it</div>
+    <div><span class="n">2</span><br>WATCH it</div>
+    <div><span class="n">3</span><br>KEEP the good one</div>
+    <div><span class="n">4</span><br>USE it</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">1</span> Start it</h2>
+    <ol>
+      <li><span class="big">Click this button</span> — it opens the bot in Google Colab.
+        Nothing to upload.<br>
+        <a class="btn" href="https://colab.research.google.com/github/monty313/the-truth/blob/main/GPU_EDITION/Momentum_One_GPU.ipynb">Open Momentum One in Colab</a>
+      </li>
+      <li><span class="big">Turn on the GPU:</span> top menu →
+        <b>Runtime</b> → <b>Change runtime type</b> → pick <b>L4 GPU</b> → <b>Save</b>.</li>
+      <li><span class="big">Press play ▶ on the first cell.</span> Wait until it prints
+        <code>ready.</code></li>
+      <li><span class="big">Press play ▶ on the next cell</span> (titled START TRAINING). Done — it's learning.</li>
+    </ol>
+    <div class="tip"><b>If Colab asks you to sign in to Google</b>, just do it — Colab is free.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">2</span> Watch it</h2>
+    <p>Every round prints one line, like this:</p>
+    <p><code>upd 42 | rollout: mean pnl +1.2% | hit-target 8% | breach 0.3%</code></p>
+    <ol>
+      <li><b>mean pnl</b> — the average profit that round.</li>
+      <li><b>hit-target</b> — how often it hit the random target it was handed.</li>
+      <li><b>breach</b> — how often it crossed the risk line. You want this near <b>0</b>.</li>
+    </ol>
+    <p>When it beats its record it prints, and <b>saves itself</b>:</p>
+    <p><code>*** NEW RECORD: 12 cleared days in a row -> saved ...pass0012...</code></p>
+    <p class="k">The number (<b>pass0012</b> = 12 cleared days in a row) starts near 0 and
+      climbs as it learns. High targets are hard, so it grows slowly — that's normal.</p>
+    <p><b>It runs until Colab stops it</b> (free Colab lasts up to ~12 hours), or until it
+      wins at <b>365 in a row</b>. The best brain saves to your Google Drive every time it
+      sets a record, so nothing is ever lost. Cell 3 shows how far it got.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">3</span> Keep the good one</h2>
+    <p class="big">You don't have to do anything to keep it — it saves itself.</p>
+    <ol>
+      <li><b>It auto-saves to your Google Drive.</b> Every time it beats its record, the best
+        brain is written to <code>MyDrive / momentum_gpu / gpu_best.pt</code>. Safe even if
+        Colab shuts off.</li>
+      <li><b>Continue another day.</b> Open this notebook again, run <b>Cell 1</b> (reconnects
+        your Drive), then <b>Cell 2</b> — it picks up from your best brain and keeps climbing.</li>
+      <li><b>Trust it.</b> Run <b>Cell 5</b> to re-check the best brain on your <b>REAL</b>
+        simulator (the exact one, not the fast copy), so you know the numbers are real.</li>
+      <li><b>It can't be lost.</b> The save only ever changes when it finds a <i>better</i>
+        brain. Your +6.5% proof is never touched.</li>
+    </ol>
+    <div class="tip"><b>Want a copy on your computer too?</b> Run <b>Cell 4</b> — it downloads
+      <code>gpu_best.pt</code>. (It's already on your Drive either way.)</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b4">4</span> Use it</h2>
+    <p>A good brain is the <b>same shape</b> as your real bot's brain, so it drops straight
+      in — nothing to convert.</p>
+    <ol>
+      <li><b>Right now:</b> keep it and check it (Step 3). That's the safe, valuable part —
+        you're collecting proven brains.</li>
+      <li><b>To trade it live on MT5:</b> that's a separate setup (Windows + your MT5 login +
+        the safety gates). <b>We do that together</b> when you say the word — just ask me to
+        "wire up the good brain to MT5" and I'll walk you through it.</li>
+    </ol>
+  </div>
+
+  <div class="safe">
+    <p style="margin:0"><b>Your proof is safe.</b> This never touches your proven +6.5% brain.
+      It starts <i>from a copy</i> of it and only ever saves to new <code>gpu_...</code> files.</p>
+    <p style="margin:10px 0 0" class="k"><b>Out of memory?</b> In the START TRAINING cell,
+      change <code>--instances 8000</code> to <code>--instances 4000</code>. Nothing else changes.</p>
+  </div>
+
+  <p class="k" style="margin-top:24px">Lost? Open this guide again — it lives in your
+    MOMENTUM_ONE / GPU_EDITION folder and in your saved artifacts.</p>
+</div>
+</body>
+</html>
