@@ -36,7 +36,6 @@ self_tuner:                       # 2026-07-20 — the autonomous self-tuner (tr
   screen_z: 1.64                  # lenient day-clustered paired test to SHORTLIST vs the equal-budget control
   confirm_z: 2.0                  # day-clustered paired test on FRESH select days vs the frozen champion
   min_disagreements: 4            # min DISTINCT DAYS that must differ before a gate may fire (day-clustered)
-  audit_margin_se: 2.0            # an adopt may sit at most this many SE below the audit high-water (non-backslide)
   plateau_patience: 3             # no-adopt generations before exploration widens (then sawtooths back small)
   explore_scale: 0.25             # mutation step size; grows to a cap on plateau, resets on an adopt
   eval_episodes: 512              # episodes per score; paired by DAY, so many episodes/day collapse to one day-vote

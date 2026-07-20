@@ -323,12 +323,14 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
       4) SCREEN on the select days (one shared seed): a mutation is eligible only if it beats
          the equal-budget control by a PAIRED, DAY-CLUSTERED margin (screen_z) — credit the
          change, not the extra steps; pick the single best by consistency;
-      5) CONFIRM that best on a FRESH seed vs the FROZEN champion, DAY-CLUSTERED, at confirm_z;
-      6) AUDIT tripwire on the PERMANENT held-out days (fresh seed): the gain must HOLD out of
-         sample (champion not better there, and consistency not down past its error bar);
-      ADOPT only if BOTH the fresh confirm AND the audit hold (else keep the champion). Two
-      independent fresh hurdles multiply into a strict-but-passable ratchet that can climb or
-      hold, never backslide, and can't win on luck (day-clustering kills pseudo-replication).
+      5) CONFIRM that best vs the FROZEN champion on TWO independent fresh seeds, DAY-CLUSTERED,
+         at confirm_z (two fresh wins square the per-gen false-adopt rate -> O(1) over 1000s of gens);
+      6) NON-BACKSLIDE: score it on the PERMANENT held-out audit days at a FIXED reference and
+         block the adopt if the frozen ANCHOR (best-ever held-out champion) paired-beats it — so
+         an adopt can never drop the champion significantly below its best out-of-sample level;
+      ADOPT only if BOTH confirms AND the audit floor pass (else keep the champion). These fresh,
+      day-clustered hurdles (day-clustering kills pseudo-replication) make a ratchet that climbs
+      or holds, never backslides, and can't win on luck. The anchor rises ONLY on a paired OOS win.
       7) read the honest streak on the audit days ONLY when the champion changed; save a new
          best (passed-days in the name); checkpoint so a Colab restart resumes exactly here.
     On `plateau_patience` no-adopt gens, widen exploration to a cap, then reset small (sawtooth,
@@ -340,7 +342,6 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
     d_min = int(st.get("min_disagreements", 4))            # in DISTINCT DAYS now (day-clustered gate)
     patience = int(st.get("plateau_patience", 3)); scale0 = float(st.get("explore_scale", 0.25))
     sel_frac = float(st.get("sel_frac", 0.30)); mut_knobs = int(st.get("mutate_knobs", 3))
-    audit_margin_se = float(st.get("audit_margin_se", 2.0))   # how far below the audit high-water an adopt may sit
     n_eval = int(n_eval if n_eval is not None else st.get("eval_episodes", 512))
     gamma = float(ppo.get("gamma", 0.999)); lam = float(ppo.get("lam", 0.95)); clip = float(ppo.get("clip", 0.2))
     base_seed = int(base_seed if base_seed is not None else tc.get("seed", 20260718))
@@ -383,16 +384,23 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
         ok, info = adopt_gate(aw, bw, z=z, d_min=d_min)
         return ok, info
 
-    # OUT-OF-SAMPLE ANCHOR: the champion's audit consistency at a FIXED reference seed is the
-    # high-water; an adopt may not sit more than `audit_margin_se` SE below it -> non-backslide
-    # on days that never selected or trained. meta_anchor.pt is the frozen best-audit champion.
+    # OUT-OF-SAMPLE ANCHOR (non-backslide): a FROZEN best-held-out champion + its scorecard on
+    # a FIXED audit reference (same days, same X every time). An adopt is blocked if the anchor
+    # PAIRED-BEATS the candidate out of sample (day-clustered) -> the champion can never drop
+    # significantly below its best held-out level. The anchor is raised ONLY when a candidate
+    # PAIRED-BEATS it out of sample, so it can't inflate on a lucky point estimate.
     audit_ref = _seed_from(base_seed, "audit-ref")
     anchor_path = os.path.join(ckpt_dir, "meta_anchor.pt")
-    anchor_cons = float(ck.get("meta", {}).get("anchor_cons", -1.0)) if ck is not None else -1.0
-    if anchor_cons < 0.0:                                   # first ever: anchor = the warm-start champion
-        anchor_cons = _score(champ_brain, audit_days, audit_ref)["consistency"]
-        save_champion(anchor_path, champ_brain, champ_cfg, {"obs_dim": obs_dim, "anchor_cons": anchor_cons})
-        log("audit anchor set: %.3f (out-of-sample high-water)" % anchor_cons)
+    anchor_brain = Brain(obs_dim, hidden=128).to(dev)
+    anc = load_champion(anchor_path, obs_dim, dev)
+    if anc is not None:
+        anchor_brain.load_state_dict(anc["model"])
+    else:                                                  # first ever: anchor = the warm-start champion
+        anchor_brain.load_state_dict(champ_brain.state_dict())
+        save_champion(anchor_path, anchor_brain, champ_cfg, {"obs_dim": obs_dim})
+    anchor_aud = _score(anchor_brain, audit_days, audit_ref)          # cached held-out scorecard (fixed seed)
+    anchor_cons = anchor_aud["consistency"]
+    log("audit anchor: consistency %.3f on %d held-out days (fixed reference)" % (anchor_cons, len(audit_days)))
 
     t0 = time.time(); g = gen0
     while time.time() - t0 < minutes * 60.0:
@@ -431,28 +439,28 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
             passed_sel = _beats(_score(champ_brain, sel_days, c2),
                                 _score(brains[best_i], sel_days, c2), confirm_z)[0]
 
-        # HURDLE 2 — out-of-sample NON-BACKSLIDE: the candidate's audit consistency (at the FIXED
-        # reference seed) must be within `audit_margin_se` SE of the all-time audit high-water,
-        # so an adopt can never push the champion below its best held-out level.
-        adopt = False; cand_aud = None
+        # HURDLE 2 — out-of-sample NON-BACKSLIDE: score the candidate on the FIXED audit reference
+        # and block the adopt if the frozen ANCHOR paired-beats it out of sample (day-clustered).
+        # So an adopt can never push the champion significantly below its best held-out level.
+        adopt = False; cand_aud = None; anchor_blocks = False
         if passed_sel:
             cand_aud = _score(brains[best_i], audit_days, audit_ref)
-            adopt = bool(cand_aud["consistency"] >= anchor_cons - audit_margin_se * cand_aud["se"])
+            anchor_blocks = _beats(cand_aud, anchor_aud, screen_z)[0]     # does the anchor win out of sample?
+            adopt = not anchor_blocks
 
         if adopt:
             champ_brain = brains[best_i]; champ_cfg = configs[best_i]
             explore = scale0; stale = 0
-            new_high = cand_aud["consistency"] > anchor_cons
-            if new_high:                                    # new out-of-sample high -> re-anchor the safety net
-                anchor_cons = cand_aud["consistency"]
-                save_champion(anchor_path, champ_brain, champ_cfg,
-                              {"obs_dim": obs_dim, "anchor_cons": anchor_cons})
+            cand_reanchors = _beats(anchor_aud, cand_aud, screen_z)[0]    # candidate paired-BEATS anchor OOS?
+            if cand_reanchors:                              # conservative re-anchor -> the safety net can only rise
+                anchor_brain.load_state_dict(champ_brain.state_dict())
+                anchor_aud = cand_aud; anchor_cons = cand_aud["consistency"]
+                save_champion(anchor_path, champ_brain, champ_cfg, {"obs_dim": obs_dim, "anchor_cons": anchor_cons})
             log("gen %d ADOPT (%s) | 2x fresh confirm (c=%d b=%d z=%.2f) | audit %.3f vs anchor %.3f%s"
                 % (g, took, info["c"], info["b"], info["stat"], cand_aud["consistency"],
-                   anchor_cons, " NEW HIGH" if new_high else ""))
-        else:
+                   anchor_cons, " NEW ANCHOR" if cand_reanchors else ""))
+        elif not passed_sel:                                # a real SELECT miss counts toward plateau-widening
             stale += 1
-            why = "sel not proven (2x)" if not passed_sel else "audit non-backslide"
             if stale >= patience:
                 stale = 0
                 if explore >= _EXPLORE_CAP - 1e-9:
@@ -462,8 +470,10 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
                     explore = min(explore * 1.5, _EXPLORE_CAP)
                     log("gen %d plateau: widen explore to %.3f | champion kept" % (g, explore))
             else:
-                log("gen %d keep champion (%s) | cand sel %.3f vs %.3f"
-                    % (g, why, cand_conf["consistency"], champ_conf["consistency"]))
+                log("gen %d keep champion (sel not proven 2x) | cand sel %.3f vs %.3f"
+                    % (g, cand_conf["consistency"], champ_conf["consistency"]))
+        else:                                               # cleared select but not the audit floor -> near miss
+            log("gen %d keep champion (audit non-backslide) | candidate cleared select, not the held-out floor" % g)
 
         if adopt or g == gen0 + 1:                         # streak only when the champion CHANGED (or first gen)
             stk = day_after_day_streak(champ_brain, sim, audit_days,   # FIXED seed -> reflects the champion, not X-luck
