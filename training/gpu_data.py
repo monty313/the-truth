@@ -98,6 +98,53 @@ def build_day_tensors(csv_path: str, cache_path: str | None = None,
     return days_obs, days_phys, day_lens, dates, cols
 
 
+# per-symbol physics constants (MT5 typical). Data-prep records these so the sim can use the
+# right spread/size scale per market later. Obs features are normalized -> symbol-agnostic,
+# so ONE brain handles every symbol.
+SYMBOL_SPECS = {
+    "XAUUSD": {"point_size": 0.01, "contract_size": 100.0},
+    "EURUSD": {"point_size": 0.0001, "contract_size": 100000.0},
+    "GBPUSD": {"point_size": 0.0001, "contract_size": 100000.0},
+    "US30":   {"point_size": 0.1, "contract_size": 1.0},
+}
+
+
+def _symbol_of(path: str) -> str:
+    name = os.path.basename(path).upper()
+    for s in SYMBOL_SPECS:
+        if s in name:
+            return s
+    return os.path.splitext(os.path.basename(path))[0].upper()
+
+
+def build_symbol_set(csv_dir: str, cache_dir: str | None = None,
+                     symbols=None, verbose: bool = True) -> dict:
+    """Build + cache per-day tensors for EVERY MT5 M1 CSV in csv_dir (one file per symbol —
+    e.g. the mounted Drive folder Camillion_data). One-time, cached per symbol. Returns
+    {SYMBOL: {'cache','specs','days','cols'}}. Obs columns are identical across symbols, so
+    one brain trains on them all."""
+    import glob as _glob
+    cache_dir = cache_dir or rpath("artifacts", "symbol_cache")
+    os.makedirs(cache_dir, exist_ok=True)
+    files = sorted(_glob.glob(os.path.join(csv_dir, "*.csv")))
+    out = {}
+    for f in files:
+        sym = _symbol_of(f)
+        if symbols and sym not in symbols:
+            continue
+        cache = os.path.join(cache_dir, "days_%s.npz" % sym)
+        do, dp, dl, dates, cols = build_day_tensors(f, cache_path=cache, verbose=verbose)
+        out[sym] = {"cache": cache,
+                    "specs": SYMBOL_SPECS.get(sym, {"point_size": 0.01, "contract_size": 100.0}),
+                    "days": int(do.shape[0]), "cols": int(do.shape[2])}
+        if verbose:
+            print("symbol %-8s | %d days | cols %d | -> %s"
+                  % (sym, do.shape[0], do.shape[2], os.path.basename(cache)), flush=True)
+    if not out:
+        print("build_symbol_set: no CSVs found in %s" % csv_dir, flush=True)
+    return out
+
+
 if __name__ == "__main__":
     src = sys.argv[1] if len(sys.argv) > 1 else rpath("data", "XAUUSD_curriculum_2026.csv")
     tag = os.path.splitext(os.path.basename(src))[0]
