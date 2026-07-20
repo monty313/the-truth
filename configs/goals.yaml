@@ -1,7 +1,7 @@
 # WHO: Monty's typed inputs. WHAT: goal/floor + day rules. WHEN: 2026-07-18.
 # WHY: ADR-0001. INTERCONNECTED: shell, rewards, env, HUD.
-goal_pct: 2.5          # boot-camp training value; live value typed by Monty
-floor_pct: 4.0         # boot-camp training value (daily max drawdown, equity)
+goal_pct: 3.0          # Monty's daily target % (the focus; Colab Cell 1 writes this)
+floor_pct: 3.5         # Monty's daily max drawdown % (the focus; Colab Cell 1 writes this)
 equity_basis: equity   # open+closed P/L counts
 currency: USD
 day_boundary_tz: Europe/Berlin   # 00:00 CEST/CET day clock
@@ -14,8 +14,12 @@ ratchet:
   activation_buffer_heat_aware: true   # activate only when flatten cost still leaves >= goal
 goal_conditioning:      # ANY-X promise (ADR-0001/0007)
   randomize_in_training: true
-  goal_range: [0.5, 4.0]
-  floor_range: [1.0, 6.0]
+  # Monty's training law (2026-07-20, restated): every practice day gets a RANDOM
+  # target from this range and a RANDOM risk from this range; 60% of practice is
+  # pinned to his focus pair (goal_pct/floor_pct above) — the 60/40 focus is auto
+  # (evaluation/consistency.auto_ranges), never a separate knob.
+  goal_range: [2.5, 70.3]
+  floor_range: [1.0, 4.4]
 
 # Monty's ruling on the boot-camp BAR (ADR-0013, 2026-07-19). He reviewed the
 # first real-XAUUSD Gauntlet — oracle averaged +4.63%/day with 0 floor breaches,

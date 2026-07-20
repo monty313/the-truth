@@ -361,8 +361,11 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
         m = ck.get("meta", {}); gen0 = int(m.get("gen", 0)); best_streak = int(m.get("best_streak", 0))
         explore = float(m.get("explore", scale0)); stale = int(m.get("stale", 0))
         log("resume: gen %d | best streak %d | explore %.3f" % (gen0, best_streak, explore))
-    else:                                                  # else warm-start from the GPU trainer's best
-        for name in ("gpu_best", "PROVEN_2x_2026-07-19", "best_trading"):
+    else:                                                  # else warm-start from the best PROFITABLE brain first
+        # lift_best = the brain that PROVED it banks the target (2026-07-20 lift demo);
+        # seeding the tuner from a brain that already makes money beats seeding from a
+        # flat-but-safe one — the ratchet then hones consistency instead of digging out of zero.
+        for name in ("lift_best", "gpu_best", "PROVEN_2x_2026-07-19", "best_trading"):
             p = os.path.join(ckpt_dir, name + ".pt")
             if os.path.exists(p):
                 d = torch.load(p, weights_only=False, map_location=dev)

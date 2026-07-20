@@ -30,6 +30,9 @@ INTERCONNECTED WITH: training/policy.Brain, training/gpu_data, core.configs
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
+- 2026-07-20  ratchet lock line = goal + flat_cost (was bare goal) — WHY: lift demo
+  proved the stand-down flatten banked goal - cost (~2.9% on a 3.0% target); R3#7's
+  documented intent is "flatten still realizes >= goal". Mirrored in backtesting/simulator.
 - 2026-07-20  created — WHY: 8,000-at-once GPU training needs a batched twin of
   DaySim; brain shape untouched, DaySim stays the judge.
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
@@ -382,10 +385,15 @@ class FastSim:
             self.dead = self.dead | stand
 
         # ===== ratchet =====
+        # 2026-07-20 LAW FIX (lift demo finding): the lock line must INCLUDE the flatten
+        # cost, or the stand-down flatten realizes goal - cost (banked ~2.9% on a 3.0%
+        # target — the day "reaches the target" but never banks it). R3#7's documented
+        # intent is "flatten still realizes >= goal"; arming already requires
+        # eq - flat_cost >= goal, so goal + flat_cost is at-or-below equity when set.
         flat_cost = self._flat_cost(hi, lo, close, sp)
         cond = (eqp - flat_cost >= self.goal) | (self.ratchet >= self.goal)
         trail = self.max_eq - self.floor * self.trail_keep
-        newr = torch.maximum(torch.maximum(self.ratchet, self.goal), trail)
+        newr = torch.maximum(torch.maximum(self.ratchet, self.goal + flat_cost), trail)
         self.ratchet = torch.where(live & cond & ~self.dead, newr, self.ratchet)
 
         # ===== idleness hunger (approx: flat & hold) =====

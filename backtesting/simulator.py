@@ -25,6 +25,7 @@ UNITS: prices in quote units; spread column = POINTS * POINT_SIZE.
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-20  ratchet lock line = goal + flat_cost (was bare goal) — WHY: lift demo proved the stand-down flatten banked goal - cost (~2.9% on a 3.0% target); R3#7's own words say "flatten still realizes >= goal". Mirrored in training/fastsim.
 - 2026-07-19  Shell v3, config-driven, stop-anchored risk, intrabar floor  — WHY: audit rounds 1+2 proved v1 law breakable; numbers moved to configs (S7).
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
@@ -295,13 +296,17 @@ class DaySim:
 
         # ratchet (ADR-0001): activation needs heat-aware clearance so the
         # stand-down flatten still realizes >= goal (R3#7)
+        # 2026-07-20 LAW FIX (lift demo finding, mirrored in training/fastsim.py): the
+        # lock line must INCLUDE the flatten cost, or the stand-down realizes
+        # goal - cost (banked ~2.9% on a 3.0% target). Arming already requires
+        # eq - flat_cost >= goal, so goal + flat_cost is at-or-below equity when set.
         flat_cost = 100.0 * sum(s.units * ((close - lo) + sp) if s.side > 0
                                 else s.units * ((hi - close) + sp)
                                 for s in self.stacks) / self.eq0
         if eq - flat_cost >= self.goal or self.ratchet_floor >= self.goal:
             peak = max(self.res.equity_curve)
             trail = peak - (self.floor * self._trail_keep)
-            self.ratchet_floor = max(self.ratchet_floor, self.goal, trail)
+            self.ratchet_floor = max(self.ratchet_floor, self.goal + flat_cost, trail)
 
         if self.killed:
             self._flatten("kill_switch")

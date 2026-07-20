@@ -94,7 +94,7 @@ def main():
 
     # warm-start from a COPY of the proof; the original file is never touched
     loaded = None
-    for name in ("gpu_best", a.ckpt, a.warm, "PROVEN_2x_2026-07-19", "best_meta"):  # resume from BEST first
+    for name in ("gpu_best", a.ckpt, "lift_best", a.warm, "PROVEN_2x_2026-07-19", "best_meta"):  # resume best, then the proven-profitable seed
         pth = rpath("artifacts", "checkpoints", name + ".pt")
         if os.path.exists(pth):
             d = torch.load(pth, weights_only=False, map_location=dev)
@@ -187,8 +187,12 @@ def main():
         gh = float(res["goal_hit"].float().mean().item()) * 100
         br = float(res["breached"].float().mean().item()) * 100
         mp = float(res["day_pnl"].mean().item())
-        print("upd %4d | %.0fs | rollout: mean pnl %+.2f%% | hit-target %.1f%% | breach %.1f%% | ploss %.3f"
-              % (upd, time.time() - t0, mp, gh, br, stats["policy_loss"]), flush=True)
+        tr = float(sim.trades_used.float().mean().item())
+        # NOTE: ploss ~ 0.000 is NORMAL at epochs=1 (loss measured at ratio=1 on mean-0
+        # advantages) — the gradient is real. Watch ENTROPY (falling = converging) and
+        # TRADES/DAY (rising activity) for the true learning signal.
+        print("upd %4d | %.0fs | pnl %+.2f%% | hit %.1f%% | breach %.1f%% | trades/day %.1f | entropy %.2f"
+              % (upd, time.time() - t0, mp, gh, br, tr, stats.get("entropy", 0.0)), flush=True)
 
         if upd % a.eval_every == 0:
             best = eval_streak(eval_rounds)
