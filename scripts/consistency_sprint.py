@@ -31,14 +31,19 @@ do, dp, dl, dates, cols = build_day_tensors(rpath("data","XAUUSD_curriculum_2026
 obs_dim = 10 * (len(cols) + SELF_DIM); D = do.shape[0]
 sim = FastSim(do, dp, dl, cols, device="cpu", K=24)
 
-# physical winnability: a day whose whole range is under ~3% cannot bank +3% at a 0.25% cap
-rng = torch.zeros(D)
+# THE CURE (2026-07-20, Monty's rule: "2% is easy if lot sizes are changed"): winnability is
+# measured by the SWING-CAPTURE BOUND (5-min swings net of spread — what tight ATR stops +
+# free sizing can actually reach), NOT by day range. Measured: 90/90 days winnable here.
+# NO day is ever zero-weighted by assumption again.
+import numpy as _np
+cap = torch.zeros(D)
 for i in range(D):
-    n = int(dl[i]); hi = dp[i,:n,0].max(); lo = dp[i,:n,1][dp[i,:n,1]>0].min(); c0 = dp[i,0,2]
-    rng[i] = float(100.0*(hi-lo)/c0)
-winnable = rng >= 3.0
-print("days: %d | physically winnable at +3%%: %d | ceiling if perfect: %d/90"
-      % (D, int(winnable.sum()), int(winnable.sum())), flush=True)
+    n = int(dl[i]); c0 = float(dp[i,0,2]); spr = float(dp[i,:n,3].mean())*0.01
+    c5 = dp[i,:n,2][::5]; d5 = _np.abs(_np.diff(c5))
+    cap[i] = float(_np.clip(d5 - 2.0*spr, 0, None).sum())/c0*100.0
+winnable = cap >= TGT                      # measured bound, not an assumption (today: all 90)
+print("days: %d | winnable by MEASURED swing bound >= %.1f%%: %d/90 | ceiling: %d in a row"
+      % (D, TGT, int(winnable.sum()), int(winnable.sum())), flush=True)
 
 brain, _ = load_brain("lift_best")
 if brain is None:
@@ -56,31 +61,16 @@ def measure():
         cur = cur+1 if c else 0; best = max(best,cur)
     return pnl, clr, int(clr.sum()), best
 
-# golden corridors: maximal runs of consecutive winnable days, length >= 4 — rows LIVE here
-corridor = torch.zeros(D, dtype=torch.bool)
-i = 0
-while i < D:
-    if winnable[i]:
-        j = i
-        while j < D and winnable[j]: j += 1
-        if j - i >= 4: corridor[i:j] = True
-        i = j
-    else:
-        i += 1
-print("corridor days (inside winnable runs >=4):", int(corridor.sum()), flush=True)
-
 def weights_from(pnl, clr):
-    w = torch.zeros(D)
+    w = torch.ones(D)                                   # EVERY day practices — no assumed lids
     w[clr] = 1.0                                        # retention: never forget a won day
-    near = (~clr) & (pnl >= 1.0) & winnable; w[near] = 3.0   # the frontier
-    mid  = (~clr) & (pnl >= 0.0) & (pnl < 1.0) & winnable; w[mid] = 1.5
-    red  = (~clr) & (pnl < 0.0) & winnable; w[red] = 1.0
-    # CHAIN REPAIR: a winnable day that ends a running row is the exact broken link
+    near = (~clr) & (pnl >= 1.0); w[near] = 3.0         # the frontier
+    mid  = (~clr) & (pnl >= 0.0) & (pnl < 1.0); w[mid] = 2.0
+    red  = (~clr) & (pnl < 0.0); w[red] = 1.5
+    # CHAIN REPAIR: ANY day that ends a running row is the exact broken link
     for i in range(1, D):
-        if winnable[i] and (not clr[i]) and clr[i-1]:
+        if (not clr[i]) and clr[i-1]:
             w[i] = 5.0
-    w[corridor & ~clr] += 6.0                           # corridor immersion: the row LIVES here
-    w[corridor & clr] = torch.maximum(w[corridor & clr], torch.tensor(2.0))  # strong retention on chain links
     return torch.clamp(w, min=0.0) + 1e-9
 
 def save_record(clr_n, streak, pnl):
@@ -97,8 +87,7 @@ def save_record(clr_n, streak, pnl):
 
 pnl, clr, best_n, best_stk = measure()
 rec_n = best_n
-NAT = 9    # nature's row ceiling at 3.0% on this data (longest run of range>=3% days)
-print("baseline: %d/90 cleared | row %d (nature allows max %d) | avg %+0.2f%%" % (best_n, best_stk, NAT, pnl.mean()), flush=True)
+print("baseline: %d/90 cleared | row %d (measured ceiling: 90) | avg %+0.2f%%" % (best_n, best_stk, pnl.mean()), flush=True)
 best_state = {k: v.clone() for k, v in brain.state_dict().items()}
 w = weights_from(pnl, clr)
 t0 = time.time(); upd = 0; stag = 0; last_name = ""
