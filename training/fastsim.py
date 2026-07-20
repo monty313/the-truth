@@ -253,9 +253,10 @@ class FastSim:
 
         # ---- pull tags at the DECISION bar (before advancing) ----
         t0 = self.t
-        pull_buy = (self.days_obs[self.day_idx][:, t0][:, self.pull_buy_idx] > 0).any(1) \
+        row0 = self.days_obs[self.day_idx, t0]        # (N,C) ONE gather (review: was materializing the whole day every bar)
+        pull_buy = (row0[:, self.pull_buy_idx] > 0).any(1) \
             if self.pull_buy_idx.numel() else torch.zeros(self.N, dtype=torch.bool, device=dev)
-        pull_sell = (self.days_obs[self.day_idx][:, t0][:, self.pull_sell_idx] > 0).any(1) \
+        pull_sell = (row0[:, self.pull_sell_idx] > 0).any(1) \
             if self.pull_sell_idx.numel() else torch.zeros(self.N, dtype=torch.bool, device=dev)
 
         # ---- advance one bar ----
