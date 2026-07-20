@@ -15,3 +15,8 @@ artifacts/drill2x_progress.json
 artifacts/bootcamp_eval.json
 artifacts/trophy_case.jsonl
 artifacts/gauntlet/the_2x_wall.html
+artifacts/checkpoints/meta_live.pt
+artifacts/checkpoints/best_meta.pt
+artifacts/checkpoints/history/
+artifacts/meta_progress.json
+artifacts/CHECKPOINT_HISTORY.md
