@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAUNTLET — Real XAUUSD</title>
+<style>
+  :root{--bg:#0a0e14;--panel:#111823;--edge:#1e2b3a;--ink:#e8f0f8;--dim:#8aa0b5;
+    --cyan:#38e1ff;--green:#39d98a;--amber:#f5b342;--red:#ff5c72;--blue:#4aa8ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 700px at 70% -10%,#0f1a28 0,var(--bg) 60%);
+    color:var(--ink);font-family:"Segoe UI",system-ui,Arial,sans-serif;padding:26px 20px 60px;letter-spacing:.2px}
+  .wrap{max-width:1000px;margin:0 auto}
+  header{display:flex;align-items:center;gap:13px;border-bottom:1px solid var(--edge);padding-bottom:15px;margin-bottom:20px}
+  .dot{width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}
+  h1{font-size:21px;margin:0;font-weight:600;letter-spacing:2px}
+  h1 span{color:var(--cyan)}
+  .sub{color:var(--dim);font-size:12.5px;margin-top:2px;letter-spacing:.8px}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:20px 0}
+  .tile{background:var(--panel);border:1px solid var(--edge);border-radius:11px;padding:13px 15px}
+  .tile .v{font-size:23px;font-weight:700}
+  .tile .l{font-size:11px;color:var(--dim);margin-top:3px;letter-spacing:.4px}
+  .green{color:var(--green)}.cyan{color:var(--cyan)}.amber{color:var(--amber)}.red{color:var(--red)}
+  .chartbox{background:var(--panel);border:1px solid var(--edge);border-radius:13px;padding:20px 18px 12px;margin-top:8px}
+  .chart{position:relative;height:280px;border-bottom:2px solid #2b3b4d;margin-top:26px}
+  .gl{position:absolute;left:0;right:0;border-top:1px dashed;font-size:10px;padding-left:2px}
+  .bars{display:flex;align-items:flex-end;height:100%;gap:3px}
+  .bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+  .bar .b{width:100%;border-radius:3px 3px 0 0;min-height:2px}
+  .bar .d{font-size:8px;color:#5f7488;margin-top:4px;transform:rotate(-90deg);transform-origin:center;
+    white-space:nowrap;height:34px}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:26px;font-size:12px;color:var(--dim)}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .sw{width:11px;height:11px;border-radius:3px}
+  .verdict{margin-top:22px;border-radius:13px;padding:16px 18px;font-size:14.5px;line-height:1.55}
+  .v-warn{background:#171006;border:1px solid #5a4212;color:#f3dca6}
+  .verdict b{color:var(--amber)}
+  .good{background:#0c1a12;border:1px solid #1e5138;color:#bff0d3;margin-top:12px;border-radius:13px;padding:14px 16px;font-size:14px}
+  .good b{color:var(--green)}
+  footer{margin-top:24px;color:#5f7488;font-size:11px;text-align:center;letter-spacing:.6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="dot"></div>
+    <div>
+      <h1>GAUNTLET · REAL <span>XAUUSD</span></h1>
+      <div class="sub">FEASIBILITY CHECK · 21 TRADING DAYS · APR 27 – MAY 26 2026 · 28,951 one-minute bars</div>
+    </div>
+  </header>
+
+  <div class="tiles">
+    <div class="tile"><div class="v green">+4.63%</div><div class="l">Oracle avg / day (best-case ceiling)</div></div>
+    <div class="tile"><div class="v green">0</div><div class="l">Floor breaches (−4%) — never touched</div></div>
+    <div class="tile"><div class="v cyan">14 / 21</div><div class="l">Days the ceiling cleared the +2.5% goal</div></div>
+    <div class="tile"><div class="v amber">9 / 21</div><div class="l">Days it could reach +5% (2× goal)</div></div>
+    <div class="tile"><div class="v red">−0.14%</div><div class="l">Baseline avg / day (naive strategy)</div></div>
+  </div>
+
+  <div class="chartbox">
+    <div style="font-size:12px;color:var(--dim);letter-spacing:1px">ORACLE — BEST POSSIBLE % EACH DAY (WITH PERFECT HINDSIGHT, RESPECTING THE FLOOR)</div>
+    <div class="chart" id="chart"></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--green)"></i>Reached +5% (2× goal)</span>
+      <span><i class="sw" style="background:var(--cyan)"></i>Reached +2.5% goal</span>
+      <span><i class="sw" style="background:var(--amber)"></i>Positive but under goal</span>
+      <span><i class="sw" style="border-top:2px dashed #f5b342;height:0;width:16px;border-radius:0"></i>+5% bar &nbsp;·&nbsp; +2.5% goal</span>
+    </div>
+  </div>
+
+  <div class="good">
+    <b>The good news.</b> Your gold data is clean (zero bad candles), and the edge is real:
+    even a cautious best-case never touched the −4% floor once in 21 days, averaged <b>+4.6%/day</b>,
+    and beat the +2.5% goal two days out of three. A dumb baseline just bled slowly (−0.14%/day) —
+    so there is real money on the table for the bot to learn to reach.
+  </div>
+
+  <div class="verdict v-warn">
+    <b>Your ruling is needed.</b> The boot-camp bar you set was <b>“+5% (2× goal) EVERY single day,
+    zero floor touches.”</b> But on real gold, even perfect hindsight only reached +5% on
+    <b>9 of 21 days</b> — the other 12 days simply didn't move enough. So “double the goal <i>every</i> day”
+    isn't physically in this data. The system refuses to pretend it is, and asks you to set the bar
+    before boot camp is trusted. (Note: this is only the last 30 days — a fuller read needs more history.)
+  </div>
+
+  <footer>MOMENTUM ONE · GAUNTLET · REAL_XAUUSD · 2026-07-19 · oracle = upper bound, not a promise</footer>
+</div>
+<script>
+  const dates=["04-28","04-29","04-30","05-01","05-04","05-05","05-06","05-07","05-08","05-11","05-12","05-13","05-14","05-15","05-18","05-19","05-20","05-21","05-22","05-25","05-26"];
+  const pnl=[8.062,5.961,2.499,6.576,6.075,2.121,9.615,3.752,6.056,2.814,2.481,2.372,2.877,3.404,7.278,4.774,5.817,7.7,2.426,2.079,2.478];
+  const MAX=10; // % axis top
+  const chart=document.getElementById("chart");
+  // gridlines at +5 (bar) and +2.5 (goal)
+  [[5,"#f5b342"],[2.5,"#38e1ff"]].forEach(([y,c])=>{
+    const g=document.createElement("div");g.className="gl";
+    g.style.bottom=(y/MAX*100)+"%";g.style.borderColor=c;g.style.color=c;
+    g.textContent=(y===5?"+5% bar":"+2.5% goal");chart.appendChild(g);
+  });
+  const bars=document.createElement("div");bars.className="bars";
+  pnl.forEach((v,i)=>{
+    const col=v>=5?"#39d98a":v>=2.5?"#38e1ff":"#f5b342";
+    const w=document.createElement("div");w.className="bar";
+    w.innerHTML=`<div style="font-size:9px;color:${col};margin-bottom:3px">${v.toFixed(1)}</div>`+
+      `<div class="b" style="height:${v/MAX*100}%;background:${col}"></div>`+
+      `<div class="d">${dates[i]}</div>`;
+    bars.appendChild(w);
+  });
+  chart.appendChild(bars);
+</script>
+</body>
+</html>

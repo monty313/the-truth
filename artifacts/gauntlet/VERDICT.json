@@ -1,0 +1,8 @@
+{
+  "source": "REAL_XAUUSD",
+  "bar": "+5.0% EVERY day, zero -4.0% touches",
+  "oracle_clears_bar_every_day": false,
+  "oracle_mean_pnl_pct": 4.629,
+  "ruling_required_from_monty": true,
+  "note": "Oracle could NOT clear the bar every day \u2014 Monty must rule on the bar before boot camp is trusted (the bar bends only by his hand). Boot camp will run but stamps this warning on every report."
+}

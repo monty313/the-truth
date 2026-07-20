@@ -5,3 +5,13 @@ logs/*.jsonl
 data_io/cache/
 .pytest_cache/
 logs/app.log
+
+# transient training outputs (not part of "the truth" proof)
+artifacts/checkpoints/drill_live.pt
+artifacts/checkpoints/drill2x.pt
+artifacts/checkpoints/drill2x_v2.pt
+artifacts/checkpoints/champion_candidate.pt
+artifacts/drill2x_progress.json
+artifacts/bootcamp_eval.json
+artifacts/trophy_case.jsonl
+artifacts/gauntlet/the_2x_wall.html

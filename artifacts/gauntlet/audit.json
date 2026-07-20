@@ -1,0 +1,10 @@
+{
+  "rows": 28951,
+  "start": "2026-04-27 00:00:00",
+  "end": "2026-05-26 21:59:00",
+  "bad_candles": 0,
+  "gaps_over_120min_weekday": 21,
+  "spread_median_pts": 4.0,
+  "spread_p95_pts": 4.0,
+  "spread_max_pts": 281.0
+}
