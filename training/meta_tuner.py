@@ -143,13 +143,14 @@ def day_after_day_streak(brain, sim, ordered_days, gen=None, focus_frac=0.6,
     """HEADLINE metric: walk the days in calendar order (each once, random X) and return
     the longest run of consecutive CLEARED days — 'day after day, in a row'."""
     r = ranges or auto_ranges()
+    ff = float(r.get("focus_frac", focus_frac))            # single source (auto_ranges) — no hardcoded copy
     dev = sim.dev
     di = torch.as_tensor(ordered_days, dtype=torch.long, device=dev)
     n = int(di.numel())
     tg = torch.empty(n, device=dev).uniform_(r["tgt_lo"], r["tgt_hi"], generator=gen)
     rk = torch.empty(n, device=dev).uniform_(r["risk_lo"], r["risk_hi"], generator=gen)
-    if focus_frac > 0:
-        m = torch.rand(n, device=dev, generator=gen) < focus_frac
+    if ff > 0:
+        m = torch.rand(n, device=dev, generator=gen) < ff
         tg = torch.where(m, torch.full_like(tg, r["focus_target"]), tg)
         rk = torch.where(m, torch.full_like(rk, r["focus_risk"]), rk)
     res = rollout(brain, sim, di, tg, rk, greedy=True, collect=False, decide_every=decide_every)
@@ -339,6 +340,7 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
     d_min = int(st.get("min_disagreements", 4))            # in DISTINCT DAYS now (day-clustered gate)
     patience = int(st.get("plateau_patience", 3)); scale0 = float(st.get("explore_scale", 0.25))
     sel_frac = float(st.get("sel_frac", 0.30)); mut_knobs = int(st.get("mutate_knobs", 3))
+    audit_margin_se = float(st.get("audit_margin_se", 2.0))   # how far below the audit high-water an adopt may sit
     n_eval = int(n_eval if n_eval is not None else st.get("eval_episodes", 512))
     gamma = float(ppo.get("gamma", 0.999)); lam = float(ppo.get("lam", 0.95)); clip = float(ppo.get("clip", 0.2))
     base_seed = int(base_seed if base_seed is not None else tc.get("seed", 20260718))
@@ -376,9 +378,21 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
     def _beats(a_res, b_res, z):
         """day-clustered paired test: does b clear significantly MORE DAYS than a? (CRN: a,b
         scored on identical episodes, so their day_idx align)."""
+        assert torch.equal(a_res["day_idx"], b_res["day_idx"]), "CRN broken: day_idx misaligned"
         aw, bw = _day_paired(a_res["cleared_mask"], b_res["cleared_mask"], a_res["day_idx"])
         ok, info = adopt_gate(aw, bw, z=z, d_min=d_min)
         return ok, info
+
+    # OUT-OF-SAMPLE ANCHOR: the champion's audit consistency at a FIXED reference seed is the
+    # high-water; an adopt may not sit more than `audit_margin_se` SE below it -> non-backslide
+    # on days that never selected or trained. meta_anchor.pt is the frozen best-audit champion.
+    audit_ref = _seed_from(base_seed, "audit-ref")
+    anchor_path = os.path.join(ckpt_dir, "meta_anchor.pt")
+    anchor_cons = float(ck.get("meta", {}).get("anchor_cons", -1.0)) if ck is not None else -1.0
+    if anchor_cons < 0.0:                                   # first ever: anchor = the warm-start champion
+        anchor_cons = _score(champ_brain, audit_days, audit_ref)["consistency"]
+        save_champion(anchor_path, champ_brain, champ_cfg, {"obs_dim": obs_dim, "anchor_cons": anchor_cons})
+        log("audit anchor set: %.3f (out-of-sample high-water)" % anchor_cons)
 
     t0 = time.time(); g = gen0
     while time.time() - t0 < minutes * 60.0:
@@ -389,11 +403,11 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
                                        for _ in range(max(K - 1, 1))]
 
         brains = []                                        # PROBE (the expensive part)
-        for i, cfg in enumerate(configs):
+        p_seed = _seed_from(base_seed, g, "probe")         # SAME train sample for every candidate this gen ->
+        for cfg in configs:                                # the equal-budget control differs ONLY by config
             brains.append(probe(cfg, sim, train_days, champ_brain, n_updates, obs_dim,
                                 instances=instances, decide_every=decide_every, gamma=gamma,
-                                lam=lam, clip=clip, ranges=ranges,
-                                gen=_gen(dev, _seed_from(base_seed, g, "probe", i))))
+                                lam=lam, clip=clip, ranges=ranges, gen=_gen(dev, p_seed)))
 
         s_seed = _seed_from(base_seed, g, "screen")        # SCREEN on ONE shared seed (CRN)
         screens = [_score(b, sel_days, s_seed) for b in brains]
@@ -405,28 +419,40 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
         else:
             best_i = 0; took = "more-training"             # no knob beat 'just more steps' -> test that
 
-        c_seed = _seed_from(base_seed, g, "confirm")       # CONFIRM on a FRESH seed vs FROZEN champion
-        champ_conf = _score(champ_brain, sel_days, c_seed)
-        cand_conf = _score(brains[best_i], sel_days, c_seed)
+        # HURDLE 1 — TWO independent fresh confirms vs the FROZEN champion on the rotating
+        # select days. Requiring a win on TWO fresh seeds squares the per-gen false-adopt rate,
+        # so cumulative false adopts stay O(1) over thousands of generations (alpha control).
+        c1 = _seed_from(base_seed, g, "confirm")
+        champ_conf = _score(champ_brain, sel_days, c1)
+        cand_conf = _score(brains[best_i], sel_days, c1)
         passed_sel, info = _beats(champ_conf, cand_conf, confirm_z)
+        if passed_sel:
+            c2 = _seed_from(base_seed, g, "confirm2")
+            passed_sel = _beats(_score(champ_brain, sel_days, c2),
+                                _score(brains[best_i], sel_days, c2), confirm_z)[0]
 
-        a_seed = _seed_from(base_seed, g, "audit")         # AUDIT tripwire on PERMANENT held-out days
-        champ_aud = _score(champ_brain, audit_days, a_seed)
-        cand_aud = _score(brains[best_i], audit_days, a_seed)
-        champ_better_audit = _beats(cand_aud, champ_aud, screen_z)[0]        # does champ win out-of-sample?
-        audit_ok = (not champ_better_audit) and \
-                   (cand_aud["consistency"] >= champ_aud["consistency"] - champ_aud["se"])
-        adopt = bool(passed_sel and audit_ok)
+        # HURDLE 2 — out-of-sample NON-BACKSLIDE: the candidate's audit consistency (at the FIXED
+        # reference seed) must be within `audit_margin_se` SE of the all-time audit high-water,
+        # so an adopt can never push the champion below its best held-out level.
+        adopt = False; cand_aud = None
+        if passed_sel:
+            cand_aud = _score(brains[best_i], audit_days, audit_ref)
+            adopt = bool(cand_aud["consistency"] >= anchor_cons - audit_margin_se * cand_aud["se"])
 
         if adopt:
             champ_brain = brains[best_i]; champ_cfg = configs[best_i]
             explore = scale0; stale = 0
-            log("gen %d ADOPT (%s) | sel %.3f->%.3f (c=%d b=%d z=%.2f) | audit %.3f->%.3f OK"
-                % (g, took, champ_conf["consistency"], cand_conf["consistency"], info["c"], info["b"],
-                   info["stat"], champ_aud["consistency"], cand_aud["consistency"]))
+            new_high = cand_aud["consistency"] > anchor_cons
+            if new_high:                                    # new out-of-sample high -> re-anchor the safety net
+                anchor_cons = cand_aud["consistency"]
+                save_champion(anchor_path, champ_brain, champ_cfg,
+                              {"obs_dim": obs_dim, "anchor_cons": anchor_cons})
+            log("gen %d ADOPT (%s) | 2x fresh confirm (c=%d b=%d z=%.2f) | audit %.3f vs anchor %.3f%s"
+                % (g, took, info["c"], info["b"], info["stat"], cand_aud["consistency"],
+                   anchor_cons, " NEW HIGH" if new_high else ""))
         else:
             stale += 1
-            why = "sel not proven" if not passed_sel else "audit tripwire (out-of-sample)"
+            why = "sel not proven (2x)" if not passed_sel else "audit non-backslide"
             if stale >= patience:
                 stale = 0
                 if explore >= _EXPLORE_CAP - 1e-9:
@@ -436,7 +462,7 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
                     explore = min(explore * 1.5, _EXPLORE_CAP)
                     log("gen %d plateau: widen explore to %.3f | champion kept" % (g, explore))
             else:
-                log("gen %d keep champion (%s) | best cand sel %.3f vs %.3f"
+                log("gen %d keep champion (%s) | cand sel %.3f vs %.3f"
                     % (g, why, cand_conf["consistency"], champ_conf["consistency"]))
 
         if adopt or g == gen0 + 1:                         # streak only when the champion CHANGED (or first gen)
@@ -450,11 +476,12 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 1440.0,
 
         save_champion(champ_path, champ_brain, champ_cfg,   # checkpoint (resumable) every generation
                       {"obs_dim": obs_dim, "gen": g, "best_streak": best_streak,
-                       "explore": explore, "stale": stale, "base_seed": base_seed})
+                       "explore": explore, "stale": stale, "base_seed": base_seed,
+                       "anchor_cons": anchor_cons})
         json.dump({"gen": g, "best_streak": int(best_streak), "explore": round(explore, 4),
                    "stale": stale, "last_adopt": bool(adopt), "took": took,
                    "champ_sel_consistency": round(champ_conf["consistency"], 4),
-                   "champ_audit_consistency": round(champ_aud["consistency"], 4)},
+                   "audit_anchor_consistency": round(anchor_cons, 4)},
                   open(os.path.join(ckpt_dir, "meta_progress.json"), "w"), indent=2)
 
     log("meta run chunk done | gen %d | best streak %d cleared-in-a-row" % (g, best_streak))
