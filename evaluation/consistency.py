@@ -51,19 +51,28 @@ from training.gpu_rollout import rollout        # noqa: E402
 from core.configs import goals_cfg              # noqa: E402
 
 
+# Machine policy (NOT human knobs): the practice envelope is a FIXED wide band so one brain
+# generalizes to any handed X, and it is always stretched to CONTAIN the user's two numbers.
+# The 60/40 focus split is fixed policy too. The ONLY numbers a human ever sets are
+# goal_pct + floor_pct (configs/goals.yaml). Everything below derives from those.
+_FOCUS_FRAC = 0.6                                          # 60% of practice pinned to the user's exact X, 40% random
+_ENVELOPE = {"goal_range": (0.5, 4.0), "floor_range": (1.0, 6.0)}   # fixed band; always widened to hold the user's X
+
+
 def auto_ranges() -> dict:
-    """Single source of truth, derived from the user's TWO inputs (goal_pct, floor_pct).
-    Envelope is wide (one brain for any X) and ALWAYS contains the user's numbers; the
-    focus point IS the user's numbers. Nothing here is a knob a human sets."""
+    """Single source of truth, from the user's TWO inputs (goal_pct, floor_pct). The envelope
+    is FIXED machine policy (a wide band so one brain handles any X) always stretched to contain
+    the user's numbers; the focus point IS the user's numbers; the focus split is fixed policy.
+    A human sets ONLY goal_pct + floor_pct — nothing else here is a knob."""
     g = goals_cfg()
     goal = float(g.get("goal_pct", 2.5))
     floor = float(g.get("floor_pct", 4.0))
     gc = g.get("goal_conditioning", {})
-    gr = gc.get("goal_range", [0.5, 4.0])
-    fr = gc.get("floor_range", [1.0, 6.0])
+    gr = gc.get("goal_range", _ENVELOPE["goal_range"])    # fixed policy band (may be mirrored in goals.yaml)
+    fr = gc.get("floor_range", _ENVELOPE["floor_range"])
     return {"tgt_lo": min(float(gr[0]), goal), "tgt_hi": max(float(gr[1]), goal),
             "risk_lo": min(float(fr[0]), floor), "risk_hi": max(float(fr[1]), floor),
-            "focus_target": goal, "focus_risk": floor}
+            "focus_target": goal, "focus_risk": floor, "focus_frac": _FOCUS_FRAC}
 
 
 @torch.no_grad()
@@ -88,8 +97,9 @@ def evaluate(brain, sim, day_pool, n_episodes: int = 512, focus_frac: float = 0.
         di = pool[torch.randint(pool.numel(), (n,), device=dev, generator=gen)]
     tg = torch.empty(n, device=dev).uniform_(r["tgt_lo"], r["tgt_hi"], generator=gen)
     rk = torch.empty(n, device=dev).uniform_(r["risk_lo"], r["risk_hi"], generator=gen)
-    if focus_frac > 0:                                    # same focus mix training uses
-        m = torch.rand(n, device=dev, generator=gen) < focus_frac
+    ff = float(r.get("focus_frac", focus_frac))          # single source (auto_ranges) — not a second copy
+    if ff > 0:                                            # same focus mix training uses
+        m = torch.rand(n, device=dev, generator=gen) < ff
         tg = torch.where(m, torch.full_like(tg, r["focus_target"]), tg)
         rk = torch.where(m, torch.full_like(rk, r["focus_risk"]), rk)
 
@@ -116,7 +126,8 @@ def evaluate(brain, sim, day_pool, n_episodes: int = 512, focus_frac: float = 0.
     return {"consistency": consistency, "surrogate": surrogate,
             "breach_rate": float(breached.mean().item()),
             "cleared": int(cleared.sum().item()), "n": n, "n_distinct_days": n_distinct,
-            "se": se, "cleared_mask": cleared.bool()}
+            "se": se, "cleared_mask": cleared.bool(),
+            "day_idx": di.detach().clone()}    # per-episode day -> lets the gate cluster by DAY (kills pseudo-replication)
 
 
 def split_days(n_days: int, holdout_frac: float = 0.15):

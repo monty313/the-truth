@@ -25,14 +25,20 @@ self_tuner:                       # 2026-07-20 — the autonomous self-tuner (tr
   # Monty: "auto accept itself ONLY if consistency improves." The LAB self-adopts a change
   # ONLY when the paired ratchet PROVES real consistency went up (never on noise); the
   # champion is always kept; a final human gate stays before LIVE (real money).
-  mode: auto_adopt_lab            # lab self-adopts on a proven consistency gain; LIVE still gated
-  candidates_per_gen: 24          # K proposals screened each generation
-  screen_z: 1.64                  # lenient paired-McNemar to SHORTLIST on the screening seed
-  confirm_z: 2.33                 # strict, continuity-corrected paired-McNemar to ADOPT (fresh seed)
-  min_disagreements: 12           # min differing days before the gate may fire (with the -1 correction)
-  plateau_patience: 3             # generations with no adopt before exploration widens
-  explore_scale: 0.25             # mutation step size; grows on plateau, resets on an adopt
-  eval_episodes: 512              # episodes per consistency score (CRN across champion vs candidate)
+  # The adopt gate is PAIRED and DAY-CLUSTERED: many correlated episodes on the same day
+  # collapse to ONE day-vote, so a lucky day can't fake significance. A change is adopted only
+  # if it beats the champion on FRESH select days (confirm_z) AND holds on the PERMANENT
+  # held-out audit days — two independent fresh hurdles that can't be won on luck.
+  mode: auto_adopt_lab            # lab self-adopts on a proven, out-of-sample consistency gain; LIVE still gated
+  candidates_per_gen: 24          # K proposals probed each generation
+  sel_frac: 0.30                  # each gen this fraction of the WORK pool is the ROTATING select set; the rest trains
+  mutate_knobs: 3                 # jitter at most this many knobs per proposal (few-at-a-time; avoids degenerate corners)
+  screen_z: 1.64                  # lenient day-clustered paired test to SHORTLIST vs the equal-budget control
+  confirm_z: 2.0                  # day-clustered paired test on FRESH select days vs the frozen champion
+  min_disagreements: 4            # min DISTINCT DAYS that must differ before a gate may fire (day-clustered)
+  plateau_patience: 3             # no-adopt generations before exploration widens (then sawtooths back small)
+  explore_scale: 0.25             # mutation step size; grows to a cap on plateau, resets on an adopt
+  eval_episodes: 512              # episodes per score; paired by DAY, so many episodes/day collapse to one day-vote
 run_limits:
   max_hours_per_run: 3            # Monty's cap before review (legacy CPU bootcamp). The GPU
                                   # self-tuner runs until Colab stops it; champion resumes from Drive.
