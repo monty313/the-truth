@@ -96,7 +96,7 @@ export); the measurement —
 (deterministic; re-run it and the table reprints); the laws referenced —
 [`training/fastsim.py`](https://github.com/monty313/the-truth/blob/main/training/fastsim.py),
 [`configs/masks_shell.yaml`](https://github.com/monty313/the-truth/blob/main/configs/masks_shell.yaml);
-the diagnosis — [`THE_FLEA_CURE.md`](https://github.com/monty313/the-truth/blob/main/THE_FLEA_CURE.md).
+the diagnosis — [`THE_FLEA_CURE.md`](https://github.com/monty313/the-truth/blob/main/doctrine/flea-jar/THE_FLEA_CURE.md).
 
 **Weight of the exhibit:** the owner's training envelope — targets to 70.3% — which the
 defendant privately called absurd, is hereby measured as **conservative**: the market

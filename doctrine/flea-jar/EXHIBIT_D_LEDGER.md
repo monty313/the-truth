@@ -61,6 +61,6 @@ inside the 4.5% law. If the quietest day qualifies, the argument is over.
 
 - **The price record:** [`data/XAUUSD_curriculum_2026.csv`](https://github.com/monty313/the-truth/blob/main/data/XAUUSD_curriculum_2026.csv) — 90 real XAUUSD trading days (2026-01-20 → 2026-05-26), M1 bars from the owner's MT5 broker export.
 - **The measuring instrument:** [`scripts/exhibit_d_ledger.py`](https://github.com/monty313/the-truth/blob/main/scripts/exhibit_d_ledger.py) (this ledger) and [`scripts/prove_70.py`](https://github.com/monty313/the-truth/blob/main/scripts/prove_70.py) (the 90-day sweep). Deterministic — same command, same numbers, forever.
-- **The case it seals:** [`THE_CLOSING_ARGUMENT.md`](https://github.com/monty313/the-truth/blob/main/THE_CLOSING_ARGUMENT.md) · the diagnosis: [`THE_FLEA_CURE.md`](https://github.com/monty313/the-truth/blob/main/THE_FLEA_CURE.md).
+- **The case it seals:** [`THE_CLOSING_ARGUMENT.md`](https://github.com/monty313/the-truth/blob/main/doctrine/flea-jar/THE_CLOSING_ARGUMENT.md) · the diagnosis: [`THE_FLEA_CURE.md`](https://github.com/monty313/the-truth/blob/main/doctrine/flea-jar/THE_FLEA_CURE.md).
 
 *Exhibit admitted. The defense rests — on the receipts.* ⚖️

@@ -1,0 +1,11 @@
+days where +70% was POSSIBLE at <=4.5% DD, lev<=100: 90 of 90
+
+TOP 5 (evidence grade):
+  2026-03-23 | day multiplier x47821407754526.2 (= +4782140775452523%) | 272 winning windows | avg leverage 48x | +70% reached after 45 of 1380 minutes (3% of the day)
+  2026-02-02 | day multiplier x5097654601501.5 (= +509765460150052%) | 274 winning windows | avg leverage 34x | +70% reached after 35 of 1380 minutes (3% of the day)
+  2026-01-30 | day multiplier x2089985015606.1 (= +208998501560515%) | 274 winning windows | avg leverage 41x | +70% reached after 40 of 1377 minutes (3% of the day)
+  2026-03-24 | day multiplier x655133971798.7 (= +65513397179769%) | 274 winning windows | avg leverage 63x | +70% reached after 50 of 1380 minutes (4% of the day)
+  2026-01-29 | day multiplier x14001035044.3 (= +1400103504327%) | 274 winning windows | avg leverage 57x | +70% reached after 15 of 1380 minutes (1% of the day)
+
+and the QUIETEST day of the book, for the record:
+  2026-05-22 | x76826.1 (+7682508%) | 70% reached: minute 115
