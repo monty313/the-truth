@@ -1,42 +1,52 @@
 # Momentum One
 
-Trading bot. You set a daily profit target and a max loss. It tries to hit the target without breaking the floor.
+Self-healing RL scalper. You set daily **target %** and **floor %**.  
+The bot trains to **hit the target often** without breaking the floor.
 
 ---
 
-## If you are confused, read only this
+## Confused? Open only this
 
-1. Open **[DO_THIS.md](DO_THIS.md)**
-2. Run the commands in order
-3. The only score that matters is what `prove_it` prints
+### → [DO_THIS.md](DO_THIS.md)
 
----
-
-## Three files that matter
-
-| File | When to open it |
-|------|-----------------|
-| [DO_THIS.md](DO_THIS.md) | Every time you train |
-| [MAP.md](MAP.md) | When you forget where a folder is |
-| [UPDATE_RULES.md](UPDATE_RULES.md) | When you change code or configs |
-
-Everything else is support. You can ignore it until you need it.
+Three steps: setup → train / self-heal → measure with `prove_it`.
 
 ---
 
-## Folders in one line each
+## Three files (daily)
 
-| Folder | In one line |
-|--------|-------------|
+| File | Use |
+|------|-----|
+| [DO_THIS.md](DO_THIS.md) | Commands to run |
+| [MAP.md](MAP.md) | Where every folder is |
+| [UPDATE_RULES.md](UPDATE_RULES.md) | How to edit without mess |
+
+## Three files (mindset / proof)
+
+| File | Use |
+|------|-----|
+| [doctrine/SUCCESS_LEDGER.md](doctrine/SUCCESS_LEDGER.md) | Wins already proven |
+| [doctrine/flea-jar/THE_FLEA_CURE.md](doctrine/flea-jar/THE_FLEA_CURE.md) | Nothing is impossible |
+| [PERFORMANCE_IS_POSSIBLE.md](PERFORMANCE_IS_POSSIBLE.md) | Performance proof (never delete) |
+
+Everything else is support. Skip until you need it.
+
+---
+
+## Folders (one line each)
+
+| Folder | What |
+|--------|------|
 | `scripts/` | Commands you type |
-| `configs/` | Numbers (target, risk, rewards) |
-| `training/` | The learning code + meta_tuner |
-| `features/` | Chart indicators |
-| `telemetry/` | “What was the bot thinking?” |
-| `doctrine/` | Rules written down |
-| `data/` | Price history |
-| `artifacts/` | Saved brains |
-| `docs/history/` | Old notes — skip these |
+| `configs/` | Numbers (goals, rewards, TFs) |
+| `training/` | RL brain + meta_tuner |
+| `features/` | Indicators + Gravity sets |
+| `telemetry/` | Mind probe + ghosts |
+| `doctrine/` | Laws + CMO + flea cure |
+| `data/` | Price CSVs |
+| `artifacts/` | Saved brains + epoch logs |
+| `docs/` | Old notes + ADRs (skip daily) |
+| `GPU_EDITION/` | Notebooks for cloud GPU |
 
 ```bash
 python scripts/preflight_train.py
