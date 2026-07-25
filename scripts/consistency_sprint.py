@@ -45,9 +45,17 @@ winnable = cap >= TGT                      # measured bound, not an assumption (
 print("days: %d | winnable by MEASURED swing bound >= %.1f%%: %d/90 | ceiling: %d in a row"
       % (D, TGT, int(winnable.sum()), int(winnable.sum())), flush=True)
 
+# Warm-start order: current lift record → best PROVEN sprint → other PROVEN lineage
 brain, _ = load_brain("lift_best")
 if brain is None:
+    brain, _ = load_brain("PROVEN_SPRINT_row04_clear24_2026-07-20")
+if brain is None:
     brain, _ = load_brain("PROVEN_LIFT_2026-07-20")
+if brain is None:
+    brain, _ = load_brain("PROVEN_2x_2026-07-19")
+if brain is None:
+    raise SystemExit("No PROVEN lineage checkpoint found under artifacts/checkpoints/")
+print("warm-start brain loaded (PROVEN lineage)", flush=True)
 opt = torch.optim.Adam(brain.parameters(), lr=1.2e-4)   # POLISH phase: gentle steps
 ENT = 0.012                                                  # POLISH phase: tiny exploration
 
@@ -103,8 +111,12 @@ while time.time() - t0 < a.minutes*60:
         gain = "" if n <= best_n else "  <-- UP"
         print("u%4d %5ds | cleared %2d/90 (best %2d) | streak %2d (best %2d) | avg %+0.2f%% | ent %.2f%s"
               % (upd, time.time()-t0, n, best_n, stk, best_stk, pnl.mean(), stats["entropy"], gain), flush=True)
-        json.dump({"upd": upd, "cleared": n, "best": best_n, "streak": stk, "best_streak": best_stk,
-                   "avg": round(float(pnl.mean()),3)}, open("/tmp/sprint.json","w"))
+        _sj = rpath("artifacts", "sprint_status.json")
+        try:
+            json.dump({"upd": upd, "cleared": n, "best": best_n, "streak": stk, "best_streak": best_stk,
+                       "avg": round(float(pnl.mean()), 3)}, open(_sj, "w"))
+        except Exception:
+            pass
         if stk > best_stk or (stk == best_stk and n > rec_n):
             best_stk = max(stk, best_stk); rec_n = n; best_n = max(n, best_n)
             best_state = {k: v.clone() for k, v in brain.state_dict().items()}
