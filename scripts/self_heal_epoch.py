@@ -186,11 +186,13 @@ def main() -> int:
     print(f"    baseline clear={base['clear_pct']}% breach={base['breach_pct']}% row={base['row']}")
 
     print("\n[1] Trajectories (Mind + Ghosts + IRAC)...")
+    # Mind Probe over many days is slow on CPU — allow ~3 min/day + buffer
+    _traj_timeout = max(1800, int(args.days) * 180 + 600)
     r1 = run([
         sys.executable, "scripts/give_llm_what_it_needs.py",
         args.brain, str(args.goal), str(args.floor),
         "--days", str(args.days),
-    ], timeout=600)
+    ], timeout=_traj_timeout)
     print(r1.stdout[-3000:] if r1.stdout else "")
 
     irac = load_irac(args.brain)

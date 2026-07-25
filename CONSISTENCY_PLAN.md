@@ -22,6 +22,21 @@
 **Historical peak on this lineage:** ~27% clear, row 4 (pre TF-set realign).  
 **Migration floor after SETS lock:** ~21% — climb from here, then beat 27%.
 
+### Fresh IRAC (2026-07-25, 6 curriculum days)
+
+| Day | pull flags | policy_hold on setup | high_miss pull |
+|-----|------------|----------------------|----------------|
+| 2026-01-20 | 0 | 0 | 0 |
+| 2026-02-10 | 6 | 50 | 6 |
+| 2026-03-03 | 4 | 76 | 4 |
+| 2026-03-24 | 12 | 107 | 12 |
+| 2026-04-15 | 16 | 103 | 16 |
+| 2026-05-06 | 16 | 68 | 16 |
+| **TOTAL** | | **404** | **54** |
+
+**Class: Policy.** Setup visible, policy holds. High-miss pull = 54 (ghosts would have helped).  
+Artifact: `artifacts/llm_curriculum/irac_PROVEN_SPRINT_row04_clear24_2026-07-20.json`
+
 ---
 
 ## Disease (do not misdiagnose)
