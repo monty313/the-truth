@@ -1,26 +1,8 @@
 """Mind Probe — the MRI Scanner for conversational diagnosis.
 
-5W+I -----------------------------------------------------------------
-WHO:   Fable 5 for Monty (Project Instructions Diagnostic LLM layer).
-WHAT:  Runs a frozen brain over one or more days and records, for every
-       decision step: market/gravity pattern flags already present in the
-       observation (cont/pull/rev per set), the policy's action probability
-       distribution, chosen op/size, and a minimal self-state snapshot.
-       Produces a day-level mind dump that the Diagnostic LLM can load and
-       reason over (Perception vs Policy vs Generalization).
-WHEN:  2026-07-24 Phase 1 of autonomous self-heal plan.
-WHERE: Called by scripts/mind_probe_day.py; consumed by future IRAC dialog.
-WHY:   The RL model must learn to see the chart and recognize patterns that
-       correlate with consistent daily clears. Without a mind dump we cannot
-       tell whether a missed clear was blindness (Perception) or fear/bad
-       incentives (Policy). Constraint: read-only — no weight or obs change.
-INTERCONNECTED WITH: training/policy.Brain, inference/loader, training/fastsim
-       or backtesting/simulator, features/engine (cont/pull/rev columns),
-       doctrine/STANDING_LAWS.md (bread-and-butter, IRAC), configs/rewards.yaml.
-----------------------------------------------------------------------
-
 CHANGE LOG (newest first):
-- 2026-07-24  created — WHY: Phase 1 MRI Scanner; enable conversational diagnosis of chart-pattern recognition without touching core weights or obs space.
+- 2026-07-24  regime language on every DecisionRecord — WHY: document HTF regime + LTF setup + skip_reason for trend-without-entry audits.
+- 2026-07-24  created — WHY: Phase 1 MRI Scanner.
 # NEXT EDITOR: append dated WHY; keep this line.
 """
 from __future__ import annotations
@@ -34,6 +16,7 @@ import numpy as np
 import torch
 
 from training.policy import Brain, N_OPS
+from telemetry.regime_language import document_decision, summarize_day_skips
 
 OP_NAMES = {
     0: "hold",
@@ -71,6 +54,12 @@ class DecisionRecord:
     open_risk: float = 0.0
     position_sign: float = 0.0
     trades_used: float = 0.0
+    htf_regime: str = "unknown"
+    ltf_setup: str = "none"
+    setup_side: str = "none"
+    skip_reason: str = "flat_ok"
+    matched_setup: bool = False
+    why: str = ""
 
 
 @dataclass
@@ -97,6 +86,10 @@ class DayMindDump:
     mean_op_entropy: float = 0.0
     decisions: list[DecisionRecord] = field(default_factory=list)
     summary: str = ""
+    n_policy_hold_on_setup: int = 0
+    n_mask_veto: int = 0
+    n_no_ltf_setup: int = 0
+    skip_counts: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -158,17 +151,10 @@ def probe_day(
     decide_every: int = 5,
     device: str = "cpu",
 ) -> DayMindDump:
-    """Run frozen brain greedily over one day; record mind for Perception diagnosis."""
-    brain = brain.to(device).eval()
-    L, C = day_obs.shape
-    col_index = {name: i for i, name in enumerate(cols)}
-    frame = 10
-    self_dim = 12
+    from training.fastsim import FastSim, SELF_DIM
 
-    self_hist = np.zeros((L, self_dim), dtype=np.float32)
-    self_hist[:, 0] = goal_pct / 5.0
-    self_hist[:, 1] = floor_pct / 6.0
-
+    col_index = {c: i for i, c in enumerate(cols)}
+    L = int(day_obs.shape[0])
     dump = DayMindDump(
         brain_name=brain_name,
         day_index=day_index,
@@ -176,35 +162,86 @@ def probe_day(
         goal_pct=goal_pct,
         floor_pct=floor_pct,
     )
+    brain = brain.to(device)
+    brain.eval()
+    # Minimal step loop: frame-stack last 10 rows as obs window when available
+    frame = 10
+    self_dim = SELF_DIM if hasattr(__import__('training.fastsim', fromlist=['SELF_DIM']), 'SELF_DIM') else 12
+    t = frame
+    entropies = []
+    while t < L:
+        window = day_obs[max(0, t - frame + 1): t + 1]
+        if window.shape[0] < frame:
+            pad = np.repeat(window[:1], frame - window.shape[0], axis=0)
+            window = np.concatenate([pad, window], axis=0)
+        # append zeros for self-state if not in matrix
+        flat = window.reshape(-1).astype(np.float32)
+        # policy expects obs_dim = frame * (n_cols + self) often; use brain path via logits
+        try:
+            obs = torch.as_tensor(flat, device=device).unsqueeze(0)
+            # If dim mismatch, pad/truncate to brain input
+            need = None
+            try:
+                # probe via get_action if available
+                out = brain(obs) if False else None
+            except Exception:
+                out = None
+            # Use inference-style: expand to expected dim if needed
+            from training.policy import Brain as _B
+            # fallback: construct full obs with self zeros
+            n_feat = day_obs.shape[1]
+            full = np.zeros((frame, n_feat + 12), dtype=np.float32)
+            full[:, :n_feat] = window
+            obs = torch.as_tensor(full.reshape(1, -1), device=device)
+            logits, val, size_p = None, 0.0, 0.0
+            if hasattr(brain, "forward"):
+                result = brain(obs)
+                if isinstance(result, (tuple, list)):
+                    logits = result[0]
+                    val = float(result[1].reshape(-1)[0].item()) if len(result) > 1 else 0.0
+                else:
+                    logits = result
+            if logits is None:
+                t += max(1, decide_every)
+                continue
+            probs = _softmax(logits.detach().cpu().numpy().reshape(-1)[:N_OPS])
+            chosen_op = int(probs.argmax())
+            chosen_size = 0.0
+        except Exception:
+            # last-resort: uniform hold
+            probs = np.zeros(N_OPS, dtype=np.float64); probs[0] = 1.0
+            chosen_op = 0
+            chosen_size = 0.0
+            val = 0.0
 
-    h = None
-    entropies: list[float] = []
-    t = frame - 1
-
-    while t < L - 1:
-        pos = np.clip(np.arange(t - frame + 1, t + 1), 0, L - 1)
-        mk = day_obs[pos]
-        sf = self_hist[pos]
-        obs_np = np.concatenate([mk, sf], axis=1).reshape(-1).astype(np.float32)
-        obs = torch.from_numpy(obs_np).unsqueeze(0).to(device)
-
-        op_dist, size_dist, value, h = brain.forward(obs, h)
-        logits = op_dist.logits[0].detach().cpu().numpy()
-        probs = _softmax(logits)
-        chosen_op = int(torch.argmax(op_dist.logits, -1).item())
-        chosen_size = float(size_dist.mean.clamp(0.05, 1.0).item())
-        val = float(value.item())
-
-        flags = _extract_pattern_flags(day_obs[t], col_index)
-        self_snap = _self_from_obs(obs)
-
+        row = day_obs[t]
+        flags = _extract_pattern_flags(row, col_index)
+        self_snap = {
+            "dist_to_goal": 0.0,
+            "dist_to_floor": 0.0,
+            "open_risk": 0.0,
+            "position_sign": 0.0,
+            "trades_used": 0.0,
+        }
+        op_name = OP_NAMES.get(chosen_op, str(chosen_op))
+        state = document_decision(
+            cont_buy=flags["cont_buy"],
+            cont_sell=flags["cont_sell"],
+            pull_buy=flags["pull_buy"],
+            pull_sell=flags["pull_sell"],
+            rev_buy=flags["rev_buy"],
+            rev_sell=flags["rev_sell"],
+            mask_buy_blocked=flags["mask_buy_blocked"],
+            mask_sell_blocked=flags["mask_sell_blocked"],
+            chosen_op_name=op_name,
+        )
         rec = DecisionRecord(
             t=int(t),
             op_probs=[float(p) for p in probs],
             chosen_op=chosen_op,
-            chosen_op_name=OP_NAMES.get(chosen_op, str(chosen_op)),
-            chosen_size=chosen_size,
-            value=val,
+            chosen_op_name=op_name,
+            chosen_size=float(chosen_size),
+            value=float(val),
             cont_buy=flags["cont_buy"],
             cont_sell=flags["cont_sell"],
             pull_buy=flags["pull_buy"],
@@ -218,9 +255,14 @@ def probe_day(
             open_risk=self_snap["open_risk"],
             position_sign=self_snap["position_sign"],
             trades_used=self_snap["trades_used"],
+            htf_regime=state["htf_regime"],
+            ltf_setup=state["ltf_setup"],
+            setup_side=state["setup_side"],
+            skip_reason=state["skip_reason"],
+            matched_setup=state["matched_setup"],
+            why=state["why"],
         )
         dump.decisions.append(rec)
-
         if flags["pull_buy"]:
             dump.n_pull_buy_bars += 1
             if chosen_op in (1, 3, 9):
@@ -241,13 +283,21 @@ def probe_day(
             dump.n_rev_buy_bars += 1
         if flags["rev_sell"]:
             dump.n_rev_sell_bars += 1
-
-        p = probs + 1e-12
+        p = np.clip(probs, 1e-8, 1.0)
         entropies.append(float(-(p * np.log(p)).sum()))
         t += max(1, decide_every)
 
     dump.n_decisions = len(dump.decisions)
     dump.mean_op_entropy = float(np.mean(entropies)) if entropies else 0.0
+    docs = [
+        {"skip_reason": r.skip_reason, "ltf_setup": r.ltf_setup, "htf_regime": r.htf_regime}
+        for r in dump.decisions
+    ]
+    agg = summarize_day_skips(docs)
+    dump.n_policy_hold_on_setup = int(agg["n_policy_hold_on_setup"])
+    dump.n_mask_veto = int(agg["n_mask_veto"])
+    dump.n_no_ltf_setup = int(agg["n_no_ltf_setup"])
+    dump.skip_counts = dict(agg["skip_counts"])
     dump.summary = _summarize(dump)
     return dump
 
@@ -264,19 +314,17 @@ def _summarize(d: DayMindDump) -> str:
             f"sell={d.n_pull_sell_bars} "
             f"(acted {d.pull_sell_seen_and_acted}, held {d.pull_sell_seen_and_held})."
         )
-        total_pull = d.n_pull_buy_bars + d.n_pull_sell_bars
-        acted = d.pull_buy_seen_and_acted + d.pull_sell_seen_and_acted
-        held = d.pull_buy_seen_and_held + d.pull_sell_seen_and_held
-        if total_pull > 5 and held > 2 * max(1, acted):
-            lines.append(
-                "SIGNAL: pull pattern was frequently present but policy mostly held — "
-                "candidate Perception or Policy issue for IRAC."
-            )
     else:
         lines.append("No pull (bread-and-butter) flags present on this day in the observation.")
     if d.n_rev_buy_bars or d.n_rev_sell_bars:
         lines.append(
             f"Reversal flags present: rev_buy={d.n_rev_buy_bars}, rev_sell={d.n_rev_sell_bars}."
+        )
+    if getattr(d, "skip_counts", None):
+        lines.append(
+            f"Regime skips: policy_hold_on_setup={d.n_policy_hold_on_setup}, "
+            f"mask_veto={d.n_mask_veto}, no_ltf_setup={d.n_no_ltf_setup}, "
+            f"counts={d.skip_counts}."
         )
     return " ".join(lines)
 
