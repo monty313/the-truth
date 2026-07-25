@@ -1,4 +1,6 @@
 # WHAT: observation space per ADR-0004/0008 + Monty's physics spec.
+# CHANGE LOG:
+# - 2026-07-25  SIGON: include_signal_agent_slots true + cache plain-English — WHY: Colab signal-ON lineage.
 frame_stack: 10                 # sliding window bars (LTF) — "video, not photo"
 no_raw_prices: true             # indicators + distances only (normalized)
 include:
@@ -16,11 +18,16 @@ include:
   sauces_observation_only: {dimension_jump: true, mcflurry: true}
 normalization: per_feature_rolling   # z-scored on rolling stats, clipped +-5
 
+# ── CACHE (plain English) ──────────────────────────────────────────
+# A CACHE is a saved shortcut of pre-built features so training does not
+# recompute indicators every run. Files live under:
+#   artifacts/gpu_cache_*.npz
+#   artifacts/symbol_cache/*
+# AFTER you turn signal slots ON/OFF or add new symbols, DELETE those
+# cache files ONCE, then let the next train rebuild them.
+# NEVER delete .pt brain checkpoints when clearing caches.
+# ───────────────────────────────────────────────────────────────────
 # Signal-agent suggestions in observation (sig_000..sig_499).
-# FALSE keeps PROVEN_* checkpoint dims (1820). TRUE expands obs (+500 cols) and
-# requires a NEW train — old brains cannot load (input layer size mismatch).
-#
-# SIGON Colab path: set TRUE, delete artifacts/gpu_cache_*.npz + symbol_cache, train
-# scripts/gpu_train.py → best_sigon.pt. PROVEN prove_it: set FALSE first.
-# Default FALSE on main so local prove_it PROVEN_* still works after pull.
-include_signal_agent_slots: false
+# TRUE  = SIGON lineage (~6820 frame_dim) — NEW Brain only; never load PROVEN_* 1820 weights.
+# FALSE = PROVEN_* compatible (1820). Flip back only when scoring old checkpoints.
+include_signal_agent_slots: true

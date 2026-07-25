@@ -1,9 +1,9 @@
 """Live day board JSON for SIGON training HUD.
 
-Writes artifacts/llm_curriculum/day_board.json with per-instance emoji rows
-so Iron Man HUD / Colab can refresh without parsing logs.
+Writes artifacts/llm_curriculum/day_board.json with per-instance emoji rows.
 
 CHANGE LOG:
+- 2026-07-25  status clear/near/miss/breach + emoji ⚪ set — WHY: SIGON Iron Man board.
 - 2026-07-25  created — WHY: SIGON live emoji board (gpu_train write_day_board).
 """
 from __future__ import annotations
@@ -16,13 +16,13 @@ from typing import Any
 
 from core.configs import path as rpath
 
-# ⚪ pending / warm  🟢 cleared (hit target, no breach)  🔴 breach  🟡 hit miss (not clear)  🔵 in-progress-ish
+# Emoji legend (user-facing: all rows start/idle as ⚪ family)
 EMOJI = {
+    "clear": "🟢",   # hit target, no breach
+    "near": "🟡",    # positive but short of target, no breach
+    "miss": "🟠",    # flat/red, no breach
+    "breach": "🔴",  # floor breached
     "pending": "⚪",
-    "clear": "🟢",
-    "breach": "🔴",
-    "miss": "🟡",
-    "active": "🔵",
 }
 
 
@@ -35,9 +35,11 @@ def classify_row(pnl: float, target: float, risk: float, breached: bool) -> str:
         return "breach"
     if pnl >= target:
         return "clear"
+    if pnl >= 0.5 * target and pnl > 0:
+        return "near"
     if pnl > 0:
-        return "miss"
-    return "pending"
+        return "near"
+    return "miss"
 
 
 def write_day_board(
@@ -68,15 +70,10 @@ def write_day_board(
             br = np.resize(br, n)
 
     rows = []
-    n_clear = n_breach = n_miss = 0
+    counts = {"clear": 0, "near": 0, "miss": 0, "breach": 0, "pending": 0}
     for i in range(n):
         status = classify_row(float(pnl[i]), float(tg[i]), float(rk[i]), bool(br[i]))
-        if status == "clear":
-            n_clear += 1
-        elif status == "breach":
-            n_breach += 1
-        elif status == "miss":
-            n_miss += 1
+        counts[status] = counts.get(status, 0) + 1
         sym = None
         if symbols is not None and i < len(symbols):
             sym = symbols[i]
@@ -95,12 +92,7 @@ def write_day_board(
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "unix": time.time(),
         "n": n,
-        "counts": {
-            "clear": n_clear,
-            "breach": n_breach,
-            "miss": n_miss,
-            "pending": n - n_clear - n_breach - n_miss,
-        },
+        "counts": counts,
         "clear_rate": clear_rate,
         "breach_rate": breach_rate,
         "row": int(row),

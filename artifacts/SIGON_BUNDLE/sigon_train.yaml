@@ -1,24 +1,31 @@
 # SIGON GPU training defaults (Bot 1.5 + signal-agent lineage)
 # CHANGE LOG:
-# - 2026-07-25  created — WHY: Colab multi-symbol, 3 day-retries, board + best_sigon.
+# - 2026-07-25  full SIGON config — WHY: Colab multi-symbol, 3 retries, best_sigon, meta knobs.
 
 instances_default: 8000
-max_day_retries: 3              # fail a day → same day again up to this many times
+# OOM step-down order on Colab L4 (try next if CUDA OOM):
+oom_instances_fallback: [4000, 2000, 1024]
+
+max_day_retries: 3              # fail a day → same day again up to this many times / instance
 eval_every: 30
 eval_envs: 512
-target_days: 365                # streak finish-line narrative
+target_days: 365
 
-# Prefer multi-symbol pool when CSVs exist under data/
 symbols: [XAUUSD, EURUSD, GBPUSD, US30]
 
-# Focus pair still comes from goals.yaml (auto_ranges). Ranges:
-#   goal_range / floor_range in goals.yaml goal_conditioning
-
-# Champion paths (written by scripts/gpu_train.py)
-champion: best_sigon
+# Champion — highest consistency under breach≈0 policy
+champion: artifacts/checkpoints/best_sigon.pt
+champion_name: best_sigon
 progress: artifacts/checkpoints/gpu_progress.json
 day_board: artifacts/llm_curriculum/day_board.json
 
-# Before SIGON train: set configs/features.yaml include_signal_agent_slots: true
-# and delete artifacts/gpu_cache_*.npz + artifacts/symbol_cache/
+# Meta / reward evolution (gated)
+meta:
+  full_knob_access: true
+  # Adopt reward/hyper changes ONLY if prove_it clear rate rises AND breach stays 0
+  adopt_only_if_clear_up_and_breach_zero: true
+  w_pullback_with_htf_may_rise: true   # Policy disease cure — raise only with IRAC evidence
+
 require_signal_slots: true
+# Before train: features.yaml include_signal_agent_slots: true
+# After flip: delete artifacts/gpu_cache_*.npz and artifacts/symbol_cache/*

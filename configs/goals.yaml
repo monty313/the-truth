@@ -5,47 +5,38 @@
 #   - Meta-tuner optimizes rewards/hypers for consistency ACROSS the ranges below
 #   - prove_it BRAIN TARGET RISK  → measure the SAME brain at ANY pair without retrain
 # CHANGE LOG:
-# - 2026-07-25  document goal/floor as runtime variables — WHY: Monty changes target/risk anytime; meta-learning + self-state, not weight retrain.
-goal_pct: 3.0          # Monty's daily target % (the focus; Colab Cell 1 writes this)
-floor_pct: 3.5         # Monty's daily max drawdown % (the focus; Colab Cell 1 writes this)
-equity_basis: equity   # open+closed P/L counts
+# - 2026-07-25  SIGON focus 40% @ 2.5/3.5, ranges 2.5–70.5 / 1.0–4.0 — WHY: Colab sampling law.
+# - 2026-07-25  document goal/floor as runtime variables — WHY: Monty changes target/risk anytime.
+goal_pct: 2.5          # focus target % (also focus_target under goal_conditioning)
+floor_pct: 3.5         # focus risk floor %
+equity_basis: equity
 currency: USD
-day_boundary_tz: Europe/Berlin   # 00:00 CEST/CET day clock
+day_boundary_tz: Europe/Berlin
 midnight_buffer_min: 0
 flat_at_reset: true
 ratchet:
   enabled: true
-  mode: peak            # after goal: floor rises to goal, then trails every new peak
-  trail_keep_frac: 0.25 # giveback allowed = this fraction of the floor (audit S6 — Monty may retune)
-  activation_buffer_heat_aware: true   # activate only when flatten cost still leaves >= goal
-goal_conditioning:      # ANY-X promise (ADR-0001/0007)
-  randomize_in_training: true
-  # Monty's training law (2026-07-20, restated): every practice day gets a RANDOM
-  # target from this range and a RANDOM risk from this range; 60% of practice is
-  # pinned to his focus pair (goal_pct/floor_pct above) — the 60/40 focus is auto
-  # (evaluation/consistency.auto_ranges), never a separate knob.
-  goal_range: [2.5, 70.3]
-  floor_range: [1.0, 4.4]
+  mode: peak
+  trail_keep_frac: 0.25
+  activation_buffer_heat_aware: true
 
-# Monty's ruling on the boot-camp BAR (ADR-0013, 2026-07-19). He reviewed the
-# first real-XAUUSD Gauntlet — oracle averaged +4.63%/day with 0 floor breaches,
-# but could clear the 2x bar (+5%/day) on only 9 of 21 days — and ruled KEEP:
-# the 2x-goal-every-day bar stands as the aspirational north-star. The honest
-# "unreachable on low-range days" warning stays on reports, now ACKNOWLEDGED.
-# WHY here: goals.yaml is Monty's config; boot camp reads it (the bar bends only
-# by his hand). NEXT EDITOR: never edit this silently — a re-rule needs a new ADR.
+goal_conditioning:      # ANY-X promise (ADR-0001/0007) — read by evaluation.consistency.auto_ranges
+  randomize_in_training: true
+  # 40% of practice days fixed at focus_target/focus_risk; 60% random in ranges.
+  focus_frac: 0.40
+  focus_target: 2.5
+  focus_risk: 3.5
+  goal_range: [2.5, 70.5]
+  floor_range: [1.0, 4.0]
+
 bar_ruling:
   decided: 2026-07-19
   bar: "2x-goal-every-day"
-  decision: keep                 # keep | average | daily_goal | (future)
-  acknowledged_warning: true     # Monty has seen the oracle 9/21 evidence
+  decision: keep
+  acknowledged_warning: true
   evidence: "gauntlet REAL_XAUUSD 2026-04-27..05-26 (21d): oracle +4.63%/day avg, min +2.08%, 0 breaches, cleared +5% on 9/21 days"
 
-# Account mode (ADR-0012, Monty 2026-07-19): PERSONAL first (adjustable goal/floor
-# + keep-trading ratchet). FTMO is a future switchable mode, NOT yet active.
-account_mode: personal            # personal | ftmo_challenge (future)
-# When ftmo_challenge is built: target 2.5, daily_loss 5.0, max_loss 10.0,
-# trailing 4.0, stop_at_target true, early_flatten_buffer 0.1 (flatten at -%(daily-0.1)).
+account_mode: personal
 ftmo_future:
   target_pct: 2.5
   daily_loss_pct: 5.0

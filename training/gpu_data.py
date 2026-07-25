@@ -20,7 +20,7 @@ INTERCONNECTED WITH: data_io/loader, features/engine, training/fastsim.
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
-- 2026-07-25  load_multi_symbol_pool — WHY: SIGON multi-symbol training (XAUUSD+EURUSD+GBPUSD+US30).
+- 2026-07-25  cache plain-English comments + load_multi_symbol_pool — WHY: SIGON Colab path.
 - 2026-07-20  created — WHY: Bot 1.5 GPU Edition needs cached per-day tensors
   built by the real feature engine so the twin feeds the brain identical obs.
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
@@ -39,6 +39,14 @@ from core.configs import path as rpath                          # noqa: E402
 from data_io.loader import read_mt5_m1, trading_days            # noqa: E402
 from features.engine import build_features, obs_columns         # noqa: E402
 
+# ── CACHE (plain English) ──────────────────────────────────────────
+# A CACHE is a saved shortcut of pre-built features (npz files under
+# artifacts/gpu_cache_*.npz and artifacts/symbol_cache/*).
+# After you turn signal slots ON/OFF or add new symbols, DELETE those
+# cache files ONCE, then rebuild. NEVER delete .pt brain checkpoints
+# when clearing caches.
+# ───────────────────────────────────────────────────────────────────
+
 # Raw columns the SIM needs (not the brain). spread is in POINTS here; the sim
 # multiplies by POINT_SIZE. 15min::atr14 is the LTF ATR the broker stop uses.
 PHYS_COLS = ["high", "low", "close", "spread",
@@ -47,13 +55,18 @@ PHYS_COLS = ["high", "low", "close", "spread",
 
 def build_day_tensors(csv_path: str, cache_path: str | None = None,
                       min_bars: int = 300, verbose: bool = True):
-    """Return (days_obs, days_phys, day_lens, dates, cols). Cache to .npz."""
+    """Return (days_obs, days_phys, day_lens, dates, cols). Cache to .npz.
+
+    Cache = shortcut of features. If signals/columns changed, delete the .npz first.
+    """
     if cache_path and os.path.exists(cache_path):
         z = np.load(cache_path, allow_pickle=True)
         if verbose:
             print("gpu_data: loaded cache %s | days=%d Lmax=%d cols=%d"
                   % (cache_path, z["days_obs"].shape[0], z["days_obs"].shape[1],
                      z["days_obs"].shape[2]), flush=True)
+            print("gpu_data: (cache is a feature shortcut — delete gpu_cache_*.npz / "
+                  "symbol_cache if you flipped signals ON)", flush=True)
         return (z["days_obs"], z["days_phys"], z["day_lens"],
                 list(z["dates"]), list(z["cols"]))
 

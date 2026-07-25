@@ -1,0 +1,12 @@
+# Schema for signal-agent forward accuracy (SIGON)
+# CHANGE LOG:
+# - 2026-07-25  created — WHY: score on trigger TF only at 5/10/20 bars.
+
+default_horizons_bars: [5, 10, 20]
+score_on: trigger_tf_only          # not wall-clock; bars of the signal's LTF/trigger grid
+output_dir: artifacts/signal_accuracy
+index_file: index.json
+# Priority slots for stubs / scoreboard
+priority_slots: [0, 1, 2, 3, 4, 80, 81, 82, 83]
+# Agreement agents (PART4 evidence ~70–81% @10)
+agree_slots: [80, 81, 82, 83]
