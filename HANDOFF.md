@@ -137,6 +137,9 @@ python scripts\consistency_sprint.py --minutes 60 --envs 64
 
 See **[CONSISTENCY_PLAN.md](CONSISTENCY_PLAN.md)** — phases 21→27→35→50 clear, breach gate, policy_hold cure, sprint/meta sequence.
 
+**For next LLM (Colab GPU + signal agents ON):**  
+**[HANDOFF_CONSISTENCY_TO_COLAB_SIGNALS.md](HANDOFF_CONSISTENCY_TO_COLAB_SIGNALS.md)** — full source-cited history of how clear rate was raised, hard gates, obs dim 1820 vs ~6820, Track B train recipe, prompt contract.
+
 ## Next work (priority)
 
 1. ~~Unblock prove_it~~ **DONE** — baseline recorded.  
