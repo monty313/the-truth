@@ -1,11 +1,8 @@
-"""Encode up to 500 strategy slots into observation columns obs::sig_000..sig_499.
-
-Values: +1 buy, -1 sell, 0 empty/flat.
-Camillion alphas mapped as kinds (proxied onto Momentum One Gravity flags).
+"""Encode 500 strategy slots: +1 buy / -1 sell / 0 empty.
 
 CHANGE LOG:
-- 2026-07-25  Camillion alpha pack kinds + MO natives — WHY: fill slots from Camillion_Claude_RL_model.
-- 2026-07-25  created — WHY: Monty 500-slot advisor obs; unfilled slots stay 0.
+- 2026-07-25  slots 28+ DT/S11/live phases — WHY: Monty scan of other repos.
+- 2026-07-25  Camillion kinds + MO natives.
 """
 from __future__ import annotations
 
@@ -19,7 +16,6 @@ import yaml
 N_SLOTS = 500
 ROOT = Path(__file__).resolve().parents[1]
 SLOTS_CFG = ROOT / "configs" / "signal_slots.yaml"
-
 Handler = Callable[[pd.DataFrame], pd.Series]
 
 
@@ -94,8 +90,66 @@ def _cci_strength_dir(F: pd.DataFrame, tf: str = "15min") -> pd.Series:
 
 
 def _gravity_proxy(F: pd.DataFrame) -> pd.Series:
-    """Camillion gravity_30m_4h: set2 cont agree set3 cont."""
     return _agree(_cont(F, "set2"), _cont(F, "set3"))
+
+
+def _vote_dirs(*series_list) -> np.ndarray:
+    mats = [s.to_numpy() for s in series_list]
+    n = len(mats[0])
+    out = np.zeros(n, dtype=np.float32)
+    for i in range(n):
+        ups = sum(1 for m in mats if m[i] > 0)
+        dns = sum(1 for m in mats if m[i] < 0)
+        if ups > dns:
+            out[i] = 1.0
+        elif dns > ups:
+            out[i] = -1.0
+    return out
+
+
+def _dt_ftmo_proxy(F: pd.DataFrame) -> pd.Series:
+    parts = [_cont(F, s) for s in ("set1", "set2", "set3")] + [_pull(F, s) for s in ("set1", "set2", "set3")]
+    return pd.Series(_vote_dirs(*parts), index=F.index, dtype=np.float32)
+
+
+def _s11_cci_proxy(F: pd.DataFrame) -> pd.Series:
+    return _cci_strength_dir(F, "15min")
+
+
+def _s11_pull_proxy(F: pd.DataFrame) -> pd.Series:
+    return _pull(F, "set1")
+
+
+def _s11_m15_proxy(F: pd.DataFrame) -> pd.Series:
+    return _cont(F, "set1")
+
+
+def _phase_cci_align(F: pd.DataFrame) -> pd.Series:
+    return _cont(F, "set1")
+
+
+def _phase_hilo_trend(F: pd.DataFrame) -> pd.Series:
+    return _cont(F, "set2")
+
+
+def _phase_bb_mid(F: pd.DataFrame) -> pd.Series:
+    return _cont(F, "set3")
+
+
+def _phase_sma_stack(F: pd.DataFrame) -> pd.Series:
+    return _cont(F, "set2")
+
+
+def _phase_atr_expand(F: pd.DataFrame) -> pd.Series:
+    return _cci_strength_dir(F, "1h")
+
+
+def _adx_proxy(F: pd.DataFrame, set_name: str) -> pd.Series:
+    return _cont(F, set_name)
+
+
+def _orb_stub(F: pd.DataFrame) -> pd.Series:
+    return _zero(F)
 
 
 def _regime_pulse_trend(F: pd.DataFrame, set_name: str) -> pd.Series:
@@ -124,14 +178,6 @@ def _sma_stack_pullback(F: pd.DataFrame, set_name: str) -> pd.Series:
 
 def _sma_reversion(F: pd.DataFrame, set_name: str) -> pd.Series:
     return _rev(F, set_name)
-
-
-def _orb_stub(F: pd.DataFrame) -> pd.Series:
-    return _zero(F)
-
-
-def _adx_proxy(F: pd.DataFrame, set_name: str) -> pd.Series:
-    return _cont(F, set_name)
 
 
 KIND_HANDLERS: dict[str, Handler] = {
@@ -163,27 +209,31 @@ KIND_HANDLERS: dict[str, Handler] = {
     "cam_orb_ny_breakout": _orb_stub,
     "cam_adx_di_align_5m_30m": lambda F: _adx_proxy(F, "set2"),
     "cam_adx_di_align_30m_4h": lambda F: _adx_proxy(F, "set3"),
+    "dt_ftmo_alpha": _dt_ftmo_proxy,
+    "s11_cci": _s11_cci_proxy,
+    "s11_pull": _s11_pull_proxy,
+    "s11_m15": _s11_m15_proxy,
+    "phase_cci_align": _phase_cci_align,
+    "phase_hilo_trend": _phase_hilo_trend,
+    "phase_bb_mid": _phase_bb_mid,
+    "phase_sma_stack": _phase_sma_stack,
+    "phase_atr_expand": _phase_atr_expand,
 }
 
 
 def compute_slot(F: pd.DataFrame, spec: dict[str, Any]) -> pd.Series:
     kind = (spec.get("kind") or "zero").strip()
-    handler = KIND_HANDLERS.get(kind, _zero)
-    return handler(F).astype(np.float32)
+    return KIND_HANDLERS.get(kind, _zero)(F).astype(np.float32)
 
 
 def append_signal_obs(F: pd.DataFrame, new: dict | None = None) -> dict:
     if new is None:
         new = {}
     filled = load_filled_slots(only_enabled=True)
-    n = len(F)
-    zeros = np.zeros(n, dtype=np.float32)
+    zeros = np.zeros(len(F), dtype=np.float32)
     for i in range(N_SLOTS):
         col = f"obs::sig_{i:03d}"
-        if i in filled:
-            new[col] = compute_slot(F, filled[i]).to_numpy(dtype=np.float32)
-        else:
-            new[col] = zeros
+        new[col] = compute_slot(F, filled[i]).to_numpy(dtype=np.float32) if i in filled else zeros
     return new
 
 
