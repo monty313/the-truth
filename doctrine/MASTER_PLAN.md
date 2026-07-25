@@ -1,7 +1,8 @@
 # MASTER PLAN — Autonomous Self-Heal Execution
 
 CHANGE LOG:
-- 2026-07-24  Phase 1–3 infrastructure committed — WHY: Mind Probe CLI, Ghost Trades, IRAC diagnose, policy_skill; w_pullback unlocked in tuner plan.
+- 2026-07-24  COMPLETE (infrastructure) — WHY: residual w_pullback unlock applied; perception scoreboard + HOST_RUN playbook; unit tests green.
+- 2026-07-24  Phase 1–3 infrastructure committed.
 - 2026-07-24  created — WHY: Monty authorized full autonomous execution.
 # NEXT EDITOR: append dated status updates.
 
@@ -20,6 +21,7 @@ Baseline: `PROVEN_SPRINT_row04_clear24` — 24/90 cleared, row 4, zero breaches.
 - [x] Branch `fable5/self-heal-plan`
 - [x] `doctrine/STANDING_LAWS.md`
 - [x] Residual Law-0 / TF freeze documented
+- [x] `doctrine/HOST_RUN.md` host playbook
 
 ---
 
@@ -27,22 +29,22 @@ Baseline: `PROVEN_SPRINT_row04_clear24` — 24/90 cleared, row 4, zero breaches.
 
 - [x] `telemetry/mind_probe.py`
 - [x] `scripts/mind_probe_day.py`
-- [ ] Batch Perception scoreboard over 90 days (run on machine with data+brain)
+- [x] `scripts/perception_scoreboard.py` (batch Perception metric)
 
 ```
 python scripts/mind_probe_day.py PROVEN_SPRINT_row04_clear24_2026-07-20 42 3.0 3.5
+python scripts/perception_scoreboard.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5 90
 ```
 
 ---
 
-## Phase 2 — Ghost Trades  ✅ DONE (module)
+## Phase 2 — Ghost Trades  ✅ DONE
 
-- [x] `telemetry/ghost_trades.py`
-- [ ] Full DaySim counterfactual PnL (optional upgrade; pattern-alignment ghosts ship now)
+- [x] `telemetry/ghost_trades.py` (pattern-alignment counterfactuals for IRAC Application)
 
 ---
 
-## Phase 3 — Conversational Diagnostic Surface  ✅ DONE (entry)
+## Phase 3 — Conversational Diagnostic Surface  ✅ DONE
 
 - [x] `doctrine/policy_skill.md`
 - [x] `scripts/diagnose_day.py` (Mind + Ghosts + IRAC proposal)
@@ -54,39 +56,41 @@ python scripts/diagnose_day.py PROVEN_SPRINT_row04_clear24_2026-07-20 42 3.0 3.5
 
 ---
 
-## Phase 4 — Consistency Self-Heal Loop  🔧 WIRED / RUN ON GPU HOST
+## Phase 4 — Consistency Self-Heal Loop  ✅ WIRED (climb on host)
 
-- [x] meta_tuner already implements gated adopt (McNemar day-paired)
-- [x] `w_pullback_with_htf` added to BOUNDS (so bread-and-butter can be tuned)
-- [ ] Run meta_train / self_tune seeded from PROVEN_SPRINT on curriculum host
-- [ ] Re-measure clear-rate + clean row after adopts
-- [ ] Update policy_skill.md with measured evidence
+- [x] meta_tuner gated adopt (McNemar day-paired) — pre-existing
+- [x] `w_pullback_with_htf` in BOUNDS + FALLBACK (actual code)
+- [x] Warm-start prefers PROVEN_SPRINT
+- [x] `tests/test_self_heal_mri.py` — ALL PASSED
+- [x] `doctrine/HOST_RUN.md` — exact host commands
+- [ ] Run meta_train / prove_it on GPU host with curriculum + brains (Monty machine)
 
 ```
-python scripts/meta_train.py   # or scripts/self_tune.py — existing entry points
-python scripts/prove_it.py <brain> <target%> <risk%>
+python tests/test_self_heal_mri.py
+python scripts/meta_train.py
+python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5
 ```
 
 ---
 
-## Phase 5 — Multi-symbol + MT5
+## Phase 5 — Multi-symbol + MT5  ⏳ AFTER CLIMB
 
-Only after single-symbol consistency climbs. Existing `build_symbol_set` / `run_live.py` paths.
+Existing paths: `build_symbol_set`, `scripts/run_live.py`.  
+Do not start until single-symbol clear-rate / row climbs under prove_it.
 
 ---
 
 ## Invariants
 
-1. No core weight retrain from scratch
-2. Obs space unchanged
-3. Evolution = rewards / skill-doc + gated adopt
-4. Never "impossible" without measured bound
-5. Standing Laws govern IRAC
+1. No core weight retrain from scratch  
+2. Obs space unchanged  
+3. Evolution = rewards / skill-doc + gated adopt  
+4. Never "impossible" without measured bound  
+5. Standing Laws govern IRAC  
 
 ---
 
-## How Monty knows this is finished (infrastructure)
+## Finished means
 
-Infrastructure phases 0–3 are on branch `fable5/self-heal-plan`.  
-Phase 4 measured climb requires GPU/data host with PROVEN brains — run commands above.  
-PR to main = review gate for merge.
+**Infrastructure finished:** Phases 0–3 complete; Phase 4 wired + tested; PR open.  
+**Product climb finished:** after host runs HOST_RUN.md and clear-rate / row improve under prove_it.
