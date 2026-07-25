@@ -1,0 +1,24 @@
+# SIGON GPU training defaults (Bot 1.5 + signal-agent lineage)
+# CHANGE LOG:
+# - 2026-07-25  created — WHY: Colab multi-symbol, 3 day-retries, board + best_sigon.
+
+instances_default: 8000
+max_day_retries: 3              # fail a day → same day again up to this many times
+eval_every: 30
+eval_envs: 512
+target_days: 365                # streak finish-line narrative
+
+# Prefer multi-symbol pool when CSVs exist under data/
+symbols: [XAUUSD, EURUSD, GBPUSD, US30]
+
+# Focus pair still comes from goals.yaml (auto_ranges). Ranges:
+#   goal_range / floor_range in goals.yaml goal_conditioning
+
+# Champion paths (written by scripts/gpu_train.py)
+champion: best_sigon
+progress: artifacts/checkpoints/gpu_progress.json
+day_board: artifacts/llm_curriculum/day_board.json
+
+# Before SIGON train: set configs/features.yaml include_signal_agent_slots: true
+# and delete artifacts/gpu_cache_*.npz + artifacts/symbol_cache/
+require_signal_slots: true

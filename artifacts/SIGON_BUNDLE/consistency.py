@@ -29,8 +29,6 @@ INTERCONNECTED WITH: training/fastsim (results: goal_hit/breached/min_eq/min_wor
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
-- 2026-07-25  SIGON sampling law note: auto_ranges() is the single source for gpu_train
-  random target/risk (+ focus 60% on goals.yaml pair) — WHY: multi-symbol SIGON path.
 - 2026-07-20  review-hardened: CRN seeding, without-replacement days + honest SE,
   additive climb surrogate on intrabar-worst, auto-bound envelope/focus  — WHY: 4-agent
   review (noise-ratchet, flat surrogate, breach basis, two-inputs invariant).
