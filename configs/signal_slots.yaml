@@ -1,9 +1,8 @@
 # 500 signal slots. +1 buy | -1 sell | 0 empty. RL may ignore.
-# 0-8 MO | 10-27 Camillion | 28-36 DT/S11/live | 37-44 SMA | 45-55 RSI | 56-499 free
+# 0-8 MO | 10-27 Camillion | 28-36 DT/S11 | 37-44 SMA | 45-55 RSI | 56-63 Stoch | 64-499 free
 # CHANGE LOG:
-# - 2026-07-25  slots 45-55 RSI multi-TF mom+pb+agree
-# - 2026-07-25  slots 37-44 SMA multi-TF
-# - 2026-07-25  slots 28-36 DT/S11/live | Camillion 10-27 | MO 0-8
+# - 2026-07-25  slots 56-63 stoch multi-TF (no C pullback)
+# - 2026-07-25  slots 45-55 RSI | 37-44 SMA | 28-36 DT | Camillion | MO
 
 n_slots: 500
 
@@ -63,3 +62,11 @@ filled:
   53: {name: rsi_mtf_C_combined, enabled: true, kind: rsi_mtf_C_combined, family: rsi_mtf, fidelity: native}
   54: {name: rsi_mtf_agree, enabled: true, kind: rsi_mtf_agree, family: rsi_mtf, fidelity: native}
   55: {name: rsi_mtf_any, enabled: true, kind: rsi_mtf_any, family: rsi_mtf, fidelity: native}
+  56: {name: stoch_mtf_A_momentum, enabled: true, kind: stoch_mtf_A_momentum, family: stoch_mtf, fidelity: native}
+  57: {name: stoch_mtf_A_pullback, enabled: true, kind: stoch_mtf_A_pullback, family: stoch_mtf, fidelity: native}
+  58: {name: stoch_mtf_A_combined, enabled: true, kind: stoch_mtf_A_combined, family: stoch_mtf, fidelity: native}
+  59: {name: stoch_mtf_B_momentum, enabled: true, kind: stoch_mtf_B_momentum, family: stoch_mtf, fidelity: native}
+  60: {name: stoch_mtf_B_pullback, enabled: true, kind: stoch_mtf_B_pullback, family: stoch_mtf, fidelity: native}
+  61: {name: stoch_mtf_B_combined, enabled: true, kind: stoch_mtf_B_combined, family: stoch_mtf, fidelity: native}
+  62: {name: stoch_mtf_C_momentum, enabled: true, kind: stoch_mtf_C_momentum, family: stoch_mtf, fidelity: native, note: "C pullback excluded"}
+  63: {name: stoch_mtf_agree, enabled: true, kind: stoch_mtf_agree, family: stoch_mtf, fidelity: native}
