@@ -15,3 +15,8 @@ include:
                trades_used_today]
   sauces_observation_only: {dimension_jump: true, mcflurry: true}
 normalization: per_feature_rolling   # z-scored on rolling stats, clipped +-5
+
+# Signal-agent suggestions in observation (sig_000..sig_499).
+# FALSE keeps PROVEN_* checkpoint dims (1820). TRUE expands obs (+500 cols) and
+# requires a NEW train — old brains cannot load (input layer size mismatch).
+include_signal_agent_slots: false
