@@ -1,9 +1,9 @@
 """Encode 500 strategy slots: +1 buy / -1 sell / 0 empty.
 
 CHANGE LOG:
-- 2026-07-25  sma_mtf A/B/C mid+outer+agree — WHY: Monty tested SMA multi-TF strategy.
-- 2026-07-25  slots 28+ DT/S11/live phases.
-- 2026-07-25  Camillion kinds + MO natives.
+- 2026-07-25  rsi_mtf A/B/C mom+pb+agree — WHY: Monty add all RSI multi-TF agents.
+- 2026-07-25  sma_mtf A/B/C mid+outer+agree.
+- 2026-07-25  slots 28+ DT/S11/live; Camillion; MO natives.
 """
 from __future__ import annotations
 
@@ -181,7 +181,6 @@ def _sma_reversion(F: pd.DataFrame, set_name: str) -> pd.Series:
     return _rev(F, set_name)
 
 
-# ---- Monty multi-TF SMA strategy (native) ----
 _SMA_SETS = {
     "A": {"ltf": "1min", "htfs": ["15min", "30min"]},
     "B": {"ltf": "5min", "htfs": ["1h", "4h"]},
@@ -249,6 +248,70 @@ def _sma_mtf_agree(F: pd.DataFrame, mode: str = "mid") -> pd.Series:
     return pd.Series(out, index=F.index, dtype=np.float32)
 
 
+_RSI_SETS = {
+    "A": {"ltf": "1min", "htfs": ["15min", "30min"]},
+    "B": {"ltf": "5min", "htfs": ["1h", "4h"]},
+    "C": {"ltf": "15min", "htfs": ["4h", "1d"]},
+}
+
+
+def _rsi_bb_tf(m1: pd.DataFrame, tf: str) -> pd.DataFrame:
+    from data_io.loader import resample, align_to_m1
+    from features import indicators as ind
+    o = resample(m1, tf)
+    r = ind.rsi(o["close"], 14)
+    up, mid, lo = ind.bollinger(r, 10, 1.0, shift=5)
+    df = pd.DataFrame({"rsi": r, "up": up, "mid": mid, "lo": lo}, index=o.index)
+    return align_to_m1(df, tf, m1.index)
+
+
+def _rsi_mtf_sig(F: pd.DataFrame, set_key: str, mode: str = "combined") -> pd.Series:
+    m1 = _m1_ohlc(F)
+    if m1 is None:
+        return _zero(F)
+    cfg = _RSI_SETS[set_key]
+    try:
+        ltf = _rsi_bb_tf(m1, cfg["ltf"])
+        h1 = _rsi_bb_tf(m1, cfg["htfs"][0])
+        h2 = _rsi_bb_tf(m1, cfg["htfs"][1])
+    except Exception:
+        return _zero(F)
+    mom_buy = (ltf["rsi"] > ltf["up"]) & (h1["rsi"] > h1["up"]) & (h2["rsi"] > h2["up"])
+    mom_sell = (ltf["rsi"] < ltf["lo"]) & (h1["rsi"] < h1["lo"]) & (h2["rsi"] < h2["lo"])
+    ltf_x_up = (ltf["rsi"].shift(1) <= ltf["mid"].shift(1)) & (ltf["rsi"] > ltf["mid"])
+    ltf_x_dn = (ltf["rsi"].shift(1) >= ltf["mid"].shift(1)) & (ltf["rsi"] < ltf["mid"])
+    pb_buy = (h1["rsi"] > h1["up"]) & (h2["rsi"] > h2["up"]) & ltf_x_up
+    pb_sell = (h1["rsi"] < h1["lo"]) & (h2["rsi"] < h2["lo"]) & ltf_x_dn
+    mom = np.where(mom_buy.fillna(False), 1.0, np.where(mom_sell.fillna(False), -1.0, 0.0))
+    pb = np.where(pb_buy.fillna(False), 1.0, np.where(pb_sell.fillna(False), -1.0, 0.0))
+    if mode == "momentum":
+        out = mom
+    elif mode == "pullback":
+        out = pb
+    else:
+        out = np.where(mom != 0, mom, pb)
+    return pd.Series(out, index=F.index, dtype=np.float32)
+
+
+def _rsi_mtf_agree(F: pd.DataFrame) -> pd.Series:
+    sigs = [_rsi_mtf_sig(F, k, "combined").to_numpy() for k in ("A", "B", "C")]
+    n = len(F)
+    out = np.zeros(n, dtype=np.float32)
+    for i in range(n):
+        vals = [s[i] for s in sigs if s[i] != 0]
+        if len(vals) >= 2 and all(v == vals[0] for v in vals):
+            out[i] = vals[0]
+    return pd.Series(out, index=F.index, dtype=np.float32)
+
+
+def _rsi_mtf_any(F: pd.DataFrame) -> pd.Series:
+    out = np.zeros(len(F), dtype=np.float32)
+    for k in ("A", "B", "C"):
+        s = _rsi_mtf_sig(F, k, "combined").to_numpy()
+        out = np.where(out == 0, s, out)
+    return pd.Series(out, index=F.index, dtype=np.float32)
+
+
 KIND_HANDLERS: dict[str, Handler] = {
     "zero": _zero,
     "pull_set1": lambda F: _pull(F, "set1"),
@@ -295,6 +358,17 @@ KIND_HANDLERS: dict[str, Handler] = {
     "sma_mtf_C_outer": lambda F: _sma_mtf_sig(F, "C", "outer"),
     "sma_mtf_agree_mid": lambda F: _sma_mtf_agree(F, "mid"),
     "sma_mtf_agree_outer": lambda F: _sma_mtf_agree(F, "outer"),
+    "rsi_mtf_A_momentum": lambda F: _rsi_mtf_sig(F, "A", "momentum"),
+    "rsi_mtf_A_pullback": lambda F: _rsi_mtf_sig(F, "A", "pullback"),
+    "rsi_mtf_A_combined": lambda F: _rsi_mtf_sig(F, "A", "combined"),
+    "rsi_mtf_B_momentum": lambda F: _rsi_mtf_sig(F, "B", "momentum"),
+    "rsi_mtf_B_pullback": lambda F: _rsi_mtf_sig(F, "B", "pullback"),
+    "rsi_mtf_B_combined": lambda F: _rsi_mtf_sig(F, "B", "combined"),
+    "rsi_mtf_C_momentum": lambda F: _rsi_mtf_sig(F, "C", "momentum"),
+    "rsi_mtf_C_pullback": lambda F: _rsi_mtf_sig(F, "C", "pullback"),
+    "rsi_mtf_C_combined": lambda F: _rsi_mtf_sig(F, "C", "combined"),
+    "rsi_mtf_agree": lambda F: _rsi_mtf_agree(F),
+    "rsi_mtf_any": lambda F: _rsi_mtf_any(F),
 }
 
 
