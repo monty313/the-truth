@@ -29,3 +29,6 @@ Live orders · from-scratch core retrain · obs expand without Monty · “impos
 - `PERFORMANCE_IS_POSSIBLE_PART4.md` (slots 80–83 evidence)
 - `SUCCESS_LEDGER.md`
 - Active `policy_skill.md` + latest Mind Probe / Ghosts / prove_it
+
+## Strategy design prompts
+See root `how to make llm create better strategies.md` and `doctrine/HOW_TO_MAKE_LLM_CREATE_BETTER_STRATEGIES.md`.

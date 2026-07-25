@@ -3,7 +3,8 @@
 Full SSOT: **doctrine/SYSTEM_DOCTRINE_CMO.md**  
 Flea cure detail: **doctrine/flea-jar/THE_FLEA_CURE.md**  
 Wins: **doctrine/SUCCESS_LEDGER.md**  
-Agreement 70%+ evidence: **PERFORMANCE_IS_POSSIBLE_PART4.md** (slots 80–83, `signals/agree.py`)
+Agreement 70%+ evidence: **PERFORMANCE_IS_POSSIBLE_PART4.md** (slots 80–83, `signals/agree.py`)  
+Strategy design playbook: **how to make llm create better strategies.md**
 
 ## Flea-jar oath (say this to yourself every session)
 The lid is gone. Nothing the ledger/bound showed possible is impossible.  
