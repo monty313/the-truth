@@ -1,0 +1,26 @@
+# 500 signal-agent slots in the observation space.
+# Empty slots emit 0 every bar. Filled slots emit +1 buy / -1 sell / 0 flat.
+# The RL policy does not have to follow them — they are suggestions.
+#
+# CHANGE LOG:
+# - 2026-07-25  created 500 slots — WHY: Monty advisor bus in obs; file strategies as you invent them.
+
+n_slots: 500
+
+# Only list slots you have filled. All other indices 0..499 stay 0.
+filled:
+  0:
+    name: bread_and_butter_pull_set1
+    enabled: true
+    kind: pull_set1
+    note: "LTF pull flags on set1 — example slot"
+  1:
+    name: continuation_set1
+    enabled: true
+    kind: cont_set1
+    note: "LTF continuation flags on set1 — example slot"
+  2:
+    name: bread_and_butter_pull_set2
+    enabled: true
+    kind: pull_set2
+    note: "pull on set2 — example slot"
