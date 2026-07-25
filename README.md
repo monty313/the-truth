@@ -1,53 +1,45 @@
 # Momentum One
 
-Self-healing RL scalper. You set daily **target %** and **floor %**.  
-The bot trains to **hit the target often** without breaking the floor.
+Self-healing RL trading bot. You set daily target % and risk %.  
+It aims to hit the target without breaching the floor.
 
 ---
 
-## Confused? Open only this
+## Confused? Read only this
 
-### → [DO_THIS.md](DO_THIS.md)
+1. **[START_FROM_TODAY.md](START_FROM_TODAY.md)** — this chapter  
+2. **[DO_THIS.md](DO_THIS.md)** — commands  
+3. **[doctrine/SUCCESS_LEDGER.md](doctrine/SUCCESS_LEDGER.md)** — what already worked  
+4. **[MAP.md](MAP.md)** — where everything is  
 
-Three steps: setup → train / self-heal → measure with `prove_it`.
-
----
-
-## Three files (daily)
-
-| File | Use |
-|------|-----|
-| [DO_THIS.md](DO_THIS.md) | Commands to run |
-| [MAP.md](MAP.md) | Where every folder is |
-| [UPDATE_RULES.md](UPDATE_RULES.md) | How to edit without mess |
-
-## Three files (mindset / proof)
-
-| File | Use |
-|------|-----|
-| [doctrine/SUCCESS_LEDGER.md](doctrine/SUCCESS_LEDGER.md) | Wins already proven |
-| [doctrine/flea-jar/THE_FLEA_CURE.md](doctrine/flea-jar/THE_FLEA_CURE.md) | Nothing is impossible |
-| [PERFORMANCE_IS_POSSIBLE.md](PERFORMANCE_IS_POSSIBLE.md) | Performance proof (never delete) |
-
-Everything else is support. Skip until you need it.
+The only score that counts is what **`prove_it`** prints (clear % and breach %).
 
 ---
 
-## Folders (one line each)
+## Folders in one line
 
-| Folder | What |
-|--------|------|
+| Folder | One line |
+|--------|----------|
 | `scripts/` | Commands you type |
-| `configs/` | Numbers (goals, rewards, TFs) |
-| `training/` | RL brain + meta_tuner |
-| `features/` | Indicators + Gravity sets |
-| `telemetry/` | Mind probe + ghosts |
-| `doctrine/` | Laws + CMO + flea cure |
-| `data/` | Price CSVs |
-| `artifacts/` | Saved brains + epoch logs |
-| `docs/` | Old notes + ADRs (skip daily) |
-| `GPU_EDITION/` | Notebooks for cloud GPU |
+| `configs/` | Numbers (target, risk, rewards) |
+| `training/` | Learning code + meta_tuner |
+| `features/` | Indicators + Gravity |
+| `telemetry/` | What the bot was thinking |
+| `doctrine/` | Laws, CMO, wins, flea-jar cure |
+| `data/` | Prices |
+| `artifacts/` | Saved brains and logs |
+| `prompts/` | CMO system prompt |
+| `docs/history/` | Old notes |
+
+---
+
+## First commands
 
 ```bash
+python scripts/restore_meta_tuner.py
 python scripts/preflight_train.py
+python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5
 ```
+
+**LLM persona:** `doctrine/SYSTEM_DOCTRINE_CMO.md`  
+**Flea-jar cure:** lid is gone — nothing impossible; only consistency remains.

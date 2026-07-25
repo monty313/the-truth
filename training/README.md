@@ -1,14 +1,12 @@
-# training/
+# training/ — RL brain
 
-Brain + learning + meta_tuner.
-
-## How to update
-1. Edit the real module (not a copy)
-2. Append CHANGE LOG: date + WHY
-3. If meta_tuner.py is missing: `python scripts/restore_meta_tuner.py`
-
-| File | What |
+| File | Role |
 |------|------|
-| meta_tuner.py | Adjusts rewards and lr (wrapper) |
+| **meta_tuner.py** | Required. Reward/penalty + hparam wrapper. If missing: `python scripts/restore_meta_tuner.py` |
 | policy.py | Network |
-| fastsim.py | Fast simulator |
+| ppo.py / gpu_rollout.py | Learning |
+| fastsim.py / gpu_data.py | Sim + data |
+| rewards.py / env.py | Rewards / env |
+| meta_optimizer.py | Legacy propose-only |
+
+Warm-start from `artifacts/checkpoints/PROVEN_*`. No from-scratch wipe.

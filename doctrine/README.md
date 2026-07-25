@@ -1,17 +1,21 @@
-# doctrine/
+# doctrine/ — laws and LLM memory
 
-## Start here for the LLM
-| File | What |
-|------|------|
-| **SYSTEM_DOCTRINE_CMO.md** | **Full CMO + Lead Quant persona (RAG SSOT)** |
-| LLM_JOB.md | Short job card |
-| LLM_THINKS_LIKE_MONTY.md | Build-on principles |
-| policy_skill.md | SkillOpt memory (gated edits) |
-| LLM_REGIME_DEFINITIONS.yaml | Regime + indicator registry |
-| STANDING_LAWS.md | Hard laws |
+## Read in this order
+
+1. **SUCCESS_LEDGER.md** — wins (never erase)  
+2. **SYSTEM_DOCTRINE_CMO.md** — full CMO persona (+ §0 flea-jar)  
+3. **flea-jar/THE_FLEA_CURE.md** — full flea cure autopsy  
+4. **policy_skill.md** — SkillOpt skill memory  
+5. **STANDING_LAWS.md** — hard laws  
+6. **LLM_REGIME_DEFINITIONS.yaml** — regimes + indicators  
+
+## Short cards
+- LLM_JOB.md  
+- LLM_THINKS_LIKE_MONTY.md  
+- REGIME_LANGUAGE.md  
 
 ## How to update
-- Persona changes → edit **SYSTEM_DOCTRINE_CMO.md** only, then sync the short cards if needed.
-- Regimes/indicators → **LLM_REGIME_DEFINITIONS.yaml** only.
-- Skill memory → gated via `scripts/skillopt_gate.py`.
-- Do not delete PERFORMANCE_IS_POSSIBLE* files at repo root.
+- New win → one line in SUCCESS_LEDGER  
+- Persona → SYSTEM_DOCTRINE_CMO only  
+- Skill → self_heal_epoch / skillopt_gate only  
+- Never delete flea-jar or PERFORMANCE files at repo root  
