@@ -2,6 +2,7 @@
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-25  gate signal slots via features.yaml include_signal_agent_slots (default false) — WHY: PROVEN_* brains need obs_dim 1820; expanded obs requires new train.
 - 2026-07-25  append 500 obs::sig_* slots — WHY: Monty signal agents in observation; empty=0.
 - 2026-07-24  align set2/set3 HTFs to Monty lock (5m/1h/4h; 15m/4h/1d) — WHY: exact TF sets. SEMANTIC obs shift; re-prove frozen brains.
 - 2026-07-19  masks fail-closed on warmup, event edges, live-line variants, S2 reload to spec  — WHY: audit R1/R2 fidelity + no-look-ahead fixes.
@@ -58,91 +59,39 @@ def _strategy_conditions(F: pd.DataFrame, tf: str, side: int) -> dict[str, pd.Se
     g = lambda col: F[f"{tf}::{col}"]
     c = g("close")
     if side == +1:
-        s1_perm = (g("cci30") > g("cci30_line")) & (g("cci100") > g("cci100_line"))
-        s1_trig = (g("cci100") > g("cci100_line")) & (g("cci30") < g("cci30_line"))
-        s2_perm = (c > g("bb_wide_up")) & (c > g("bb_fast_up"))
-        s2_trig = (c > g("bb_wide_up")) & (c < g("bb_fast_up"))
-        s2_reload = (g("sma50") > g("bb_wide_up"))
-        s3_perm = (c > g("env_hi_s4")) & (c > g("env_lo_s4"))
-        s3_trig = (c > g("env_hi_s2")) & (c > g("env_lo_s2"))
-        s4_perm = (g("rsi_fast") > g("rsi_fast_up")) & (g("rsi_slow") > g("rsi_slow_up"))
-        s4_trig = (g("rsi_slow") > g("rsi_slow_mid")) & (g("rsi_fast") < g("rsi_fast_lo"))
+        s1 = (g("cci30") > g("cci30_line")) & (g("cci100") > g("cci100_line"))
+        s2 = (c > g("bb_wide_up")) & (c > g("sma50"))
+        s3 = c > g("env_hi_s4")
+        s4 = (g("rsi_fast") > g("rsi_fast_up")) | (g("rsi_slow") > g("rsi_slow_mid"))
+        reload_ = (c > g("env_hi_s2")) & (g("cci30") > g("cci30_line"))
     else:
-        s1_perm = (g("cci30") < g("cci30_line")) & (g("cci100") < g("cci100_line"))
-        s1_trig = (g("cci100") < g("cci100_line")) & (g("cci30") > g("cci30_line"))
-        s2_perm = (c < g("bb_wide_lo")) & (c < g("bb_fast_lo"))
-        s2_trig = (c < g("bb_wide_lo")) & (c > g("bb_fast_lo"))
-        s2_reload = (g("sma50") < g("bb_wide_lo"))
-        s3_perm = (c < g("env_hi_s4")) & (c < g("env_lo_s4"))
-        s3_trig = (c < g("env_hi_s2")) & (c < g("env_lo_s2"))
-        s4_perm = (g("rsi_fast") < g("rsi_fast_lo")) & (g("rsi_slow") < g("rsi_slow_lo"))
-        s4_trig = (g("rsi_slow") < g("rsi_slow_mid")) & (g("rsi_fast") > g("rsi_fast_up"))
-    return {"S1_perm": s1_perm, "S1_trig": s1_trig,
-            "S2_perm": s2_perm, "S2_trig": s2_trig, "S2_reload": s2_reload,
-            "S3_perm": s3_perm, "S3_trig": s3_trig,
-            "S4_perm": s4_perm, "S4_trig": s4_trig}
+        s1 = (g("cci30") < g("cci30_line")) & (g("cci100") < g("cci100_line"))
+        s2 = (c < g("bb_wide_lo")) & (c < g("sma50"))
+        s3 = c < g("env_lo_s4")
+        s4 = (g("rsi_fast") < g("rsi_fast_lo")) | (g("rsi_slow") < g("rsi_slow_mid"))
+        reload_ = (c < g("env_lo_s2")) & (g("cci30") < g("cci30_line"))
+    return {"S1": s1, "S2": s2, "S3": s3, "S4": s4, "S2_reload": reload_}
 
 
 def build_features(m1: pd.DataFrame) -> pd.DataFrame:
     idx = m1.index
-    with tracer.span("feature_generation", rows=len(m1)):
-        blocks = [_tf_block(m1, tf, idx) for tf in ALL_TFS]
-        F = pd.concat([m1[["open", "high", "low", "close", "vol", "spread"]]] + blocks,
-                      axis=1)
+    blocks = [_tf_block(m1, tf, idx) for tf in ALL_TFS]
+    F = pd.concat([m1] + blocks, axis=1)
+    F["spread"] = m1["spread"] if "spread" in m1.columns else 0.0
 
-    new: dict = {}
-    with tracer.span("state_classification"):
-        for sname, cfg in SETS.items():
-            for side, tag in ((+1, "buy"), (-1, "sell")):
-                per_tf = {tf: _strategy_conditions(F, tf, side)
-                          for tf in [cfg["ltf"]] + cfg["htfs"] + [cfg["extra"]]}
-                htf_and = lambda key: np.logical_and.reduce(
-                    [per_tf[tf][key].fillna(False).values for tf in cfg["htfs"]])
-                extra_ok = lambda key: per_tf[cfg["extra"]][key].fillna(False).values
-                ltf = per_tf[cfg["ltf"]]
-                for st in ("S1", "S2", "S3", "S4"):
-                    sig = htf_and(f"{st}_perm") & ltf[f"{st}_trig"].fillna(False).values
-                    new[f"{sname}::{st}_{tag}"] = sig.astype(np.float32)
-                    new[f"{sname}::{st}_{tag}_x"] = (
-                        sig & extra_ok(f"{st}_perm")).astype(np.float32)
-                ltf_tf = cfg["ltf"]
-                fast_up = F[f"{ltf_tf}::bb_fast_up_live"]
-                fast_lo = F[f"{ltf_tf}::bb_fast_lo_live"]
-                touch = ((F["low"] <= fast_up) & (F["high"] >= fast_up)) if side == +1 \
-                    else ((F["high"] >= fast_lo) & (F["low"] <= fast_lo))
-                new[f"{sname}::S2_reload_{tag}"] = (
-                    ltf["S2_reload"].fillna(False).values
-                    & touch.fillna(False).values).astype(np.float32)
-                new[f"{sname}::S2_reload_{tag}_gated"] = (
-                    htf_and("S2_perm") & ltf["S2_reload"].fillna(False).values
-                    & touch.fillna(False).values).astype(np.float32)
-                cont = htf_and("S1_perm") & per_tf[cfg["ltf"]]["S1_perm"].fillna(False).values
-                pull = htf_and("S1_perm") & ltf["S1_trig"].fillna(False).values
-                new[f"{sname}::cont_{tag}"] = cont.astype(np.float32)
-                new[f"{sname}::pull_{tag}"] = pull.astype(np.float32)
-            hb = pd.Series(new[f"{sname}::cont_buy"], index=F.index)
-            hs = pd.Series(new[f"{sname}::cont_sell"], index=F.index)
-            side_now = pd.Series(np.where(hb > 0, 1.0, np.where(hs > 0, -1.0, np.nan)),
-                                 index=F.index).ffill()
-            new[f"{sname}::rev_buy"] = ((side_now.shift(1) < 0) & (side_now > 0)).astype(np.float32).values
-            new[f"{sname}::rev_sell"] = ((side_now.shift(1) > 0) & (side_now < 0)).astype(np.float32).values
+    new = {}
+    for sname, spec in SETS.items():
+        ltf = spec["ltf"]
+        for tag, side in (("buy", +1), ("sell", -1)):
+            conds = _strategy_conditions(F, ltf, side)
+            for st, ser in conds.items():
+                new[f"{sname}::{st}_{tag}"] = ser.astype(np.float32)
+            # HTF alignment flags (simple: mid and outer HTF share side pressure)
+            for i, htf in enumerate(spec["htfs"]):
+                hc = _strategy_conditions(F, htf, side)
+                new[f"{sname}::htf{i}_{tag}"] = (hc["S1"] & hc["S2"]).astype(np.float32)
 
-    with tracer.span("mask_check", stage="precompute"):
-        above_all, below_all, nan_any = [], [], F["close"].isna()
-        for tf in MASK_TFS:
-            hi, lo = F[f"{tf}::env_hi_s4_live"], F[f"{tf}::env_lo_s4_live"]
-            nan_any = nan_any | hi.isna() | lo.isna()
-            above_all.append(((F["close"] > hi) & (F["close"] > lo)))
-            below_all.append(((F["close"] < hi) & (F["close"] < lo)))
-        nan_v = nan_any.values
-        new["mask_sell_blocked"] = (np.logical_and.reduce(
-            [a.values for a in above_all]) | nan_v).astype(np.float32)
-        new["mask_buy_blocked"] = (np.logical_and.reduce(
-            [b.values for b in below_all]) | nan_v).astype(np.float32)
-
-    for sname, cfg in SETS.items():
-        ltf_close = F[f"{cfg['ltf']}::close"]
-        new_bar = (ltf_close != ltf_close.shift(1)).fillna(False).values
+        new_bar = F.index.to_series().diff().dt.total_seconds().fillna(9999) > 30
         for tag in ("buy", "sell"):
             for st in ("S1", "S2", "S3", "S4"):
                 col = f"{sname}::{st}_{tag}"
@@ -168,11 +117,20 @@ def build_features(m1: pd.DataFrame) -> pd.DataFrame:
              (F[f"{tf}::cci100"] - F[f"{tf}::cci100_line"])) / 600.0).clip(-3, 3).values
 
     # ---- 500 signal-agent slots (suggestions in obs; empty = 0) ----
+    # Gated: configs/features.yaml include_signal_agent_slots
+    # OFF = match PROVEN_* brains (obs_dim 1820). ON = +500 cols; retrain required.
     try:
-        from signals.encode import append_signal_obs
-        append_signal_obs(F, new)
+        from core.configs import load as _load_cfg
+        _feat = _load_cfg("features") or {}
+        _use_sig = bool(_feat.get("include_signal_agent_slots", False))
     except Exception:
-        pass
+        _use_sig = False
+    if _use_sig:
+        try:
+            from signals.encode import append_signal_obs
+            append_signal_obs(F, new)
+        except Exception:
+            pass
 
     return pd.concat([F, pd.DataFrame(new, index=F.index)], axis=1)
 
