@@ -1,14 +1,15 @@
 # WHO: Monty's typed inputs. WHAT: goal/floor + day rules.
 # RUNTIME INPUTS (do not retrain to change these):
-#   - goal_pct / floor_pct = today's focus pair (edit anytime or pass to prove_it CLI)
+#   - goal_pct / floor_pct = optional HUD defaults; training focus pair is below
 #   - Brain sees goal & floor in obs self-state every step (ANY-X conditioning)
-#   - Meta-tuner optimizes rewards/hypers for consistency ACROSS the ranges below
-#   - prove_it BRAIN TARGET RISK  → measure the SAME brain at ANY pair without retrain
+#   - Meta-tuner optimizes rewards/hypers for consistency ACROSS the ranges
+#   - prove_it BRAIN TARGET RISK → measure SAME brain at ANY pair without retrain
 # CHANGE LOG:
-# - 2026-07-25  SIGON focus 40% @ 2.5/3.5, ranges 2.5–70.5 / 1.0–4.0 — WHY: Colab sampling law.
-# - 2026-07-25  document goal/floor as runtime variables — WHY: Monty changes target/risk anytime.
-goal_pct: 2.5          # focus target % (also focus_target under goal_conditioning)
-floor_pct: 3.5         # focus risk floor %
+# - 2026-07-25  sampling law 40% @ 2.5/3.5 + ranges 2.5–70.5 / 1–4 — WHY: Monty Colab SIGON meta law
+# - 2026-07-25  document goal/floor as runtime variables
+
+goal_pct: 2.5          # default focus target % (40% of train days use this with floor_pct)
+floor_pct: 3.5         # default focus risk %
 equity_basis: equity
 currency: USD
 day_boundary_tz: Europe/Berlin
@@ -20,9 +21,11 @@ ratchet:
   trail_keep_frac: 0.25
   activation_buffer_heat_aware: true
 
-goal_conditioning:      # ANY-X promise (ADR-0001/0007) — read by evaluation.consistency.auto_ranges
+goal_conditioning:
   randomize_in_training: true
-  # 40% of practice days fixed at focus_target/focus_risk; 60% random in ranges.
+  # TRAINING LAW (Monty 2026-07-25 — single source; notebook + FastSim + auto_ranges must match):
+  #   40% of practice days → target 2.5% and risk 3.5% (focus pair)
+  #   60% of practice days → target uniform in goal_range, risk uniform in floor_range
   focus_frac: 0.40
   focus_target: 2.5
   focus_risk: 3.5

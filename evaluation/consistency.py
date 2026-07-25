@@ -29,8 +29,6 @@ INTERCONNECTED WITH: training/fastsim (results: goal_hit/breached/min_eq/min_wor
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
-- 2026-07-25  auto_ranges() reads focus_frac/target/risk + goal_range/floor_range from
-  goals.yaml goal_conditioning (SIGON 40% @ 2.5/3.5) — WHY: no hard-coded 0.6/old envelope.
 - 2026-07-20  review-hardened: CRN seeding, without-replacement days + honest SE,
   additive climb surrogate on intrabar-worst, auto-bound envelope/focus  — WHY: 4-agent
   review (noise-ratchet, flat surrogate, breach basis, two-inputs invariant).
@@ -53,47 +51,26 @@ from training.gpu_rollout import rollout        # noqa: E402
 from core.configs import goals_cfg              # noqa: E402
 
 
-# Fallbacks only if goals.yaml is missing keys (should not happen on a healthy clone).
-_FALLBACK_FOCUS_FRAC = 0.40
-_FALLBACK_ENVELOPE = {"goal_range": (2.5, 70.5), "floor_range": (1.0, 4.0)}
+# Machine policy (NOT human knobs): the practice envelope is a FIXED wide band so one brain
+# generalizes to any handed X, and it is always stretched to CONTAIN the user's two numbers.
+# The 60/40 focus split is fixed policy too. The ONLY numbers a human ever sets are
+# goal_pct + floor_pct (configs/goals.yaml). Everything below derives from those.
+_FOCUS_FRAC = 0.40
+_ENVELOPE = {"goal_range": (2.5, 70.5), "floor_range": (1.0, 4.0)}
 
 
 def auto_ranges() -> dict:
-    """Sampling law for train + meta: ALL numbers from configs/goals.yaml.
-
-    Reads:
-      goal_pct, floor_pct
-      goal_conditioning.focus_frac, focus_target, focus_risk
-      goal_conditioning.goal_range, floor_range
-
-    Returns dict keys used by gpu_train / evaluate:
-      tgt_lo, tgt_hi, risk_lo, risk_hi, focus_target, focus_risk, focus_frac
-    """
+    """40% focus pair from goals.yaml; 60% uniform in goal_range x floor_range."""
     g = goals_cfg()
-    goal = float(g.get("goal_pct", 2.5))
-    floor = float(g.get("floor_pct", 3.5))
-    gc = g.get("goal_conditioning") or {}
-    gr = gc.get("goal_range", _FALLBACK_ENVELOPE["goal_range"])
-    fr = gc.get("floor_range", _FALLBACK_ENVELOPE["floor_range"])
-    focus_target = float(gc.get("focus_target", goal))
-    focus_risk = float(gc.get("focus_risk", floor))
-    focus_frac = float(gc.get("focus_frac", _FALLBACK_FOCUS_FRAC))
-    tgt_lo, tgt_hi = float(gr[0]), float(gr[1])
-    risk_lo, risk_hi = float(fr[0]), float(fr[1])
-    # Ensure envelope always contains the focus pair
-    tgt_lo = min(tgt_lo, focus_target, goal)
-    tgt_hi = max(tgt_hi, focus_target, goal)
-    risk_lo = min(risk_lo, focus_risk, floor)
-    risk_hi = max(risk_hi, focus_risk, floor)
-    return {
-        "tgt_lo": tgt_lo,
-        "tgt_hi": tgt_hi,
-        "risk_lo": risk_lo,
-        "risk_hi": risk_hi,
-        "focus_target": focus_target,
-        "focus_risk": focus_risk,
-        "focus_frac": focus_frac,
-    }
+    gc = g.get("goal_conditioning", {}) or {}
+    goal = float(gc.get("focus_target", g.get("goal_pct", 2.5)))
+    floor = float(gc.get("focus_risk", g.get("floor_pct", 3.5)))
+    gr = gc.get("goal_range", _ENVELOPE["goal_range"])
+    fr = gc.get("floor_range", _ENVELOPE["floor_range"])
+    ff = float(gc.get("focus_frac", _FOCUS_FRAC))
+    return {"tgt_lo": float(gr[0]), "tgt_hi": float(gr[1]),
+            "risk_lo": float(fr[0]), "risk_hi": float(fr[1]),
+            "focus_target": goal, "focus_risk": floor, "focus_frac": ff}
 
 
 @torch.no_grad()
