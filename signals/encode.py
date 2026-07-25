@@ -1,8 +1,8 @@
 """Encode 500 strategy slots: +1 buy / -1 sell / 0 empty.
 
 CHANGE LOG:
-- 2026-07-25  stoch_mtf A/B mom+pb, C mom only — WHY: Monty add; C pullback excluded (bad).
-- 2026-07-25  rsi_mtf / sma_mtf / DT / Camillion / MO natives.
+- 2026-07-25  stoch_ema A/B/C + HTF bias — WHY: Monty; ~60-66% on set A test.
+- 2026-07-25  stoch_mtf A/B mom+pb, C mom only; rsi/sma/DT/Camillion/MO.
 """
 from __future__ import annotations
 
@@ -388,6 +388,65 @@ def _stoch_mtf_agree(F: pd.DataFrame) -> pd.Series:
     return pd.Series(out, index=F.index, dtype=np.float32)
 
 
+_STOCH_EMA_SETS = {
+    "A": {"ltf": "1min", "htfs": ["15min", "30min"]},
+    "B": {"ltf": "5min", "htfs": ["1h", "4h"]},
+    "C": {"ltf": "15min", "htfs": ["4h", "1d"]},
+}
+
+
+def _ema(s: pd.Series, n: int) -> pd.Series:
+    return s.ewm(span=n, adjust=False, min_periods=n).mean()
+
+
+def _stoch_ema_raw_on(o: pd.DataFrame) -> pd.Series:
+    k, d = _stochastic(o, 5, 3, 3)
+    e8 = _ema(o["close"], 8)
+    c = o["close"]
+    cross_up = (k.shift(1) <= d.shift(1)) & (k > d)
+    cross_dn = (k.shift(1) >= d.shift(1)) & (k < d)
+    long_ = cross_up & (k < 40) & (c > e8)
+    short_ = cross_dn & (k > 60) & (c < e8)
+    out = np.where(long_.fillna(False), 1.0, np.where(short_.fillna(False), -1.0, 0.0))
+    return pd.Series(out, index=o.index, dtype=np.float32)
+
+
+def _stoch_ema_bias(o: pd.DataFrame):
+    k, d = _stochastic(o, 5, 3, 3)
+    e8 = _ema(o["close"], 8)
+    bull = (k > d) & (o["close"] > e8)
+    bear = (k < d) & (o["close"] < e8)
+    return bull.fillna(False), bear.fillna(False)
+
+
+def _stoch_ema_htf(F: pd.DataFrame, set_key: str) -> pd.Series:
+    m1 = _m1_ohlc(F)
+    if m1 is None:
+        return _zero(F)
+    cfg = _STOCH_EMA_SETS[set_key]
+    try:
+        from data_io.loader import resample, align_to_m1
+        ltf = resample(m1, cfg["ltf"])
+        h1 = resample(m1, cfg["htfs"][0])
+        h2 = resample(m1, cfg["htfs"][1])
+        raw = _stoch_ema_raw_on(ltf)
+        b1, s1 = _stoch_ema_bias(h1)
+        b2, s2 = _stoch_ema_bias(h2)
+        b1a = b1.reindex(ltf.index, method="ffill").fillna(False)
+        b2a = b2.reindex(ltf.index, method="ffill").fillna(False)
+        s1a = s1.reindex(ltf.index, method="ffill").fillna(False)
+        s2a = s2.reindex(ltf.index, method="ffill").fillna(False)
+        r = raw.to_numpy()
+        long_ok = (r > 0) & b1a.to_numpy() & b2a.to_numpy()
+        short_ok = (r < 0) & s1a.to_numpy() & s2a.to_numpy()
+        filtered = np.where(long_ok, 1.0, np.where(short_ok, -1.0, 0.0)).astype(np.float32)
+        ser = pd.Series(filtered, index=ltf.index, name="s")
+        aligned = align_to_m1(ser.to_frame(), cfg["ltf"], m1.index)["s"]
+        return aligned.astype(np.float32).reindex(F.index).fillna(0.0)
+    except Exception:
+        return _zero(F)
+
+
 KIND_HANDLERS: dict[str, Handler] = {
     "zero": _zero,
     "pull_set1": lambda F: _pull(F, "set1"),
@@ -453,6 +512,9 @@ KIND_HANDLERS: dict[str, Handler] = {
     "stoch_mtf_B_combined": lambda F: _stoch_mtf_sig(F, "B", "combined"),
     "stoch_mtf_C_momentum": lambda F: _stoch_mtf_sig(F, "C", "momentum"),
     "stoch_mtf_agree": lambda F: _stoch_mtf_agree(F),
+    "stoch_ema_A": lambda F: _stoch_ema_htf(F, "A"),
+    "stoch_ema_B": lambda F: _stoch_ema_htf(F, "B"),
+    "stoch_ema_C": lambda F: _stoch_ema_htf(F, "C"),
 }
 
 
