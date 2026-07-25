@@ -26,7 +26,7 @@ Self-healing RL scalper bot (Momentum One):
 | Git clone of `the-truth` | Done |
 | `training/meta_tuner.py` | On main; restore script OK |
 | `python scripts/preflight_train.py` | **PASSED** |
-| `prove_it` with PROVEN brain | **Crashed** until signal slots disabled (see below) |
+| `prove_it` with PROVEN brain | **PASS** 2026-07-25 — see baseline below |
 | Target / floor as variables | Documented; self-state in obs; CLI on prove_it |
 
 ### Preflight last result
@@ -39,60 +39,36 @@ Self-healing RL scalper bot (Momentum One):
 
 ---
 
-## CRITICAL BUG (must fix before prove_it works)
+## CRITICAL BUG — FIXED 2026-07-25
 
-### Error
+### Was
 
 ```text
 RuntimeError: mat1 and mat2 shapes cannot be multiplied (90x6820 and 1820x128)
 ```
 
-### Cause
+Also: remote `d6313e9` accidentally gutted `features/engine.py` (lost forever masks + full S1_perm/trig states) → `KeyError: mask_buy_blocked`.
 
-- **PROVEN_*** brains were trained at **obs frame dim ≈ 1820** (10 × (170 + 12 self)).
-- Code later added **500 signal slots** → dim **≈ 6820**.
-- Old brain cannot load the larger input layer.
+### Fix applied locally
 
-### Fix (do on Windows now)
+1. Restored full engine (masks, cont/pull/rev, S*_perm/trig) from pre-rewrite logic.
+2. Gated 500 signal slots via `configs/features.yaml` `include_signal_agent_slots: false` + engine reads the flag.
+3. Deleted stale `artifacts/gpu_cache_XAUUSD_curriculum_2026.npz` and rebuilt.
 
-```powershell
-cd C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth
-git pull origin main
+### Baseline (PROVEN_SPRINT_row04_clear24_2026-07-20 @ 3.0% / 3.5%)
 
-# Wipe stale feature cache
-del artifacts\gpu_cache_XAUUSD_curriculum_2026.npz
+```text
+obs: 170 market cols | frame_dim=1820 | days=90
+cleared (hit target, NO breach):      21% of days
+breached the risk floor:               0% of days
+longest cleared streak in a row:       2 days
+average day result:                +0.17%
+median day result:                 -0.40%
+green days (made money):              46% of days
+best / worst day:                  +6.46% /  -3.47%
 ```
 
-In `features\engine.py`, find the block that always does:
-
-```python
-from signals.encode import append_signal_obs
-append_signal_obs(F, new)
-```
-
-Replace with:
-
-```python
-# Signal slots OFF so PROVEN brains match obs size (1820)
-pass
-```
-
-Or ensure `configs/features.yaml` has:
-
-```yaml
-include_signal_agent_slots: false
-```
-
-**and** that `features/engine.py` actually reads that flag.  
-If remote `engine.py` looks incomplete, restore a full gated copy before scoring.
-
-Then:
-
-```powershell
-python scripts\prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5
-```
-
-Expect `frame_dim=1820` (not 6820), then clear % / breach % / streak.
+**Breach 0% holds.** Clear rate 21%, streak 2 — disease still open is **policy_hold** (setup visible → policy stands down).
 
 **Turning signals ON later** requires a **new training run** (obs expansion). Do not force old checkpoints into the expanded obs.
 
@@ -157,19 +133,24 @@ python scripts\consistency_sprint.py --minutes 60 --envs 64
 
 ---
 
+## Consistency climb
+
+See **[CONSISTENCY_PLAN.md](CONSISTENCY_PLAN.md)** — phases 21→27→35→50 clear, breach gate, policy_hold cure, sprint/meta sequence.
+
 ## Next work (priority)
 
-1. Unblock prove_it (signals off + cache delete) → record clear/breach/streak.  
-2. Confirm breach 0.  
-3. Self-heal on policy_hold.  
-4. Short GPU sprint.  
-5. Meta-tuner after baseline exists.  
-6. Later: new brain if signal slots ON.
+1. ~~Unblock prove_it~~ **DONE** — baseline recorded.  
+2. ~~Confirm breach 0~~ **DONE** (0% @ 3.0/3.5).  
+3. Self-heal on policy_hold (diagnose running / next).  
+4. Short then long consistency_sprint.  
+5. Meta-tuner after P1 (≥27% clear).  
+6. Later: new brain if signal slots ON.  
+7. **Commit + push** restored `features/engine.py`, HANDOFF, CONSISTENCY_PLAN.
 
 ---
 
 ## One-line summary
 
-> Preflight PASSED; prove_it fails 6820 vs 1820 until signal slots gated off + cache deleted; target/risk are runtime variables; disease is policy_hold; agreement signals exist but offline for dim compatibility.
+> prove_it PASS @ 3.0/3.5: frame_dim=1820, clear 21%, breach 0%, streak 2, avg +0.17%; signals gated off; engine restored; next = self-heal policy_hold + GPU sprint.
 
-*Update this file when prove_it baseline numbers are recorded.*
+*Baseline recorded 2026-07-25.*

@@ -52,3 +52,5 @@ CHANGE LOG:
 - 2026-07-25  Fresh start + flea-jar oath locked into CMO doctrine
 - 2026-07-25  Agreement agents registered: ~75% / ~70–72% / ~76% / ~78–81% (PART4 tables)
 - 2026-07-25  meta_tuner restored on main; goal/floor documented as runtime inputs
+- 2026-07-25  Engine restored after d6313e9 gut; signals gated off; prove_it PASS frame_dim=1820 clear=21% breach=0% row=2 avg=+0.17% @ 3.0/3.5
+- 2026-07-25  CONSISTENCY_PLAN.md — climb path 21→27→35→50 with breach gate
