@@ -1,44 +1,31 @@
-# MOMENTUM ONE — Meta-Learning RL Trading System
-<!-- 5W+I ============================================================
-WHO:   Built by Claude (Fable 5) for Monty (operator/owner).
-WHAT:  Repo root of the Momentum One trading system: a goal-conditioned,
-       meta-learning RL bot for MT5 (all symbols), governed by hard risk
-       Shell rules and the Fable 5 observability-first doctrine.
-WHEN:  Scaffolded 2026-07-18 (overnight autonomous build).
-WHERE: Runs on Monty's Windows laptop (live) + cloud bursts (training).
-WHY:   Hit the daily goal (+X%) without breaching the daily floor (-X%),
-       on any symbol, one brain for life, always improving.
-INTERCONNECTED WITH: every subfolder; governing docs in Claude project:
-       momentum-one-handoff.md, momentum-one-plan.md, fable5-master-prompt.md.
-==================================================================== -->
+# Momentum One
 
-One meta-learning brain. Hits the goal you type, never breaches the floor
-you type, on every symbol you own — built once, correctly, for life.
+Self-healing RL trading bot. You type target % and risk %. It aims to hit the target without breaching the floor.
 
-## Map
-| Folder | Purpose |
-|---|---|
-| docs/adr | Architecture Decision Records (why everything is the way it is) |
-| codex/regimes | The Codex: strategies, states, masks, matrix — machine-readable law |
-| configs | EVERY number lives here, versioned. No hidden thresholds. |
-| telemetry | Span tracer + logging standards (the Eyes) |
-| experiments | Run cards + tracker (the Memory) |
-| data_io | M1 CSV loading, resampling, calendar (CEST day) |
-| features | MT5-exact indicators, 4-Set matrix, states, observation builder |
-| backtesting | Paranoid-fill simulator + Shell + Feasibility Gauntlet |
-| training | Gym env, rewards, recurrent PPO, meta-optimizer, trophy case |
-| execution_bridge | MT5 live bridge (Windows), dry-run mode |
-| dashboards/hud | JARVIS HUD server + page + kill switch |
-| alerts | Push notifications + weekly retrain reminder |
-| tests | pytest suite — golden, shell, no-look-ahead, reward |
-| scripts | Entry points (run_gauntlet, train_bootcamp, run_live, run_hud) |
+## Start here
+Open **[DO_THIS.md](DO_THIS.md)** — three command blocks only.
 
-## Quick start (Monty's laptop)
-```
+| File | What |
+|------|------|
+| [DO_THIS.md](DO_THIS.md) | Commands to run |
+| [UPDATE_RULES.md](UPDATE_RULES.md) | How to change the repo without making a mess |
+| [TRAINING.md](TRAINING.md) | Longer train notes |
+| [doctrine/LLM_REGIME_DEFINITIONS.yaml](doctrine/LLM_REGIME_DEFINITIONS.yaml) | How the LLM defines regimes |
+
+## Folders (short)
+| Folder | What lives here |
+|--------|-----------------|
+| `configs/` | All numbers (goals, rewards, TFs) |
+| `scripts/` | Commands you run |
+| `training/` | Brain + PPO + meta_tuner |
+| `features/` | Indicators + Gravity sets |
+| `telemetry/` | Mind probe, ghosts |
+| `doctrine/` | Laws and regime definitions |
+| `data/` | Price CSVs |
+| `artifacts/` | Brains and caches |
+| `docs/history/` | Old notes (not day-to-day) |
+
+```bash
 pip install -r requirements.txt
-python scripts/run_dummy_traced_run.py      # prove the eyes work
-python scripts/run_gauntlet.py              # evidence before training
-python scripts/train_bootcamp.py            # boot camp (approval-gated tuning)
-python scripts/run_hud.py                   # JARVIS HUD on http://localhost:8750
+python scripts/preflight_train.py
 ```
-Laws: see docs/LAWS.md. Nothing trades without the Shell. Ever.
