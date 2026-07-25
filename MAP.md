@@ -2,7 +2,7 @@
 
 ```
 YOU RUN THESE
-  DO_THIS.md              ← start here (only this for daily use)
+  DO_THIS.md              ← start here (daily)
   UPDATE_RULES.md         ← before you change any file
   scripts/                ← all commands
 
@@ -21,8 +21,12 @@ EYES (LLM)
 DATA
   data/                   ← price CSVs
 
-OLD NOTES
-  docs/history/           ← ignore for daily work
+REFERENCE (keep — not required every day)
+  PERFORMANCE_IS_POSSIBLE.md
+  PERFORMANCE_IS_POSSIBLE_PART2.md
+  PERFORMANCE_IS_POSSIBLE_PART2.html
+  PERFORMANCE_IS_POSSIBLE_PART3.md
+  docs/history/           ← other old notes
 ```
 
 Train path: **DO_THIS.md**  
