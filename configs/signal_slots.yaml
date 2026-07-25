@@ -1,9 +1,8 @@
 # 500 signal slots. +1 buy | -1 sell | 0 empty. RL may ignore.
-# 0-8 MO | 10-27 Camillion | 28-36 DT | 37-44 SMA | 45-55 RSI | 56-63 Stoch MTF | 64-66 Stoch+EMA HTF | 67-499 free
+# ... 64-66 stoch_ema | 67-75 rsi2_ema | 76-499 free
 # CHANGE LOG:
-# - 2026-07-25  slots 64-66 stoch_ema + HTF filter
-# - 2026-07-25  slots 56-63 stoch multi-TF (no C pullback)
-# - 2026-07-25  RSI/SMA/DT/Camillion/MO
+# - 2026-07-25  slots 67-75 rsi2_ema 2-TF + 3-TF
+# - 2026-07-25  slots 64-66 stoch_ema | 56-63 stoch_mtf | RSI/SMA/DT/Camillion/MO
 
 n_slots: 500
 
@@ -71,6 +70,15 @@ filled:
   61: {name: stoch_mtf_B_combined, enabled: true, kind: stoch_mtf_B_combined, family: stoch_mtf, fidelity: native}
   62: {name: stoch_mtf_C_momentum, enabled: true, kind: stoch_mtf_C_momentum, family: stoch_mtf, fidelity: native}
   63: {name: stoch_mtf_agree, enabled: true, kind: stoch_mtf_agree, family: stoch_mtf, fidelity: native}
-  64: {name: stoch_ema_A, enabled: true, kind: stoch_ema_A, family: stoch_ema, fidelity: native, note: "1m cross + 15m/30m bias"}
-  65: {name: stoch_ema_B, enabled: true, kind: stoch_ema_B, family: stoch_ema, fidelity: native, note: "5m cross + 1h/4h bias"}
-  66: {name: stoch_ema_C, enabled: true, kind: stoch_ema_C, family: stoch_ema, fidelity: native, note: "15m cross + 4h/1d bias"}
+  64: {name: stoch_ema_A, enabled: true, kind: stoch_ema_A, family: stoch_ema, fidelity: native}
+  65: {name: stoch_ema_B, enabled: true, kind: stoch_ema_B, family: stoch_ema, fidelity: native}
+  66: {name: stoch_ema_C, enabled: true, kind: stoch_ema_C, family: stoch_ema, fidelity: native}
+  67: {name: rsi2_ema_1m_15m, enabled: true, kind: rsi2_ema_1m_15m, family: rsi2_ema, fidelity: native}
+  68: {name: rsi2_ema_1m_30m, enabled: true, kind: rsi2_ema_1m_30m, family: rsi2_ema, fidelity: native}
+  69: {name: rsi2_ema_5m_1h, enabled: true, kind: rsi2_ema_5m_1h, family: rsi2_ema, fidelity: native}
+  70: {name: rsi2_ema_5m_4h, enabled: true, kind: rsi2_ema_5m_4h, family: rsi2_ema, fidelity: native}
+  71: {name: rsi2_ema_15m_4h, enabled: true, kind: rsi2_ema_15m_4h, family: rsi2_ema, fidelity: native}
+  72: {name: rsi2_ema_15m_1d, enabled: true, kind: rsi2_ema_15m_1d, family: rsi2_ema, fidelity: native}
+  73: {name: rsi2_ema_A, enabled: true, kind: rsi2_ema_A, family: rsi2_ema, fidelity: native, note: "1m+15m+30m"}
+  74: {name: rsi2_ema_B, enabled: true, kind: rsi2_ema_B, family: rsi2_ema, fidelity: native, note: "5m+1h+4h"}
+  75: {name: rsi2_ema_C, enabled: true, kind: rsi2_ema_C, family: rsi2_ema, fidelity: native, note: "15m+4h+1d"}
