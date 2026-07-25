@@ -1,12 +1,11 @@
 # 500 signal slots. +1 buy | -1 sell | 0 empty. RL may ignore.
-# 0-8 MO | 10-27 Camillion | 28-36 DT/S11/live | 37-44 SMA multi-TF | 45-499 free
+# 0-8 MO | 10-27 Camillion | 28-36 DT/S11/live | 37-44 SMA | 45-55 RSI | 56-499 free
 # CHANGE LOG:
-# - 2026-07-25  slots 37-44 SMA multi-TF A/B/C mid+outer+agree
-# - 2026-07-25  slots 28-36 DT/S11/live phases
-# - 2026-07-25  Camillion 10-27 + MO 0-8
+# - 2026-07-25  slots 45-55 RSI multi-TF mom+pb+agree
+# - 2026-07-25  slots 37-44 SMA multi-TF
+# - 2026-07-25  slots 28-36 DT/S11/live | Camillion 10-27 | MO 0-8
 
 n_slots: 500
-source_camillion: "https://github.com/monty313/Camillion_Claude_RL_model.git"
 
 filled:
   0: {name: mo_bread_and_butter_pull_set1, enabled: true, kind: pull_set1, family: momentum_one}
@@ -45,11 +44,22 @@ filled:
   34: {name: phase_bb_mid, enabled: true, kind: phase_bb_mid, family: rl_trading_live, fidelity: proxy}
   35: {name: phase_sma_stack, enabled: true, kind: phase_sma_stack, family: rl_trading_live, fidelity: proxy}
   36: {name: phase_atr_expand, enabled: true, kind: phase_atr_expand, family: rl_trading_live, fidelity: proxy}
-  37: {name: sma_mtf_A_mid, enabled: true, kind: sma_mtf_A_mid, family: sma_mtf, fidelity: native, note: "1m/15m/30m"}
-  38: {name: sma_mtf_B_mid, enabled: true, kind: sma_mtf_B_mid, family: sma_mtf, fidelity: native, note: "5m/1h/4h best drill"}
-  39: {name: sma_mtf_C_mid, enabled: true, kind: sma_mtf_C_mid, family: sma_mtf, fidelity: native, note: "15m/4h/1d"}
+  37: {name: sma_mtf_A_mid, enabled: true, kind: sma_mtf_A_mid, family: sma_mtf, fidelity: native}
+  38: {name: sma_mtf_B_mid, enabled: true, kind: sma_mtf_B_mid, family: sma_mtf, fidelity: native}
+  39: {name: sma_mtf_C_mid, enabled: true, kind: sma_mtf_C_mid, family: sma_mtf, fidelity: native}
   40: {name: sma_mtf_A_outer, enabled: true, kind: sma_mtf_A_outer, family: sma_mtf, fidelity: native}
-  41: {name: sma_mtf_B_outer, enabled: true, kind: sma_mtf_B_outer, family: sma_mtf, fidelity: native, note: "strongest 240-bar drill"}
+  41: {name: sma_mtf_B_outer, enabled: true, kind: sma_mtf_B_outer, family: sma_mtf, fidelity: native}
   42: {name: sma_mtf_C_outer, enabled: true, kind: sma_mtf_C_outer, family: sma_mtf, fidelity: native}
   43: {name: sma_mtf_agree_mid, enabled: true, kind: sma_mtf_agree_mid, family: sma_mtf, fidelity: native}
   44: {name: sma_mtf_agree_outer, enabled: true, kind: sma_mtf_agree_outer, family: sma_mtf, fidelity: native}
+  45: {name: rsi_mtf_A_momentum, enabled: true, kind: rsi_mtf_A_momentum, family: rsi_mtf, fidelity: native}
+  46: {name: rsi_mtf_A_pullback, enabled: true, kind: rsi_mtf_A_pullback, family: rsi_mtf, fidelity: native}
+  47: {name: rsi_mtf_A_combined, enabled: true, kind: rsi_mtf_A_combined, family: rsi_mtf, fidelity: native}
+  48: {name: rsi_mtf_B_momentum, enabled: true, kind: rsi_mtf_B_momentum, family: rsi_mtf, fidelity: native}
+  49: {name: rsi_mtf_B_pullback, enabled: true, kind: rsi_mtf_B_pullback, family: rsi_mtf, fidelity: native}
+  50: {name: rsi_mtf_B_combined, enabled: true, kind: rsi_mtf_B_combined, family: rsi_mtf, fidelity: native}
+  51: {name: rsi_mtf_C_momentum, enabled: true, kind: rsi_mtf_C_momentum, family: rsi_mtf, fidelity: native}
+  52: {name: rsi_mtf_C_pullback, enabled: true, kind: rsi_mtf_C_pullback, family: rsi_mtf, fidelity: native}
+  53: {name: rsi_mtf_C_combined, enabled: true, kind: rsi_mtf_C_combined, family: rsi_mtf, fidelity: native}
+  54: {name: rsi_mtf_agree, enabled: true, kind: rsi_mtf_agree, family: rsi_mtf, fidelity: native}
+  55: {name: rsi_mtf_any, enabled: true, kind: rsi_mtf_any, family: rsi_mtf, fidelity: native}
