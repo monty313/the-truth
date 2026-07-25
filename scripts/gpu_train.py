@@ -9,6 +9,7 @@ USAGE (Colab L4):
   python scripts/gpu_train.py --csv data/XAUUSD_curriculum_2026.csv --instances 64 --max-updates 3 --device cpu
 
 CHANGE LOG:
+- 2026-07-25  Jarvis hot-reload + status; 3-fail instance restart; auto best_sigon
 - 2026-07-25  multi-symbol pool, 3 day-retries/instance, day_board JSON, signal_accuracy stub,
   best_sigon champion, sampling via auto_ranges — WHY: SIGON Colab path.
 - 2026-07-20  created — WHY: 8,000 random-X instances, streak record auto-save.
@@ -37,6 +38,7 @@ from training.gpu_data import build_day_tensors, load_multi_symbol_pool  # noqa:
 from evaluation.consistency import auto_ranges  # noqa: E402
 from training.day_board import write_day_board  # noqa: E402
 from training.signal_accuracy import write_placeholder_accuracy  # noqa: E402
+from training.jarvis import write_status, apply_inbox_to_sim  # noqa: E402
 
 
 def now():
@@ -274,9 +276,10 @@ def main():
         br = float(res["breached"].float().mean().item()) * 100
         mp = float(res["day_pnl"].mean().item())
         clear_frac = float(hit.float().mean().item())
+        retries_active = int((retry_left > 0).sum().item())
         print("upd %4d | %.0fs | pnl %+.2f%% | hit %.1f%% | breach %.1f%% | clear_batch %.1f%% | entropy %.2f | retries_active %d"
               % (upd, time.time() - t0, mp, gh, br, clear_frac * 100, stats.get("entropy", 0.0),
-                 int((retry_left > 0).sum().item())), flush=True)
+                 retries_active), flush=True)
 
         # live day board for HUD (sample of this batch)
         n_board = min(96, a.instances)
@@ -294,8 +297,27 @@ def main():
             breach_rate=br / 100.0,
             row=int(max(best_streak, 0)),
             obs_dim=obs_dim,
-            extra={"update": upd, "instances": a.instances},
+            extra={"update": upd, "instances": a.instances, "retries_active": retries_active},
         )
+
+        # Jarvis hot channel (every update; cheap file read)
+        try:
+            write_status(
+                update=upd,
+                clear_batch_pct=round(clear_frac * 100, 2),
+                breach_pct=round(br, 2),
+                retries_active=retries_active,
+                obs_dim=obs_dim,
+                best_streak=int(max(best_streak, 0)),
+                instances=a.instances,
+                champion="artifacts/checkpoints/best_sigon.pt",
+            )
+            jlogs = apply_inbox_to_sim(sim)
+            for line in jlogs:
+                print("   [JARVIS] %s" % line, flush=True)
+        except Exception as e:
+            if upd % 50 == 0:
+                print("   [JARVIS] channel skip: %s" % e, flush=True)
 
         if upd % a.eval_every == 0:
             best = eval_streak(eval_rounds)

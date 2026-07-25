@@ -164,6 +164,32 @@ if __name__ == "__main__":
           % ((atr > 0).mean(), set(_np.unique(mb).tolist()) <= {0.0, 1.0}))
 
 
+def _pick_best_csv_per_symbol(csv_dir: str, symbols=None) -> dict[str, str]:
+    """One M1 CSV per symbol. Prefer curriculum / non-drill / largest file."""
+    import glob as _glob
+    files = sorted(_glob.glob(os.path.join(csv_dir, "*.csv")))
+    want = set(s.upper() for s in symbols) if symbols else None
+    buckets: dict[str, list[str]] = {}
+    for f in files:
+        sym = _symbol_of(f)
+        if want is not None and sym not in want:
+            continue
+        buckets.setdefault(sym, []).append(f)
+
+    def score(path: str) -> tuple:
+        name = os.path.basename(path).lower()
+        # higher is better
+        is_drill = 0 if "drill" in name else 1
+        is_curr = 1 if "curriculum" in name else 0
+        size = os.path.getsize(path) if os.path.isfile(path) else 0
+        return (is_drill, is_curr, size)
+
+    out = {}
+    for sym, paths in buckets.items():
+        out[sym] = max(paths, key=score)
+    return out
+
+
 def load_multi_symbol_pool(csv_dir: str, cache_dir: str | None = None,
                            symbols=None, verbose: bool = True):
     """Load every symbol CSV under csv_dir into ONE concatenated day pool.
@@ -176,22 +202,19 @@ def load_multi_symbol_pool(csv_dir: str, cache_dir: str | None = None,
     artifacts/gpu_cache_*.npz and artifacts/symbol_cache/* once, then rebuild.
     Never delete .pt checkpoints when clearing caches.
     """
-    import glob as _glob
     cache_dir = cache_dir or rpath("artifacts", "symbol_cache")
     os.makedirs(cache_dir, exist_ok=True)
-    files = sorted(_glob.glob(os.path.join(csv_dir, "*.csv")))
-    if symbols:
-        symbols = set(s.upper() for s in symbols)
+    picked = _pick_best_csv_per_symbol(csv_dir, symbols=symbols)
     packs = []
-    for f in files:
-        sym = _symbol_of(f)
-        if symbols and sym not in symbols:
-            continue
+    for sym in sorted(picked.keys()):
+        f = picked[sym]
         cache = os.path.join(cache_dir, "days_%s.npz" % sym)
+        if verbose:
+            print("pool+ %-8s <- %s" % (sym, os.path.basename(f)), flush=True)
         do, dp, dl, dates, cols = build_day_tensors(f, cache_path=cache, verbose=verbose)
         packs.append((sym, do, dp, dl, dates, cols))
         if verbose:
-            print("pool+ %-8s | %d days | cols %d" % (sym, do.shape[0], do.shape[2]), flush=True)
+            print("       %-8s | %d days | cols %d" % (sym, do.shape[0], do.shape[2]), flush=True)
     if not packs:
         raise FileNotFoundError("No symbol CSVs in %s (wanted %s)" % (csv_dir, symbols))
     # Align to max L and shared cols (must match feature engine)

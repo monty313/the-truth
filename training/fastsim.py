@@ -98,6 +98,24 @@ class FastSim:
             "w_trade_consistency": 0.10, "trade_consistency_target": 0.3,
             "w_record_win": 0.25, "w_death_penalty": -10.0}.items()}
 
+    def reload_rewards(self):
+        """Hot-reload configs/rewards.yaml into self.w WITHOUT restarting training.
+        Jarvis / CMO can edit rewards.yaml mid-run; next steps use new weights."""
+        w = dict(_load("rewards"))
+        defaults = {
+            "w_net_profit": 6.0, "w_no_drawdown_close": 0.02, "no_drawdown_tolerance": 0.0,
+            "w_pyramid_stack_green": 0.20, "w_pullback_with_htf": 0.25,
+            "w_idleness_hunger": -0.002, "w_did_nothing": -6.0, "did_nothing_band": 0.25,
+            "w_day_goal_hit": 2.0, "day_dd_extra_scale": 0.5, "w_streak_per_day": 0.15,
+            "w_trade_consistency": 0.10, "trade_consistency_target": 0.3,
+            "w_record_win": 0.25, "w_death_penalty": -10.0,
+        }
+        for k, d in defaults.items():
+            if k in w or k in self.w:
+                self.w[k] = float(w.get(k, self.w.get(k, d)))
+        return dict(self.w)
+
+
         # ----- pull-tag column indices (for the tiny pullback close bonus) -----
         def _idx(names):
             out = [cols.index(n) for n in names if n in cols]

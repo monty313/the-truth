@@ -42,3 +42,8 @@ artifacts/checkpoints/meta_best.pt
 artifacts/checkpoints/meta_progress.json
 artifacts/META_TRAINING_HISTORY.md
 artifacts/symbol_cache/
+
+# Local M1 price data (too large for git; Colab copies from Drive)
+data/*.csv
+!data/.gitkeep
+
