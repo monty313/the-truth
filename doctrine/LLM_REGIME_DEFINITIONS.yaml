@@ -1,0 +1,206 @@
+# =============================================================================
+# LLM_REGIME_DEFINITIONS.yaml — SINGLE SOURCE OF TRUTH for how Fable 5 defines
+# regimes from observations.
+#
+# UPDATE ANYTIME. Append indicators under the matching role/registry; do NOT
+# invent new composition rules unless Monty changes doctrine.
+#
+# DESIGN LAW (stable when indicators are added):
+#   Regimes are defined by ROLES + COMPOSITION, not by a closed indicator list.
+#   Indicators only *register* as evidence under a role. Adding an indicator
+#   extends the evidence pool; the same regime names and skip logic still apply.
+#
+# Consumed by: Diagnostic LLM (IRAC), telemetry/regime_language.py (keep in sync
+# when registry names change), Mind Probe documentation.
+# CHANGE LOG: append dated WHY at top of this block on every edit.
+# - 2026-07-24  created — WHY: one file Monty can edit; obs indicators listed;
+#               add-indicator does not change regime composition behavior.
+# =============================================================================
+
+meta:
+  version: "2026-07-24"
+  owner: "Monty / Fable 5 Diagnostic LLM"
+  principle: >
+    Composition over isolation. No indicator works alone. LTF is always relative
+    to the same family on higher TFs. Adding indicators only adds evidence under
+    existing roles — regime names and entry grammar stay the same.
+
+sets:
+  A:
+    ltf: 1m
+    mid: 15m
+    htfs: [15m, 30m]
+    code_set: set1
+  B:
+    ltf: 5m
+    mid: 1h
+    htfs: [1h, 4h]
+    code_set: set2
+  C:
+    ltf: 15m
+    mid: 4h
+    htfs: [4h, 1d]
+    code_set: set3
+
+roles:
+  higher_timeframe:
+    job: "Dominant regime + directional bias (trend / range / transition)."
+    rule: "Permission only when listed HTFs agree (both sides of Gravity)."
+  mid_timeframe:
+    job: "Structure: accepting or rejecting HTF bias; key levels."
+    rule: "Does not execute. Confirms or weakens HTF permission."
+  lower_timeframe:
+    job: "Execution, timing, risk — entries and exits only."
+    rule: "Trigger is relative to same indicator family on larger period/HTF."
+
+indicator_registry:
+  gravity_permission:
+    role: higher_timeframe
+    meaning: "HTF directional permission (S1_perm both HTFs)."
+    obs_patterns:
+      - "set*::cont_buy"
+      - "set*::cont_sell"
+      - "obs::*s1_strength"
+      - "obs::*cci30"
+      - "obs::*cci100"
+  gravity_trigger:
+    role: lower_timeframe
+    meaning: "LTF timing trigger while HTF permission holds (pullback)."
+    obs_patterns:
+      - "set*::pull_buy"
+      - "set*::pull_sell"
+      - "set*::S1_buy"
+      - "set*::S1_sell"
+  structure_accept_reject:
+    role: mid_timeframe
+    meaning: "Mid TF accepting/rejecting HTF bias (structure)."
+    obs_patterns:
+      - "obs::*stretch"
+      - "obs::*env_gap"
+      - "obs::*dj"
+      - "obs::*mcf"
+  volatility_sense:
+    role: conditioning
+    meaning: "Compression / normal / expansion of movement."
+    obs_patterns:
+      - "obs::*stretch"
+      - "obs::*env_gap"
+  liquidity_sense:
+    role: conditioning
+    meaning: "Drive toward highs/lows/imbalance before cont or rev."
+    obs_patterns:
+      - "obs::*env_gap"
+      - "obs::*stretch"
+      - "set*::cont_buy"
+      - "set*::cont_sell"
+  veto:
+    role: risk
+    meaning: "Hard blocks independent of Gravity setup."
+    obs_patterns:
+      - "mask_buy_blocked"
+      - "mask_sell_blocked"
+  session:
+    role: context
+    meaning: "Clock / session context only."
+    obs_patterns:
+      - "obs::hour_sin"
+      - "obs::hour_cos"
+      - "obs::spread_rel"
+
+regimes:
+  trend:
+    labels: [trend_bull, trend_bear]
+    definition: >
+      Price keeps making HH/HL or LH/LL structure; clear directional bias.
+    composition: >
+      Firm HTF permission (gravity_permission) on one side, not both.
+    uses_registries: [gravity_permission, structure_accept_reject]
+
+  range:
+    labels: [range]
+    definition: >
+      Oscillation between support/resistance; no sustained HTF directional permission.
+    composition: >
+      Neither side holds cont/pull dominance from gravity_permission.
+    uses_registries: [gravity_permission, structure_accept_reject]
+
+  transition:
+    labels: [transition]
+    definition: >
+      Market shifting trend↔range or bias side flip.
+    composition: >
+      set*::rev_buy or set*::rev_sell edges, or cont side flip.
+    uses_registries: [gravity_permission]
+    obs_patterns_extra:
+      - "set*::rev_buy"
+      - "set*::rev_sell"
+
+  volatility:
+    labels: [compression, normal, expansion]
+    definition: >
+      Scale of movement: compression, normal, or expansion/breakout.
+    composition: >
+      Derived from volatility_sense continuous features. Thresholds in
+      telemetry/regime_language.classify_volatility.
+    uses_registries: [volatility_sense]
+
+  liquidity:
+    labels: [toward_high, toward_low, balanced]
+    definition: >
+      Price pressing into highs/lows/imbalance before cont or rev.
+    composition: >
+      Sign of env_gap/stretch and/or cont side from liquidity_sense.
+    uses_registries: [liquidity_sense]
+
+  pullback:
+    labels: [pullback]
+    definition: >
+      HTF bias intact; LTF dipped (bread-and-butter).
+    composition: >
+      gravity_permission ON and gravity_trigger pull on that side.
+    uses_registries: [gravity_permission, gravity_trigger]
+    bread_and_butter: true
+
+  continuation:
+    labels: [continuation]
+    definition: >
+      LTF still aligned with HTF bias.
+    composition: >
+      gravity_permission ON and LTF also perm → set*::cont_*.
+    uses_registries: [gravity_permission, gravity_trigger]
+
+  reversal:
+    labels: [reversal]
+    definition: >
+      Bias side flip at structure.
+    composition: >
+      set*::rev_buy / set*::rev_sell.
+    uses_registries: [gravity_permission]
+    obs_patterns_extra:
+      - "set*::rev_buy"
+      - "set*::rev_sell"
+
+strategy_grammar:
+  form: "HTF_regime × mid_structure × LTF_setup → candidate strategy"
+  examples:
+    - "trend × accepting × pullback → bread-and-butter entry with HTF bias"
+    - "trend × accepting × continuation → add / hold with trend"
+    - "trend × rejecting × pullback → skip or fade (policy must learn)"
+    - "transition × * × reversal → reversal family"
+    - "range × * × * → mean-revert family (only if Ghost evidence supports)"
+  open_set: true
+
+skip_reasons:
+  acted: "Took entry/exit op."
+  policy_hold: "HTF regime + LTF setup visible; policy chose hold — Policy class."
+  mask_veto: "Forever-mask (or veto registry) blocked that side."
+  no_ltf_setup: "HTF bias on; no pull/cont/rev trigger on LTF."
+  no_htf_bias: "No clear HTF directional permission."
+  flat_ok: "No setup; hold is consistent."
+
+llm_read_rules:
+  - "Always resolve regimes via composition rules, not by a single indicator."
+  - "When Monty adds an indicator: register it under indicator_registry only; do not change regime composition unless doctrine changes."
+  - "When diagnosing misses: report htf_regime, ltf_setup, skip_reason, and which registry evidence was on."
+  - "Bread-and-butter priority: pullback under trend on any locked set A/B/C."
+  - "Never claim impossible — ask how to make the entry path consistent under the inputs."

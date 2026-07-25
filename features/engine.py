@@ -20,6 +20,7 @@ INTERCONNECTED WITH: data_io/loader (align rules), features/indicators
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-24  align set2/set3 HTFs to Monty lock (5m/1h/4h; 15m/4h/1d) — WHY: exact TF sets. SEMANTIC obs shift; re-prove frozen brains.
 - 2026-07-19  masks fail-closed on warmup, event edges, live-line variants, S2 reload to spec  — WHY: audit R1/R2 fidelity + no-look-ahead fixes.
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
@@ -31,10 +32,11 @@ from data_io.loader import resample, align_to_m1
 from features import indicators as ind
 from telemetry import tracer
 
-SETS = {  # ADR-0004 (extra-confidence TF listed last, weighted not gating)
+SETS = {  # Monty lock 2026-07-24: A=1m/15m/30m B=5m/1h/4h C=15m/4h/1d
+    # SEMANTIC obs shift for set2/set3 — re-prove frozen brains.
     "set1": {"ltf": "1min", "htfs": ["15min", "30min"], "extra": "1h"},
-    "set2": {"ltf": "5min", "htfs": ["30min", "1h"], "extra": "4h"},
-    "set3": {"ltf": "15min", "htfs": ["1h", "4h"], "extra": "1d"},
+    "set2": {"ltf": "5min", "htfs": ["1h", "4h"], "extra": "1d"},
+    "set3": {"ltf": "15min", "htfs": ["4h", "1d"], "extra": "1w"},
     "set4": {"ltf": "30min", "htfs": ["4h", "1d"], "extra": "1w"},
 }
 ALL_TFS = ["1min", "5min", "15min", "30min", "1h", "4h", "1d", "1w"]
