@@ -1,31 +1,43 @@
 # Momentum One
 
-Self-healing RL trading bot. You type target % and risk %. It aims to hit the target without breaching the floor.
+Trading bot. You set a daily profit target and a max loss. It tries to hit the target without breaking the floor.
 
-## Start here
-Open **[DO_THIS.md](DO_THIS.md)** — three command blocks only.
+---
 
-| File | What |
-|------|------|
-| [DO_THIS.md](DO_THIS.md) | Commands to run |
-| [UPDATE_RULES.md](UPDATE_RULES.md) | How to change the repo without making a mess |
-| [TRAINING.md](TRAINING.md) | Longer train notes |
-| [doctrine/LLM_REGIME_DEFINITIONS.yaml](doctrine/LLM_REGIME_DEFINITIONS.yaml) | How the LLM defines regimes |
+## If you are confused, read only this
 
-## Folders (short)
-| Folder | What lives here |
-|--------|-----------------|
-| `configs/` | All numbers (goals, rewards, TFs) |
-| `scripts/` | Commands you run |
-| `training/` | Brain + PPO + meta_tuner |
-| `features/` | Indicators + Gravity sets |
-| `telemetry/` | Mind probe, ghosts |
-| `doctrine/` | Laws and regime definitions |
-| `data/` | Price CSVs |
-| `artifacts/` | Brains and caches |
-| `docs/history/` | Old notes (not day-to-day) |
+1. Open **[DO_THIS.md](DO_THIS.md)**
+2. Run the commands in order
+3. The only score that matters is what `prove_it` prints
+
+---
+
+## Three files that matter
+
+| File | When to open it |
+|------|-----------------|
+| [DO_THIS.md](DO_THIS.md) | Every time you train |
+| [MAP.md](MAP.md) | When you forget where a folder is |
+| [UPDATE_RULES.md](UPDATE_RULES.md) | When you change code or configs |
+
+Everything else is support. You can ignore it until you need it.
+
+---
+
+## Folders in one line each
+
+| Folder | In one line |
+|--------|-------------|
+| `scripts/` | Commands you type |
+| `configs/` | Numbers (target, risk, rewards) |
+| `training/` | The learning code + meta_tuner |
+| `features/` | Chart indicators |
+| `telemetry/` | “What was the bot thinking?” |
+| `doctrine/` | Rules written down |
+| `data/` | Price history |
+| `artifacts/` | Saved brains |
+| `docs/history/` | Old notes — skip these |
 
 ```bash
-pip install -r requirements.txt
 python scripts/preflight_train.py
 ```

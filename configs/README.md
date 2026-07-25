@@ -1,17 +1,15 @@
 # configs/
 
-**All tunable numbers live here.** Not in random Python files.
+All numbers live here.
 
 ## How to update
-- Change a weight or goal → edit the matching YAML.
-- Add a new knob → add it here first, then read it via `core.configs.load`.
-- After reward changes, run `python scripts/preflight_train.py`.
-- CHANGE LOG: put a dated comment at the top of the YAML you edited.
+1. Edit the YAML
+2. Add a short dated comment at the top
+3. Run `python scripts/preflight_train.py`
 
-| File | Holds |
-|------|--------|
-| goals.yaml | target %, floor % |
-| rewards.yaml | reward / penalty weights |
-| timeframes.yaml | TF sets (must match `features/engine.py` SETS) |
-| training.yaml | PPO / self-tuner settings |
-| features.yaml | indicator list for obs |
+| File | What |
+|------|------|
+| goals.yaml | target % and risk % |
+| rewards.yaml | reward and penalty weights |
+| timeframes.yaml | TF sets |
+| training.yaml | train settings |

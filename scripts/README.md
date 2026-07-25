@@ -1,31 +1,19 @@
 # scripts/
 
-**Only place for commands you run.**
+Only place for commands you run.
 
 ## How to update
-- New runnable command → add `verb_noun.py` here.
-- Put real logic in `training/`, `telemetry/`, etc.; script should be thin.
-- Add one row to the table below.
-- Do not leave a second copy of the same script under another name.
+1. Add `verb_noun.py`
+2. Keep it thin — real code in training/telemetry/features
+3. Add one line to this README
 
-## Before train
+Daily path is in **/DO_THIS.md** — not here.
+
 | Script | Does |
 |--------|------|
-| preflight_train.py | Check stack is ready |
-| restore_meta_tuner.py | Fix missing meta_tuner |
-| align_tf_sets.py | Lock TF sets |
-
-## Train
-| Script | Does |
-|--------|------|
-| consistency_sprint.py | Climb clear rate |
-| meta_train.py | Meta-tuner (rewards + hparams) |
-
-## Measure
-| Script | Does |
-|--------|------|
-| prove_it.py | Clear % / row / breach |
-| give_llm_what_it_needs.py | Probe + ghosts + IRAC pack |
-| mind_probe_day.py / diagnose_day.py | One-day look |
-
-See **DO_THIS.md** at repo root for the order to run them.
+| preflight_train.py | Check ready |
+| restore_meta_tuner.py | Fix meta_tuner |
+| consistency_sprint.py | Train climb |
+| meta_train.py | Meta-tuner |
+| prove_it.py | Score |
+| give_llm_what_it_needs.py | Mind + IRAC |

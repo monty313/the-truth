@@ -1,43 +1,32 @@
-# How to update this repo (keep it clean)
+# How to change this repo without making a mess
 
-Read this before adding or changing files.
+## Before you edit
+Ask: *which folder owns this?* (see MAP.md)
 
 ## Rules
-1. **One job → one place.** Do not copy the same text into three docs.
-2. **Start pages stay short.** `DO_THIS.md` stays under ~30 lines. Long notes go in `docs/` or `doctrine/`.
-3. **Every code file keeps a CHANGE LOG** at the top (date + WHY). Append; do not delete old lines.
-4. **Configs hold numbers.** No magic constants buried in scripts if they belong in `configs/`.
-5. **Scripts are entry points only.** Library code lives in `training/`, `features/`, `telemetry/`, etc.
-6. **Do not add a new top-level folder** unless nothing existing fits.
-7. **Old writeups** go in `docs/history/`, not the repo root.
-8. **Regime / indicator language:** edit only `doctrine/LLM_REGIME_DEFINITIONS.yaml` (append to registries).
+1. **One fact in one file** — do not copy the same paragraph everywhere
+2. **DO_THIS.md stays short** — no essays there
+3. **Numbers → `configs/`** only
+4. **Commands you run → `scripts/`** only
+5. **Code libraries → `training/`, `features/`, `telemetry/`** — not scripts
+6. **Laws / regimes → `doctrine/`**
+7. **Old long notes → `docs/history/`**
+8. **Every code change:** add a line at the top CHANGE LOG: `date — what — WHY`
+9. **After changes:** `python scripts/preflight_train.py` must PASS
+10. **Do not** create `file_v2.py` or `final_final.md` — edit the real file
 
-## Where to put a change
+## Quick “where does this go?”
 
-| Kind of change | Put it here |
-|----------------|-------------|
-| Daily target / risk | `configs/goals.yaml` |
-| Reward or penalty weight | `configs/rewards.yaml` |
-| Timeframes / SETS | `configs/timeframes.yaml` + `features/engine.py` SETS (keep in sync) |
-| New obs indicator | feature code + register in `doctrine/LLM_REGIME_DEFINITIONS.yaml` |
-| Train / diagnose command | `scripts/` + one line in `scripts/README.md` |
-| Law / regime meaning | `doctrine/` (not root) |
-| Long explanation | `docs/` or `docs/history/` |
-| Checkpoint / cache | `artifacts/` only |
+| I want to… | Edit this |
+|------------|-----------|
+| Change daily target or risk | `configs/goals.yaml` |
+| Change a reward / penalty | `configs/rewards.yaml` |
+| Change timeframes | `configs/timeframes.yaml` **and** `features/engine.py` SETS |
+| Add an indicator | `features/` + register in `doctrine/LLM_REGIME_DEFINITIONS.yaml` |
+| Add a command | new file in `scripts/` + one line in `scripts/README.md` |
+| Change how regimes are named | `doctrine/LLM_REGIME_DEFINITIONS.yaml` only |
 
-## After you change something
-```bash
-python scripts/preflight_train.py
-```
-If it fails, fix that before training.
-
-## Naming
-- Scripts: `verb_noun.py` (`prove_it`, `restore_meta_tuner`)
-- Do not create `meta_train2.py` / `final_final.py` — update the real file
-- New brain files: `artifacts/checkpoints/` with a clear name
-
-## Forbidden (creates mess)
-- Second “start here” doc that duplicates `DO_THIS.md`
-- Pasting the same IRAC into five markdown files
-- Leaving `PLACEHOLDER` or empty critical modules on the branch
-- Changing SETS without rebuilding feature cache and re-proving the brain
+## Forbidden
+- Second “start here” that replaces DO_THIS.md
+- Leaving PLACEHOLDER in `training/meta_tuner.py`
+- Changing SETS without deleting `artifacts/gpu_cache_*.npz` and running `prove_it` again
