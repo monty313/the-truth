@@ -1,7 +1,8 @@
 """Encode 500 strategy slots: +1 buy / -1 sell / 0 empty.
 
 CHANGE LOG:
-- 2026-07-25  slots 28+ DT/S11/live phases — WHY: Monty scan of other repos.
+- 2026-07-25  sma_mtf A/B/C mid+outer+agree — WHY: Monty tested SMA multi-TF strategy.
+- 2026-07-25  slots 28+ DT/S11/live phases.
 - 2026-07-25  Camillion kinds + MO natives.
 """
 from __future__ import annotations
@@ -180,6 +181,74 @@ def _sma_reversion(F: pd.DataFrame, set_name: str) -> pd.Series:
     return _rev(F, set_name)
 
 
+# ---- Monty multi-TF SMA strategy (native) ----
+_SMA_SETS = {
+    "A": {"ltf": "1min", "htfs": ["15min", "30min"]},
+    "B": {"ltf": "5min", "htfs": ["1h", "4h"]},
+    "C": {"ltf": "15min", "htfs": ["4h", "1d"]},
+}
+
+
+def _sma_series(s: pd.Series, n: int) -> pd.Series:
+    return s.rolling(n, min_periods=n).mean()
+
+
+def _tf_band_from_m1(m1: pd.DataFrame, tf: str, shift: int) -> pd.DataFrame:
+    from data_io.loader import resample, align_to_m1
+    o = resample(m1, tf)
+    hi = _sma_series(o["high"], 4).shift(shift)
+    lo = _sma_series(o["low"], 4).shift(shift)
+    mid = _sma_series(o["close"], 4).shift(shift)
+    band = pd.DataFrame({"hi": hi, "lo": lo, "mid": mid}, index=o.index)
+    return align_to_m1(band, tf, m1.index)
+
+
+def _m1_ohlc(F: pd.DataFrame) -> pd.DataFrame | None:
+    need = ("open", "high", "low", "close")
+    if not all(c in F.columns for c in need):
+        return None
+    out = F[list(need)].copy()
+    out["vol"] = F["vol"] if "vol" in F.columns else 1.0
+    if "spread" in F.columns:
+        out["spread"] = F["spread"]
+    return out
+
+
+def _sma_mtf_sig(F: pd.DataFrame, set_key: str, mode: str = "mid") -> pd.Series:
+    m1 = _m1_ohlc(F)
+    if m1 is None:
+        return _zero(F)
+    cfg = _SMA_SETS[set_key]
+    try:
+        ltf = _tf_band_from_m1(m1, cfg["ltf"], 2)
+        h1 = _tf_band_from_m1(m1, cfg["htfs"][0], 4)
+        h2 = _tf_band_from_m1(m1, cfg["htfs"][1], 4)
+    except Exception:
+        return _zero(F)
+    c = m1["close"]
+    htf_up = (c > h1["hi"]) & (c > h1["lo"]) & (c > h2["hi"]) & (c > h2["lo"])
+    htf_dn = (c < h1["hi"]) & (c < h1["lo"]) & (c < h2["hi"]) & (c < h2["lo"])
+    if mode == "outer":
+        buy = (c < ltf["lo"]) & htf_up
+        sell = (c > ltf["hi"]) & htf_dn
+    else:
+        buy = (c < ltf["mid"]) & htf_up
+        sell = (c > ltf["mid"]) & htf_dn
+    out = np.where(buy.fillna(False), 1.0, np.where(sell.fillna(False), -1.0, 0.0))
+    return pd.Series(out, index=F.index, dtype=np.float32)
+
+
+def _sma_mtf_agree(F: pd.DataFrame, mode: str = "mid") -> pd.Series:
+    sigs = [_sma_mtf_sig(F, k, mode).to_numpy() for k in ("A", "B", "C")]
+    n = len(F)
+    out = np.zeros(n, dtype=np.float32)
+    for i in range(n):
+        vals = [s[i] for s in sigs if s[i] != 0]
+        if len(vals) >= 2 and all(v == vals[0] for v in vals):
+            out[i] = vals[0]
+    return pd.Series(out, index=F.index, dtype=np.float32)
+
+
 KIND_HANDLERS: dict[str, Handler] = {
     "zero": _zero,
     "pull_set1": lambda F: _pull(F, "set1"),
@@ -218,6 +287,14 @@ KIND_HANDLERS: dict[str, Handler] = {
     "phase_bb_mid": _phase_bb_mid,
     "phase_sma_stack": _phase_sma_stack,
     "phase_atr_expand": _phase_atr_expand,
+    "sma_mtf_A_mid": lambda F: _sma_mtf_sig(F, "A", "mid"),
+    "sma_mtf_B_mid": lambda F: _sma_mtf_sig(F, "B", "mid"),
+    "sma_mtf_C_mid": lambda F: _sma_mtf_sig(F, "C", "mid"),
+    "sma_mtf_A_outer": lambda F: _sma_mtf_sig(F, "A", "outer"),
+    "sma_mtf_B_outer": lambda F: _sma_mtf_sig(F, "B", "outer"),
+    "sma_mtf_C_outer": lambda F: _sma_mtf_sig(F, "C", "outer"),
+    "sma_mtf_agree_mid": lambda F: _sma_mtf_agree(F, "mid"),
+    "sma_mtf_agree_outer": lambda F: _sma_mtf_agree(F, "outer"),
 }
 
 
