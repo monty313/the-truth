@@ -1,5 +1,11 @@
-# WHO: Monty's typed inputs. WHAT: goal/floor + day rules. WHEN: 2026-07-18.
-# WHY: ADR-0001. INTERCONNECTED: shell, rewards, env, HUD.
+# WHO: Monty's typed inputs. WHAT: goal/floor + day rules.
+# RUNTIME INPUTS (do not retrain to change these):
+#   - goal_pct / floor_pct = today's focus pair (edit anytime or pass to prove_it CLI)
+#   - Brain sees goal & floor in obs self-state every step (ANY-X conditioning)
+#   - Meta-tuner optimizes rewards/hypers for consistency ACROSS the ranges below
+#   - prove_it BRAIN TARGET RISK  → measure the SAME brain at ANY pair without retrain
+# CHANGE LOG:
+# - 2026-07-25  document goal/floor as runtime variables — WHY: Monty changes target/risk anytime; meta-learning + self-state, not weight retrain.
 goal_pct: 3.0          # Monty's daily target % (the focus; Colab Cell 1 writes this)
 floor_pct: 3.5         # Monty's daily max drawdown % (the focus; Colab Cell 1 writes this)
 equity_basis: equity   # open+closed P/L counts

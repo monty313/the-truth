@@ -6,6 +6,7 @@
 > Job: make the possible **consistent** — not debate whether it is possible.
 
 CHANGE LOG:
+- 2026-07-25  goal/floor = runtime inputs (meta + self-state) — WHY: change target/risk anytime; measure via prove_it <tgt> <risk>; no full retrain.
 - 2026-07-25  agreement agents 80–83 + PART4 — WHY: 70%+ signal evidence; lid off at suggestion layer.
 - 2026-07-25  flea-jar banner — WHY: lid is gone; consistency is the only remaining problem.
 - 2026-07-25  opened as permanent ledger for fresh start — WHY: start new without forgetting wins.
@@ -25,6 +26,7 @@ CHANGE LOG:
 | **w_pullback_with_htf → 0.25** from IRAC | Evidence-backed cure works |
 | **Agreement slots 80–83** (see PART4) | Independent families agreeing → **~70–81%** forward hit on signal events |
 | **seA ∩ r2A ~75% @ 10 bars** | Strict intersection beats any single family (~60–67%) |
+| **goal/floor in obs + meta ranges** | Change target/risk anytime; same brain; prove_it at any pair |
 
 ## Brains to warm-start from
 
@@ -40,6 +42,7 @@ CHANGE LOG:
 - `PERFORMANCE_IS_POSSIBLE.md` (+ PART2 / PART3 / **PART4** / html)
 - `doctrine/flea-jar/THE_FLEA_CURE.md`
 - `signals/agree.py` + slots 80–83 in `configs/signal_slots.yaml`
+- `training/meta_tuner.py`
 
 ## Dated wins
 
@@ -48,3 +51,4 @@ CHANGE LOG:
 - 2026-07-24  IRAC Policy class confirmed (policy_hold on HTF pull)
 - 2026-07-25  Fresh start + flea-jar oath locked into CMO doctrine
 - 2026-07-25  Agreement agents registered: ~75% / ~70–72% / ~76% / ~78–81% (PART4 tables)
+- 2026-07-25  meta_tuner restored on main; goal/floor documented as runtime inputs
