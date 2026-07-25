@@ -1,192 +1,46 @@
-# 500 signal-agent slots in the observation space.
-# +1 buy | -1 sell | 0 empty/flat. RL may ignore all.
-#
-# Slot plan:
-#   0-9    Momentum One natives (bread-and-butter, cont, rev)
-#   10-27  Camillion_Claude_RL_model alpha pack (proxied onto Gravity flags)
-#   28-499 free for new strategies
-#
+# 500 signal slots. +1 buy | -1 sell | 0 empty. RL may ignore.
+# 0-8 MO | 10-27 Camillion | 28-36 DT/S11/live phases | 37-499 free
 # CHANGE LOG:
-# - 2026-07-25  import Camillion alpha pack slots 10-27 — WHY: Monty fill from Camillion repo.
-# - 2026-07-25  created 500 slots — WHY: advisor bus in obs.
+# - 2026-07-25  slots 28-36 DT/S11/live phases — WHY: Monty other-repo scan.
+# - 2026-07-25  Camillion 10-27 + MO 0-8
 
 n_slots: 500
 source_camillion: "https://github.com/monty313/Camillion_Claude_RL_model.git"
 
 filled:
-  0:
-    name: mo_bread_and_butter_pull_set1
-    enabled: true
-    kind: pull_set1
-    family: momentum_one
-    note: "LTF pull set1 — primary consistency pattern"
-  1:
-    name: mo_continuation_set1
-    enabled: true
-    kind: cont_set1
-    family: momentum_one
-  2:
-    name: mo_bread_and_butter_pull_set2
-    enabled: true
-    kind: pull_set2
-    family: momentum_one
-  3:
-    name: mo_continuation_set2
-    enabled: true
-    kind: cont_set2
-    family: momentum_one
-  4:
-    name: mo_pull_set3
-    enabled: true
-    kind: pull_set3
-    family: momentum_one
-  5:
-    name: mo_continuation_set3
-    enabled: true
-    kind: cont_set3
-    family: momentum_one
-  6:
-    name: mo_rev_set1
-    enabled: true
-    kind: rev_set1
-    family: momentum_one
-  7:
-    name: mo_rev_set2
-    enabled: true
-    kind: rev_set2
-    family: momentum_one
-  8:
-    name: mo_rev_set3
-    enabled: true
-    kind: rev_set3
-    family: momentum_one
-  10:
-    name: cam_gravity_30m_4h
-    enabled: true
-    kind: cam_gravity_30m_4h
-    family: camillion
-    camillion_slot: 0
-    fidelity: proxy
-    note: "set2 cont agree set3 cont"
-  11:
-    name: cam_regime_pulse_trend_5m_30m
-    enabled: true
-    kind: cam_regime_pulse_trend_5m_30m
-    family: camillion
-    camillion_slot: 1
-    fidelity: proxy
-  12:
-    name: cam_regime_pulse_pullback_5m_30m
-    enabled: true
-    kind: cam_regime_pulse_pullback_5m_30m
-    family: camillion
-    camillion_slot: 2
-    fidelity: proxy
-  13:
-    name: cam_regime_pulse_trend_30m_4h
-    enabled: true
-    kind: cam_regime_pulse_trend_30m_4h
-    family: camillion
-    camillion_slot: 3
-    fidelity: proxy
-  14:
-    name: cam_regime_pulse_pullback_30m_4h
-    enabled: true
-    kind: cam_regime_pulse_pullback_30m_4h
-    family: camillion
-    camillion_slot: 4
-    fidelity: proxy
-  15:
-    name: cam_cci_surge_trend_5m_30m
-    enabled: true
-    kind: cam_cci_surge_trend_5m_30m
-    family: camillion
-    camillion_slot: 5
-    fidelity: proxy
-  16:
-    name: cam_cci_surge_pullback_5m_30m
-    enabled: true
-    kind: cam_cci_surge_pullback_5m_30m
-    family: camillion
-    camillion_slot: 6
-    fidelity: proxy
-  17:
-    name: cam_cci_surge_trend_30m_4h
-    enabled: true
-    kind: cam_cci_surge_trend_30m_4h
-    family: camillion
-    camillion_slot: 7
-    fidelity: proxy
-  18:
-    name: cam_cci_surge_pullback_30m_4h
-    enabled: true
-    kind: cam_cci_surge_pullback_30m_4h
-    family: camillion
-    camillion_slot: 8
-    fidelity: proxy
-  19:
-    name: cam_sma_stack_trend_5m_30m
-    enabled: true
-    kind: cam_sma_stack_trend_5m_30m
-    family: camillion
-    camillion_slot: 9
-    fidelity: proxy
-  20:
-    name: cam_sma_stack_pullback_5m_30m
-    enabled: true
-    kind: cam_sma_stack_pullback_5m_30m
-    family: camillion
-    camillion_slot: 10
-    fidelity: proxy
-  21:
-    name: cam_sma_stack_trend_30m_4h
-    enabled: true
-    kind: cam_sma_stack_trend_30m_4h
-    family: camillion
-    camillion_slot: 11
-    fidelity: proxy
-  22:
-    name: cam_sma_stack_pullback_30m_4h
-    enabled: true
-    kind: cam_sma_stack_pullback_30m_4h
-    family: camillion
-    camillion_slot: 12
-    fidelity: proxy
-  23:
-    name: cam_sma_reversion_rally_5m_30m
-    enabled: true
-    kind: cam_sma_reversion_rally_5m_30m
-    family: camillion
-    camillion_slot: 13
-    fidelity: proxy
-  24:
-    name: cam_sma_reversion_rally_30m_4h
-    enabled: true
-    kind: cam_sma_reversion_rally_30m_4h
-    family: camillion
-    camillion_slot: 14
-    fidelity: proxy
-  25:
-    name: cam_orb_ny_breakout_indices
-    enabled: false
-    kind: cam_orb_ny_breakout
-    family: camillion
-    camillion_slot: 15
-    fidelity: stub
-    note: "disabled until ORB session logic ported; emits 0"
-  26:
-    name: cam_adx_di_align_5m_30m
-    enabled: true
-    kind: cam_adx_di_align_5m_30m
-    family: camillion
-    camillion_slot: 16
-    fidelity: weak_proxy
-    note: "no ADX in MO yet — uses cont set2"
-  27:
-    name: cam_adx_di_align_30m_4h
-    enabled: true
-    kind: cam_adx_di_align_30m_4h
-    family: camillion
-    camillion_slot: 17
-    fidelity: weak_proxy
-    note: "no ADX in MO yet — uses cont set3"
+  0: {name: mo_bread_and_butter_pull_set1, enabled: true, kind: pull_set1, family: momentum_one}
+  1: {name: mo_continuation_set1, enabled: true, kind: cont_set1, family: momentum_one}
+  2: {name: mo_bread_and_butter_pull_set2, enabled: true, kind: pull_set2, family: momentum_one}
+  3: {name: mo_continuation_set2, enabled: true, kind: cont_set2, family: momentum_one}
+  4: {name: mo_pull_set3, enabled: true, kind: pull_set3, family: momentum_one}
+  5: {name: mo_continuation_set3, enabled: true, kind: cont_set3, family: momentum_one}
+  6: {name: mo_rev_set1, enabled: true, kind: rev_set1, family: momentum_one}
+  7: {name: mo_rev_set2, enabled: true, kind: rev_set2, family: momentum_one}
+  8: {name: mo_rev_set3, enabled: true, kind: rev_set3, family: momentum_one}
+  10: {name: cam_gravity_30m_4h, enabled: true, kind: cam_gravity_30m_4h, family: camillion, fidelity: proxy}
+  11: {name: cam_regime_pulse_trend_5m_30m, enabled: true, kind: cam_regime_pulse_trend_5m_30m, family: camillion, fidelity: proxy}
+  12: {name: cam_regime_pulse_pullback_5m_30m, enabled: true, kind: cam_regime_pulse_pullback_5m_30m, family: camillion, fidelity: proxy}
+  13: {name: cam_regime_pulse_trend_30m_4h, enabled: true, kind: cam_regime_pulse_trend_30m_4h, family: camillion, fidelity: proxy}
+  14: {name: cam_regime_pulse_pullback_30m_4h, enabled: true, kind: cam_regime_pulse_pullback_30m_4h, family: camillion, fidelity: proxy}
+  15: {name: cam_cci_surge_trend_5m_30m, enabled: true, kind: cam_cci_surge_trend_5m_30m, family: camillion, fidelity: proxy}
+  16: {name: cam_cci_surge_pullback_5m_30m, enabled: true, kind: cam_cci_surge_pullback_5m_30m, family: camillion, fidelity: proxy}
+  17: {name: cam_cci_surge_trend_30m_4h, enabled: true, kind: cam_cci_surge_trend_30m_4h, family: camillion, fidelity: proxy}
+  18: {name: cam_cci_surge_pullback_30m_4h, enabled: true, kind: cam_cci_surge_pullback_30m_4h, family: camillion, fidelity: proxy}
+  19: {name: cam_sma_stack_trend_5m_30m, enabled: true, kind: cam_sma_stack_trend_5m_30m, family: camillion, fidelity: proxy}
+  20: {name: cam_sma_stack_pullback_5m_30m, enabled: true, kind: cam_sma_stack_pullback_5m_30m, family: camillion, fidelity: proxy}
+  21: {name: cam_sma_stack_trend_30m_4h, enabled: true, kind: cam_sma_stack_trend_30m_4h, family: camillion, fidelity: proxy}
+  22: {name: cam_sma_stack_pullback_30m_4h, enabled: true, kind: cam_sma_stack_pullback_30m_4h, family: camillion, fidelity: proxy}
+  23: {name: cam_sma_reversion_rally_5m_30m, enabled: true, kind: cam_sma_reversion_rally_5m_30m, family: camillion, fidelity: proxy}
+  24: {name: cam_sma_reversion_rally_30m_4h, enabled: true, kind: cam_sma_reversion_rally_30m_4h, family: camillion, fidelity: proxy}
+  25: {name: cam_orb_ny_breakout_indices, enabled: false, kind: cam_orb_ny_breakout, family: camillion, fidelity: stub}
+  26: {name: cam_adx_di_align_5m_30m, enabled: true, kind: cam_adx_di_align_5m_30m, family: camillion, fidelity: weak_proxy}
+  27: {name: cam_adx_di_align_30m_4h, enabled: true, kind: cam_adx_di_align_30m_4h, family: camillion, fidelity: weak_proxy}
+  28: {name: dt_ftmo_alpha, enabled: true, kind: dt_ftmo_alpha, family: decision_tree, source: DECISON-TREE, fidelity: proxy}
+  29: {name: s11_cci, enabled: true, kind: s11_cci, family: decision_tree, source: DECISON-TREE, fidelity: proxy}
+  30: {name: s11_pull, enabled: true, kind: s11_pull, family: decision_tree, source: DECISON-TREE, fidelity: proxy}
+  31: {name: s11_m15, enabled: true, kind: s11_m15, family: decision_tree, source: DECISON-TREE, fidelity: proxy}
+  32: {name: phase_cci_align, enabled: true, kind: phase_cci_align, family: rl_trading_live, fidelity: proxy}
+  33: {name: phase_hilo_trend, enabled: true, kind: phase_hilo_trend, family: rl_trading_live, fidelity: proxy}
+  34: {name: phase_bb_mid, enabled: true, kind: phase_bb_mid, family: rl_trading_live, fidelity: proxy}
+  35: {name: phase_sma_stack, enabled: true, kind: phase_sma_stack, family: rl_trading_live, fidelity: proxy}
+  36: {name: phase_atr_expand, enabled: true, kind: phase_atr_expand, family: rl_trading_live, fidelity: proxy}
