@@ -1,9 +1,8 @@
 """Encode 500 strategy slots: +1 buy / -1 sell / 0 empty.
 
 CHANGE LOG:
-- 2026-07-25  rsi_mtf A/B/C mom+pb+agree — WHY: Monty add all RSI multi-TF agents.
-- 2026-07-25  sma_mtf A/B/C mid+outer+agree.
-- 2026-07-25  slots 28+ DT/S11/live; Camillion; MO natives.
+- 2026-07-25  stoch_mtf A/B mom+pb, C mom only — WHY: Monty add; C pullback excluded (bad).
+- 2026-07-25  rsi_mtf / sma_mtf / DT / Camillion / MO natives.
 """
 from __future__ import annotations
 
@@ -312,6 +311,83 @@ def _rsi_mtf_any(F: pd.DataFrame) -> pd.Series:
     return pd.Series(out, index=F.index, dtype=np.float32)
 
 
+_STOCH_SETS = {
+    "A": {"ltf": "1min", "htfs": ["15min", "30min"]},
+    "B": {"ltf": "5min", "htfs": ["1h", "4h"]},
+    "C": {"ltf": "15min", "htfs": ["4h", "1d"]},
+}
+
+
+def _stochastic(o: pd.DataFrame, k_period=5, d_period=3, slowing=3):
+    low_min = o["low"].rolling(k_period, min_periods=k_period).min()
+    high_max = o["high"].rolling(k_period, min_periods=k_period).max()
+    denom = (high_max - low_min).replace(0.0, np.nan)
+    raw_k = 100.0 * (o["close"] - low_min) / denom
+    k = raw_k.rolling(slowing, min_periods=slowing).mean()
+    d = k.rolling(d_period, min_periods=d_period).mean()
+    return k, d
+
+
+def _stoch_bb_tf(m1: pd.DataFrame, tf: str) -> pd.DataFrame:
+    from data_io.loader import resample, align_to_m1
+    from features import indicators as ind
+    o = resample(m1, tf)
+    k, d = _stochastic(o, 5, 3, 3)
+    up, mid, lo = ind.bollinger(k, 10, 0.5, shift=5)
+    df = pd.DataFrame({"k": k, "d": d, "up": up, "mid": mid, "lo": lo}, index=o.index)
+    return align_to_m1(df, tf, m1.index)
+
+
+def _stoch_mtf_sig(F: pd.DataFrame, set_key: str, mode: str = "combined") -> pd.Series:
+    if set_key == "C" and mode == "pullback":
+        return _zero(F)
+    m1 = _m1_ohlc(F)
+    if m1 is None:
+        return _zero(F)
+    cfg = _STOCH_SETS[set_key]
+    try:
+        ltf = _stoch_bb_tf(m1, cfg["ltf"])
+        h1 = _stoch_bb_tf(m1, cfg["htfs"][0])
+        h2 = _stoch_bb_tf(m1, cfg["htfs"][1])
+    except Exception:
+        return _zero(F)
+
+    def bull(s):
+        return (s["k"] > s["d"]) & (s["k"] > s["up"])
+
+    def bear(s):
+        return (s["k"] < s["d"]) & (s["k"] < s["lo"])
+
+    mom_buy = bull(ltf) & bull(h1) & bull(h2)
+    mom_sell = bear(ltf) & bear(h1) & bear(h2)
+    pb_buy = bull(h1) & bull(h2) & (ltf["k"] < ltf["lo"])
+    pb_sell = bear(h1) & bear(h2) & (ltf["k"] > ltf["up"])
+    mom = np.where(mom_buy.fillna(False), 1.0, np.where(mom_sell.fillna(False), -1.0, 0.0))
+    pb = np.where(pb_buy.fillna(False), 1.0, np.where(pb_sell.fillna(False), -1.0, 0.0))
+    if mode == "momentum":
+        out = mom
+    elif mode == "pullback":
+        out = pb
+    else:
+        out = mom if set_key == "C" else np.where(mom != 0, mom, pb)
+    return pd.Series(out, index=F.index, dtype=np.float32)
+
+
+def _stoch_mtf_agree(F: pd.DataFrame) -> pd.Series:
+    sigs = [
+        _stoch_mtf_sig(F, "A", "combined").to_numpy(),
+        _stoch_mtf_sig(F, "B", "combined").to_numpy(),
+        _stoch_mtf_sig(F, "C", "momentum").to_numpy(),
+    ]
+    n = len(F)
+    out = np.zeros(n, dtype=np.float32)
+    for i in range(n):
+        vals = [s[i] for s in sigs if s[i] != 0]
+        if len(vals) >= 2 and all(v == vals[0] for v in vals):
+            out[i] = vals[0]
+    return pd.Series(out, index=F.index, dtype=np.float32)
+
+
 KIND_HANDLERS: dict[str, Handler] = {
     "zero": _zero,
     "pull_set1": lambda F: _pull(F, "set1"),
@@ -369,6 +445,14 @@ KIND_HANDLERS: dict[str, Handler] = {
     "rsi_mtf_C_combined": lambda F: _rsi_mtf_sig(F, "C", "combined"),
     "rsi_mtf_agree": lambda F: _rsi_mtf_agree(F),
     "rsi_mtf_any": lambda F: _rsi_mtf_any(F),
+    "stoch_mtf_A_momentum": lambda F: _stoch_mtf_sig(F, "A", "momentum"),
+    "stoch_mtf_A_pullback": lambda F: _stoch_mtf_sig(F, "A", "pullback"),
+    "stoch_mtf_A_combined": lambda F: _stoch_mtf_sig(F, "A", "combined"),
+    "stoch_mtf_B_momentum": lambda F: _stoch_mtf_sig(F, "B", "momentum"),
+    "stoch_mtf_B_pullback": lambda F: _stoch_mtf_sig(F, "B", "pullback"),
+    "stoch_mtf_B_combined": lambda F: _stoch_mtf_sig(F, "B", "combined"),
+    "stoch_mtf_C_momentum": lambda F: _stoch_mtf_sig(F, "C", "momentum"),
+    "stoch_mtf_agree": lambda F: _stoch_mtf_agree(F),
 }
 
 
