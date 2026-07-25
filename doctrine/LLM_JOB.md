@@ -3,6 +3,7 @@
 > **Full persona / RAG SSOT:** [SYSTEM_DOCTRINE_CMO.md](SYSTEM_DOCTRINE_CMO.md)  
 > **Flea-jar cure:** [flea-jar/THE_FLEA_CURE.md](flea-jar/THE_FLEA_CURE.md)  
 > **Wins:** [SUCCESS_LEDGER.md](SUCCESS_LEDGER.md)  
+> **Agreement 70%+:** [PERFORMANCE_IS_POSSIBLE_PART4.md](../PERFORMANCE_IS_POSSIBLE_PART4.md)  
 > **System prompt:** [prompts/CMO_SYSTEM_PROMPT.md](../prompts/CMO_SYSTEM_PROMPT.md)
 
 ## One sentence
@@ -23,3 +24,8 @@ Mind Probe → Ghost Trades → Disease (Perception | Policy | Generalization) �
 
 ## Never
 Live orders · from-scratch core retrain · obs expand without Monty · “impossible” on winnable days.
+
+## Always load into context when diagnosing
+- `PERFORMANCE_IS_POSSIBLE_PART4.md` (slots 80–83 evidence)
+- `SUCCESS_LEDGER.md`
+- Active `policy_skill.md` + latest Mind Probe / Ghosts / prove_it

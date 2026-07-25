@@ -6,6 +6,7 @@
 > Job: make the possible **consistent** — not debate whether it is possible.
 
 CHANGE LOG:
+- 2026-07-25  agreement agents 80–83 + PART4 — WHY: 70%+ signal evidence; lid off at suggestion layer.
 - 2026-07-25  flea-jar banner — WHY: lid is gone; consistency is the only remaining problem.
 - 2026-07-25  opened as permanent ledger for fresh start — WHY: start new without forgetting wins.
 # NEXT EDITOR: append dated wins only. Do not delete lines.
@@ -22,6 +23,8 @@ CHANGE LOG:
 | **90 / 90 days** in swing-capture bound | **Physics does not forbid the goal — the jar lid is off** |
 | **policy_hold** on visible pull | Disease is Policy, not “no edge” |
 | **w_pullback_with_htf → 0.25** from IRAC | Evidence-backed cure works |
+| **Agreement slots 80–83** (see PART4) | Independent families agreeing → **~70–81%** forward hit on signal events |
+| **seA ∩ r2A ~75% @ 10 bars** | Strict intersection beats any single family (~60–67%) |
 
 ## Brains to warm-start from
 
@@ -34,8 +37,9 @@ CHANGE LOG:
 
 ## Never delete
 
-- `PERFORMANCE_IS_POSSIBLE.md` (+ PART2 / PART3 / html)
+- `PERFORMANCE_IS_POSSIBLE.md` (+ PART2 / PART3 / **PART4** / html)
 - `doctrine/flea-jar/THE_FLEA_CURE.md`
+- `signals/agree.py` + slots 80–83 in `configs/signal_slots.yaml`
 
 ## Dated wins
 
@@ -43,3 +47,4 @@ CHANGE LOG:
 - 2026-07-24  Post SETS-align clear≈21%, breach 0%
 - 2026-07-24  IRAC Policy class confirmed (policy_hold on HTF pull)
 - 2026-07-25  Fresh start + flea-jar oath locked into CMO doctrine
+- 2026-07-25  Agreement agents registered: ~75% / ~70–72% / ~76% / ~78–81% (PART4 tables)
