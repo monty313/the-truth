@@ -1,26 +1,47 @@
-# PERFORMANCE IS POSSIBLE
+> **Do not delete this file.** Reference evidence that the daily target is reachable. Daily commands live in DO_THIS.md.
 
-> Kept on purpose. Not required for daily train — see DO_THIS.md for commands.
+# THE PERFORMANCE IS POSSIBLE
+### A logical brief for Momentum One
 
-This file and its PART2 / PART3 companions document that the daily target is reachable under measured swing bounds. Do **not** delete these files when organizing the repo.
+**The fleas-in-a-jar trap.** Put fleas in a jar with a lid and they learn to jump
+just below it. Take the lid away and they keep jumping short — forever — to a
+ceiling that is no longer there.
 
-## How this fits the organized repo
+That is what happens when a trading system is trained as if most days are
+"unwinnable." The data says otherwise.
 
-| File | Role |
-|------|------|
-| DO_THIS.md | What you run |
-| MAP.md | Where folders are |
-| UPDATE_RULES.md | How to edit without mess |
-| **PERFORMANCE_IS_POSSIBLE*.md** | **Evidence / narrative that the goal is reachable** |
+## The measured fact
 
-## Training
+On the XAUUSD curriculum used for Momentum One, **swing-capture analysis shows
+the daily target is reachable on the vast majority of sessions** (the flea-cure
+bound: the day is not closed by physics — only by policy).
+
+When `prove_it` is run at a stated target and floor (e.g. 3.0% / 3.5%):
+
+- **Breach rate can stay at 0%** under a trained policy.
+- **Clear rate is the climb** — how often the bot actually takes the edge the
+  day offered.
+- A low clear rate with zero breaches is not "the market refused." It is usually
+  **hesitation** (policy_hold while Gravity setup is visible) or under-training
+  on the current Gravity stack.
+
+## What that implies for training
+
+1. **Do not label days impossible** when the swing bound says they are winnable.
+2. **Weight near-miss and pull-under-trend days** — that is where clear rate is won.
+3. **Keep the floor sacred** — zero breach is non-negotiable; clear rate is the
+   optimization target under that constraint.
+4. **Measure only with `prove_it`** at your numbers — not narrative.
+
+## How to run the measurement
 
 ```bash
 python scripts/preflight_train.py
 python scripts/consistency_sprint.py --minutes 600 --envs 256
-python scripts/prove_it.py <brain> 3.0 3.5
+python scripts/prove_it.py <brain_name> 3.0 3.5
 ```
 
-Only `prove_it` clear % and breach % count as the score.
+Companions: `PERFORMANCE_IS_POSSIBLE_PART2.md`, `PART3.md`, and the HTML brief.
 
-See also: PERFORMANCE_IS_POSSIBLE_PART2.md, PART3.md, and the HTML companion.
+Organization note: these PERFORMANCE files are **kept on purpose**. Daily path is
+`DO_THIS.md`. Folder map is `MAP.md`.
