@@ -1,7 +1,8 @@
 # 500 signal slots. +1 buy | -1 sell | 0 empty. RL may ignore.
-# 0-8 MO | 10-27 Camillion | 28-36 DT/S11/live phases | 37-499 free
+# 0-8 MO | 10-27 Camillion | 28-36 DT/S11/live | 37-44 SMA multi-TF | 45-499 free
 # CHANGE LOG:
-# - 2026-07-25  slots 28-36 DT/S11/live phases — WHY: Monty other-repo scan.
+# - 2026-07-25  slots 37-44 SMA multi-TF A/B/C mid+outer+agree
+# - 2026-07-25  slots 28-36 DT/S11/live phases
 # - 2026-07-25  Camillion 10-27 + MO 0-8
 
 n_slots: 500
@@ -35,12 +36,20 @@ filled:
   25: {name: cam_orb_ny_breakout_indices, enabled: false, kind: cam_orb_ny_breakout, family: camillion, fidelity: stub}
   26: {name: cam_adx_di_align_5m_30m, enabled: true, kind: cam_adx_di_align_5m_30m, family: camillion, fidelity: weak_proxy}
   27: {name: cam_adx_di_align_30m_4h, enabled: true, kind: cam_adx_di_align_30m_4h, family: camillion, fidelity: weak_proxy}
-  28: {name: dt_ftmo_alpha, enabled: true, kind: dt_ftmo_alpha, family: decision_tree, source: DECISON-TREE, fidelity: proxy}
-  29: {name: s11_cci, enabled: true, kind: s11_cci, family: decision_tree, source: DECISON-TREE, fidelity: proxy}
-  30: {name: s11_pull, enabled: true, kind: s11_pull, family: decision_tree, source: DECISON-TREE, fidelity: proxy}
-  31: {name: s11_m15, enabled: true, kind: s11_m15, family: decision_tree, source: DECISON-TREE, fidelity: proxy}
+  28: {name: dt_ftmo_alpha, enabled: true, kind: dt_ftmo_alpha, family: decision_tree, fidelity: proxy}
+  29: {name: s11_cci, enabled: true, kind: s11_cci, family: decision_tree, fidelity: proxy}
+  30: {name: s11_pull, enabled: true, kind: s11_pull, family: decision_tree, fidelity: proxy}
+  31: {name: s11_m15, enabled: true, kind: s11_m15, family: decision_tree, fidelity: proxy}
   32: {name: phase_cci_align, enabled: true, kind: phase_cci_align, family: rl_trading_live, fidelity: proxy}
   33: {name: phase_hilo_trend, enabled: true, kind: phase_hilo_trend, family: rl_trading_live, fidelity: proxy}
   34: {name: phase_bb_mid, enabled: true, kind: phase_bb_mid, family: rl_trading_live, fidelity: proxy}
   35: {name: phase_sma_stack, enabled: true, kind: phase_sma_stack, family: rl_trading_live, fidelity: proxy}
   36: {name: phase_atr_expand, enabled: true, kind: phase_atr_expand, family: rl_trading_live, fidelity: proxy}
+  37: {name: sma_mtf_A_mid, enabled: true, kind: sma_mtf_A_mid, family: sma_mtf, fidelity: native, note: "1m/15m/30m"}
+  38: {name: sma_mtf_B_mid, enabled: true, kind: sma_mtf_B_mid, family: sma_mtf, fidelity: native, note: "5m/1h/4h best drill"}
+  39: {name: sma_mtf_C_mid, enabled: true, kind: sma_mtf_C_mid, family: sma_mtf, fidelity: native, note: "15m/4h/1d"}
+  40: {name: sma_mtf_A_outer, enabled: true, kind: sma_mtf_A_outer, family: sma_mtf, fidelity: native}
+  41: {name: sma_mtf_B_outer, enabled: true, kind: sma_mtf_B_outer, family: sma_mtf, fidelity: native, note: "strongest 240-bar drill"}
+  42: {name: sma_mtf_C_outer, enabled: true, kind: sma_mtf_C_outer, family: sma_mtf, fidelity: native}
+  43: {name: sma_mtf_agree_mid, enabled: true, kind: sma_mtf_agree_mid, family: sma_mtf, fidelity: native}
+  44: {name: sma_mtf_agree_outer, enabled: true, kind: sma_mtf_agree_outer, family: sma_mtf, fidelity: native}
