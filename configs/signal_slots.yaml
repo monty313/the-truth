@@ -1,6 +1,7 @@
 # 500 signal slots. +1 buy | -1 sell | 0 empty. RL may ignore.
-# ... 67-75 rsi2_ema | 76-79 smma_rsi | 80-499 free
+# ... 76-79 smma_rsi | 80-83 agree | 84-499 free
 # CHANGE LOG:
+# - 2026-07-25  slots 80-83 agree composites (≥70% tests)
 # - 2026-07-25  slots 76-79 smma_rsi >60% only (15m+4h, Set C)
 # - 2026-07-25  slots 67-75 rsi2_ema | 64-66 stoch_ema | 56-63 stoch_mtf
 
@@ -82,7 +83,11 @@ filled:
   73: {name: rsi2_ema_A, enabled: true, kind: rsi2_ema_A, family: rsi2_ema, fidelity: native}
   74: {name: rsi2_ema_B, enabled: true, kind: rsi2_ema_B, family: rsi2_ema, fidelity: native}
   75: {name: rsi2_ema_C, enabled: true, kind: rsi2_ema_C, family: rsi2_ema, fidelity: native}
-  76: {name: smma_rsi_15m_4h_V0, enabled: true, kind: smma_rsi_15m_4h_V0, family: smma_rsi, fidelity: native, note: "~60-63% drill"}
-  77: {name: smma_rsi_15m_4h_V1, enabled: true, kind: smma_rsi_15m_4h_V1, family: smma_rsi, fidelity: native, note: "flip long ~60-61%"}
-  78: {name: smma_rsi_C_V0, enabled: true, kind: smma_rsi_C_V0, family: smma_rsi, fidelity: native, note: "Set C ~61-66% drill"}
-  79: {name: smma_rsi_C_V1, enabled: true, kind: smma_rsi_C_V1, family: smma_rsi, fidelity: native, note: "Set C V1 ~60-63%"}
+  76: {name: smma_rsi_15m_4h_V0, enabled: true, kind: smma_rsi_15m_4h_V0, family: smma_rsi, fidelity: native}
+  77: {name: smma_rsi_15m_4h_V1, enabled: true, kind: smma_rsi_15m_4h_V1, family: smma_rsi, fidelity: native}
+  78: {name: smma_rsi_C_V0, enabled: true, kind: smma_rsi_C_V0, family: smma_rsi, fidelity: native}
+  79: {name: smma_rsi_C_V1, enabled: true, kind: smma_rsi_C_V1, family: smma_rsi, fidelity: native}
+  80: {name: agree_seA_r2A, enabled: true, kind: agree_seA_r2A, family: agree, fidelity: native, note: "seA∩r2A ~75%@10"}
+  81: {name: agree_seB_r2B_epB, enabled: true, kind: agree_seB_r2B_epB, family: agree, fidelity: native, note: "2of seB+r2B+epB ~70-72%"}
+  82: {name: agree_2of_top4, enabled: true, kind: agree_2of_top4, family: agree, fidelity: native, note: "2of seA+r2A+seB+smaC ~76/71%"}
+  83: {name: agree_seA_r2A_atr, enabled: true, kind: agree_seA_r2A_atr, family: agree, fidelity: native, note: "seA∩r2A+ATR ~78-81%"}
