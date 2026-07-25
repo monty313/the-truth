@@ -1,45 +1,36 @@
 # DO THIS
 
-Do these steps in order.
+**Fresh chapter:** [START_FROM_TODAY.md](START_FROM_TODAY.md)  
+**Wins (never erase):** [doctrine/SUCCESS_LEDGER.md](doctrine/SUCCESS_LEDGER.md)
 
 ## 1. Setup
 ```bash
-pip install -r requirements.txt
 python scripts/restore_meta_tuner.py
 python scripts/preflight_train.py
 ```
-Preflight must say **PASSED**.
 
-## 2. Self-heal epoch (self-correct + self-improve)
+## 2. Baseline (know today’s line)
 ```bash
-python scripts/self_heal_epoch.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5 --days 10
-```
-Adds trajectories + IRAC + prove_it gate. Skill stays pending until you accept.
-
-### Accept skill when evidence is solid
-```bash
-python scripts/self_heal_epoch.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5 --days 10 --auto-accept-skill
+python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5
 ```
 
-### Full improve cycle (frontier train + gate + skill + optional reward nudge)
+## 3. Self-heal epoch
 ```bash
-python scripts/self_heal_epoch.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5 --days 10 --sprint-minutes 120 --auto-accept-skill --apply-reward-nudge
+python scripts/self_heal_epoch.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5 --days 12
 ```
 
-## 3. Long GPU climb (when ready)
+## 4. Climb (GPU)
 ```bash
 python scripts/consistency_sprint.py --minutes 600 --envs 256
 python scripts/prove_it.py <new_brain> 3.0 3.5
-python scripts/self_heal_epoch.py <new_brain> 3.0 3.5 --auto-accept-skill
 ```
+Log every improvement in SUCCESS_LEDGER.
 
-## 4. Meta-tuner (reward/penalty wrapper)
+## 5. Meta-tuner
 ```bash
 python scripts/meta_train.py --minutes 600
 ```
 
 ---
-**Only score that counts:** `prove_it` clear % and breach %.  
-**CMO doctrine:** `doctrine/SYSTEM_DOCTRINE_CMO.md`  
-**Skill memory:** `doctrine/policy_skill.md`  
-**Epoch logs:** `artifacts/self_heal_epochs/`
+Score that counts: **prove_it** clear % + breach 0%.  
+Past wins prove the ceiling is not real.
