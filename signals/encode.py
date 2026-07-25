@@ -1,9 +1,10 @@
 """Encode 500 strategy slots: +1 buy / -1 sell / 0 empty.
 
 CHANGE LOG:
+- 2026-07-25  wire smma_rsi + agree HANDLERS (slots 76-83)
 - 2026-07-25  wire rsi2_ema HANDLERS slots 67-75
-- 2026-07-25  stoch_ema A/B/C + HTF bias — WHY: Monty; ~60-66% on set A test.
-- 2026-07-25  stoch_mtf A/B mom+pb, C mom only; rsi/sma/DT/Camillion/MO.
+- 2026-07-25  stoch_ema A/B/C + HTF bias
+- 2026-07-25  stoch_mtf; rsi/sma/DT/Camillion/MO
 """
 from __future__ import annotations
 
@@ -519,6 +520,16 @@ KIND_HANDLERS: dict[str, Handler] = {
 }
 from signals.rsi2_ema import HANDLERS as _RSI2_HANDLERS
 KIND_HANDLERS.update(_RSI2_HANDLERS)
+try:
+    from signals.smma_rsi import HANDLERS as _SMMA_RSI_HANDLERS
+    KIND_HANDLERS.update(_SMMA_RSI_HANDLERS)
+except Exception:
+    pass
+try:
+    from signals.agree import HANDLERS as _AGREE_HANDLERS
+    KIND_HANDLERS.update(_AGREE_HANDLERS)
+except Exception:
+    pass
 
 
 def compute_slot(F: pd.DataFrame, spec: dict[str, Any]) -> pd.Series:
