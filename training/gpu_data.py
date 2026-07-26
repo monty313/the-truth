@@ -20,6 +20,8 @@ INTERCONNECTED WITH: data_io/loader, features/engine, training/fastsim.
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
+- 2026-07-25  progress heartbeats during one-time feature build — WHY: Colab looks
+  stuck on multi-year multi-symbol CSVs; Monty must not ^C during first build.
 - 2026-07-20  created — WHY: Bot 1.5 GPU Edition needs cached per-day tensors
   built by the real feature engine so the twin feeds the brain identical obs.
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
@@ -27,6 +29,7 @@ CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this lin
 from __future__ import annotations
 import os
 import sys
+import time
 
 import numpy as np
 
@@ -57,15 +60,24 @@ def build_day_tensors(csv_path: str, cache_path: str | None = None,
         return (z["days_obs"], z["days_phys"], z["day_lens"],
                 list(z["dates"]), list(z["cols"]))
 
+    t0 = time.time()
     if verbose:
-        print("gpu_data: building features from %s (one-time)..." % csv_path, flush=True)
+        mb = os.path.getsize(csv_path) / (1024 * 1024) if os.path.isfile(csv_path) else 0
+        print("gpu_data: building features from %s (%.0f MB) — ONE-TIME, do not stop"
+              % (os.path.basename(csv_path), mb), flush=True)
+        print("gpu_data:   [1/4] reading CSV...", flush=True)
     m1 = read_mt5_m1(csv_path)
+    if verbose:
+        print("gpu_data:   [2/4] building features (this is the long step; can take 10–40 min per symbol)...",
+              flush=True)
     F = build_features(m1)
+    if verbose:
+        print("gpu_data:   [3/4] packing days (elapsed %.0fs)..." % (time.time() - t0), flush=True)
     cols = obs_columns(F)                      # EXACT order the brain trained on
     days = trading_days(F)                      # [(date, F_day)], already >=300 filtered
     days = [(d, g) for d, g in days if len(g) >= min_bars]
     D = len(days)
-    Lmax = max(len(g) for _, g in days)
+    Lmax = max(len(g) for _, g in days) if D else 0
     C = len(cols)
 
     days_obs = np.zeros((D, Lmax, C), dtype=np.float32)
@@ -84,8 +96,12 @@ def build_day_tensors(csv_path: str, cache_path: str | None = None,
         days_phys[i, :n] = P
         day_lens[i] = n
         dates.append(str(date))
+        if verbose and D and ((i + 1) % max(1, D // 5) == 0 or i + 1 == D):
+            print("gpu_data:       packed %d/%d days..." % (i + 1, D), flush=True)
 
     if cache_path:
+        if verbose:
+            print("gpu_data:   [4/4] writing cache...", flush=True)
         os.makedirs(os.path.dirname(cache_path), exist_ok=True)
         np.savez_compressed(cache_path, days_obs=days_obs, days_phys=days_phys,
                             day_lens=day_lens, dates=np.array(dates, dtype=object),
@@ -94,8 +110,8 @@ def build_day_tensors(csv_path: str, cache_path: str | None = None,
             print("gpu_data: cached -> %s" % cache_path, flush=True)
 
     if verbose:
-        print("gpu_data: DONE | days=%d Lmax=%d cols=%d | obs_dim would be %d"
-              % (D, Lmax, C, 10 * (C + 12)), flush=True)
+        print("gpu_data: DONE | days=%d Lmax=%d cols=%d | obs_dim would be %d | %.0fs"
+              % (D, Lmax, C, 10 * (C + 12), time.time() - t0), flush=True)
     return days_obs, days_phys, day_lens, dates, cols
 
 
@@ -218,15 +234,21 @@ def load_multi_symbol_pool(csv_dir: str, cache_dir: str | None = None,
     os.makedirs(cache_dir, exist_ok=True)
     picked = _pick_best_csv_per_symbol(csv_dir, symbols=symbols)
     packs = []
-    for sym in sorted(picked.keys()):
+    n_sym = len(picked)
+    for si, sym in enumerate(sorted(picked.keys()), start=1):
         f = picked[sym]
         cache = os.path.join(cache_dir, "days_%s.npz" % sym)
         if verbose:
-            print("pool+ %-8s <- %s" % (sym, os.path.basename(f)), flush=True)
+            print("pool+ %-8s <- %s   [%d/%d symbols]"
+                  % (sym, os.path.basename(f), si, n_sym), flush=True)
+            if not os.path.exists(cache):
+                print("       (no cache yet — first build can take 10–40 min; leave it running)",
+                      flush=True)
         do, dp, dl, dates, cols = build_day_tensors(f, cache_path=cache, verbose=verbose)
         packs.append((sym, do, dp, dl, dates, cols))
         if verbose:
-            print("       %-8s | %d days | cols %d" % (sym, do.shape[0], do.shape[2]), flush=True)
+            print("       %-8s | %d days | cols %d | OK"
+                  % (sym, do.shape[0], do.shape[2]), flush=True)
     if not packs:
         raise FileNotFoundError("No symbol CSVs in %s (wanted %s)" % (csv_dir, symbols))
     # Align to max L and shared cols (must match feature engine)
