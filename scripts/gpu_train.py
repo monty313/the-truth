@@ -17,6 +17,7 @@ HARD RULES:
   - Per instance: fail day → up to max_day_retries (3); still fail → streak restarts day 1.
 
 CHANGE LOG:
+- 2026-07-26  --require-warm exits if best_sigon not loaded — WHY: Monty Colab must never silent-NEW after streak-7
 - 2026-07-25  streak-named locks (best_sigon_streakXX), per-instance streak climb,
   --entropy-coef CLI, breach 0% gate on lock, OOM 6000/4000/2000 docs — WHY: SIGON Colab.
 - 2026-07-25  Jarvis hot-reload + status; 3-fail instance restart; auto best_sigon
@@ -133,6 +134,9 @@ def main():
                     help="Warm-start checkpoint name under artifacts/checkpoints/ "
                          "(e.g. best_sigon). Loads only if obs_dim matches. "
                          "Never loads PROVEN 1820 into SIGON ~6820.")
+    ap.add_argument("--require-warm", action="store_true",
+                    help="EXIT if warm-start did not load (no silent NEW brain). "
+                         "Use on Colab continue-train so streak is never wiped.")
     ap.add_argument("--ckpt", default="gpu_live")
     ap.add_argument("--device", default="auto")
     ap.add_argument("--max-day-retries", type=int, default=None,
@@ -263,6 +267,14 @@ def main():
             print("warm skip %s: %s" % (name, e), flush=True)
     if loaded == "fresh_sigon":
         print("NEW Brain(%d) — SIGON lineage signals-ON (not PROVEN 1820)" % obs_dim, flush=True)
+        if a.require_warm:
+            raise SystemExit(
+                "STOP: --require-warm set but no matching champion loaded.\n"
+                "  Need: artifacts/checkpoints/best_sigon.pt (obs_dim=%d)\n"
+                "  Fix: run STEP restore from Drive folder momentum_sigon_champs,\n"
+                "       then re-run train. Do NOT continue with a NEW brain."
+                % obs_dim
+            )
 
     tc = training_cfg() or {}
     gamma = float(tc.get("gamma", 0.99))

@@ -29,8 +29,8 @@ That is the **only** notebook to use.
 |---|------|-----|
 | 1 | Turn on GPU | Top menu: **Runtime** → **Change runtime type** → pick **L4** or **T4** → **Save** |
 | 2 | Run STEP 1 | Click the cell → press **▶** → click **Allow** for Google Drive |
-| 3 | Run STEP 2 | Press **▶** — this **starts training all 4 symbols** |
-| 4 | Wait | First time can take **1–3 hours** building data. **Do not press Stop.** Training has started when you see **`upd 1`** |
+| 3 | Run STEP 2 | Press **▶** — copies **best brain from Drive**, then trains (**4000** games). **Will not** start empty NEW brain |
+| 4 | Wait | First time can take a while building data. **Do not press Stop.** Good start = **`warm-start best_sigon`** then **`upd 1`** |
 
 ---
 
@@ -63,9 +63,9 @@ upd    2 | ...
 
 ---
 
-## If memory runs out
+## If memory runs out (red OOM)
 
-In STEP 2, change `4000` to `2000`, then press ▶ again.
+In STEP 2 code, change `--instances 4000` to `2000` or `1000`, then press ▶ again.
 
 ---
 
