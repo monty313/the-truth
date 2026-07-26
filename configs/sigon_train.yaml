@@ -2,17 +2,24 @@
 # Parallel instance = one simulated env (one day × one symbol × one goal/risk draw).
 #
 # DAY RETRIES (Monty):
-#   If that instance FAILS the day (miss target or approach breach handling),
-#   it may retry the SAME day setup up to max_day_retries times before that
-#   instance resets / draws a new day. This is per parallel instance, not global.
+#   If that instance FAILS the day (miss target or breach),
+#   it may retry the SAME day setup up to max_day_retries times.
+#   If still fail → that instance's streak climb RESTARTS at day 1
+#   (draws a new day; does NOT wipe the whole train).
 max_day_retries: 3
 
-# Champion = highest consistency policy only (no ceremony prove-to-human ladder).
-# Always keep/overwrite best_sigon when clear rate improves and breach stays 0.
+# Champion = new all-time-high consistency STREAK with breach 0%.
+# Filenames include streak COUNT:
+#   artifacts/checkpoints/best_sigon_streak05.pt
+#   artifacts/checkpoints/history/SIGON_streak05_obs6820_SN-xxxx.pt
+#   artifacts/checkpoints/best_sigon.pt  ← always the latest locked pointer
 champion:
   path: artifacts/checkpoints/best_sigon.pt
+  named_pattern: artifacts/checkpoints/best_sigon_streak{streak:02d}.pt
+  history_pattern: artifacts/checkpoints/history/SIGON_streak{streak:02d}_obs{obs_dim}_SN-{serial}.pt
   record_json: artifacts/checkpoints/best_sigon_record.json
-  # record fields: clear_rate, breach_rate, row, obs_dim, symbols, updated_at
+  lock_requires_breach_zero: true
+  # record fields: clear_rate, breach_rate, streak, obs_dim, symbols, updated_at
 
 # Meta has full access to all reward weights + PPO hypers in training/meta_tuner BOUNDS.
 # LLM (CMO) may read meta state under artifacts/llm_curriculum/ and propose gated updates.
@@ -22,5 +29,11 @@ meta:
   w_pullback_with_htf_may_rise: true   # Policy disease: raise if hold-on-setup persists
 
 # Speed: prefer high instance counts (GPU ≥70% util).
+# OOM on Colab L4? drop in this order — same command, lower --instances:
+#   8000 → 6000 → 4000 → 2000
 instances_default: 8000
-instances_oom_fallback: [4000, 2000, 1024]
+instances_oom_fallback: [6000, 4000, 2000]
+
+# Exploration (also overridable via --entropy-coef on CLI; warm-start keeps weights)
+# Higher = more random action exploration during PPO.
+default_entropy_coef_hint: 0.03

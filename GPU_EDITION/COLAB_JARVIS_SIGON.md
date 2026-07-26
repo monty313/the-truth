@@ -1,8 +1,13 @@
-# Colab L4 — SIGON + Jarvis (no full restart)
+# Colab L4 — SIGON + Jarvis (Monty one-path)
+
+**Signals ON** = new brain lineage (**obs_dim ~6820**).  
+**Never** load PROVEN_* 1820 weights into this brain.
+
+---
 
 ## Cell 0 — GPU
 
-**Runtime → Change runtime type → Hardware accelerator → L4 GPU → Save**
+**Runtime → Change runtime type → Hardware accelerator → L4 GPU (or T4) → Save**
 
 ---
 
@@ -15,9 +20,10 @@ drive.mount('/content/drive')
 !git clone https://github.com/monty313/the-truth.git 2>/dev/null || true
 %cd /content/the-truth
 !git pull origin main
+!pip -q install pyyaml >/dev/null 2>&1
 ```
 
-### Copy M1 CSVs from Monty’s Drive folder
+### Copy M1 CSVs (XAUUSD, EURUSD, GBPUSD, US30)
 
 Drive folder ID: `1gwTD6535FilsKqRUsi7vi6WlT0vgdhui`  
 (URL: https://drive.google.com/drive/folders/1gwTD6535FilsKqRUsi7vi6WlT0vgdhui)
@@ -33,7 +39,7 @@ candidates = [
 ]
 src = None
 for c in candidates:
-    if os.path.isdir(c) and glob.glob(c + "/*.csv"):
+    if os.path.isdir(c) and glob.glob(c + "/**/*.csv", recursive=True):
         src = c
         break
 if src is None:
@@ -64,24 +70,33 @@ print("data CSVs:", os.listdir("data"))
 !rm -f artifacts/gpu_cache_*.npz
 !rm -rf artifacts/symbol_cache
 # NEVER delete artifacts/checkpoints/*.pt brains when clearing caches
+# NEVER delete PERFORMANCE*, SUCCESS_LEDGER, flea-jar, PROVEN_*.pt
 ```
 
-**Config on main:** `include_signal_agent_slots: true` → expect **obs_dim ~6820**.  
-Do **not** warm-start PROVEN_* 1820 weights into this brain.
+**Config on main:** `include_signal_agent_slots: true` → expect **obs_dim ~6820**.
 
 ---
 
 ## Cell 2 — TRAIN (leave running)
 
+**Paste this exact command:**
+
 ```bash
-!python scripts/gpu_train.py --csv-dir data --instances 8000 --minutes 600
+!python scripts/gpu_train.py --csv-dir data --instances 8000 --minutes 600 --entropy-coef 0.03 --warm best_sigon
 ```
 
-OOM → `--instances 4000` then `2000` then `1024`.
+| Flag | Meaning |
+|------|---------|
+| `--instances 8000` | Parallel envs (default). **OOM?** try `6000` then `4000` then `2000` |
+| `--minutes 600` | Run length (10 hours) |
+| `--entropy-coef 0.03` | Exploration (higher = more random actions). Warm-start **keeps** weights |
+| `--warm best_sigon` | Resume SIGON champion if dims match; skips PROVEN 1820 safely |
 
 | Output | Path |
 |--------|------|
-| Champion | `artifacts/checkpoints/best_sigon.pt` |
+| Latest champion pointer | `artifacts/checkpoints/best_sigon.pt` |
+| Streak-named lock | `artifacts/checkpoints/best_sigon_streak05.pt` (example streak=5) |
+| History freeze | `artifacts/checkpoints/history/SIGON_streak05_obs6820_SN-xxxx.pt` |
 | Day board | `artifacts/llm_curriculum/day_board.json` |
 | Jarvis status | `artifacts/jarvis/status.json` |
 | Progress | `artifacts/checkpoints/gpu_progress.json` |
@@ -89,19 +104,21 @@ OOM → `--instances 4000` then `2000` then `1024`.
 Optional Drive backup:
 
 ```python
-!cp -f artifacts/checkpoints/best_sigon.pt /content/drive/MyDrive/best_sigon.pt 2>/dev/null || true
+!cp -f artifacts/checkpoints/best_sigon*.pt /content/drive/MyDrive/ 2>/dev/null || true
 ```
 
 ---
 
-## Cell 3 — JARVIS (new cell anytime while train runs)
+## Cell 3 — JARVIS (after Interrupt, or after train ends)
+
+Colab runs **one cell at a time**. While Cell 2 is running you cannot run Jarvis in another cell on free Colab unless you stop (Interrupt) train first — or open a second runtime. Easiest: **Interrupt → Jarvis → re-run train with `--warm best_sigon`**.
 
 ```bash
 !python scripts/jarvis_talk.py status
 !python scripts/jarvis_talk.py board
 ```
 
-Hot updates (**no process restart**):
+Hot updates (applied on next train updates via inbox — no code restart):
 
 ```bash
 !python scripts/jarvis_talk.py "SET w_pullback_with_htf=0.35"
@@ -110,17 +127,27 @@ Hot updates (**no process restart**):
 !python scripts/jarvis_talk.py outbox
 ```
 
-Train log shows `[JARVIS] ...` when inbox is applied.
+Then resume train:
+
+```bash
+!python scripts/gpu_train.py --csv-dir data --instances 8000 --minutes 600 --entropy-coef 0.03 --warm best_sigon
+```
 
 ---
 
-## Rules
+## Rules (hard)
 
 | Rule | Behavior |
 |------|----------|
-| Highest consistency | Auto-save `best_sigon.pt` |
-| Signals ON | NEW ~6820 lineage |
-| Fail same day 3× | That **instance** draws a **new** day; train continues |
-| Jarvis SET / RELOAD_REWARDS | Hot mid-train via `artifacts/jarvis/inbox.md` |
-| 40% focus | goals.yaml 2.5% / 3.5%; 60% random ranges |
+| New ATH streak + breach 0% | LOCK `best_sigon_streakXX.pt` + `best_sigon.pt` + history freeze |
+| Signals ON | NEW ~6820 lineage only |
+| Fail same day 3× | That **instance** streak restarts at day 1; whole train continues |
+| Target / risk | Runtime inputs in goals.yaml (40% @ 2.5/3.5; 60% random ranges) |
 | Gold / US30 | Thin spread / typically no fees — still model `obs::spread_rel` |
+| Caches | Clear `gpu_cache_*.npz` + `symbol_cache/*` once after signals ON — never delete `.pt` |
+
+### Sampling law (`configs/goals.yaml`)
+
+- **40%** of practice → target **2.5%** / risk **3.5%**
+- **60%** → target uniform **[2.5, 70.5]** / risk **[1.0, 4.0]**
+- Every update re-rolls target/risk per instance (same day sticky only while retries remain)

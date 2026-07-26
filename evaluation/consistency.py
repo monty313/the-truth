@@ -29,6 +29,8 @@ INTERCONNECTED WITH: training/fastsim (results: goal_hit/breached/min_eq/min_wor
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
+- 2026-07-25  auto_ranges reads goals.yaml goal_conditioning (focus_frac 0.40,
+  focus 2.5/3.5, ranges) — WHY: single source for SIGON sampling law.
 - 2026-07-20  review-hardened: CRN seeding, without-replacement days + honest SE,
   additive climb surrogate on intrabar-worst, auto-bound envelope/focus  — WHY: 4-agent
   review (noise-ratchet, flat surrogate, breach basis, two-inputs invariant).
