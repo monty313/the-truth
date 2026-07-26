@@ -9,31 +9,27 @@
 max_day_retries: 3
 
 # Champion = new all-time-high consistency STREAK with breach 0%.
-# Filenames include streak COUNT:
-#   artifacts/checkpoints/best_sigon_streak05.pt
-#   artifacts/checkpoints/history/SIGON_streak05_obs6820_SN-xxxx.pt
-#   artifacts/checkpoints/best_sigon.pt  ← always the latest locked pointer
 champion:
   path: artifacts/checkpoints/best_sigon.pt
   named_pattern: artifacts/checkpoints/best_sigon_streak{streak:02d}.pt
   history_pattern: artifacts/checkpoints/history/SIGON_streak{streak:02d}_obs{obs_dim}_SN-{serial}.pt
   record_json: artifacts/checkpoints/best_sigon_record.json
   lock_requires_breach_zero: true
-  # record fields: clear_rate, breach_rate, streak, obs_dim, symbols, updated_at
 
-# Meta has full access to all reward weights + PPO hypers in training/meta_tuner BOUNDS.
-# LLM (CMO) may read meta state under artifacts/llm_curriculum/ and propose gated updates.
 meta:
   full_knob_access: true
   adopt_requires_clear_up_breach_zero: true
-  w_pullback_with_htf_may_rise: true   # Policy disease: raise if hold-on-setup persists
+  w_pullback_with_htf_may_rise: true
 
-# Speed: prefer high instance counts (GPU ≥70% util).
-# OOM on Colab L4? drop in this order — same command, lower --instances:
-#   8000 → 6000 → 4000 → 2000
-instances_default: 8000
-instances_oom_fallback: [6000, 4000, 2000]
+# ---- Colab / SIGON ~6820 VRAM ----
+# Full multi-year × 4 symbols is ~17GB of day tensors alone → OOM on free Colab.
+# Cap days per symbol (still trains ALL 4 symbols; uses recent history).
+max_days_per_symbol: 120
 
-# Exploration (also overridable via --entropy-coef on CLI; warm-start keeps weights)
-# Higher = more random action exploration during PPO.
+# Parallel envs. SIGON obs is ~4× larger than old 1820 — use fewer instances.
+# OOM? drop: 512 → 256 → 128
+instances_default: 512
+instances_oom_fallback: [256, 128, 64]
+env_mb_default: 64
+
 default_entropy_coef_hint: 0.03

@@ -62,13 +62,51 @@ def _sigon_cfg() -> dict:
         return {}
 
 
+def _cap_days_per_symbol(do, dp, dl, dates, symbol_names, max_per_sym: int):
+    """Keep only the last max_per_sym days per symbol so the GPU pool fits Colab.
+
+    Full multi-year 4-symbol SIGON (~4350 days × 1440 × 670) is ~17GB on GPU alone
+    and OOMs even with low instances. Capping keeps all 4 symbols, less history.
+    """
+    if max_per_sym is None or int(max_per_sym) <= 0:
+        return do, dp, dl, dates, symbol_names
+    max_per_sym = int(max_per_sym)
+    n = int(do.shape[0])
+    if symbol_names is None:
+        symbol_names = ["?"] * n
+    by: dict[str, list[int]] = {}
+    for i, s in enumerate(symbol_names):
+        by.setdefault(str(s), []).append(i)
+    keep: list[int] = []
+    for s, idxs in by.items():
+        if len(idxs) > max_per_sym:
+            # most recent days if each symbol block is chronological
+            take = idxs[-max_per_sym:]
+            print("cap %s days: %d -> %d (last/recent)" % (s, len(idxs), len(take)), flush=True)
+            keep.extend(take)
+        else:
+            keep.extend(idxs)
+    keep = sorted(keep)
+    if len(keep) == n:
+        return do, dp, dl, dates, symbol_names
+    do = do[keep]
+    dp = dp[keep]
+    dl = dl[keep]
+    dates = [dates[i] for i in keep]
+    symbol_names = [symbol_names[i] for i in keep]
+    print("day pool after cap: %d days (~%.2f GB obs on GPU)"
+          % (len(keep), do.nbytes / (1024 ** 3)), flush=True)
+    return do, dp, dl, dates, symbol_names
+
+
 def main():
     ap = argparse.ArgumentParser(
-        description="SIGON multi-symbol GPU trainer. OOM? try --instances 6000 then 4000 then 2000."
+        description="SIGON multi-symbol GPU trainer. Colab OOM? use --instances 512 "
+                    "--max-days-per-symbol 120 --env-mb 64 (see configs/sigon_train.yaml)."
     )
     ap.add_argument("--instances", type=int, default=None,
-                    help="Parallel envs (default 8000 from configs/sigon_train.yaml). "
-                         "OOM fallback: 6000 / 4000 / 2000.")
+                    help="Parallel envs (default from configs/sigon_train.yaml). "
+                         "Colab SIGON: try 512, then 256, then 128.")
     ap.add_argument("--minutes", type=float, default=1440.0)
     ap.add_argument("--max-updates", type=int, default=0)
     ap.add_argument("--csv", default=None, help="Single CSV (legacy). Prefer --csv-dir for 4 symbols.")
@@ -84,12 +122,13 @@ def main():
     ap.add_argument("--decide-every", type=int, default=cfg_decide())
     ap.add_argument("--target-days", type=int, default=365)
     ap.add_argument("--eval-every", type=int, default=30)
-    ap.add_argument("--eval-envs", type=int, default=512)
+    ap.add_argument("--eval-envs", type=int, default=None)
     ap.add_argument("--eval-rounds", type=int, default=24)
     ap.add_argument("--patience", type=int, default=100000)
-    ap.add_argument("--env-mb", type=int, default=256)
+    ap.add_argument("--env-mb", type=int, default=None,
+                    help="PPO env mini-batch (lower = less VRAM). Colab: 64 or 32.")
     ap.add_argument("--epochs", type=int, default=1)
-    ap.add_argument("--K", type=int, default=24)
+    ap.add_argument("--K", type=int, default=16)
     ap.add_argument("--warm", default="",
                     help="Warm-start checkpoint name under artifacts/checkpoints/ "
                          "(e.g. best_sigon). Loads only if obs_dim matches. "
@@ -102,13 +141,22 @@ def main():
                     help="PPO entropy bonus (higher = more exploration). "
                          "Default from configs/training.yaml entropy_coef. "
                          "Warm-start still keeps weights; only exploration pressure changes.")
+    ap.add_argument("--max-days-per-symbol", type=int, default=None,
+                    help="Cap history per symbol so GPU RAM fits (Colab default 120). "
+                         "0 = use all days (needs lots of VRAM).")
     a = ap.parse_args()
 
     sc = _sigon_cfg()
     if a.instances is None:
-        a.instances = int(sc.get("instances_default") or 8000)
+        a.instances = int(sc.get("instances_default") or 512)
+    if a.env_mb is None:
+        a.env_mb = int(sc.get("env_mb_default") or 64)
+    if a.eval_envs is None:
+        a.eval_envs = min(256, max(64, a.instances // 2))
+    if a.max_days_per_symbol is None:
+        a.max_days_per_symbol = int(sc.get("max_days_per_symbol") or 120)
     max_day_retries = int(a.max_day_retries if a.max_day_retries is not None else sc.get("max_day_retries") or 3)
-    oom_fb = sc.get("instances_oom_fallback") or [6000, 4000, 2000]
+    oom_fb = sc.get("instances_oom_fallback") or [512, 256, 128]
 
     dev = ("cuda" if torch.cuda.is_available() else "cpu") if a.device == "auto" else a.device
     _r = auto_ranges()
@@ -145,14 +193,29 @@ def main():
         do, dp, dl, dates, cols = build_day_tensors(src, cache_path=cache, verbose=True)
         symbol_names = ["XAUUSD"] * int(do.shape[0])
 
+    # Cap days so multi-year × 4 symbols fits Colab VRAM (still all 4 symbols)
+    do, dp, dl, dates, symbol_names = _cap_days_per_symbol(
+        do, dp, dl, dates, symbol_names, a.max_days_per_symbol)
+
     D = int(do.shape[0])
     market_cols = int(do.shape[2])
     obs_dim = 10 * (market_cols + SELF_DIM)
-    print("BOT 1.5 GPU | device=%s | instances=%d | days-pool=%d | market_cols=%d | obs_dim=%d | day_retries=%d"
-          % (dev, a.instances, D, market_cols, obs_dim, max_day_retries), flush=True)
+    pool_gb = float(do.nbytes) / (1024 ** 3)
+    print("BOT 1.5 GPU | device=%s | instances=%d | days-pool=%d (%.2f GB) | market_cols=%d | "
+          "obs_dim=%d | day_retries=%d | env_mb=%d | max_days/sym=%s"
+          % (dev, a.instances, D, pool_gb, market_cols, obs_dim, max_day_retries,
+             a.env_mb, a.max_days_per_symbol), flush=True)
     print("sampling: focus_frac=%.2f @ %.1f/%.1f | range tgt[%.1f,%.1f] risk[%.1f,%.1f]"
           % (a.focus_frac, a.focus_target, a.focus_risk, a.target_lo, a.target_hi, a.risk_lo, a.risk_hi), flush=True)
+    if pool_gb > 6.0 and str(dev).startswith("cuda"):
+        print("WARNING: day pool still large (%.1f GB). If OOM, re-run with "
+              "--max-days-per-symbol 80 --instances 256 --env-mb 32" % pool_gb, flush=True)
 
+    if str(dev).startswith("cuda"):
+        try:
+            torch.cuda.empty_cache()
+        except Exception:
+            pass
     sim = FastSim(do, dp, dl, cols, device=dev, K=a.K)
     # Sanity: pull indices must exist after __init__ (Colab critical path)
     if not hasattr(sim, "pull_buy_idx") or not hasattr(sim, "pull_sell_idx"):
@@ -319,10 +382,24 @@ def main():
             retry_left[fresh] = max_day_retries
 
         stored = rollout(brain, sim, di, tg, rk, greedy=False, collect=True, decide_every=a.decide_every)
-        stats = ppo_update(brain, opt, stored, sim.days_obs, gamma=gamma, lam=lam,
-                           clip=clip, epochs=a.epochs, ent_coef=ent, env_mb=a.env_mb)
-        upd += 1
         res = stored["results"]
+        try:
+            stats = ppo_update(brain, opt, stored, sim.days_obs, gamma=gamma, lam=lam,
+                               clip=clip, epochs=a.epochs, ent_coef=ent, env_mb=a.env_mb)
+        except RuntimeError as e:
+            if "out of memory" in str(e).lower():
+                print("CUDA OOM during PPO. Re-run with lower RAM, e.g.:\n"
+                      "  --instances 256 --env-mb 32 --max-days-per-symbol 80\n"
+                      "  or --instances 128 --env-mb 16 --max-days-per-symbol 60",
+                      flush=True)
+                if str(dev).startswith("cuda"):
+                    torch.cuda.empty_cache()
+            raise
+        # free big rollout tensors (keeps Colab alive across updates)
+        del stored
+        if str(dev).startswith("cuda") and ((upd + 1) % 5 == 0):
+            torch.cuda.empty_cache()
+        upd += 1
         hit = res["goal_hit"].bool() & ~res["breached"].bool()
         failed = ~hit
 
