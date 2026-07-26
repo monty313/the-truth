@@ -2,6 +2,15 @@
 
 **You only need one file.**
 
+## NEW bot vs OLD bot (do not mix)
+
+| | OLD | THIS (SIGON) |
+|--|-----|----------------|
+| Signal agents | OFF | **ON** |
+| Size | ~1820 | **~6820** |
+| Files | PROVEN_*.pt | **best_sigon*.pt** |
+| Mix them? | | **NO — never load PROVEN into SIGON** |
+
 ---
 
 ## Open this notebook in Colab

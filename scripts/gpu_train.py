@@ -159,9 +159,22 @@ def main():
         raise RuntimeError("FastSim missing pull_buy_idx/pull_sell_idx after __init__ — bug")
     brain = Brain(obs_dim).to(dev)
     loaded = "fresh_sigon"
-    # optional warm only if matching obs_dim (never 1820 → 6820)
-    for name in (a.warm, "best_sigon", "gpu_best", a.ckpt):
+    # SIGON only: warm best_sigon (or explicit --warm). NEVER auto-load PROVEN / gpu_best
+    # (those are the old signals-OFF ~1820 lineage). Dim gate is a second safety net.
+    warm_names = []
+    if a.warm:
+        warm_names.append(a.warm)
+    if "best_sigon" not in warm_names:
+        warm_names.append("best_sigon")
+    # Block known old-lineage names unless dims somehow match AND user forced them
+    _OLD = {"proven", "proven_2x", "gpu_best", "gpu_live", "gpu_pass"}
+    for name in warm_names:
         if not name:
+            continue
+        low = name.lower().replace("-", "_")
+        if any(low.startswith(x) or low == x for x in _OLD) and "sigon" not in low:
+            print("REFUSE warm %s — old signals-OFF lineage name; use best_sigon only"
+                  % name, flush=True)
             continue
         pth = rpath("artifacts", "checkpoints", "%s.pt" % name)
         if not os.path.exists(pth):
@@ -173,15 +186,20 @@ def main():
                 print("skip warm %s (obs_dim %s != %d) — never load PROVEN 1820 into SIGON"
                       % (name, od, obs_dim), flush=True)
                 continue
+            # refuse tiny/old dims even if somehow listed
+            if od > 0 and od < 3000:
+                print("skip warm %s — obs_dim %d looks like signals-OFF (want ~6820)"
+                      % (name, od), flush=True)
+                continue
             brain.load_state_dict(blob["model"])
             loaded = name
-            print("warm-start %s (obs_dim=%d) — weights kept; exploration via entropy-coef"
+            print("warm-start %s (obs_dim=%d SIGON) — weights kept; exploration via entropy-coef"
                   % (name, obs_dim), flush=True)
             break
         except Exception as e:
             print("warm skip %s: %s" % (name, e), flush=True)
     if loaded == "fresh_sigon":
-        print("NEW Brain(%d) — SIGON lineage (do not expect PROVEN 1820 weights)" % obs_dim, flush=True)
+        print("NEW Brain(%d) — SIGON lineage signals-ON (not PROVEN 1820)" % obs_dim, flush=True)
 
     tc = training_cfg() or {}
     gamma = float(tc.get("gamma", 0.99))
