@@ -79,7 +79,22 @@ print("data CSVs:", os.listdir("data"))
 
 ## Cell 2 — TRAIN (leave running)
 
-**Paste this exact command:**
+### FAST START first (Monty — use this if you see `building features...` then `^C`)
+
+Full multi-year CSVs (names like `EURUSD_M1_20210113...2026.csv`) take **hours** to build features once. Colab often stops mid-build (`^C`).  
+**Start with gold curriculum only:**
+
+```bash
+!ls -lh data/*.csv
+!python scripts/gpu_train.py --csv data/XAUUSD_curriculum_2026.csv --instances 4000 --minutes 600 --entropy-coef 0.03 --warm best_sigon
+```
+
+You are training when you see `upd 1`, `upd 2`, …  
+If curriculum is missing: put `XAUUSD_curriculum_2026.csv` (and other `*_curriculum*.csv`) in Drive folder **Camillion_data**, re-run Cell 1.
+
+### Full multi-symbol (after FAST works)
+
+Prefer **curriculum** files in `data/` (not 2020–2026 full dumps). Code auto-picks curriculum when present.
 
 ```bash
 !python scripts/gpu_train.py --csv-dir data --instances 8000 --minutes 600 --entropy-coef 0.03 --warm best_sigon

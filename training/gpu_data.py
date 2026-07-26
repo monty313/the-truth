@@ -165,7 +165,12 @@ if __name__ == "__main__":
 
 
 def _pick_best_csv_per_symbol(csv_dir: str, symbols=None) -> dict[str, str]:
-    """One M1 CSV per symbol. Prefer curriculum / non-drill / largest file."""
+    """One M1 CSV per symbol.
+
+    Prefer (in order): curriculum > non-drill > SMALLER file.
+    WHY smaller: full multi-year M1 CSVs (2020–2026) take hours to feature-build on
+    Colab and look 'stuck' then get ^C interrupted. Curriculum is the train default.
+    """
     import glob as _glob
     files = sorted(_glob.glob(os.path.join(csv_dir, "*.csv")))
     want = set(s.upper() for s in symbols) if symbols else None
@@ -178,11 +183,18 @@ def _pick_best_csv_per_symbol(csv_dir: str, symbols=None) -> dict[str, str]:
 
     def score(path: str) -> tuple:
         name = os.path.basename(path).lower()
-        # higher is better
+        # higher is better (max)
         is_drill = 0 if "drill" in name else 1
-        is_curr = 1 if "curriculum" in name else 0
+        # curriculum strongly preferred (Colab-safe size)
+        if "curriculum" in name:
+            is_curr = 3
+        elif "2026" in name and "full" not in name:
+            is_curr = 1
+        else:
+            is_curr = 0
         size = os.path.getsize(path) if os.path.isfile(path) else 0
-        return (is_drill, is_curr, size)
+        # smaller preferred so we do not auto-pick multi-year full dumps
+        return (is_curr, is_drill, -size)
 
     out = {}
     for sym, paths in buckets.items():
