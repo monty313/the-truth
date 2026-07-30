@@ -28,6 +28,8 @@ import numpy as np
 import torch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT)
 
 from core.configs import path as rpath, training_cfg, decide_every as cfg_decide  # noqa: E402
@@ -38,7 +40,7 @@ from training.meta_tuner import run, hold_out_audit           # noqa: E402
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", default=rpath("data", "XAUUSD_curriculum_2026.csv"))
+    ap.add_argument("--csv", default=rpath("data", "raw", "XAUUSD_curriculum_2026.csv"))
     ap.add_argument("--minutes", type=float, default=1440.0)   # run until Colab stops it
     ap.add_argument("--device", default="auto")
     ap.add_argument("--K", type=int, default=24)               # position slots (match GPU trainer)

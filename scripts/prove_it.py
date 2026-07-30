@@ -10,7 +10,7 @@ If you changed include_signal_agent_slots in features.yaml, delete:
 before running.
 """
 import os, sys
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'src')); sys.path.insert(0, ROOT)
 import torch
 from core.configs import path as rpath, decide_every as cfg_decide
 DE = cfg_decide()
@@ -25,7 +25,7 @@ name = sys.argv[1] if len(sys.argv) > 1 else "PROVEN_2x_2026-07-19"
 TGT = float(sys.argv[2]) if len(sys.argv) > 2 else 3.0
 RISK = float(sys.argv[3]) if len(sys.argv) > 3 else 3.5
 
-csv = rpath("data", "XAUUSD_curriculum_2026.csv")
+csv = rpath("data", "raw", "XAUUSD_curriculum_2026.csv")
 do, dp, dl, dates, cols = build_day_tensors(
     csv, cache_path=rpath("artifacts", "gpu_cache_XAUUSD_curriculum_2026.npz"), verbose=False
 )

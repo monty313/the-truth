@@ -9,7 +9,7 @@ keep this instruction so we never lose the thread):
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import logging, os
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 def setup(name="momentum_one"):
     lvl = logging.DEBUG if os.environ.get("MOMENTUM_DEBUG") else logging.INFO
     logging.basicConfig(

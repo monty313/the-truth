@@ -19,6 +19,8 @@ INTERCONNECTED WITH: configs/*.yaml (in), everything else (out),
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-30  ROOT auto-detect: the-truth/core vs the-truth/src/core — WHY: cookiecutter move broke configs when package lives at repo root.
+- 2026-07-30  ROOT under src/ + data_file/models_dir/checkpoint_file  — WHY: cookiecutter-mlops tidy.
 - 2026-07-19  created  — WHY: 6/8 config files were decorative; one door so typing a config changes the machine (audit S7/R11).
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
@@ -26,13 +28,58 @@ from __future__ import annotations
 import os
 import yaml
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+def _find_root() -> str:
+    """Repo root: directory that contains configs/ and either core/ or src/core/."""
+    here = os.path.abspath(__file__)
+    # Prefer parents of this file until configs/ exists
+    d = os.path.dirname(here)
+    for _ in range(5):
+        if os.path.isdir(os.path.join(d, "configs")) and (
+            os.path.isdir(os.path.join(d, "scripts")) or os.path.isdir(os.path.join(d, "data"))
+        ):
+            return d
+        parent = os.path.dirname(d)
+        if parent == d:
+            break
+        d = parent
+    # Fallback: src/core -> ../../.. was wrong for root core/; use two parents from core/
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+ROOT = _find_root()
 _CACHE: dict = {}
 
 
 def path(*parts: str) -> str:
     """Absolute path inside the repo — scripts must never use cwd-relative."""
     return os.path.join(ROOT, *parts)
+
+
+def data_file(*parts: str) -> str:
+    """Price/feature CSVs live in data/raw/ (cookiecutter). Falls back to data/."""
+    preferred = path("data", "raw", *parts)
+    if os.path.exists(preferred):
+        return preferred
+    legacy = path("data", *parts)
+    return preferred if not os.path.exists(legacy) else legacy
+
+
+def models_dir() -> str:
+    """Trained brains live in models/ (cookiecutter)."""
+    d = path("models")
+    os.makedirs(d, exist_ok=True)
+    os.makedirs(path("models", "history"), exist_ok=True)
+    return d
+
+
+def checkpoint_file(name: str) -> str:
+    """Resolve models/<name>.pt with legacy artifacts/checkpoints/ fallback."""
+    if not name.endswith(".pt"):
+        name = f"{name}.pt"
+    preferred = path("models", name)
+    if os.path.exists(preferred):
+        return preferred
+    legacy = path("artifacts", "checkpoints", name)
+    return preferred if not os.path.exists(legacy) else legacy
 
 
 def load(name: str, refresh: bool = False) -> dict:

@@ -1,3 +1,5 @@
+import os
+import sys
 """Run the bridge (dry-run by default) — one-physics live loop.
 5W+I: WHO Claude for Monty. WHAT loads features + the frozen champion, runs
 the Bridge day-by-day writing HUD state; dry-run paper-trades anywhere, demo/
@@ -14,6 +16,8 @@ keep this instruction so we never lose the thread):
 """
 import argparse, glob, os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT)
 
 import pandas as pd                                              # noqa: E402
@@ -34,8 +38,11 @@ def main():
 
     ec = cfg("execution")
     g = goals_cfg()
-    pats = [os.path.join(rpath("..", "data"), "XAUUSD_M1_*.csv"),
-            rpath("data", "XAUUSD_M1_*.csv")]
+    pats = [
+        os.path.join(rpath("..", "data"), "XAUUSD_M1_*.csv"),
+        rpath("data", "raw", "XAUUSD_M1_*.csv"),
+        rpath("data", "XAUUSD_M1_*.csv"),
+    ]
     real = sorted(sum((glob.glob(p) for p in pats), []))
     if real:
         m1 = read_mt5_m1(real[0])

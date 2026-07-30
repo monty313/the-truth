@@ -94,7 +94,7 @@ def write_day_board(
         "obs_dim": obs_dim,
         "updated_at": payload["updated_at"],
     }
-    cp = rpath("artifacts", "checkpoints", "best_sigon_record.json")
+    cp = rpath("models", "best_sigon_record.json")
     os.makedirs(os.path.dirname(cp), exist_ok=True)
     if clear_rate is not None:
         # only overwrite record if better clear and breach ok — caller decides; here write live view

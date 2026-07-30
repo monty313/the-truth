@@ -39,6 +39,8 @@ import numpy as np
 import torch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT)
 
 from core.configs import path as rpath, training_cfg, policy_hidden, decide_every as cfg_decide, load as load_cfg  # noqa: E402
@@ -131,7 +133,7 @@ def main():
     ap.add_argument("--epochs", type=int, default=1)
     ap.add_argument("--K", type=int, default=16)
     ap.add_argument("--warm", default="",
-                    help="Warm-start checkpoint name under artifacts/checkpoints/ "
+                    help="Warm-start checkpoint name under models/ "
                          "(e.g. best_sigon). Loads only if obs_dim matches. "
                          "Never loads PROVEN 1820 into SIGON ~6820.")
     ap.add_argument("--require-warm", action="store_true",
@@ -190,7 +192,7 @@ def main():
         do, dp, dl, dates, cols, symbol_names = load_multi_symbol_pool(
             csv_dir, symbols=sym_list, verbose=True)
     else:
-        src = a.csv or rpath("data", "XAUUSD_curriculum_2026.csv")
+        src = a.csv or rpath("data", "raw", "XAUUSD_curriculum_2026.csv")
         tag = os.path.splitext(os.path.basename(src))[0]
         cache = rpath("artifacts", "gpu_cache_%s.npz" % tag)
         print("SINGLE CSV %s (cache %s)" % (src, cache), flush=True)
@@ -243,7 +245,7 @@ def main():
             print("REFUSE warm %s — old signals-OFF lineage name; use best_sigon only"
                   % name, flush=True)
             continue
-        pth = rpath("artifacts", "checkpoints", "%s.pt" % name)
+        pth = rpath("models", "%s.pt" % name)
         if not os.path.exists(pth):
             continue
         try:
@@ -270,7 +272,7 @@ def main():
         if a.require_warm:
             raise SystemExit(
                 "STOP: --require-warm set but no matching champion loaded.\n"
-                "  Need: artifacts/checkpoints/best_sigon.pt (obs_dim=%d)\n"
+                "  Need: models/best_sigon.pt (obs_dim=%d)\n"
                 "  Fix: run STEP restore from Drive folder momentum_sigon_champs,\n"
                 "       then re-run train. Do NOT continue with a NEW brain."
                 % obs_dim
@@ -306,11 +308,11 @@ def main():
         breach = float(r["breached"].float().mean().item())
         return clear, breach
 
-    histdir = rpath("artifacts", "checkpoints", "history")
+    histdir = rpath("models", "history")
     os.makedirs(histdir, exist_ok=True)
-    ckdir = rpath("artifacts", "checkpoints")
+    ckdir = rpath("models")
     os.makedirs(ckdir, exist_ok=True)
-    prog = rpath("artifacts", "checkpoints", "gpu_progress.json")
+    prog = rpath("models", "gpu_progress.json")
     best_clear = -1.0
     best_breach = 1.0
     best_streak = 0  # all-time high locked streak count
@@ -337,10 +339,10 @@ def main():
         # named champion: best_sigon_streak05.pt
         named = "best_sigon_streak%02d.pt" % streak_n
         paths = [
-            rpath("artifacts", "checkpoints", a.ckpt + ".pt"),
-            rpath("artifacts", "checkpoints", "gpu_best.pt"),
-            rpath("artifacts", "checkpoints", "best_sigon.pt"),  # latest pointer
-            rpath("artifacts", "checkpoints", named),
+            rpath("models", a.ckpt + ".pt"),
+            rpath("models", "gpu_best.pt"),
+            rpath("models", "best_sigon.pt"),  # latest pointer
+            rpath("models", named),
             os.path.join(histdir, frozen),
         ]
         for path in paths:
@@ -354,14 +356,14 @@ def main():
             "row": streak_n,  # HUD alias
             "obs_dim": obs_dim,
             "symbols": payload["symbols"],
-            "path": "artifacts/checkpoints/best_sigon.pt",
-            "named_path": "artifacts/checkpoints/%s" % named,
-            "history_path": "artifacts/checkpoints/history/%s" % frozen,
+            "path": "models/best_sigon.pt",
+            "named_path": "models/%s" % named,
+            "history_path": "models/history/%s" % frozen,
             "updated_at": payload["saved_at"],
             "serial": serial,
             "reason": reason,
         }
-        rp = rpath("artifacts", "checkpoints", "best_sigon_record.json")
+        rp = rpath("models", "best_sigon_record.json")
         with open(rp, "w", encoding="utf-8") as f:
             json.dump(rec, f, indent=2)
         print("   *** LOCKED champion streak=%d | best_sigon.pt + %s + history/%s"
@@ -467,7 +469,7 @@ def main():
                 best_streak=int(best_streak),
                 inst_streak_max=max_inst,
                 instances=a.instances,
-                champion="artifacts/checkpoints/best_sigon.pt",
+                champion="models/best_sigon.pt",
                 entropy_coef=ent,
             )
             jlogs = apply_inbox_to_sim(sim)
@@ -522,7 +524,7 @@ def main():
                 "focus": [a.focus_frac, a.focus_target, a.focus_risk],
                 "max_day_retries": max_day_retries,
                 "symbols": sorted(set(symbol_names)) if symbol_names else [],
-                "champion_example": "artifacts/checkpoints/best_sigon_streak%02d.pt" % max(best_streak, 1),
+                "champion_example": "models/best_sigon_streak%02d.pt" % max(best_streak, 1),
             }, open(prog, "w"), indent=2)
             if best_streak >= a.target_days:
                 print("\n*** FINISH LINE: %d cleared days in a row." % int(best_streak), flush=True)
@@ -531,8 +533,8 @@ def main():
     print("\nGPU chunk done | best_streak=%d | best_clear_batch=%.1f%% | obs_dim=%d"
           % (int(best_streak), max(best_clear, 0.0) * 100, obs_dim), flush=True)
     if best_streak > 0:
-        print("Champion pointer: artifacts/checkpoints/best_sigon.pt")
-        print("Named lock example: artifacts/checkpoints/best_sigon_streak%02d.pt" % best_streak)
+        print("Champion pointer: models/best_sigon.pt")
+        print("Named lock example: models/best_sigon_streak%02d.pt" % best_streak)
 
 
 if __name__ == "__main__":

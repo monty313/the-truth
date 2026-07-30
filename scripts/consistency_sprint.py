@@ -9,7 +9,7 @@ Self-correcting: exploration bumps on stagnation. All laws live; zero-breach is 
 Usage: python scripts/consistency_sprint.py [--minutes 70]
 """
 import os, sys, time, json, hashlib, datetime, argparse, shutil
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'src')); sys.path.insert(0, ROOT)
 import torch
 from core.configs import path as rpath, policy_hidden, decide_every as cfg_decide
 from training.gpu_data import build_day_tensors
@@ -54,7 +54,7 @@ if brain is None:
 if brain is None:
     brain, _ = load_brain("PROVEN_2x_2026-07-19")
 if brain is None:
-    raise SystemExit("No PROVEN lineage checkpoint found under artifacts/checkpoints/")
+    raise SystemExit("No PROVEN lineage checkpoint found under models/")
 print("warm-start brain loaded (PROVEN lineage)", flush=True)
 opt = torch.optim.Adam(brain.parameters(), lr=1.2e-4)   # POLISH phase: gentle steps
 ENT = 0.012                                                  # POLISH phase: tiny exploration

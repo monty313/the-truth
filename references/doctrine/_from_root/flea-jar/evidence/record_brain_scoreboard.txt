@@ -1,0 +1,12 @@
+================================================================
+BRAIN: PROVEN_SPRINT_row04_clear24_2026-07-20   |   90 real trading days
+AT YOUR NUMBERS  ->  target 3.0% / risk 3.5%
+----------------------------------------------------------------
+  cleared (hit target, NO breach):      27% of days
+  breached the risk floor:               0% of days
+  longest cleared streak in a row:       4 days
+  average day result:                +0.16%
+  median day result:                 -0.40%
+  green days (made money):              48% of days
+  best / worst day:                  +6.46% /  -3.49%
+================================================================

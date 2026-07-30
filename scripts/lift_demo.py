@@ -5,7 +5,7 @@ Self-correcting: bumps exploration if stuck; fresh-restarts if dead. Every save 
 SERIAL NUMBER (sha256[:12]) so no result can ever be duplicated/confused (Monty's rule).
 """
 import os, sys, time, json, hashlib, datetime, shutil
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'src')); sys.path.insert(0, ROOT)
 import torch
 from core.configs import path as rpath, policy_hidden
 from training.gpu_data import build_day_tensors
@@ -19,7 +19,7 @@ TGT, RK, DE = 3.0, 3.5, 5
 DAY1 = 8                       # 2026-01-30 (14.2% range)
 POOL = [8, 9, 7, 44, 42]       # all >= 7.5% range days
 
-csv = rpath("data", "XAUUSD_curriculum_2026.csv")
+csv = rpath("data", "raw", "XAUUSD_curriculum_2026.csv")
 do, dp, dl, dates, cols = build_day_tensors(csv, cache_path=rpath("artifacts","gpu_cache_XAUUSD_curriculum_2026.npz"), verbose=False)
 obs_dim = 10 * (len(cols) + SELF_DIM)
 sim = FastSim(do, dp, dl, cols, device="cpu", K=24)

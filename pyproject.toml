@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "momentum-one"
+version = "0.2.1"
+description = "Self-healing RL scalper — daily target without floor breach"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "pyyaml>=6.0",
+  "torch>=2.0",
+  "flask>=3.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff>=0.4"]
+live = ["MetaTrader5"]
+
+[tool.setuptools.packages.find]
+include = [
+  "core*",
+  "training*",
+  "features*",
+  "signals*",
+  "data_io*",
+  "inference*",
+  "evaluation*",
+  "execution_bridge*",
+  "telemetry*",
+  "backtesting*",
+  "alerts*",
+  "experiments*",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = [".", "scripts", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]

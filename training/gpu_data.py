@@ -33,7 +33,7 @@ import time
 
 import numpy as np
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
@@ -163,7 +163,7 @@ def build_symbol_set(csv_dir: str, cache_dir: str | None = None,
 
 
 if __name__ == "__main__":
-    src = sys.argv[1] if len(sys.argv) > 1 else rpath("data", "XAUUSD_curriculum_2026.csv")
+    src = sys.argv[1] if len(sys.argv) > 1 else rpath("data", "raw", "XAUUSD_curriculum_2026.csv")
     tag = os.path.splitext(os.path.basename(src))[0]
     cache = rpath("artifacts", "gpu_cache_%s.npz" % tag)
     do, dp, dl, dates, cols = build_day_tensors(src, cache_path=cache)

@@ -25,6 +25,8 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
@@ -36,20 +38,53 @@ from telemetry.ghost_trades import build_ghosts
 
 
 def propose_reward_delta(ghost_report, mind_dump) -> dict:
-    """Bounded YAML delta suggestions from Ghost evidence. Not applied here.
+    """Bounded dial search suggestions. Not applied here — self_heal/meta gate.
 
-    Only keys the meta_tuner is allowed to move (plus w_pullback_with_htf once unlocked).
+    Classes: WrongSide | Policy | Perception | Shell | none
     """
     proposal = {
         "issue": None,
-        "rule": "Bread-and-butter: LTF pullback while both HTFs strong-trend (STANDING_LAWS).",
+        "rule": (
+            "With firm HTF cont, prefer matching side; bread-and-butter pull under trend. "
+            "Meta searches dials; humans do not freeze the answer."
+        ),
         "application": ghost_report.summary,
         "conclusion": None,
         "rewards_delta": {},
         "diagnosis_class": None,
+        "side_bias_bull": float(getattr(mind_dump, "side_bias_bull", 0.0)),
+        "side_bias_bear": float(getattr(mind_dump, "side_bias_bear", 0.0)),
+        "wrong_side_under_bull": int(getattr(mind_dump, "n_wrong_side_under_bull", 0)),
+        "wrong_side_under_bear": int(getattr(mind_dump, "n_wrong_side_under_bear", 0)),
     }
-    if ghost_report.n_high_miss_pull <= 5:
-        proposal["issue"] = "No repeated high-miss pull pattern on this day."
+    wb = proposal["wrong_side_under_bull"]
+    sb = proposal["side_bias_bull"]
+    ph = int(getattr(mind_dump, "n_policy_hold_on_setup", 0))
+    mask_v = int(getattr(mind_dump, "n_mask_veto", 0))
+
+    if mask_v > ph and mask_v > 5:
+        proposal["diagnosis_class"] = "Shell"
+        proposal["issue"] = f"mask_veto={mask_v} dominates — not a reward-dial problem alone."
+        proposal["conclusion"] = "Inspect forever masks; do not only raise pullback."
+        return proposal
+
+    if wb > 10 and sb < 0.05:
+        proposal["diagnosis_class"] = "WrongSide"
+        proposal["issue"] = (
+            f"Under bull cont: wrong_side={wb}, side_bias_bull={sb:+.3f} — "
+            "prefers short (or weak long mass), not just hold."
+        )
+        proposal["rewards_delta"] = {
+            "w_with_trend_close": "+0.05 search (default 0)",
+            "w_against_trend_close": "-0.05 search (more negative)",
+        }
+        proposal["conclusion"] = (
+            "Propose searching with/against-trend close dials. Gate via self_heal/meta + prove_it."
+        )
+        return proposal
+
+    if ghost_report.n_high_miss_pull <= 5 and ph < 10:
+        proposal["issue"] = "No repeated high-miss pull or wrong-side pattern on this day."
         proposal["conclusion"] = "No reward change proposed from this day alone."
         proposal["diagnosis_class"] = "none"
         return proposal
@@ -57,36 +92,32 @@ def propose_reward_delta(ghost_report, mind_dump) -> dict:
     high = [g for g in ghost_report.ghosts if g.high_miss]
     mean_alt = float(np.mean([g.alt_prob for g in high])) if high else 0.0
 
-    if mean_alt < 0.08:
+    if mean_alt < 0.08 and ghost_report.n_high_miss_pull > 5:
         proposal["diagnosis_class"] = "Perception"
         proposal["issue"] = (
             f"Pull present on {ghost_report.n_high_miss_pull} bars but policy "
-            f"mean alt_prob={mean_alt:.3f} — blindness to bread-and-butter pattern."
+            f"mean alt_prob={mean_alt:.3f} — weak mass on aligned open."
         )
         proposal["rewards_delta"] = {
-            "w_pullback_with_htf": "+0.02 to +0.08 (amplify recognition payoff)",
-            "w_did_nothing": "strengthen (more negative) if day stayed flat",
+            "w_pullback_with_htf": "+0.02 to +0.08 (search)",
+            "w_with_trend_close": "optional +0.05 if side also weak",
         }
         proposal["conclusion"] = (
-            "Propose raising w_pullback_with_htf so correct action on pull pays more. "
-            "Must pass meta_tuner adopt_gate before accept."
+            "Propose raising pull / with-trend dials. Must pass adopt_gate + prove_it."
         )
     else:
         proposal["diagnosis_class"] = "Policy"
         proposal["issue"] = (
-            f"Pull present, alt_prob={mean_alt:.3f} exists, but hold still wins — "
-            "incentive/fear shape, not pure blindness."
+            f"Setup visible; hold or mis-side under incentives "
+            f"(high_miss={ghost_report.n_high_miss_pull}, alt_prob={mean_alt:.3f})."
         )
         proposal["rewards_delta"] = {
-            "w_did_nothing": "strengthen (more negative)",
-            "w_idleness_hunger": "slightly more negative",
-            "w_pullback_with_htf": "modest increase",
+            "w_pullback_with_htf": "modest increase (search)",
+            "w_setup_skip": "optional small negative (default 0)",
+            "w_with_trend_close": "if side_bias weak, search +",
         }
-        proposal["conclusion"] = (
-            "Propose stronger anti-idleness + pull payoff. Gate via meta_tuner."
-        )
+        proposal["conclusion"] = "Propose dial search; gate via meta_tuner / self_heal."
     return proposal
-
 
 def main():
     brain = sys.argv[1] if len(sys.argv) > 1 else "PROVEN_SPRINT_row04_clear24_2026-07-20"
@@ -94,9 +125,9 @@ def main():
     goal = float(sys.argv[3]) if len(sys.argv) > 3 else 3.0
     floor = float(sys.argv[4]) if len(sys.argv) > 4 else 3.5
 
-    src = rpath("data", "XAUUSD_curriculum_2026.csv")
+    src = rpath("data", "raw", "XAUUSD_curriculum_2026.csv")
     if not os.path.exists(src):
-        src = rpath("data", "XAUUSD_M1_drill.csv")
+        src = rpath("data", "raw", "XAUUSD_M1_drill.csv")
     tag = os.path.splitext(os.path.basename(src))[0]
     cache = rpath("artifacts", f"gpu_cache_{tag}.npz")
 

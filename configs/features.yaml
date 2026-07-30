@@ -34,4 +34,4 @@ normalization: per_feature_rolling
 #   Then rebuild. Otherwise old columns + new brain = mismatch. Never delete .pt checkpoints
 #   when clearing caches.
 # ---------------------------------------------------------------------------
-include_signal_agent_slots: true
+include_signal_agent_slots: false

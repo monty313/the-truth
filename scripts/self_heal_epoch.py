@@ -29,13 +29,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-SKILL = ROOT / "doctrine" / "policy_skill.md"
+SKILL = ROOT / "references" / "doctrine" / "policy_skill.md"
 BEST = ROOT / "artifacts" / "skills" / "best_skill.md"
 REJECTED = ROOT / "artifacts" / "skills" / "rejected"
 EPOCH_DIR = ROOT / "artifacts" / "self_heal_epochs"
 REWARDS = ROOT / "configs" / "rewards.yaml"
 
 PULLBACK_BOUNDS = (0.05, 0.50)
+# Self-heal toolkit dials — search ranges (meta/self_heal may move; defaults in yaml are 0)
+DIAL_BOUNDS = {
+    "w_pullback_with_htf": (0.05, 0.50),
+    "w_with_trend_close": (0.0, 1.0),
+    "w_against_trend_close": (-1.0, 0.0),
+    "w_setup_skip": (-0.5, 0.0),
+    "w_quick_pull_close": (0.0, 0.5),
+    "w_did_nothing": (-25.0, 0.0),
+}
 
 
 def run(cmd: list[str], timeout: int | None = None) -> subprocess.CompletedProcess:
@@ -71,26 +80,73 @@ def load_irac(brain: str) -> dict | None:
 
 
 def propose_from_irac(irac: dict) -> dict:
+    """Map IRAC metrics → search directions (dials), not frozen final answers."""
     app = irac.get("application", {})
     conc = irac.get("conclusion", {})
     ph = int(app.get("sum_policy_hold_on_setup") or 0)
     hm = int(app.get("sum_high_miss_pull") or 0)
+    wrong_bull = int(app.get("sum_wrong_side_under_bull") or 0)
+    wrong_bear = int(app.get("sum_wrong_side_under_bear") or 0)
+    n_cb = int(app.get("sum_cont_buy_only") or 0)
+    n_cs = int(app.get("sum_cont_sell_only") or 0)
+    side_bull = float(app.get("mean_side_bias_bull") or 0.0)
+    side_bear = float(app.get("mean_side_bias_bear") or 0.0)
+    mask_v = int(app.get("sum_mask_veto") or 0)
     cls = conc.get("class") or "Policy"
+
+    # Prefer measured class from side metrics when present
+    if wrong_bull + wrong_bear > max(20, (ph // 2)) and (side_bull < 0.02 or side_bear < 0.02):
+        cls = "WrongSide"
+    elif mask_v > ph and mask_v > 20:
+        cls = "Shell"
+    elif ph > 50 or hm > 10:
+        cls = cls if cls in ("Policy", "Perception") else "Policy"
+
     proposal = {
         "class": cls,
         "skill_bullet": (
-            f"{date.today()}: class={cls}; policy_hold_on_setup={ph}; "
-            f"high_miss_pull={hm}; prioritize bread-and-butter entries under firm HTF."
+            f"{date.today()}: class={cls}; policy_hold={ph}; high_miss_pull={hm}; "
+            f"wrong_side bull/bear={wrong_bull}/{wrong_bear}; "
+            f"side_bias bull/bear={side_bull:+.3f}/{side_bear:+.3f}; "
+            f"search dials per class (do not freeze human answer)."
         ),
         "reward_nudge": None,
+        "reward_nudges": [],
         "rationale": irac.get("issue", ""),
     }
-    if cls == "Policy" and (ph > 50 or hm > 10):
-        proposal["reward_nudge"] = {
-            "key": "w_pullback_with_htf",
-            "delta": 0.05,
-            "why": "policy_hold on visible pull/cont — strengthen bread-and-butter reward",
-        }
+
+    if cls == "Shell":
+        proposal["skill_bullet"] += " Mask veto dominates — do not chase rewards; inspect Shell."
+        return proposal
+
+    if cls == "WrongSide" or (wrong_bull > 30 and side_bull < 0.05):
+        proposal["reward_nudges"] = [
+            {"key": "w_with_trend_close", "delta": 0.05,
+             "why": "wrong_side under bull cont — try with-trend close dial"},
+            {"key": "w_against_trend_close", "delta": -0.05,
+             "why": "penalize against-trend closes (search toward more negative)"},
+        ]
+        proposal["reward_nudge"] = proposal["reward_nudges"][0]
+        proposal["skill_bullet"] = (
+            f"{date.today()}: WrongSide — when wrong_side_under_bull high / side_bias_bull low, "
+            f"search ↑ w_with_trend_close and ↓ w_against_trend_close; prove_it gate."
+        )
+    elif cls == "Policy" and (ph > 50 or hm > 10):
+        proposal["reward_nudges"] = [
+            {"key": "w_pullback_with_htf", "delta": 0.05,
+             "why": "policy_hold on visible pull/cont — strengthen bread-and-butter"},
+            {"key": "w_setup_skip", "delta": -0.01,
+             "why": "optional: tax hold when setup visible (dial default 0)"},
+        ]
+        proposal["reward_nudge"] = proposal["reward_nudges"][0]
+    elif cls == "Perception" and hm > 10:
+        proposal["reward_nudges"] = [
+            {"key": "w_pullback_with_htf", "delta": 0.05,
+             "why": "low alt_prob on pull — amplify pull recognition payoff"},
+        ]
+        proposal["reward_nudge"] = proposal["reward_nudges"][0]
+
+    _ = (n_cb, n_cs)  # available for future density-aware proposals
     return proposal
 
 
@@ -98,7 +154,7 @@ def read_reward(key: str):
     if not REWARDS.is_file():
         return None
     text = REWARDS.read_text(encoding="utf-8")
-    m = re.search(rf"^{re.escape(key)}:\s*([0-9.]+)", text, re.M)
+    m = re.search(rf"^{re.escape(key)}:\s*([-+0-9.eE]+)", text, re.M)
     return float(m.group(1)) if m else None
 
 
@@ -107,20 +163,23 @@ def apply_reward_nudge(key: str, delta: float):
     if cur is None:
         return False, f"{key} not found"
     new = cur + delta
-    if key == "w_pullback_with_htf":
+    if key in DIAL_BOUNDS:
+        lo, hi = DIAL_BOUNDS[key]
+        new = max(lo, min(hi, new))
+    elif key == "w_pullback_with_htf":
         lo, hi = PULLBACK_BOUNDS
         new = max(lo, min(hi, new))
     text = REWARDS.read_text(encoding="utf-8")
     text2, n = re.subn(
-        rf"^{re.escape(key)}:\s*[0-9.]+",
-        f"{key}: {new:.2f}",
+        rf"^{re.escape(key)}:\s*[-+0-9.eE]+",
+        f"{key}: {new:.4f}",
         text,
         count=1,
         flags=re.M,
     )
     if n != 1:
         return False, "replace failed"
-    stamp = f"# - {date.today()}  {key} {cur:.2f}->{new:.2f} — WHY: self_heal_epoch gated nudge\n"
+    stamp = f"# - {date.today()}  {key} {cur:.4f}->{new:.4f} — WHY: self_heal_epoch gated nudge\n"
     if stamp not in text2:
         lines = text2.splitlines(True)
         i = 0
@@ -129,7 +188,7 @@ def apply_reward_nudge(key: str, delta: float):
         lines.insert(i, stamp)
         text2 = "".join(lines)
     REWARDS.write_text(text2, encoding="utf-8")
-    return True, f"{key}: {cur:.2f} → {new:.2f}"
+    return True, f"{key}: {cur:.4f} → {new:.4f}"
 
 
 def accept_skill(bullet: str) -> None:
@@ -239,12 +298,18 @@ def main() -> int:
         accept_skill(proposal["skill_bullet"])
         accepted = True
         print("\n[4] SKILL ACCEPTED → doctrine/policy_skill.md")
-        if args.apply_reward_nudge and proposal["reward_nudge"]:
-            ok, reward_msg = apply_reward_nudge(
-                proposal["reward_nudge"]["key"],
-                proposal["reward_nudge"]["delta"],
+        if args.apply_reward_nudge:
+            msgs = []
+            nudges = proposal.get("reward_nudges") or (
+                [proposal["reward_nudge"]] if proposal.get("reward_nudge") else []
             )
-            print("    reward:", reward_msg if ok else f"skip ({reward_msg})")
+            for nd in nudges:
+                if not nd:
+                    continue
+                ok, msg = apply_reward_nudge(nd["key"], nd["delta"])
+                msgs.append(msg if ok else f"skip ({msg})")
+            reward_msg = "; ".join(msgs) if msgs else None
+            print("    reward:", reward_msg or "no nudge")
     elif gate_ok:
         path = reject_skill(proposal["skill_bullet"] + " [pending --auto-accept-skill]")
         print(f"\n[4] Gate OK; skill pending. Review then --auto-accept-skill. {path}")

@@ -23,7 +23,7 @@ import json, os, time, threading, uuid
 from contextlib import contextmanager
 
 _LOCK = threading.Lock()
-_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
+_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "logs")
 os.makedirs(_DIR, exist_ok=True)
 _PATH = os.path.join(_DIR, "spans.jsonl")
 _CTX = threading.local()

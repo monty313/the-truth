@@ -2,6 +2,7 @@
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-30  CCI dual masks (5m OR 30m) + dual SMA4+4 (1m AND 15m) OR envelope — WHY: Shell wrong-side open blocks.
 - 2026-07-25  RESTORE full engine (masks + S1_perm/trig states) after bad rewrite; gate signal slots via features.yaml — WHY: d6313e9 gutted masks; PROVEN_* need obs_dim 1820.
 - 2026-07-25  gate signal slots via features.yaml include_signal_agent_slots (default false) — WHY: PROVEN_* brains need obs_dim 1820; expanded obs requires new train.
 - 2026-07-25  append 500 obs::sig_* slots — WHY: Monty signal agents in observation; empty=0.
@@ -24,7 +25,9 @@ SETS = {  # Monty lock 2026-07-24: A=1m/15m/30m B=5m/1h/4h C=15m/4h/1d
     "set4": {"ltf": "30min", "htfs": ["4h", "1d"], "extra": "1w"},
 }
 ALL_TFS = ["1min", "5min", "15min", "30min", "1h", "4h", "1d", "1w"]
-MASK_TFS = ["15min", "30min", "1h"]
+MASK_TFS = ["15min", "30min", "1h"]       # legacy envelope forever-masks
+CCI_MASK_TFS = ["5min", "30min"]          # either TF: dual CCI firm → block opposite open
+SMA_GATE_TFS = ["1min", "15min"]          # both TFs: price vs SMA(4)+4 close gate
 
 
 def _tf_block(m1: pd.DataFrame, tf: str, idx: pd.DatetimeIndex) -> pd.DataFrame:
@@ -130,17 +133,55 @@ def build_features(m1: pd.DataFrame) -> pd.DataFrame:
             new[f"{sname}::rev_sell"] = ((side_now.shift(1) > 0) & (side_now < 0)).astype(np.float32).values
 
     with tracer.span("mask_check", stage="precompute"):
-        above_all, below_all, nan_any = [], [], F["close"].isna()
+        # --- (1) Legacy envelope forever-masks: 15m/30m/1h all above/below ---
+        above_all, below_all, nan_env = [], [], F["close"].isna()
         for tf in MASK_TFS:
             hi, lo = F[f"{tf}::env_hi_s4_live"], F[f"{tf}::env_lo_s4_live"]
-            nan_any = nan_any | hi.isna() | lo.isna()
+            nan_env = nan_env | hi.isna() | lo.isna()
             above_all.append(((F["close"] > hi) & (F["close"] > lo)))
             below_all.append(((F["close"] < hi) & (F["close"] < lo)))
-        nan_v = nan_any.values
-        new["mask_sell_blocked"] = (np.logical_and.reduce(
-            [a.values for a in above_all]) | nan_v).astype(np.float32)
-        new["mask_buy_blocked"] = (np.logical_and.reduce(
-            [b.values for b in below_all]) | nan_v).astype(np.float32)
+        env_sell = np.logical_and.reduce([a.values for a in above_all]) | nan_env.values
+        env_buy = np.logical_and.reduce([b.values for b in below_all]) | nan_env.values
+
+        # --- (2) CCI dual mask: BOTH CCI30+100 >0 and each > applied SMA (5m OR 30m)
+        #         sell blocked. Mirror <0 and each < SMA → buy blocked. ---
+        cci_sell_parts, cci_buy_parts = [], []
+        nan_cci = np.zeros(len(F), dtype=bool)
+        for tf in CCI_MASK_TFS:
+            c30 = F[f"{tf}::cci30"]
+            c100 = F[f"{tf}::cci100"]
+            l30 = F[f"{tf}::cci30_line"]
+            l100 = F[f"{tf}::cci100_line"]
+            nan_cci = nan_cci | c30.isna().values | c100.isna().values \
+                | l30.isna().values | l100.isna().values
+            # both CCIs above 0 AND each above its own SMA line
+            bull = ((c30 > 0) & (c30 > l30) & (c100 > 0) & (c100 > l100)).fillna(False).values
+            bear = ((c30 < 0) & (c30 < l30) & (c100 < 0) & (c100 < l100)).fillna(False).values
+            cci_sell_parts.append(bull)  # no sells in firm bull CCI
+            cci_buy_parts.append(bear)   # no buys in firm bear CCI
+        cci_sell = np.logical_or.reduce(cci_sell_parts) | nan_cci  # either TF
+        cci_buy = np.logical_or.reduce(cci_buy_parts) | nan_cci
+
+        # --- (3) Dual SMA(4)+4 on close: 1m AND 15m both required ---
+        # buy blocked if close < SMA on both; sell blocked if close > SMA on both
+        below_sma, above_sma = [], []
+        nan_sma = np.zeros(len(F), dtype=bool)
+        for tf in SMA_GATE_TFS:
+            c = F[f"{tf}::close"]
+            sma4 = ind.sma_shifted(c, 4, 4)
+            nan_sma = nan_sma | c.isna().values | sma4.isna().values
+            below_sma.append((c < sma4).fillna(False).values)
+            above_sma.append((c > sma4).fillna(False).values)
+        sma_buy = np.logical_and.reduce(below_sma) | nan_sma   # both under → no buy
+        sma_sell = np.logical_and.reduce(above_sma) | nan_sma  # both over → no sell
+
+        new["mask_sell_blocked"] = (env_sell | cci_sell | sma_sell).astype(np.float32)
+        new["mask_buy_blocked"] = (env_buy | cci_buy | sma_buy).astype(np.float32)
+        # diagnostics (not in obs_columns — for tests / HUD later)
+        new["mask_cci_sell"] = cci_sell.astype(np.float32)
+        new["mask_cci_buy"] = cci_buy.astype(np.float32)
+        new["mask_sma_sell"] = sma_sell.astype(np.float32)
+        new["mask_sma_buy"] = sma_buy.astype(np.float32)
 
     for sname, cfg in SETS.items():
         ltf_close = F[f"{cfg['ltf']}::close"]

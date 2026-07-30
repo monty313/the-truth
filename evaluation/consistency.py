@@ -45,7 +45,7 @@ import sys
 import torch
 import torch.nn.functional as F
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     from training.fastsim import FastSim
     from inference.loader import load_brain
 
-    src = sys.argv[1] if len(sys.argv) > 1 else rpath("data", "XAUUSD_M1_drill.csv")
+    src = sys.argv[1] if len(sys.argv) > 1 else rpath("data", "raw", "XAUUSD_M1_drill.csv")
     tag = os.path.splitext(os.path.basename(src))[0]
     do, dp, dl, dates, cols = build_day_tensors(src, cache_path=rpath("artifacts", "gpu_cache_%s.npz" % tag))
     sim = FastSim(do, dp, dl, cols, device="cpu", K=24)

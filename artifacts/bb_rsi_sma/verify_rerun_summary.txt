@@ -1,0 +1,1 @@
+Verified: LTF BB on RSI(5) 10/1/shift5; HTF BB on price 100/0.5/shift2

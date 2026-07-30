@@ -1,6 +1,8 @@
 """Encode 500 strategy slots: +1 buy / -1 sell / 0 empty.
 
 CHANGE LOG:
+- 2026-07-30  wire bb_rsi_sma_agent HANDLERS (slots 90-92 sets A/B/C)
+- 2026-07-29  wire dvmr_agent HANDLERS (slot 84 champion 1h+1d)
 - 2026-07-25  wire smma_rsi + agree HANDLERS (slots 76-83)
 - 2026-07-25  wire rsi2_ema HANDLERS slots 67-75
 - 2026-07-25  stoch_ema A/B/C + HTF bias
@@ -528,6 +530,21 @@ except Exception:
 try:
     from signals.agree import HANDLERS as _AGREE_HANDLERS
     KIND_HANDLERS.update(_AGREE_HANDLERS)
+except Exception:
+    pass
+try:
+    from signals.dvmr_agent import HANDLERS as _DVMR_HANDLERS
+    KIND_HANDLERS.update(_DVMR_HANDLERS)
+except Exception:
+    pass
+try:
+    from signals.momentum_vector_agent import HANDLERS as _MV_HANDLERS
+    KIND_HANDLERS.update(_MV_HANDLERS)
+except Exception:
+    pass
+try:
+    from signals.bb_rsi_sma_agent import HANDLERS as _BB_RSI_SMA_HANDLERS
+    KIND_HANDLERS.update(_BB_RSI_SMA_HANDLERS)
 except Exception:
     pass
 

@@ -13,8 +13,8 @@ CHANGE LOG:
 from __future__ import annotations
 import os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT not in sys.path:
-    sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.join(ROOT, "src"))
+sys.path.insert(0, ROOT)
 import numpy as np
 from core.configs import path as rpath
 from telemetry.mind_probe import load_and_probe
@@ -24,9 +24,9 @@ def main():
     day_i = int(sys.argv[2]) if len(sys.argv) > 2 else 0
     goal = float(sys.argv[3]) if len(sys.argv) > 3 else 3.0
     floor = float(sys.argv[4]) if len(sys.argv) > 4 else 3.5
-    src = rpath("data", "XAUUSD_curriculum_2026.csv")
+    src = rpath("data", "raw", "XAUUSD_curriculum_2026.csv")
     if not os.path.exists(src):
-        src = rpath("data", "XAUUSD_M1_drill.csv")
+        src = rpath("data", "raw", "XAUUSD_M1_drill.csv")
     tag = os.path.splitext(os.path.basename(src))[0]
     cache = rpath("artifacts", f"gpu_cache_{tag}.npz")
     from training.gpu_data import build_day_tensors

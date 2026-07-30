@@ -26,6 +26,7 @@ INTERCONNECTED WITH: backtesting/simulator (closed-trade records incl.
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-30  with/against trend + quick_pull + setup_skip dials (default 0) — WHY: self-heal toolkit; meta searches dials, humans do not freeze the cure.
 - 2026-07-19  pay only on FULL close, pullback via tags, idleness only when flat, config-scaled  — WHY: audit T2/T3/T4/T9 reward-farm fixes.
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
@@ -62,11 +63,13 @@ class RewardEngine:
 
     # ---------- per step ----------
     def on_step(self, closed_now: list[dict], acted: bool, anti_gravity: bool,
-                flat: bool) -> float:
+                flat: bool, setup_visible: bool = False) -> float:
         """closed_now: trades closed at THIS bar. Closed-only payments.
-        FULL closes carry the stack bonuses; partials pay pure P/L only."""
+        FULL closes carry the stack bonuses; partials pay pure P/L only.
+        setup_visible: firm cont/pull present while flat (for w_setup_skip)."""
         w = self.w
         r = 0.0
+        max_quick = int(w.get("quick_pull_max_bars", 20))
         for tr in closed_now:
             r += w["w_net_profit"] * tr["pnl_pct"]
             if tr.get("full"):
@@ -75,14 +78,26 @@ class RewardEngine:
                     r += w["w_no_drawdown_close"]
                 if tr["adds"] > 0 and tr["stack_green"]:
                     r += w["w_pyramid_stack_green"] * min(tr["adds"], 5)
-                if tr.get("tags", {}).get("pullback") and not tr.get("probe"):
-                    r += w["w_pullback_with_htf"]          # paid at close (T3)
-        if flat and not acted and not closed_now:          # T4: only when flat
-            r += w["w_idleness_hunger"]
+                tags = tr.get("tags", {}) or {}
+                if tags.get("pullback") and not tr.get("probe"):
+                    r += float(w.get("w_pullback_with_htf", 0.0))
+                if tags.get("with_trend") and not tr.get("probe"):
+                    r += float(w.get("w_with_trend_close", 0.0))
+                if tags.get("against_trend") and not tr.get("probe"):
+                    r += float(w.get("w_against_trend_close", 0.0))
+                bars = int(tr.get("bars", 10**9))
+                if (tags.get("pullback") and tags.get("with_trend")
+                        and not tr.get("probe") and tr.get("pnl", 0) > 0
+                        and bars <= max_quick):
+                    r += float(w.get("w_quick_pull_close", 0.0))
+        if flat and not acted and not closed_now:
+            r += float(w.get("w_idleness_hunger", 0.0))
+            if setup_visible:
+                r += float(w.get("w_setup_skip", 0.0))
         if anti_gravity:
             decay = max(0.0, 1.0 - self.update_idx /
-                        max(1, w["antigravity_decay_updates"]))
-            r += w["w_antigravity_penalty"] * decay
+                        max(1, w.get("antigravity_decay_updates", 300)))
+            r += float(w.get("w_antigravity_penalty", 0.0)) * decay
         return r
 
     # ---------- per day ----------

@@ -1,7 +1,10 @@
 # WHO: ADR-0005 (Monty's reward doctrine). WHAT: every reward weight. WHEN: 2026-07-18.
 # NOTE: weights are STARTING values; meta-optimizer PROPOSES changes; Monty approves.
 # CHANGE LOG:
+# - 2026-07-30  self-heal dials w_with_trend_close / w_against_trend_close / w_quick_pull_close / w_setup_skip default 0 — WHY: meta learns to fix side bias; humans install dials not answers.
 # - 2026-07-24  w_pullback_with_htf 0.02->0.25 — WHY: IRAC Policy — multi-day Mind Probe policy_hold on HTF-trend pull/cont (not blindness).
+# - 2026-07-30  w_with_trend_close 0.0000->0.0500 — WHY: self_heal_epoch gated nudge
+# - 2026-07-30  w_against_trend_close 0.0000->-0.0500 — WHY: self_heal_epoch gated nudge
 pay_only_on_close: true
 day_dd_extra_scale: 0.5
 trade_consistency_target: 0.3
@@ -13,6 +16,12 @@ w_streak_per_day: 0.15
 w_no_drawdown_close: 0.02
 w_pyramid_stack_green: 0.20
 w_pullback_with_htf: 0.25
+# Self-heal toolkit dials (default 0 = off until meta/self_heal moves them)
+w_with_trend_close: 0.0500
+w_against_trend_close: -0.0500
+w_quick_pull_close: 0.0
+quick_pull_max_bars: 20
+w_setup_skip: 0.0
 w_idleness_hunger: -0.002
 w_did_nothing: -6.0
 did_nothing_band: 0.25

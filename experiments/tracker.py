@@ -22,7 +22,7 @@ keep this instruction so we never lose the thread):
 from __future__ import annotations
 import hashlib, json, os, subprocess, time, uuid
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 RUNS = os.path.join(ROOT, "artifacts", "runs")
 os.makedirs(RUNS, exist_ok=True)
 

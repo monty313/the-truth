@@ -9,4 +9,4 @@
 | rewards.py / env.py | Rewards / env |
 | meta_optimizer.py | Legacy propose-only |
 
-Warm-start from `artifacts/checkpoints/PROVEN_*`. No from-scratch wipe.
+Warm-start from `models/PROVEN_*`. No from-scratch wipe.

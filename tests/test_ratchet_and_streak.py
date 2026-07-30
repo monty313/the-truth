@@ -9,7 +9,7 @@
     ratchet drift, this fails and names the day it broke.
 WHY: the streak metric is Monty's headline; the lift is the profitability proof.
 INTERCONNECTED: training/fastsim, training/gpu_rollout, inference/loader,
-data/XAUUSD_curriculum_2026.csv (tracked), artifacts/checkpoints/PROVEN_LIFT (tracked).
+data/XAUUSD_curriculum_2026.csv (tracked), models/PROVEN_LIFT (tracked).
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
 - 2026-07-20  created — WHY: review found the streak bug + asked that the ratchet
@@ -22,6 +22,8 @@ import sys
 import torch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
@@ -33,7 +35,7 @@ from training.gpu_rollout import rollout                     # noqa: E402
 
 def _sim(n_days=4):
     do, dp, dl, dates, cols = build_day_tensors(
-        rpath("data", "XAUUSD_M1_drill.csv"),
+        rpath("data", "raw", "XAUUSD_M1_drill.csv"),
         cache_path=rpath("artifacts", "gpu_cache_XAUUSD_M1_drill.npz"), verbose=False)
     return FastSim(do, dp, dl, cols, device="cpu", K=8), dates
 
@@ -61,7 +63,7 @@ def test_the_lift_is_pinned_proven_brain_banks_the_target():
     brain, _ = load_brain("PROVEN_LIFT_2026-07-20")
     assert brain is not None, "the committed frozen lift brain must load"
     do, dp, dl, dates, cols = build_day_tensors(
-        rpath("data", "XAUUSD_curriculum_2026.csv"),
+        rpath("data", "raw", "XAUUSD_curriculum_2026.csv"),
         cache_path=rpath("artifacts", "gpu_cache_XAUUSD_curriculum_2026.npz"), verbose=False)
     sim = FastSim(do, dp, dl, cols, device="cpu", K=24)
     day = [i for i, d in enumerate(dates) if "2026-01-30" in str(d)]

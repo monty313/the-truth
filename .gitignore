@@ -1,12 +1,22 @@
 __pycache__/
 *.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# local scratch (keep _archive tracked README only if needed)
+_archive/inbox/
+
 artifacts/runs/
 logs/*.jsonl
-data_io/cache/
-.pytest_cache/
 logs/app.log
+src/data_io/cache/
 
-# transient training outputs (not part of "the truth" proof)
+# transient training outputs
 artifacts/checkpoints/drill_live.pt
 artifacts/checkpoints/drill2x.pt
 artifacts/checkpoints/drill2x_v2.pt
@@ -25,16 +35,33 @@ artifacts/checkpoints/curric_L*.pt
 artifacts/curriculum_progress.json
 artifacts/CURRICULUM_HISTORY.md
 
-# GPU Edition (Bot 1.5) transient outputs — regenerated each run
+# models/ working copies (PROVEN_*.pt stay tracked)
+models/drill_live.pt
+models/drill2x.pt
+models/drill2x_v2.pt
+models/champion_candidate.pt
+models/meta_live.pt
+models/best_meta.pt
+models/history/
+models/curric_live.pt
+models/curric_L*.pt
+models/gpu_live.pt
+models/gpu_best.pt
+models/gpu_progress.json
+models/lift_best.pt
+models/meta_champion.pt
+models/meta_anchor.pt
+models/meta_best.pt
+models/meta_progress.json
+models/_lift_tmp.pt
+
+# GPU caches — regenerate
 artifacts/gpu_cache_*.npz
 artifacts/gpu_progress.json
 artifacts/GPU_TRAINING_HISTORY.md
 artifacts/checkpoints/gpu_live.pt
 artifacts/checkpoints/gpu_best.pt
 artifacts/checkpoints/gpu_progress.json
-
-# self-tuner + lift transient outputs (review 2026-07-20). The FROZEN, serial-named
-# proofs (PROVEN_*.pt) stay committed; the MUTABLE working files must not churn git.
 artifacts/checkpoints/lift_best.pt
 artifacts/checkpoints/meta_champion.pt
 artifacts/checkpoints/meta_anchor.pt
@@ -43,7 +70,13 @@ artifacts/checkpoints/meta_progress.json
 artifacts/META_TRAINING_HISTORY.md
 artifacts/symbol_cache/
 
-# Local M1 price data (too large for git; Colab copies from Drive)
-data/*.csv
+# Local M1 price data (too large for git)
+data/raw/*.csv
+data/interim/*
+data/processed/*
+data/external/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!data/external/.gitkeep
 !data/.gitkeep
-

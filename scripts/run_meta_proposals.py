@@ -1,3 +1,5 @@
+import os
+import sys
 """Generate meta-optimizer PROPOSALS for Monty to approve (ADR-0007).
 5W+I: WHO Claude; adoption ONLY by Monty. WHAT writes a proposal batch of
 reward-weight/hparam configs to artifacts/proposals/. WHEN 2026-07-19 (audit
@@ -11,6 +13,8 @@ keep this instruction so we never lose the thread):
 """
 import json, os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT)
 from training.rewards import load_weights          # noqa: E402
 from training.meta_optimizer import propose         # noqa: E402

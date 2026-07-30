@@ -23,6 +23,8 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
@@ -39,9 +41,9 @@ def main():
     floor = float(sys.argv[3]) if len(sys.argv) > 3 else 3.5
     max_days = int(sys.argv[4]) if len(sys.argv) > 4 else 90
 
-    src = rpath("data", "XAUUSD_curriculum_2026.csv")
+    src = rpath("data", "raw", "XAUUSD_curriculum_2026.csv")
     if not os.path.exists(src):
-        src = rpath("data", "XAUUSD_M1_drill.csv")
+        src = rpath("data", "raw", "XAUUSD_M1_drill.csv")
     tag = os.path.splitext(os.path.basename(src))[0]
     cache = rpath("artifacts", f"gpu_cache_{tag}.npz")
 
@@ -53,6 +55,8 @@ def main():
     n = min(int(days_obs.shape[0]), max_days)
     rows = []
     tot_pull = tot_acted = tot_held = tot_high_miss = 0
+    tot_wrong_bull = tot_wrong_bear = 0
+    side_bulls, side_bears = [], []
 
     print(f"Perception scoreboard brain={brain} days=0..{n-1} goal={goal} floor={floor}")
     for i in range(n):
@@ -77,15 +81,27 @@ def main():
         tot_acted += acted
         tot_held += held
         tot_high_miss += ghosts.n_high_miss_pull
+        tot_wrong_bull += int(getattr(dump, "n_wrong_side_under_bull", 0))
+        tot_wrong_bear += int(getattr(dump, "n_wrong_side_under_bear", 0))
+        side_bulls.append(float(getattr(dump, "side_bias_bull", 0.0)))
+        side_bears.append(float(getattr(dump, "side_bias_bear", 0.0)))
         rows.append({
             "day": label, "idx": i, "pull": pull, "acted": acted, "held": held,
             "high_miss": ghosts.n_high_miss_pull, "entropy": dump.mean_op_entropy,
+            "side_bias_bull": float(getattr(dump, "side_bias_bull", 0.0)),
+            "side_bias_bear": float(getattr(dump, "side_bias_bear", 0.0)),
+            "wrong_side_bull": int(getattr(dump, "n_wrong_side_under_bull", 0)),
+            "wrong_side_bear": int(getattr(dump, "n_wrong_side_under_bear", 0)),
+            "forward_ok": int(getattr(dump, "forward_ok", 0)),
+            "forward_fail": int(getattr(dump, "forward_fail", 0)),
         })
         if (i + 1) % 10 == 0:
             print(f"  ... {i+1}/{n} days")
 
     act_rate = (tot_acted / tot_pull) if tot_pull else 0.0
     hold_rate = (tot_held / tot_pull) if tot_pull else 0.0
+    msb = float(np.mean(side_bulls)) if side_bulls else 0.0
+    mss = float(np.mean(side_bears)) if side_bears else 0.0
     summary = {
         "brain": brain, "goal": goal, "floor": floor, "n_days": n,
         "total_pull_bars": tot_pull,
@@ -95,6 +111,11 @@ def main():
         "act_rate_on_pull": round(act_rate, 4),
         "hold_rate_on_pull": round(hold_rate, 4),
         "perception_flag": hold_rate > 0.5 and tot_pull > 50,
+        "mean_side_bias_bull": round(msb, 4),
+        "mean_side_bias_bear": round(mss, 4),
+        "total_wrong_side_under_bull": tot_wrong_bull,
+        "total_wrong_side_under_bear": tot_wrong_bear,
+        "wrong_side_flag": tot_wrong_bull > 50 and msb < 0.05,
         "days": rows,
     }
 
@@ -105,18 +126,21 @@ def main():
         json.dump(summary, f, indent=2)
 
     print()
-    print("=== PERCEPTION SCOREBOARD ===")
+    print("=== PERCEPTION / SIDE SCOREBOARD ===")
     print(f"Days: {n}")
     print(f"Pull bars: {tot_pull}")
     print(f"Acted on pull: {tot_acted} ({act_rate*100:.1f}%)")
     print(f"Held on pull: {tot_held} ({hold_rate*100:.1f}%)")
     print(f"High-miss pull (Ghost): {tot_high_miss}")
+    print(f"Side-bias bull/bear: {msb:+.4f} / {mss:+.4f}")
+    print(f"Wrong-side under bull/bear cont: {tot_wrong_bull} / {tot_wrong_bear}")
+    if summary["wrong_side_flag"]:
+        print("FLAG: wrong-side under bull — candidate WrongSide class for self-heal dials.")
     if summary["perception_flag"]:
         print("FLAG: high hold-on-pull rate — candidate Perception/Policy issue for IRAC.")
-    else:
-        print("No strong Perception flag from aggregate hold-on-pull rate.")
+    if not summary["perception_flag"] and not summary["wrong_side_flag"]:
+        print("No strong hold or wrong-side aggregate flag.")
     print(f"Wrote: {out}")
-
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,57 @@
 {
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}"
+  ],
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}"
+  ],
   "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
   "python.testing.pytestArgs": ["tests"],
-  "files.associations": { "*.yaml": "yaml" }
+  "python.testing.cwd": "${workspaceFolder}",
+  "python.analysis.typeCheckingMode": "basic",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.tabSize": 4,
+    "editor.rulers": [100]
+  },
+  "files.associations": {
+    "*.yaml": "yaml",
+    "*.yml": "yaml"
+  },
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/*.pyc": true,
+    "_archive": true
+  },
+  "search.exclude": {
+    "**/artifacts/**": true,
+    "**/models/history/**": true,
+    "**/_archive/**": true,
+    "**/.git/**": true
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "GOAL.md": "DO_THIS.md, MAP.md, AGENTS.md, README.md, 00_START_HERE.md",
+    "requirements.txt": "pyproject.toml, Makefile, .gitignore"
+  },
+  "terminal.integrated.env.windows": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "terminal.integrated.env.linux": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "terminal.integrated.env.osx": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.promptFilesRecommendations": {
+    "AGENTS.md": true
+  }
 }

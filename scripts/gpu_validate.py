@@ -19,6 +19,8 @@ import numpy as np
 import torch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT)
 
 from core.configs import path as rpath                          # noqa: E402
@@ -48,7 +50,7 @@ def tensors_from_days(days, cols):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", default=rpath("data", "XAUUSD_M1_drill.csv"))
+    ap.add_argument("--csv", default=rpath("data", "raw", "XAUUSD_M1_drill.csv"))
     ap.add_argument("--ckpt", default="PROVEN_2x_2026-07-19")
     ap.add_argument("--goal", type=float, default=2.5)
     ap.add_argument("--floor", type=float, default=4.0)

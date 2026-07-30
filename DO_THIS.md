@@ -1,55 +1,61 @@
 # DO THIS
 
-**Fresh chapter:** [START_FROM_TODAY.md](START_FROM_TODAY.md)  
-**Wins (never erase):** [doctrine/SUCCESS_LEDGER.md](doctrine/SUCCESS_LEDGER.md)  
-**Agreement evidence:** [PERFORMANCE_IS_POSSIBLE_PART4.md](PERFORMANCE_IS_POSSIBLE_PART4.md)
+**Mission:** [GOAL.md](GOAL.md)  
+**Buttons:** [USE/](USE/) ← easiest  
+**Daily scripts list:** [scripts/00_DAILY.md](scripts/00_DAILY.md)
 
-## Target & risk are variables (not retrain triggers)
+---
 
-You may change **daily target %** and **risk floor %** anytime:
+## Target & risk = dials (not retrain)
 
-| Mechanism | Role |
-|-----------|------|
-| `configs/goals.yaml` → `goal_pct` / `floor_pct` | Today's focus pair |
-| `goal_conditioning.goal_range` / `floor_range` | Meta-training samples many pairs |
-| Obs **self-state** (`goal`, `floor`, `dist_to_goal`, `dist_to_floor`) | Brain **sees** the active pair every step |
-| `python scripts/prove_it.py <brain> <target> <risk>` | Measure **same brain** at any pair — **no retrain** |
-| `training/meta_tuner.py` | Evolves rewards/hypers for consistency across pairs |
+Change target/risk anytime. Measure with `prove_it`.  
+Do **not** retrain only because the number changed.
 
-**Do not** retrain from scratch when you only change target/risk.
+---
 
-## 1. Setup
+## Path A — no typing (recommended)
+
+Open folder **`USE/`** and double-click:
+
+1. **1_prove.bat** — score  
+2. **2_preflight.bat** — ready check  
+3. **3_self_heal.bat** — heal epoch  
+4. **4_train.bat** — GPU train  
+
+---
+
+## Path B — type commands
+
+### 1. Setup
 ```bash
 git pull origin main
 python scripts/restore_meta_tuner.py
 python scripts/preflight_train.py
 ```
 
-## 2. Baseline at *your* numbers (example only)
+### 2. Score (baseline)
 ```bash
-# Example — replace 2.5 2.5 or 3.0 3.5 with whatever you will trade tomorrow
-python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 2.5 2.5
 python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5
 ```
-Log clear % / breach / streak per pair. Breach must stay 0.
 
-## 3. Self-heal epoch (still parameterized)
+### 3. Self-heal
 ```bash
 python scripts/self_heal_epoch.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5 --days 12
 ```
-Disease to kill: **policy_hold** when Gravity + pull/cont or `sig_080–083` is on.
 
-## 4. Climb (GPU) — policy practice under current rewards
+### 4. Climb (GPU)
 ```bash
 python scripts/consistency_sprint.py --minutes 600 --envs 256
-python scripts/prove_it.py <new_brain> <your_target> <your_risk>
+python scripts/prove_it.py <new_brain> 3.0 3.5
 ```
 
-## 5. Meta-tuner (any-X consistency)
+### 5. Meta-tuner
 ```bash
 python scripts/meta_train.py --minutes 600
 ```
 
 ---
-Score that counts: **prove_it clear % + breach 0%** at the target/risk **you** pass in.  
-Past wins prove the ceiling is not real.
+
+## Only score that counts
+
+**prove_it → clear % + breach 0%** at the target/risk you pass in.

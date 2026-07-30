@@ -5,7 +5,7 @@ keep this instruction so we never lose the thread):
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import sys, os, glob
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src')); sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core.configs import load, path
 
 

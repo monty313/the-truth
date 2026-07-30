@@ -25,6 +25,8 @@ import sys
 import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT)
 
 import numpy as np                                              # noqa: E402
@@ -119,10 +121,10 @@ def main():
                 ppo.save(a.best)
                 # Versioned, dated, hashed snapshot + full-detail history so we can
                 # ALWAYS revert to any good state (Monty 2026-07-19).
-                bestpath = rpath("artifacts", "checkpoints", a.best + ".pt")
+                bestpath = rpath("models", a.best + ".pt")
                 hh = hashlib.sha256(open(bestpath, "rb").read()).hexdigest()[:12]
                 stamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
-                histdir = rpath("artifacts", "checkpoints", "history")
+                histdir = rpath("models", "history")
                 os.makedirs(histdir, exist_ok=True)
                 frozen = "meta_%s_%s.pt" % (stamp, hh)
                 shutil.copy2(bestpath, os.path.join(histdir, frozen))
@@ -133,9 +135,9 @@ def main():
                         fh.write("# Checkpoint history - every improvement, newest at bottom\n\n"
                                  "Each entry is a FROZEN, revertible brain. Inspect one:\n"
                                  "  python scripts/replay_best.py --ckpt history/<name-without-.pt>\n"
-                                 "Revert: copy that file over artifacts/checkpoints/best_meta.pt\n\n")
+                                 "Revert: copy that file over models/best_meta.pt\n\n")
                     fh.write("## %s  (update %d, mode META any-X)\n" % (stamp, u))
-                    fh.write("- frozen checkpoint: artifacts/checkpoints/history/%s\n" % frozen)
+                    fh.write("- frozen checkpoint: models/history/%s\n" % frozen)
                     fh.write("- sha256[:12]: %s\n" % hh)
                     fh.write("- trained goal-range %s, floor-range %s\n" % (RANGES[0], RANGES[1]))
                     fh.write("- at your target (%.1f%%/%.1f%%): per-day %s\n" % (GOAL, FLOOR, pnls))

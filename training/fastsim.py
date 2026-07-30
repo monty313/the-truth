@@ -54,7 +54,7 @@ import sys
 
 import torch
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
@@ -95,13 +95,15 @@ class FastSim:
         w = dict(_load("rewards"))
         self.w = {k: float(w.get(k, d)) for k, d in {
             "w_net_profit": 6.0, "w_no_drawdown_close": 0.02, "no_drawdown_tolerance": 0.0,
-            "w_pyramid_stack_green": 0.20, "w_pullback_with_htf": 0.02,
+            "w_pyramid_stack_green": 0.20, "w_pullback_with_htf": 0.25,
+            "w_with_trend_close": 0.0, "w_against_trend_close": 0.0,
+            "w_quick_pull_close": 0.0, "quick_pull_max_bars": 20.0, "w_setup_skip": 0.0,
             "w_idleness_hunger": -0.002, "w_did_nothing": -6.0, "did_nothing_band": 0.25,
             "w_day_goal_hit": 2.0, "day_dd_extra_scale": 0.5, "w_streak_per_day": 0.15,
             "w_trade_consistency": 0.10, "trade_consistency_target": 0.3,
             "w_record_win": 0.25, "w_death_penalty": -10.0}.items()}
 
-        # ----- pull-tag column indices (for the tiny pullback close bonus) -----
+        # ----- tag column indices (pull + firm cont for with/against trend) -----
         # MUST live in __init__ (not after reload_rewards return) or Colab dies with
         # AttributeError: 'FastSim' object has no attribute 'pull_buy_idx'.
         def _idx(names):
@@ -109,6 +111,8 @@ class FastSim:
             return torch.tensor(out, dtype=torch.long, device=self.dev)
         self.pull_buy_idx = _idx([f"set{k}::pull_buy" for k in (1, 2, 3, 4)])
         self.pull_sell_idx = _idx([f"set{k}::pull_sell" for k in (1, 2, 3, 4)])
+        self.cont_buy_idx = _idx([f"set{k}::cont_buy" for k in (1, 2, 3, 4)])
+        self.cont_sell_idx = _idx([f"set{k}::cont_sell" for k in (1, 2, 3, 4)])
 
     def reload_rewards(self):
         """Hot-reload configs/rewards.yaml into self.w WITHOUT restarting training.
@@ -118,6 +122,8 @@ class FastSim:
         defaults = {
             "w_net_profit": 6.0, "w_no_drawdown_close": 0.02, "no_drawdown_tolerance": 0.0,
             "w_pyramid_stack_green": 0.20, "w_pullback_with_htf": 0.25,
+            "w_with_trend_close": 0.0, "w_against_trend_close": 0.0,
+            "w_quick_pull_close": 0.0, "quick_pull_max_bars": 20.0, "w_setup_skip": 0.0,
             "w_idleness_hunger": -0.002, "w_did_nothing": -6.0, "did_nothing_band": 0.25,
             "w_day_goal_hit": 2.0, "day_dd_extra_scale": 0.5, "w_streak_per_day": 0.15,
             "w_trade_consistency": 0.10, "trade_consistency_target": 0.3,
@@ -138,6 +144,7 @@ class FastSim:
         self.active = z(); self.side = z(); self.units = z(); self.avg = z()
         self.stop = z(); self.bars = z(); self.madv = z(); self.esp = z()
         self.probe = z(); self.adds = z(); self.pull = z()
+        self.with_tr = z(); self.against_tr = z()
         self.balance = torch.full((N,), self.eq0, device=dev)
         self.trades_used = torch.zeros(N, device=dev)
         self.dead = torch.zeros(N, dtype=torch.bool, device=dev)
@@ -258,7 +265,15 @@ class FastSim:
         pyr = full & (self.adds > 0) & (pnl > 0)
         rr = rr + w["w_pyramid_stack_green"] * torch.clamp(self.adds, max=5.0) * pyr.float()
         pll = full & (self.pull > 0.5) & (self.probe < 0.5)
-        rr = rr + w["w_pullback_with_htf"] * pll.float()
+        rr = rr + float(w.get("w_pullback_with_htf", 0.0)) * pll.float()
+        wt = full & (self.with_tr > 0.5) & (self.probe < 0.5)
+        rr = rr + float(w.get("w_with_trend_close", 0.0)) * wt.float()
+        at = full & (self.against_tr > 0.5) & (self.probe < 0.5)
+        rr = rr + float(w.get("w_against_trend_close", 0.0)) * at.float()
+        qmax = float(w.get("quick_pull_max_bars", 20.0))
+        qck = full & (self.pull > 0.5) & (self.with_tr > 0.5) & (self.probe < 0.5) \
+            & (pnl > 0) & (self.bars <= qmax)
+        rr = rr + float(w.get("w_quick_pull_close", 0.0)) * qck.float()
         r = (rr * cmask).sum(1)
         # closed-trade stats (non-probe) for win-rate / consistency / record
         npb = cmask & (self.probe < 0.5)
@@ -271,7 +286,8 @@ class FastSim:
         # position update: half -> scale units; full -> clear slot
         keep = 1.0 - frac
         self.units = torch.where(cmask & ~full, self.units * keep, self.units)
-        for fld in ("active", "side", "units", "avg", "stop", "bars", "madv", "esp", "probe", "adds", "pull"):
+        for fld in ("active", "side", "units", "avg", "stop", "bars", "madv", "esp",
+                    "probe", "adds", "pull", "with_tr", "against_tr"):
             t_ = getattr(self, fld)
             setattr(self, fld, torch.where(full, torch.zeros_like(t_), t_))
         return r
@@ -292,6 +308,12 @@ class FastSim:
             if self.pull_buy_idx.numel() else torch.zeros(self.N, dtype=torch.bool, device=dev)
         pull_sell = (row0[:, self.pull_sell_idx] > 0).any(1) \
             if self.pull_sell_idx.numel() else torch.zeros(self.N, dtype=torch.bool, device=dev)
+        cont_buy = (row0[:, self.cont_buy_idx] > 0).any(1) \
+            if self.cont_buy_idx.numel() else torch.zeros(self.N, dtype=torch.bool, device=dev)
+        cont_sell = (row0[:, self.cont_sell_idx] > 0).any(1) \
+            if self.cont_sell_idx.numel() else torch.zeros(self.N, dtype=torch.bool, device=dev)
+        firm_bull = cont_buy & ~cont_sell
+        firm_bear = cont_sell & ~cont_buy
 
         # ---- advance one bar ----
         self.t += 1
@@ -327,6 +349,8 @@ class FastSim:
         units = torch.where(probe, torch.minimum(units, torch.full_like(units, self.probe_units)), units)
         pull_tag = torch.where(open_long, pull_buy, torch.where(open_short, pull_sell,
                                                                 torch.zeros_like(pull_buy)))
+        with_tag = (open_long & firm_bull) | (open_short & firm_bear)
+        against_tag = (open_long & firm_bear) | (open_short & firm_bull)
         e = ok_open.nonzero(as_tuple=True)[0]
         if e.numel():
             si = free_idx[e]
@@ -341,6 +365,8 @@ class FastSim:
             self.madv[e, si] = 0.0
             self.adds[e, si] = 0.0
             self.pull[e, si] = pull_tag[e].float()
+            self.with_tr[e, si] = with_tag[e].float()
+            self.against_tr[e, si] = against_tag[e].float()
             self.trades_used[e] += 1.0
 
         # ===== ADD (3,4) — the JUDGE'S rule: target the biggest same-side non-probe
@@ -431,9 +457,11 @@ class FastSim:
         newr = torch.maximum(torch.maximum(self.ratchet, self.goal + flat_cost), trail)
         self.ratchet = torch.where(live & cond & ~self.dead, newr, self.ratchet)
 
-        # ===== idleness hunger (approx: flat & hold) =====
+        # ===== idleness hunger (approx: flat & hold) + optional setup_skip =====
         flat_hold = live & (self._act_mask().sum(1) < 0.5) & (op == 0) & ~acted
         r = r + self.w["w_idleness_hunger"] * flat_hold.float()
+        setup_vis = pull_buy | pull_sell | firm_bull | firm_bear
+        r = r + float(self.w.get("w_setup_skip", 0.0)) * (flat_hold & setup_vis).float()
 
         # ===== done / day-end =====
         done = self.dead | reached_end
@@ -502,7 +530,7 @@ if __name__ == "__main__":
     import numpy as np
     from core.configs import path as rpath
     from training.gpu_data import build_day_tensors
-    src = sys.argv[1] if len(sys.argv) > 1 else rpath("data", "XAUUSD_M1_drill.csv")
+    src = sys.argv[1] if len(sys.argv) > 1 else rpath("data", "raw", "XAUUSD_M1_drill.csv")
     tag = os.path.splitext(os.path.basename(src))[0]
     do, dp, dl, dates, cols = build_day_tensors(src, cache_path=rpath("artifacts", "gpu_cache_%s.npz" % tag))
     sim = FastSim(do, dp, dl, cols, device="cpu", K=48)

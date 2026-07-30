@@ -4,7 +4,7 @@ windows; every trade sized so its worst INTRABAR dip costs <= 4.5% of current eq
 leverage capped 100:1; compounding). Prints the actual trades with prices, dips,
 leverage, and a running $10,000 account. Deterministic: re-run me, same ledger."""
 import os, sys
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'src')); sys.path.insert(0, ROOT)
 import numpy as np
 from core.configs import path as rpath
 from training.gpu_data import build_day_tensors

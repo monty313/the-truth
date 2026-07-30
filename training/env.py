@@ -132,12 +132,25 @@ class TradingEnv:
             side = +1 if op in (1, 9) else -1
             tag = "buy" if side > 0 else "sell"
             pull = any(row.get(f"set{k}::pull_{tag}", 0) > 0 for k in (1, 2, 3, 4))
+            firm_bull = any(row.get(f"set{k}::cont_buy", 0) > 0 for k in (1, 2, 3, 4)) and not any(
+                row.get(f"set{k}::cont_sell", 0) > 0 for k in (1, 2, 3, 4))
+            firm_bear = any(row.get(f"set{k}::cont_sell", 0) > 0 for k in (1, 2, 3, 4)) and not any(
+                row.get(f"set{k}::cont_buy", 0) > 0 for k in (1, 2, 3, 4))
+            with_trend = (side > 0 and firm_bull) or (side < 0 and firm_bear)
+            against_trend = (side > 0 and firm_bear) or (side < 0 and firm_bull)
             ok, _ = sim.try_open(side, risk, probe=op >= 9,
-                                 tags={"pullback": bool(pull)})   # paid at CLOSE (T3)
+                                 tags={"pullback": bool(pull),
+                                       "with_trend": bool(with_trend),
+                                       "against_trend": bool(against_trend),
+                                       "firm_bull": bool(firm_bull),
+                                       "firm_bear": bool(firm_bear)})
             acted = ok
             if ok:
                 s4 = row.get("set4::cont_buy", 0) - row.get("set4::cont_sell", 0)
-                anti_grav = (s4 > 0 and side < 0) or (s4 < 0 and side > 0)
+                # Prefer set2 cont if set4 dead; still anti-gravity when any firm stack opposes
+                s2 = row.get("set2::cont_buy", 0) - row.get("set2::cont_sell", 0)
+                grav = s4 if s4 != 0 else s2
+                anti_grav = (grav > 0 and side < 0) or (grav < 0 and side > 0)
         elif op in (3, 4):
             side = +1 if op == 3 else -1
             tgt = biggest(side, include_probes=False)   # adds: real stacks only
@@ -153,8 +166,16 @@ class TradingEnv:
         alive = sim.step()
         closed_now = sim.res.closed_trades[self._closed_seen:]
         self._closed_seen = len(sim.res.closed_trades)
+        # setup_visible for w_setup_skip: firm cont or pull while we were flat
+        setup_vis = False
+        if was_flat and not sim.stacks:
+            setup_vis = any(
+                row.get(f"set{k}::pull_buy", 0) > 0 or row.get(f"set{k}::pull_sell", 0) > 0
+                or row.get(f"set{k}::cont_buy", 0) > 0 or row.get(f"set{k}::cont_sell", 0) > 0
+                for k in (1, 2, 3, 4))
         r = self.re.on_step(closed_now, acted, anti_grav,
-                            flat=was_flat and not sim.stacks)      # T4
+                            flat=was_flat and not sim.stacks,
+                            setup_visible=setup_vis)
 
         done = not alive
         info = {}

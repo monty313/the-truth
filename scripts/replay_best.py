@@ -12,6 +12,8 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT)
 
 import pandas as pd                                              # noqa: E402
@@ -29,7 +31,7 @@ ap.add_argument("--ckpt", default="best_trading",
 a = ap.parse_args()
 
 g = goals_cfg(); GOAL = float(g["goal_pct"]); FLOOR = float(g["floor_pct"]); BAR = 2 * GOAL
-ckpt = rpath("artifacts", "checkpoints", a.ckpt + ".pt")
+ckpt = rpath("models", a.ckpt + ".pt")
 digest = (hashlib.sha256(open(ckpt, "rb").read()).hexdigest()[:16]
           if os.path.exists(ckpt) else "MISSING")
 

@@ -20,7 +20,9 @@
 #   Clear these once after any feature/symbol change:
 #     artifacts/gpu_cache_*.npz
 #     artifacts/symbol_cache/*
-#   Then rebuild. Do not delete PROVEN checkpoint .pt files when clearing caches.
+#   Then rebuild. Do not delete PROVEN checkpoint .pt files in models/ when clearing caches.
+#
+# CURRICULUM CSVs (in-repo): data/raw/*.csv  (cookiecutter raw layer)
 
 m1_csv_dir: ../data              # Fable5_Foundation/data on Monty's machine; on Colab → Drive folder with 4 CSVs
 symbols:

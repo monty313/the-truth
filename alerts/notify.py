@@ -11,7 +11,7 @@ keep this instruction so we never lose the thread):
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import json, os, time, urllib.parse, urllib.request
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LOGP = os.path.join(ROOT, "logs", "alerts.jsonl")
 
 def push(title: str, message: str) -> bool:

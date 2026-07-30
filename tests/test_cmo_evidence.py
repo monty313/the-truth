@@ -17,7 +17,7 @@ def _load_she():
 
 
 def test_doctrine_core_rules():
-    doc = (ROOT / "doctrine" / "SYSTEM_DOCTRINE_CMO.md").read_text()
+    doc = (ROOT / "references" / "doctrine" / "SYSTEM_DOCTRINE_CMO.md").read_text()
     assert "prove_it" in doc
     assert "impossible" in doc.lower() and "forbidden" in doc.lower()
     assert "last resort" in doc.lower()
@@ -31,9 +31,9 @@ def test_part4_and_prompt_visible_to_llm():
     assert "70" in part4
     prompt = (ROOT / "prompts" / "CMO_SYSTEM_PROMPT.md").read_text()
     assert "PART4" in prompt or "agree" in prompt.lower()
-    ledger = (ROOT / "doctrine" / "SUCCESS_LEDGER.md").read_text()
+    ledger = (ROOT / "references" / "doctrine" / "SUCCESS_LEDGER.md").read_text()
     assert "80" in ledger and "agree" in ledger.lower()
-    skill = (ROOT / "doctrine" / "policy_skill.md").read_text()
+    skill = (ROOT / "references" / "doctrine" / "policy_skill.md").read_text()
     assert "sig_080" in skill or "agree_seA_r2A" in skill
 
 

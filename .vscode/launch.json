@@ -1,0 +1,66 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "1 prove_it (champion 3.0/3.5)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/prove_it.py",
+      "args": [
+        "PROVEN_SPRINT_row04_clear24_2026-07-20",
+        "3.0",
+        "3.5"
+      ],
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "2 preflight",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/preflight_train.py",
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "3 self_heal",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/self_heal_epoch.py",
+      "args": [
+        "PROVEN_SPRINT_row04_clear24_2026-07-20",
+        "3.0",
+        "3.5",
+        "--days",
+        "12"
+      ],
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "MT5 bridge (1 day)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_live.py",
+      "args": ["--days", "1"],
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "pytest current file",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${file}", "-v"],
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "console": "integratedTerminal"
+    }
+  ]
+}

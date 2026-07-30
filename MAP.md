@@ -1,59 +1,83 @@
-# MAP — entire repo (easy version)
+# MAP
 
-## You only need these most days
+**Rule:** if it is not in the “Daily” table, you usually ignore it.
 
-| Open | Why |
-|------|-----|
-| **START_FROM_TODAY.md** | This chapter |
+---
+
+## Daily (notice these)
+
+| Name | What |
+|------|------|
+| **00_START_HERE.md** | First open |
+| **GOAL.md** | Mission |
 | **DO_THIS.md** | Commands |
-| **doctrine/SUCCESS_LEDGER.md** | Wins (never erase) |
-| **doctrine/SYSTEM_DOCTRINE_CMO.md** | LLM / CMO brain |
-| **scripts/** | What you run |
+| **USE/** | One-click buttons (`1_` `2_` `3_`…) |
+| **models/00_CHAMPION.md** | Active brain |
+| **scripts/00_DAILY.md** | Daily scripts only |
+| **configs/** | Numbers (goals, rewards, masks) |
+| **AGENTS.md** | AI rules + **lid-off jar mind** |
 
+---
+
+## Whole tree (simple)
+
+```text
+00_START_HERE.md     ← start
+GOAL.md              ← mission
+DO_THIS.md           ← commands
+MAP.md               ← this file
+AGENTS.md            ← AI organization + lid-off mind
+USE/                 ← your buttons (1_ 2_ 3_)
+
+configs/             numbers
+data/raw/            price CSVs
+models/              brains  (open 00_CHAMPION.md first)
+scripts/             commands (open 00_DAILY.md first)
+
+training/            learning code
+features/            indicators
+signals/             signal agents
+inference/           load brain
+execution_bridge/    MT5
+telemetry/           mind probe
+backtesting/         day sim
+evaluation/          consistency helpers
+core/                config door
+tests/               pytest
+
+references/          long reads (not daily)
+  doctrine/          laws + SUCCESS_LEDGER
+    00_LID_OFF_THE_JAR.md  ← permanent “lid is off” law
+  handoffs/          session notes
+  performance/       PERFORMANCE series (parts 1–4)
+  plans/             training plans
+
+reports/figures/     keep charts
+artifacts/           temp caches (safe delete *.npz)
+_archive/            old duplicates (do not use)
+docs/                ADRs
+.vscode/             editor tasks
 ```
-START / COMMANDS
-  START_FROM_TODAY.md
-  DO_THIS.md
-  UPDATE_RULES.md
-  scripts/          ← commands (see scripts/README.md)
 
-LLM / LAWS
-  doctrine/SYSTEM_DOCTRINE_CMO.md
-  doctrine/SUCCESS_LEDGER.md
-  doctrine/flea-jar/THE_FLEA_CURE.md
-  doctrine/policy_skill.md
-  prompts/CMO_SYSTEM_PROMPT.md
+---
 
-NUMBERS
-  configs/          ← goals, rewards, timeframes
+## Paths you type often
 
-BRAIN (code)
-  training/         ← policy, PPO, meta_tuner
-  features/         ← indicators + Gravity sets
-  telemetry/        ← mind probe, ghosts
-  evaluation/       ← consistency helpers
+| Thing | Path |
+|-------|------|
+| Champion | `models/PROVEN_SPRINT_row04_clear24_2026-07-20.pt` |
+| Gold CSV | `data/raw/XAUUSD_curriculum_2026.csv` |
+| Goals | `configs/goals.yaml` |
+| Masks | `configs/masks_shell.yaml` |
+| Rewards | `configs/rewards.yaml` |
 
-DATA & RESULTS
-  data/             ← price CSVs
-  artifacts/        ← checkpoints, caches, epoch logs
+---
 
-PROOF (never delete)
-  PERFORMANCE_IS_POSSIBLE.md
-  PERFORMANCE_IS_POSSIBLE_PART2.md
-  PERFORMANCE_IS_POSSIBLE_PART2.html
-  PERFORMANCE_IS_POSSIBLE_PART3.md
+## Naming so things pop
 
-SUPPORT (rarely open)
-  core/  data_io/  execution_bridge/  inference/
-  backtesting/  dashboards/  tests/
-  docs/history/   ← old notes
-
-IGNORE FOR DAILY WORK
-  agents/  alerts/  architecture/  codex/
-  experiments/  notebooks/  schemas/  logs/
-  GPU_EDITION/  .vscode/
-```
-
-Train path: **DO_THIS.md**  
-Change path: **UPDATE_RULES.md**  
-Wins: **doctrine/SUCCESS_LEDGER.md**
+| Prefix | Meaning |
+|--------|---------|
+| `00_` | Look first |
+| `1_` `2_` `3_` | Daily order in USE |
+| `PROVEN_` | Proof brain — do not delete |
+| `_archive` | Old junk — ignore |

@@ -1,3 +1,4 @@
+import sys
 """Generate docs/CODEBASE_MAP.md from every file's 5W+I header.
 5W+I: WHO Claude for Monty. WHAT walks the repo, extracts each module's
 WHO/WHAT/WHY/INTERCONNECTED header, and writes a single navigation index so a
@@ -13,6 +14,8 @@ keep this instruction so we never lose the thread):
 """
 import os, re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 
 def header(path):
     try:

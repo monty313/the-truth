@@ -1,0 +1,267 @@
+{
+  "issue": "Policy prefers wrong side under firm HTF cont (e.g. short under bull); not primarily pure hold. Side-bias_bull low/negative.",
+  "rule": "Bread-and-butter + with-trend: act with firm HTF side on LTF timing; meta searches dials; Shell/floor sacred.",
+  "application": {
+    "days_probed": 12,
+    "sum_policy_hold_on_setup": 148,
+    "sum_high_miss_pull": 21,
+    "sum_policy_hold_ghosts": 0,
+    "sum_wrong_side_under_bull": 315,
+    "sum_wrong_side_under_bear": 7,
+    "sum_cont_buy_only": 426,
+    "sum_cont_sell_only": 319,
+    "sum_mask_veto": 11,
+    "mean_side_bias_bull": -0.0703,
+    "mean_side_bias_bear": 0.0798,
+    "skip_counts_total": {
+      "acted": 2767,
+      "flat_ok": 258,
+      "policy_hold": 148,
+      "mask_veto": 11,
+      "no_htf_bias": 6
+    },
+    "w_pullback_with_htf": 0.25,
+    "w_with_trend_close": 0.0,
+    "w_against_trend_close": 0.0,
+    "days": [
+      {
+        "day": "2026-01-20",
+        "pull": 0,
+        "policy_hold_on_setup": 0,
+        "high_miss_pull": 0,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 0,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": 0.0,
+        "side_bias_bear": 0.0,
+        "forward_ok": 274,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 273,
+          "flat_ok": 1
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-01-20 (goal 3.0% / floor 3.5%). Decisions: 274. Mean op entropy: 2.375. Forward ok/fail: 274/0. No pull (bread-and-butter) flags present on this day in the observation. Side-bias: bull=+0.000 (wrong=0/0) bear=+0.000 (wrong=0/0). Regime skips: policy_hold_on_setup=0, mask_veto=0, no_ltf_setup=0, counts={'acted': 273, 'flat_ok': 1}."
+      },
+      {
+        "day": "2026-01-29",
+        "pull": 7,
+        "policy_hold_on_setup": 8,
+        "high_miss_pull": 1,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 7,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.07424076782031491,
+        "side_bias_bear": 0.07546709912518659,
+        "forward_ok": 274,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 228,
+          "flat_ok": 36,
+          "policy_hold": 8,
+          "mask_veto": 1,
+          "no_htf_bias": 1
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-01-29 (goal 3.0% / floor 3.5%). Decisions: 274. Mean op entropy: 2.377. Forward ok/fail: 274/0. Bread-and-butter (pull) bars: buy=3 (acted 0, held 1); sell=4 (acted 4, held 0). Side-bias: bull=-0.074 (wrong=7/11) bear=+0.075 (wrong=0/36). Regime skips: policy_hold_on_setup=8, mask_veto=1, no_ltf_setup=0, counts={'acted': 228, 'flat_ok': 36, 'policy_hold': 8, 'mask_veto': 1, 'no_htf_bias': 1}."
+      },
+      {
+        "day": "2026-02-09",
+        "pull": 2,
+        "policy_hold_on_setup": 26,
+        "high_miss_pull": 2,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 14,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.05732032975980211,
+        "side_bias_bear": 0.08425959820548695,
+        "forward_ok": 274,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 186,
+          "policy_hold": 26,
+          "flat_ok": 59,
+          "no_htf_bias": 2,
+          "mask_veto": 1
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-02-09 (goal 3.0% / floor 3.5%). Decisions: 274. Mean op entropy: 2.378. Forward ok/fail: 274/0. Bread-and-butter (pull) bars: buy=0 (acted 0, held 0); sell=2 (acted 0, held 2). Side-bias: bull=-0.057 (wrong=14/35) bear=+0.084 (wrong=0/30). Regime skips: policy_hold_on_setup=26, mask_veto=1, no_ltf_setup=0, counts={'acted': 186, 'policy_hold': 26, 'flat_ok': 59, 'no_htf_bias': 2, 'mask_veto': 1}."
+      },
+      {
+        "day": "2026-02-18",
+        "pull": 12,
+        "policy_hold_on_setup": 21,
+        "high_miss_pull": 4,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 38,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.058411843215043724,
+        "side_bias_bear": 0.05711214322792857,
+        "forward_ok": 274,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 204,
+          "policy_hold": 21,
+          "flat_ok": 44,
+          "mask_veto": 5
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-02-18 (goal 3.0% / floor 3.5%). Decisions: 274. Mean op entropy: 2.381. Forward ok/fail: 274/0. Bread-and-butter (pull) bars: buy=7 (acted 0, held 3); sell=5 (acted 4, held 1). Side-bias: bull=-0.058 (wrong=38/52) bear=+0.057 (wrong=0/19). Regime skips: policy_hold_on_setup=21, mask_veto=5, no_ltf_setup=0, counts={'acted': 204, 'policy_hold': 21, 'flat_ok': 44, 'mask_veto': 5}."
+      },
+      {
+        "day": "2026-02-27",
+        "pull": 6,
+        "policy_hold_on_setup": 0,
+        "high_miss_pull": 0,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 45,
+        "wrong_side_under_bear": 7,
+        "side_bias_bull": -0.10792951410015425,
+        "side_bias_bear": 0.10065853030517186,
+        "forward_ok": 247,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 244,
+          "flat_ok": 3
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-02-27 (goal 3.0% / floor 3.5%). Decisions: 247. Mean op entropy: 2.371. Forward ok/fail: 247/0. Bread-and-butter (pull) bars: buy=4 (acted 0, held 0); sell=2 (acted 1, held 0). Side-bias: bull=-0.108 (wrong=45/48) bear=+0.101 (wrong=7/29). Regime skips: policy_hold_on_setup=0, mask_veto=0, no_ltf_setup=0, counts={'acted': 244, 'flat_ok': 3}."
+      },
+      {
+        "day": "2026-03-10",
+        "pull": 8,
+        "policy_hold_on_setup": 37,
+        "high_miss_pull": 2,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 20,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.05023054964840412,
+        "side_bias_bear": 0.06370535679161549,
+        "forward_ok": 263,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 189,
+          "policy_hold": 37,
+          "flat_ok": 35,
+          "no_htf_bias": 1,
+          "mask_veto": 1
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-03-10 (goal 3.0% / floor 3.5%). Decisions: 263. Mean op entropy: 2.381. Forward ok/fail: 263/0. Bread-and-butter (pull) bars: buy=6 (acted 0, held 2); sell=2 (acted 2, held 0). Side-bias: bull=-0.050 (wrong=20/48) bear=+0.064 (wrong=0/28). Regime skips: policy_hold_on_setup=37, mask_veto=1, no_ltf_setup=0, counts={'acted': 189, 'policy_hold': 37, 'flat_ok': 35, 'no_htf_bias': 1, 'mask_veto': 1}."
+      },
+      {
+        "day": "2026-03-19",
+        "pull": 11,
+        "policy_hold_on_setup": 0,
+        "high_miss_pull": 0,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 51,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.1127793785988116,
+        "side_bias_bear": 0.10984942599617203,
+        "forward_ok": 274,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 273,
+          "flat_ok": 1
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-03-19 (goal 3.0% / floor 3.5%). Decisions: 274. Mean op entropy: 2.371. Forward ok/fail: 274/0. Bread-and-butter (pull) bars: buy=7 (acted 0, held 0); sell=4 (acted 4, held 0). Side-bias: bull=-0.113 (wrong=51/51) bear=+0.110 (wrong=0/29). Regime skips: policy_hold_on_setup=0, mask_veto=0, no_ltf_setup=0, counts={'acted': 273, 'flat_ok': 1}."
+      },
+      {
+        "day": "2026-03-30",
+        "pull": 10,
+        "policy_hold_on_setup": 22,
+        "high_miss_pull": 6,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 9,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.04033197138620459,
+        "side_bias_bear": 0.04494522843095988,
+        "forward_ok": 262,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 198,
+          "policy_hold": 22,
+          "flat_ok": 39,
+          "mask_veto": 2,
+          "no_htf_bias": 1
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-03-30 (goal 3.0% / floor 3.5%). Decisions: 262. Mean op entropy: 2.382. Forward ok/fail: 262/0. Bread-and-butter (pull) bars: buy=6 (acted 0, held 5); sell=4 (acted 3, held 1). Side-bias: bull=-0.040 (wrong=9/23) bear=+0.045 (wrong=0/27). Regime skips: policy_hold_on_setup=22, mask_veto=2, no_ltf_setup=0, counts={'acted': 198, 'policy_hold': 22, 'flat_ok': 39, 'mask_veto': 2, 'no_htf_bias': 1}."
+      },
+      {
+        "day": "2026-04-09",
+        "pull": 7,
+        "policy_hold_on_setup": 26,
+        "high_miss_pull": 3,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 13,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.06123430851627798,
+        "side_bias_bear": 0.1058010955651601,
+        "forward_ok": 262,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 209,
+          "flat_ok": 27,
+          "policy_hold": 26
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-04-09 (goal 3.0% / floor 3.5%). Decisions: 262. Mean op entropy: 2.376. Forward ok/fail: 262/0. Bread-and-butter (pull) bars: buy=5 (acted 0, held 3); sell=2 (acted 2, held 0). Side-bias: bull=-0.061 (wrong=13/34) bear=+0.106 (wrong=0/45). Regime skips: policy_hold_on_setup=26, mask_veto=0, no_ltf_setup=0, counts={'acted': 209, 'flat_ok': 27, 'policy_hold': 26}."
+      },
+      {
+        "day": "2026-04-20",
+        "pull": 8,
+        "policy_hold_on_setup": 0,
+        "high_miss_pull": 0,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 40,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.10864652432501318,
+        "side_bias_bear": 0.1324634889238759,
+        "forward_ok": 262,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 262
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-04-20 (goal 3.0% / floor 3.5%). Decisions: 262. Mean op entropy: 2.367. Forward ok/fail: 262/0. Bread-and-butter (pull) bars: buy=6 (acted 0, held 0); sell=2 (acted 2, held 0). Side-bias: bull=-0.109 (wrong=40/40) bear=+0.132 (wrong=0/19). Regime skips: policy_hold_on_setup=0, mask_veto=0, no_ltf_setup=0, counts={'acted': 262}."
+      },
+      {
+        "day": "2026-04-29",
+        "pull": 12,
+        "policy_hold_on_setup": 0,
+        "high_miss_pull": 0,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 50,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.09291867405176163,
+        "side_bias_bear": 0.09409220591187478,
+        "forward_ok": 262,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 262
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-04-29 (goal 3.0% / floor 3.5%). Decisions: 262. Mean op entropy: 2.371. Forward ok/fail: 262/0. Bread-and-butter (pull) bars: buy=7 (acted 0, held 0); sell=5 (acted 5, held 0). Side-bias: bull=-0.093 (wrong=50/50) bear=+0.094 (wrong=0/30). Regime skips: policy_hold_on_setup=0, mask_veto=0, no_ltf_setup=0, counts={'acted': 262}."
+      },
+      {
+        "day": "2026-05-08",
+        "pull": 7,
+        "policy_hold_on_setup": 8,
+        "high_miss_pull": 3,
+        "policy_hold_ghosts": 0,
+        "wrong_side_under_bull": 28,
+        "wrong_side_under_bear": 0,
+        "side_bias_bull": -0.07993097625234549,
+        "side_bias_bear": 0.08924882058744077,
+        "forward_ok": 262,
+        "forward_fail": 0,
+        "skip_counts": {
+          "acted": 239,
+          "flat_ok": 13,
+          "policy_hold": 8,
+          "no_htf_bias": 1,
+          "mask_veto": 1
+        },
+        "summary": "Brain PROVEN_SPRINT_row04_clear24_2026-07-20 on day 2026-05-08 (goal 3.0% / floor 3.5%). Decisions: 262. Mean op entropy: 2.377. Forward ok/fail: 262/0. Bread-and-butter (pull) bars: buy=5 (acted 0, held 3); sell=2 (acted 2, held 0). Side-bias: bull=-0.080 (wrong=28/34) bear=+0.089 (wrong=0/27). Regime skips: policy_hold_on_setup=8, mask_veto=1, no_ltf_setup=0, counts={'acted': 239, 'flat_ok': 13, 'policy_hold': 8, 'no_htf_bias': 1, 'mask_veto': 1}."
+      }
+    ]
+  },
+  "conclusion": {
+    "class": "WrongSide",
+    "cure_in_config": "Search dials w_with_trend_close\u2191 and w_against_trend_close\u2193 via self_heal/meta; prove_it gate; do not freeze human final weights.",
+    "cure_in_training": "self_heal_epoch / meta_tuner search dials; adopt only if prove_it clear rate rises and breach stays 0.",
+    "toolkit": "MRI side-bias + wrong_side + reward dials at 0 for meta search"
+  }
+}

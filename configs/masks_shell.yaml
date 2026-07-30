@@ -1,4 +1,6 @@
 # WHO: Monty rulings + ADR-0002/0003. WHAT: Shell + forever masks. WHEN: 2026-07-18.
+# CHANGE LOG:
+# - 2026-07-30  CCI dual mask (5m OR 30m) + dual SMA4+4 close (1m AND 15m) — WHY: Shell blocks wrong-side opens; OR with envelope.
 per_trade_risk_cap_pct: 0.25
 max_adds_per_stack: 5
 # NOTE (review 2026-07-20): these behaviors are HARDCODED LAW in both engines, not knobs —
@@ -11,11 +13,28 @@ heat_guard:                       # engineering addition, flagged (ADR-0002)
   enabled: true                   # the one real heat-guard switch (read by both engines)
 kill_switch_file: artifacts/KILL   # touch this file => freeze + close all
 forever_masks:
+  # (1) Legacy envelope on high/low — all listed TFs must agree
   sma_period: 4
   sma_shift: 4
   applied_to: [high, low]
   timeframes: [15min, 30min, 1h]
   fail_closed_on_warmup: true
+  # (2) CCI dual regime — BOTH CCI30 and CCI100; either TF triggers
+  # sell blocked when both > 0 and each > applied SMA(2)+2
+  # buy blocked when both < 0 and each < applied SMA(2)+2
+  cci_regime_gate:
+    periods: [30, 100]
+    zero_level: 0
+    require_vs_applied_sma: true
+    timeframes: [5min, 30min]   # OR
+  # (3) Price vs SMA(4) shift +4 on close — both TFs required
+  # buy blocked when close < SMA on 1m AND 15m
+  # sell blocked when close > SMA on 1m AND 15m
+  price_sma_gate:
+    period: 4
+    shift: 4
+    source: close
+    timeframes: [1min, 15min]   # AND
 broker_stop:
   enabled: true
   atr_mult: 6.0                  # wide stop: 6 x ATR(14) of the LTF (momentum needs room)

@@ -1,6 +1,10 @@
 # 500 signal slots. +1 buy | -1 sell | 0 empty. RL may ignore.
-# ... 76-79 smma_rsi | 80-83 agree | 84-499 free
+# ... 76-79 smma_rsi | 80-83 agree | 84-86 dvmr | 87-89 mv profit | 90-92 bb_rsi_sma sets | 93-499 free
 # CHANGE LOG:
+# - 2026-07-30  slots 90-92 bb_rsi_sma sets A/B/C (5m+30m/1h, 15m+1h/4h, 30m+4h/1d)
+# - 2026-07-30  slots 87-89 momentum vector profit-tuned (30m+4h US30 winners)
+# - 2026-07-29  slots 84-86 dvmr pack (champ 1h+1d, 30m+4h v2, pulse)
+# - 2026-07-29  slot 84 dvmr_champ_1h_1d (highest EURUSD return DVMR research)
 # - 2026-07-25  slots 80-83 agree composites (≥70% tests)
 # - 2026-07-25  slots 76-79 smma_rsi >60% only (15m+4h, Set C)
 # - 2026-07-25  slots 67-75 rsi2_ema | 64-66 stoch_ema | 56-63 stoch_mtf
@@ -91,3 +95,16 @@ filled:
   81: {name: agree_seB_r2B_epB, enabled: true, kind: agree_seB_r2B_epB, family: agree, fidelity: native, note: "2of seB+r2B+epB ~70-72%"}
   82: {name: agree_2of_top4, enabled: true, kind: agree_2of_top4, family: agree, fidelity: native, note: "2of seA+r2A+seB+smaC ~76/71%"}
   83: {name: agree_seA_r2A_atr, enabled: true, kind: agree_seA_r2A_atr, family: agree, fidelity: native, note: "seA∩r2A+ATR ~78-81%"}
+  # DVMR champion — highest return recipe from multi-TF research (EURUSD ~+18.8% IS)
+  # base=1h HTF=1d n=5 m=15 thr=0.50 sticky hard-style. Needs new train if obs slots were OFF.
+  84: {name: dvmr_champ_1h_1d, enabled: true, kind: dvmr_champ_1h_1d, family: dvmr, fidelity: native, note: "1h+1d n5/m15 thr0.50 sticky; best DVMR return ~+18.8%"}
+  85: {name: dvmr_30m_4h_v2, enabled: true, kind: dvmr_30m_4h_v2, family: dvmr, fidelity: native, note: "30m+4h n5/m20 thr0.50 sticky; strong EURUSD runner-up"}
+  86: {name: dvmr_champ_1h_1d_pulse, enabled: true, kind: dvmr_champ_1h_1d_pulse, family: dvmr, fidelity: native, note: "same as 84 but entry-bar pulse only"}
+  # Momentum Vector M — US30 profit recipes (30m+4h long). SL/TP noted from backtest only.
+  87: {name: mv_best_quality_30m_4h_long, enabled: true, kind: mv_best_quality_30m_4h_long, family: momentum_vector, fidelity: native, note: "BEST QUALITY: thr35 hm25 long SL2 TP4; US30 +99.7% PF1.23 Sh0.97"}
+  88: {name: mv_strong3_30m_4h_long, enabled: true, kind: mv_strong3_30m_4h_long, family: momentum_vector, fidelity: native, note: "STRONG#3: thr35 hm25 long SL1.5 TP3.5; +97.4% PF1.21 (same entries as 87)"}
+  89: {name: mv_strong4_30m_4h_long, enabled: true, kind: mv_strong4_30m_4h_long, family: momentum_vector, fidelity: native, note: "STRONG#4: thr25 hm12 long SL2 TP4; US30 +81.3% PF1.12 Sh0.71"}
+  # BB / RSI-BB / SMA multi-set agents (HTF price BB100/0.5/sh2; LTF RSI5 + BB on RSI 10/1/sh5)
+  90: {name: bb_rsi_sma_A, enabled: true, kind: bb_rsi_sma_A, family: bb_rsi_sma, fidelity: native, note: "Set A: 5m + 30m/1h pulse (HTF BB100/0.5; LTF RSI5+BB on RSI)"}
+  91: {name: bb_rsi_sma_B, enabled: true, kind: bb_rsi_sma_B, family: bb_rsi_sma, fidelity: native, note: "Set B: 15m + 1h/4h pulse"}
+  92: {name: bb_rsi_sma_C, enabled: true, kind: bb_rsi_sma_C, family: bb_rsi_sma, fidelity: native, note: "Set C: 30m + 4h/1d pulse"}

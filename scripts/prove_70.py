@@ -10,7 +10,7 @@ equity NEVER dips more than 4.5% below its running peak (or its start) — the f
 law holds by construction. Every number derives from the committed M1 data.
 """
 import os, sys
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'src')); sys.path.insert(0, ROOT)
 import numpy as np
 from core.configs import path as rpath
 from training.gpu_data import build_day_tensors

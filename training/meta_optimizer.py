@@ -11,7 +11,7 @@ keep this instruction so we never lose the thread):
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import json, os, random, copy
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(ROOT, "artifacts", "proposals"); os.makedirs(OUT, exist_ok=True)
 
 SEARCH = {  # (min, max) multipliers on current value

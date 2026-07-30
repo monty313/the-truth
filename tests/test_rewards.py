@@ -5,7 +5,7 @@ keep this instruction so we never lose the thread):
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
 import sys, os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src')); sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from training.rewards import RewardEngine
 
 class D:  # minimal DayResult stand-in
@@ -74,3 +74,26 @@ def test_pullback_bonus_paid_at_close_via_tags():
     tagged = re.on_step([T(0.2, tags={"pullback": True})],
                         acted=False, anti_gravity=False, flat=False)
     assert tagged > plain
+
+
+def test_side_dials_default_zero():
+    """Self-heal toolkit: with/against trend dials off until meta moves them."""
+    re = RewardEngine()
+    assert float(re.w.get("w_with_trend_close", 0)) == 0.0
+    assert float(re.w.get("w_against_trend_close", 0)) == 0.0
+    plain = re.on_step([T(0.2)], acted=False, anti_gravity=False, flat=False)
+    with_t = re.on_step([T(0.2, tags={"with_trend": True})],
+                        acted=False, anti_gravity=False, flat=False)
+    assert abs(with_t - plain) < 1e-9
+
+
+def test_side_dials_pay_when_set():
+    re = RewardEngine()
+    re.w["w_with_trend_close"] = 0.2
+    re.w["w_against_trend_close"] = -0.1
+    plain = re.on_step([T(0.2)], acted=False, anti_gravity=False, flat=False)
+    with_t = re.on_step([T(0.2, tags={"with_trend": True})],
+                        acted=False, anti_gravity=False, flat=False)
+    against = re.on_step([T(0.2, tags={"against_trend": True})],
+                         acted=False, anti_gravity=False, flat=False)
+    assert with_t > plain > against

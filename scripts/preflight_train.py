@@ -7,6 +7,7 @@ Exit 0 = ready to train. Non-zero = fix listed items first.
 from __future__ import annotations
 import os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "src"))
 sys.path.insert(0, ROOT)
 
 errors, warns = [], []
@@ -61,22 +62,23 @@ except Exception as e:
     bad(f"telemetry: {e}")
 
 print("\n[5] Doctrine SSOT")
-reg = os.path.join(ROOT, "doctrine", "LLM_REGIME_DEFINITIONS.yaml")
+reg = os.path.join(ROOT, "references", "doctrine", "LLM_REGIME_DEFINITIONS.yaml")
 if os.path.isfile(reg):
     ok("doctrine/LLM_REGIME_DEFINITIONS.yaml")
 else:
     bad("missing doctrine/LLM_REGIME_DEFINITIONS.yaml")
 
 print("\n[6] Data + checkpoints")
-cur = os.path.join(ROOT, "data", "XAUUSD_curriculum_2026.csv")
+cur = os.path.join(ROOT, "data", "raw", "XAUUSD_curriculum_2026.csv")
 if os.path.isfile(cur):
-    ok("data/XAUUSD_curriculum_2026.csv")
+    ok("data/raw/XAUUSD_curriculum_2026.csv")
 else:
-    bad("missing curriculum CSV")
-ckpt = os.path.join(ROOT, "artifacts", "checkpoints")
-proven = os.path.join(ckpt, "PROVEN_SPRINT_row04_clear24_2026-07-20.pt")
+    bad("missing curriculum CSV (expected data/raw/XAUUSD_curriculum_2026.csv)")
+proven = os.path.join(
+    ROOT, "models", "PROVEN_SPRINT_row04_clear24_2026-07-20.pt"
+)
 if os.path.isfile(proven):
-    ok("PROVEN_SPRINT checkpoint")
+    ok("models/PROVEN_SPRINT checkpoint")
 else:
     warn("PROVEN_SPRINT checkpoint missing — warm-start will fall back")
 

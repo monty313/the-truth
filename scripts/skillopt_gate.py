@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SkillOpt-style gate for doctrine/policy_skill.md
+"""SkillOpt-style gate for references/doctrine/policy_skill.md
 
 Memory loop for the diagnostic LLM:
   trajectories (IRAC JSON) → proposed skill bullet → validate with prove_it philosophy
@@ -18,10 +18,13 @@ import argparse
 import json
 import os
 import shutil
+import sys
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SKILL = os.path.join(ROOT, "doctrine", "policy_skill.md")
+sys.path.insert(0, os.path.join(ROOT, "src"))
+sys.path.insert(0, ROOT)
+SKILL = os.path.join(ROOT, "references", "doctrine", "policy_skill.md")
 BEST = os.path.join(ROOT, "artifacts", "skills", "best_skill.md")
 REJECTED = os.path.join(ROOT, "artifacts", "skills", "rejected")
 

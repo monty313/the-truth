@@ -15,11 +15,12 @@ WHY:   A learning loop that silently can't learn one of its action
        dimensions is a dummy in disguise — Monty's instruction forbids it.
 INTERCONNECTED WITH: env, policy (joint_logprob), rewards.state_dict,
        experiments/tracker, telemetry (span 'ppo_update' — in STAGES),
-       artifacts/checkpoints/.
+       models/.
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-30  checkpoints -> models/ (cookiecutter)  — WHY: tidy ML layout.
 - 2026-07-19  joint op+size log-prob, config-driven, checkpoint carries reward state  — WHY: audit T1/T8/R11.
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
@@ -29,12 +30,11 @@ import numpy as np
 import torch
 import torch.nn.functional as Fnn
 
-from core.configs import path as rpath, training_cfg
+from core.configs import models_dir, training_cfg
 from telemetry import tracer
 from training.policy import Brain
 
-CKPT = rpath("artifacts", "checkpoints")
-os.makedirs(CKPT, exist_ok=True)
+CKPT = models_dir()
 
 
 class PPO:

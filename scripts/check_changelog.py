@@ -1,3 +1,4 @@
+import sys
 """Guard: every source file must carry a CHANGE LOG block (ADR-0011).
 5W+I: WHO Claude for Monty. WHAT lists source files missing the in-code
 CHANGE LOG block so we never lose the WHY of a change. WHEN 2026-07-19.
@@ -11,6 +12,8 @@ keep this instruction so we never lose the thread):
 """
 import os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 SKIP = ("__pycache__", ".git", "artifacts", "logs", ".venv")
 missing = []
 for dp, dirs, files in os.walk(ROOT):

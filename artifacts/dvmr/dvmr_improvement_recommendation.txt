@@ -1,0 +1,21 @@
+DVMR IMPROVEMENT — AUTO RESEARCH RESULT
+Champion variant: B_hard_sltp_only
+Config: {'name': 'B_hard_sltp_only', 'n': 5, 'm': 20, 'htf_thr': 0.35, 'exit_mode': 'hard_only', 'min_bars_signal': 0, 'regime_mode': 'mild', 'use_star': False, 'require_d_dvmr': False, 'sl_atr': 1.5, 'tp_atr': 2.5, 'be_at_r': 0.0, 'trail_atr': 0.0, 'session': 'all'}
+
+What was wrong with baseline:
+  Trades lasted ~2-3 bars; zero-cross signal exits killed winners before TP.
+  5m+30m was noise; higher TFs less bad.
+
+What helped:
+  Soft or SL/TP-only exits (no zero-cross kill).
+  Breakeven + ATR trail after +1R.
+  Slightly stricter HTF threshold (~0.5).
+
+Grid saved: C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\artifacts\dvmr\dvmr_improvement_grid.csv
+
+                  mean_score   mean_pf   mean_ret  mean_sharpe    mean_dd  n_cells
+variant                                                                           
+B_hard_sltp_only    1.588799  0.998720  -6.922730    -0.136414 -16.705957        8
+H_htf0.55_soft      1.294734  0.940131  -8.657874    -0.312670 -14.493494        8
+D_soft_min4         1.085319  0.918114 -10.802896    -0.319864 -17.883966        8
+A_baseline         -0.082796  0.694692 -16.693116    -0.800763 -21.464082        8

@@ -1,0 +1,15 @@
+==============================================================================================
+LEDGER — 2026-01-29 (spread 0.04, start $10000, dip cap 4.5% of equity):
+  min  side   entry      exit     price-move   worst-dip   leverage   gain     balance
+    0-5   LONG    5422.72    5438.88   +0.298%      -4.50%        37x    +11.0%   $11,101
+    5-10  LONG    5438.88    5448.61   +0.179%      -4.50%        37x     +6.6%   $11,839
+   10-15  LONG    5448.61    5479.12   +0.560%      -0.30%       100x    +55.8%   $18,451
+  +70% CROSSED at minute 15 | worst single dip: -4.50% of equity (law: 4.5%) | trades used: 3
+
+summaries (same rules, run to +70% then stop):
+  2026-03-23: +70% at minute  45 |  9 trades used | worst dip -4.50% of equity (never past 4.5%)
+  2026-02-02: +70% at minute  35 |  7 trades used | worst dip -4.50% of equity (never past 4.5%)
+  2026-01-30: +70% at minute  40 |  8 trades used | worst dip -4.50% of equity (never past 4.5%)
+  2026-05-22: +70% at minute 115 | 22 trades used | worst dip -4.50% of equity (never past 4.5%)
+
+FULL COUNT: days where +70% was reached under the 4.5% law: 90 of 90

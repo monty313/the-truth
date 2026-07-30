@@ -4,17 +4,17 @@
 WHO:   Claude for Monty (audit R6: torch.load appeared NOWHERE — nothing
        could ever run a trained brain).
 WHAT:  load_brain(name) -> (Brain in eval mode, metadata). Reads
-       artifacts/checkpoints/<name>.pt saved by training/ppo.PPO.save
+       models/<name>.pt saved by training/ppo.PPO.save
        (model weights + obs_dim + reward state + seed).
 WHEN:  2026-07-19 (audit round 2).
 WHERE: scripts/run_live.py (dry-run/live), evaluation/champion.py.
 WHY:   Frozen means frozen (Monty's ruling) — this loads, never trains.
-INTERCONNECTED WITH: training/policy.Brain, training/ppo.save,
-       artifacts/checkpoints/.
+INTERCONNECTED WITH: training/policy.Brain, training/ppo.save, models/.
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND here on every edit, with date + WHY;
 keep this instruction so we never lose the thread):
+- 2026-07-30  models/ path (cookiecutter) + legacy fallback  — WHY: tidy layout.
 - 2026-07-19  created  — WHY: nothing loaded a checkpoint; frozen champion had no door to run (audit R6).
 # NEXT EDITOR: append your change at the top with date + WHY, and keep this line.
 """
@@ -23,13 +23,13 @@ import os
 
 import torch
 
-from core.configs import path as rpath
+from core.configs import checkpoint_file
 from training.policy import Brain
 
 
 def load_brain(name: str = "champion_candidate"):
     """Returns (brain, meta) or (None, {}) if no checkpoint exists."""
-    p = rpath("artifacts", "checkpoints", f"{name}.pt")
+    p = checkpoint_file(name)
     if not os.path.exists(p):
         return None, {}
     d = torch.load(p, map_location="cpu", weights_only=False)

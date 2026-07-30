@@ -1,0 +1,65 @@
+{
+  "version": "2.0.0",
+  "options": {
+    "env": {
+      "PYTHONPATH": "${workspaceFolder}"
+    },
+    "cwd": "${workspaceFolder}"
+  },
+  "tasks": [
+    {
+      "label": "1 prove_it",
+      "type": "shell",
+      "command": "python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "2 preflight",
+      "type": "shell",
+      "command": "python scripts/preflight_train.py",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "3 self_heal",
+      "type": "shell",
+      "command": "python scripts/self_heal_epoch.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5 --days 12",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "4 train RL agent",
+      "type": "shell",
+      "command": "python scripts/gpu_train.py",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "backtest",
+      "type": "shell",
+      "command": "python scripts/backtest_momentum_vector.py",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "lint",
+      "type": "shell",
+      "command": "python -m ruff check training features signals scripts core",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "python -m pytest tests -q",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

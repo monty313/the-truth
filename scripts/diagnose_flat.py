@@ -3,7 +3,7 @@ at native vs new settings. The per-trade risk cap is 0.25%, so hitting 3%/day NE
 many trades: a brain doing ~0-2 trades/day is 'lid on' (timid), not unlucky.
 Also replays the sacred +6.53% day (2026-01-29) in the twin at native settings."""
 import os, sys, time
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'src')); sys.path.insert(0, ROOT)
 import torch
 from core.configs import path as rpath
 from training.gpu_data import build_day_tensors
@@ -38,7 +38,7 @@ def bench(tag, brain, sim, D, tg, rk, de):
     return r, tr
 
 # ---------- curriculum (90 days) ----------
-csv = rpath("data", "XAUUSD_curriculum_2026.csv")
+csv = rpath("data", "raw", "XAUUSD_curriculum_2026.csv")
 do, dp, dl, dates, cols = build_day_tensors(csv, cache_path=rpath("artifacts","gpu_cache_XAUUSD_curriculum_2026.npz"), verbose=False)
 obs_dim = 10 * (len(cols) + SELF_DIM); D = do.shape[0]
 sim = FastSim(do, dp, dl, cols, device="cpu", K=24)

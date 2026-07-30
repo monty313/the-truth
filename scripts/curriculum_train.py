@@ -23,6 +23,8 @@ import sys
 import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT)
 
 import pandas as pd                                             # noqa: E402  (kept for parity/deps)
@@ -90,12 +92,12 @@ def main():
               and all(d.get("pnl_pct", 0.0) >= GOAL and not d.get("breached") for d in dd))
         return ok, dd
 
-    histdir = rpath("artifacts", "checkpoints", "history"); os.makedirs(histdir, exist_ok=True)
+    histdir = rpath("models", "history"); os.makedirs(histdir, exist_ok=True)
     histmd = rpath("artifacts", "CURRICULUM_HISTORY.md")
     prog = rpath("artifacts", "curriculum_progress.json")
 
     def milestone(lvl, dd):
-        bp = rpath("artifacts", "checkpoints", a.ckpt + ".pt")
+        bp = rpath("models", a.ckpt + ".pt")
         hh = hashlib.sha256(open(bp, "rb").read()).hexdigest()[:12]
         stamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
         frozen = "curric_L%03d_%s_%s.pt" % (lvl, stamp, hh)
@@ -104,10 +106,10 @@ def main():
         with open(histmd, "a") as fh:
             if first:
                 fh.write("# Curriculum history - new highest level, newest at bottom\n"
-                         "Revert: copy artifacts/checkpoints/history/<file> over "
-                         "artifacts/checkpoints/curric_live.pt\n\n")
+                         "Revert: copy models/history/<file> over "
+                         "models/curric_live.pt\n\n")
             fh.write("## LEVEL %d days clean  -  %s\n" % (lvl, stamp))
-            fh.write("- frozen: artifacts/checkpoints/history/%s  (sha256[:12] %s)\n" % (frozen, hh))
+            fh.write("- frozen: models/history/%s  (sha256[:12] %s)\n" % (frozen, hh))
             fh.write("- per-day pnl%%: %s\n" % [round(d.get("pnl_pct", 0), 2) for d in dd])
             fh.write("- every day >= %.1f%%, 0 breaches, %d consecutive days\n\n" % (GOAL, lvl))
         print("   *** MILESTONE: %d days clean -> frozen history/%s" % (lvl, frozen), flush=True)

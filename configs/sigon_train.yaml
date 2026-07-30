@@ -10,10 +10,10 @@ max_day_retries: 3
 
 # Champion = new all-time-high consistency STREAK with breach 0%.
 champion:
-  path: artifacts/checkpoints/best_sigon.pt
-  named_pattern: artifacts/checkpoints/best_sigon_streak{streak:02d}.pt
-  history_pattern: artifacts/checkpoints/history/SIGON_streak{streak:02d}_obs{obs_dim}_SN-{serial}.pt
-  record_json: artifacts/checkpoints/best_sigon_record.json
+  path: models/best_sigon.pt
+  named_pattern: models/best_sigon_streak{streak:02d}.pt
+  history_pattern: models/history/SIGON_streak{streak:02d}_obs{obs_dim}_SN-{serial}.pt
+  record_json: models/best_sigon_record.json
   lock_requires_breach_zero: true
 
 meta:

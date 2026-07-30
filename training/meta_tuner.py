@@ -1,6 +1,7 @@
 """Self-tuner: rewards/hypers toward consistency. Target% and risk% are RUNTIME inputs only.
 
 CHANGE LOG:
+- 2026-07-30  self-heal dials in BOUNDS (with/against trend, quick_pull, setup_skip) — WHY: meta searches side-bias cures; defaults 0.
 - 2026-07-25  restore on main; w_pullback_with_htf fallback 0.25
 - 2026-07-24  unlock w_pullback_with_htf in BOUNDS
 - 2026-07-20  Phase 1 self-tuner
@@ -13,7 +14,7 @@ import time
 
 import torch
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
@@ -32,6 +33,11 @@ BOUNDS = {
     "w_net_profit": (0.5, 25.0),
     "w_no_drawdown_close": (0.0, 1.0),
     "w_pullback_with_htf": (0.0, 1.0),
+    # Self-heal toolkit — meta may raise from 0; never a frozen human answer
+    "w_with_trend_close": (0.0, 1.0),
+    "w_against_trend_close": (-1.0, 0.0),
+    "w_quick_pull_close": (0.0, 0.5),
+    "w_setup_skip": (-0.5, 0.0),
     "lr": (1e-5, 3e-3),
     "entropy_coef": (0.0, 0.1),
 }
@@ -40,6 +46,8 @@ _FALLBACK = {
     "w_death_penalty": -10.0, "w_did_nothing": -6.0, "w_idleness_hunger": -0.002,
     "w_day_goal_hit": 2.0, "w_streak_per_day": 0.15, "w_trade_consistency": 0.10,
     "w_net_profit": 6.0, "w_no_drawdown_close": 0.02, "w_pullback_with_htf": 0.25,
+    "w_with_trend_close": 0.0, "w_against_trend_close": 0.0,
+    "w_quick_pull_close": 0.0, "w_setup_skip": 0.0,
     "lr": 3e-4, "entropy_coef": 0.01,
 }
 
