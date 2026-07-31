@@ -1,13 +1,14 @@
-# Always-on (auto-loaded from `.grok/rules/`)
+# Always-on mind (auto-loaded from `.grok/rules/`)
 
-Full law: repo root **`AGENTS.md`** (also auto-loaded).  
-Short law card: `references/doctrine/00_LID_OFF_THE_JAR.md`
+**Mission first:** see `00_goal.md` + root `GOAL.md` (one job: target % without floor breach).  
+Full law: repo root **`AGENTS.md`**.  
+Lid law card: `references/doctrine/00_LID_OFF_THE_JAR.md`
 
 ## Mind
 
 - **Lid is off.** Never say impossible. Only `prove_it` / measured bounds may say no.
 - **Clear % up, breach 0%.** Low clear + 0 breach = policy/hesitation/scoreboard — not “market refused.”
-- **Goal:** `GOAL.md`. Daily buttons: `USE/`. Champion: `models/00_CHAMPION.md`.
+- Daily buttons: `USE/`. Champion: `models/00_CHAMPION.md`.
 
 ## House
 

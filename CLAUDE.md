@@ -1,13 +1,30 @@
 # Claude / multi-tool bridge
 
-**Authoritative project law is the same-folder file: [AGENTS.md](AGENTS.md).**
+**Mission:** [GOAL.md](GOAL.md)  
+**Full law:** [AGENTS.md](AGENTS.md)
 
-Grok Build already auto-loads `AGENTS.md`. This file exists so Claude Code and other tools that look for `CLAUDE.md` get the same mind.
+## GOAL (forever)
 
-## Must obey
+**One bot that solves for any target % and risk % Monty types in — without having to retrain.**
 
-1. **Lid off the jar** — never conclude “impossible”; clear % up, breach 0%; measure with `prove_it`.
-2. **Organization** — no root doc dumps; follow `AGENTS.md` placement table.
-3. **North star** — `GOAL.md`.
+1. Hit the **daily profit target %** he set  
+2. Do not breach the **daily risk floor %** he set  
 
-Detail: `AGENTS.md` §0 + `references/doctrine/00_LID_OFF_THE_JAR.md`.
+Same `.pt`. Change the two numbers anytime. **No retrain** just to switch pairs.  
+3.0/3.5 is a yardstick, not the whole goal.
+
+| Meter (at his numbers) | Rule |
+|------------------------|------|
+| **Clear %** | Climb |
+| **Breach %** | Stay **0** |
+| **Streak** | Climb |
+
+**Score:** `python scripts/prove_it.py <brain> <target%> <risk%>`  
+If it does not help clear % / breach 0 at the pair under test → **skip it**.
+
+## Also
+
+- **Lid off the jar** — never “impossible”; measure with `prove_it`  
+- **Organization** — follow `AGENTS.md` (no root doc dumps)
+
+Detail: `AGENTS.md` GOAL + §0 · `references/doctrine/00_LID_OFF_THE_JAR.md`

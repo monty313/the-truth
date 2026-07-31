@@ -1,6 +1,11 @@
 """Self-tuner: rewards/hypers toward consistency. Target% and risk% are RUNTIME inputs only.
 
 CHANGE LOG:
+- 2026-07-30  Step 2 adaptive de-timid: when WrongSide hot, scale 0.35 +
+  force >=2 trend-knob mutations; sticky focus until rulers clear —
+  WHY: meta learns where/how hard to search; never freezes dial values.
+- 2026-07-30  secondary adopt veto: flat consistency + worse wrong_side_rate —
+  WHY: evaluate() now returns side metrics; do not adopt side regressions when clear% flat.
 - 2026-07-30  self-heal dials in BOUNDS (with/against trend, quick_pull, setup_skip) — WHY: meta searches side-bias cures; defaults 0.
 - 2026-07-25  restore on main; w_pullback_with_htf fallback 0.25
 - 2026-07-24  unlock w_pullback_with_htf in BOUNDS
@@ -61,12 +66,27 @@ def base_config() -> dict:
         out[k] = float(min(max(v, lo), hi))
     return out
 
-def mutate(config: dict, scale: float, gen=None, max_knobs: int = 3) -> dict:
+def mutate(config: dict, scale: float, gen=None, max_knobs: int = 3,
+           force_keys: list | tuple | None = None, min_force: int = 0) -> dict:
+    """Mutate up to max_knobs. If force_keys/min_force set, reserve that many
+    slots for the force group (e.g. trend dials under WrongSide pressure).
+    Never writes fixed answers — only noise within BOUNDS."""
     keys = list(BOUNDS.keys())
     out = dict(config)
-    for _ in range(max(1, min(max_knobs, len(keys)))):
+    n = max(1, min(max_knobs, len(keys)))
+    force = [k for k in (force_keys or []) if k in BOUNDS]
+    n_force = min(max(0, int(min_force)), len(force), n) if force else 0
+    picked: list[str] = []
+    # forced slots first (with replacement if group smaller than n_force)
+    for _ in range(n_force):
+        avail = [k for k in force if k not in picked] or force
+        j = int(torch.randint(0, len(avail), (1,), generator=gen).item())
+        picked.append(avail[j])
+    # remaining slots: any knob
+    for _ in range(n - n_force):
         j = int(torch.randint(0, len(keys), (1,), generator=gen).item())
-        k = keys[j]
+        picked.append(keys[j])
+    for k in picked:
         lo, hi = BOUNDS[k]
         noise = float(torch.randn(1, generator=gen).item()) * scale * (hi - lo)
         out[k] = float(min(max(out[k] + noise, lo), hi))
@@ -76,6 +96,64 @@ def adopt_gate(b: int, c: int, z: float = 2.33, min_disagreements: int = 5) -> b
     if (b + c) < min_disagreements:
         return False
     return (c - b) >= z * math.sqrt(b + c + 1e-9)
+
+
+# Consistency delta below this is "flat" for the secondary WrongSide veto.
+FLAT_CONS_EPS = 1e-3
+
+
+def side_adopt_ok(cand_cons: float, champ_cons: float,
+                  cand_wsr: float, champ_wsr: float,
+                  flat_eps: float = FLAT_CONS_EPS) -> bool:
+    """Secondary gate: reject if consistency gain is flat AND wrong_side_rate worsens.
+
+    Primary (adopt_gate + breach) still decides statistical clear/breach wins.
+    This only vetoes side-regressions when clear% barely moved.
+    """
+    flat = (float(cand_cons) - float(champ_cons)) < float(flat_eps)
+    worse_side = float(cand_wsr) > float(champ_wsr) + 1e-12
+    return not (flat and worse_side)
+
+
+# ---------------------------------------------------------------------------
+# Adaptive search (Step 2) — learn-to-learn WHERE and HOW HARD to search.
+# Rulers only: if WrongSide is hot, mutate bigger steps on trend dials.
+# Does NOT hard-code dial values; primary/secondary adopt gates unchanged.
+# Extend TREND_KNOBS later with Vector-specific dials (min_force still applies).
+# ---------------------------------------------------------------------------
+SCALE_NORMAL = 0.15
+SCALE_AGGRESSIVE = 0.35
+# Trend group — append future Vector dials here; keep min_force <= len(group).
+TREND_KNOBS = ("w_with_trend_close", "w_against_trend_close")
+WSR_HOT = 0.15
+SIDE_BIAS_HOT = -0.03
+# Sticky focus: while hot, refresh; after clear, hold several gens then relax.
+FOCUS_HOLD_GENS = 5
+
+
+def wrong_side_hot(res: dict) -> bool:
+    """True when any WrongSide ruler is breached (from evaluate() side keys)."""
+    wsr = float(res.get("wrong_side_rate", 0.0) or 0.0)
+    sb = float(res.get("side_bias_bull", 0.0) or 0.0)
+    ss = float(res.get("side_bias_bear", 0.0) or 0.0)
+    return (wsr > WSR_HOT) or (sb < SIDE_BIAS_HOT) or (ss < SIDE_BIAS_HOT)
+
+
+def search_plan(res: dict, focus_left: int) -> tuple[float, list | None, int, int, bool]:
+    """Return (scale, force_keys|None, min_force, new_focus_left, focused).
+
+    Adaptive: hot disease → aggressive scale + force trend knobs; sticky
+    focus_left keeps pressure for FOCUS_HOLD_GENS after last hot reading.
+    """
+    hot = wrong_side_hot(res)
+    if hot:
+        focus_left = FOCUS_HOLD_GENS
+    elif focus_left > 0:
+        focus_left -= 1
+    focused = hot or focus_left > 0
+    if focused:
+        return (SCALE_AGGRESSIVE, list(TREND_KNOBS), 2, focus_left, True)
+    return (SCALE_NORMAL, None, 0, focus_left, False)
 
 def day_after_day_streak(brain, sim, ordered_days, gen=None, focus_frac=0.6,
                          decide_every=1, ranges=None):
@@ -141,9 +219,23 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 60.0,
     champion_score = float(champ_res.get("consistency", 0.0))
     history = []
     gen_id = 0
+    focus_left = 0  # sticky aggressive generations remaining
+    was_focused = False  # for enter/exit history markers
     while time.time() < t_end:
         gen_id += 1
-        cand_cfg = mutate(champion_cfg, scale=0.15, gen=gen)
+        # Adaptive search from champion side metrics (disease of the incumbent).
+        scale, force_keys, min_force, focus_left, focused = search_plan(
+            champ_res, focus_left)
+        # One-line history marker when focused mode enters or exits.
+        focus_event = None
+        if focused and not was_focused:
+            focus_event = "enter_focused"
+        elif (not focused) and was_focused:
+            focus_event = "exit_focused"
+        was_focused = focused
+        cand_cfg = mutate(
+            champion_cfg, scale=scale, gen=gen,
+            force_keys=force_keys, min_force=min_force)
         w_snap = dict(getattr(sim, "w", {}) or {})
         try:
             probe(brain, sim, work_days, cand_cfg, decide_every=decide_every, steps=32)
@@ -152,11 +244,42 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 60.0,
                 focus_frac=float(ranges.get("focus_frac", 0.6)), decide_every=decide_every, gen=gen2, ranges=ranges)
             c = int(max(0, round((res.get("consistency", 0) - champion_score) * len(audit_days))))
             b = int(max(0, round((champion_score - res.get("consistency", 0)) * len(audit_days))))
-            if adopt_gate(b, c) and float(res.get("breach_rate", 1)) <= float(champ_res.get("breach_rate", 1)) + 1e-9:
+            primary = (
+                adopt_gate(b, c)
+                and float(res.get("breach_rate", 1))
+                <= float(champ_res.get("breach_rate", 1)) + 1e-9
+            )
+            # evaluate() always returns side_bias_* / wrong_side_rate (Step 1 dict shape)
+            secondary = side_adopt_ok(
+                float(res.get("consistency", 0)), champion_score,
+                float(res.get("wrong_side_rate", 0.0)),
+                float(champ_res.get("wrong_side_rate", 0.0)),
+            )
+            row = {
+                "gen": gen_id,
+                "consistency": float(res.get("consistency", 0)),
+                "wrong_side_rate": float(res.get("wrong_side_rate", 0.0)),
+                "search": "aggressive" if focused else "normal",
+                "scale": scale,
+                "focus_left": focus_left,
+            }
+            if focus_event:
+                row["focus_event"] = focus_event
+            if primary and secondary:
                 champion_cfg, champion_score, champ_res = cand_cfg, float(res.get("consistency", 0)), res
-                history.append({"gen": gen_id, "adopted": True, "consistency": champion_score})
+                row.update({
+                    "adopted": True,
+                    "consistency": champion_score,
+                    "side_bias_bull": float(res.get("side_bias_bull", 0.0)),
+                })
+                history.append(row)
             else:
-                history.append({"gen": gen_id, "adopted": False, "consistency": float(res.get("consistency", 0))})
+                row.update({
+                    "adopted": False,
+                    "primary": primary,
+                    "secondary": secondary,
+                })
+                history.append(row)
         finally:
             if hasattr(sim, "w") and w_snap:
                 sim.w.update(w_snap)

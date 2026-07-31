@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MOMENTUM ONE — SIGON HUD</title>
+<style>
+  :root { --bg:#070b12; --panel:#0d1524; --edge:#1a3a5c; --cyan:#00e5ff; --gold:#ffc107; --green:#00ff9d; --yellow:#ffd60a; --red:#ff3b5c; --muted:#7a8da6; --text:#e8f1ff; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; font-family:"Segoe UI",system-ui,sans-serif; background:radial-gradient(ellipse at 20% 0%,#122038 0%,var(--bg) 55%); color:var(--text); }
+  header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem; border-bottom:1px solid var(--edge); background:linear-gradient(90deg,#0a1220,#101c30); }
+  header h1 { margin:0; font-size:1.1rem; letter-spacing:0.2em; color:var(--cyan); text-shadow:0 0 12px rgba(0,229,255,.45); }
+  header .badge { font-size:.75rem; color:var(--gold); border:1px solid var(--gold); padding:.25rem .6rem; border-radius:999px; }
+  .grid { display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:1rem; padding:1rem; }
+  @media (max-width:960px){ .grid { grid-template-columns:1fr; } }
+  .panel { background:var(--panel); border:1px solid var(--edge); border-radius:12px; padding:1rem; box-shadow:0 0 24px rgba(0,229,255,.06); }
+  .panel h2 { margin:0 0 .75rem; font-size:.8rem; letter-spacing:.15em; color:var(--cyan); text-transform:uppercase; }
+  .metric { display:flex; justify-content:space-between; align-items:baseline; padding:.4rem 0; border-bottom:1px solid #152238; }
+  .metric span { color:var(--muted); font-size:.85rem; }
+  .metric strong { font-size:1.25rem; }
+  .metric strong.good { color:var(--green); }
+  .board { display:grid; grid-template-columns:repeat(auto-fill,minmax(52px,1fr)); gap:6px; max-height:240px; overflow:auto; }
+  .day { aspect-ratio:1; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; border:1px solid #1e3350; background:#0a1422; }
+  .day.clear { background:rgba(0,255,157,.15); border-color:var(--green); }
+  .day.near { background:rgba(255,214,10,.12); border-color:var(--yellow); }
+  .day.miss { background:#121a28; }
+  .day.breach { background:rgba(255,59,92,.2); border-color:var(--red); }
+  textarea, input[type=file] { width:100%; background:#080f1a; color:var(--text); border:1px solid var(--edge); border-radius:8px; padding:.6rem; font-family:ui-monospace,monospace; font-size:.8rem; }
+  textarea { min-height:140px; }
+  .hint { color:var(--muted); font-size:.75rem; margin-top:.5rem; line-height:1.4; }
+  footer { padding:.75rem 1.5rem; color:var(--muted); font-size:.75rem; border-top:1px solid var(--edge); }
+  .arc { height:4px; border-radius:2px; margin:.5rem 0 1rem; background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green)); box-shadow:0 0 10px rgba(0,229,255,.5); }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚡ MOMENTUM ONE · SIGON HUD</h1>
+  <div class="badge">IRON PROTOCOL · LIVE BOARD</div>
+</header>
+<div class="arc"></div>
+<main class="grid">
+  <section class="panel">
+    <h2>Champion consistency</h2>
+    <div class="metric"><span>Clear rate</span><strong id="clear" class="good">—</strong></div>
+    <div class="metric"><span>Breach rate</span><strong id="breach">—</strong></div>
+    <div class="metric"><span>Best row</span><strong id="row">—</strong></div>
+    <div class="metric"><span>Obs dim</span><strong id="obs">—</strong></div>
+    <div class="metric"><span>Updated</span><strong id="upd" style="font-size:.85rem">—</strong></div>
+    <p class="hint">Reads <code>artifacts/llm_curriculum/day_board.json</code> + <code>champion_live.json</code> when served from project root. highest consistency → best_sigon.pt</p>
+  </section>
+  <section class="panel">
+    <h2>Live day board</h2>
+    <div class="board" id="board"></div>
+    <p class="hint">🟢 clear · 🟡 under target · ⚪ miss · 🔴 breach · Auto-refresh 15s</p>
+  </section>
+  <section class="panel">
+    <h2>CMO think inbox</h2>
+    <input type="file" id="mdfile" accept=".md,text/markdown,text/plain"/>
+    <textarea id="md" placeholder="# Additional think notes for CMO / SkillOpt"></textarea>
+    <p class="hint">Also drop files in <code>doctrine/cmo_inbox/</code>. Adopt skill/reward changes only if clear↑ and breach stays 0.</p>
+  </section>
+</main>
+<footer>
+  Cache: after feature/symbol changes delete artifacts/gpu_cache_*.npz and artifacts/symbol_cache/* once — never delete .pt champions.
+  · XAUUSD &amp; US30: razor-thin spreads, typically no transaction fees.
+</footer>
+<script>
+const boardEl = document.getElementById('board');
+function paintBoard(days) {
+  boardEl.innerHTML = '';
+  (days || []).forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'day ' + (d.status || 'miss');
+    el.textContent = d.emoji || '⚪';
+    el.title = [d.symbol, d.date, d.status, d.pnl].filter(Boolean).join(' | ');
+    boardEl.appendChild(el);
+  });
+}
+async function refresh() {
+  try {
+    const r = await fetch('artifacts/llm_curriculum/day_board.json?ts=' + Date.now());
+    if (r.ok) {
+      const j = await r.json();
+      paintBoard(j.days);
+      if (j.clear_rate != null) document.getElementById('clear').textContent = (100*j.clear_rate).toFixed(1) + '%';
+      if (j.breach_rate != null) document.getElementById('breach').textContent = (100*j.breach_rate).toFixed(1) + '%';
+      if (j.row != null) document.getElementById('row').textContent = j.row;
+      if (j.obs_dim != null) document.getElementById('obs').textContent = j.obs_dim;
+      if (j.updated_at) document.getElementById('upd').textContent = j.updated_at;
+      return;
+    }
+  } catch (e) {}
+  // demo fallback
+  if (!boardEl.children.length) {
+    const states = ['clear','near','miss','clear','miss','clear','near','miss','clear','breach'];
+    const emoji = {clear:'🟢', near:'🟡', miss:'⚪', breach:'🔴'};
+    paintBoard(states.map((s,i)=>({status:s, emoji:emoji[s]})));
+  }
+}
+document.getElementById('mdfile').addEventListener('change', async (e) => {
+  const f = e.target.files && e.target.files[0];
+  if (f) document.getElementById('md').value = await f.text();
+});
+refresh();
+setInterval(refresh, 15000);
+</script>
+</body>
+</html>

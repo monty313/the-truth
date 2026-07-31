@@ -2,8 +2,8 @@
 
 Self-healing RL scalper.
 
-You set **daily target %** and **risk %**.  
-It aims to hit the target without breaching the floor.
+**Goal:** one bot that solves for **any** daily **target %** and **risk %** you type in — **without retrain**.  
+Change the numbers → same brain → hit that target, respect that floor.
 
 ---
 

@@ -29,6 +29,9 @@ INTERCONNECTED WITH: training/fastsim (results: goal_hit/breached/min_eq/min_wor
 ----------------------------------------------------------------------
 
 CHANGE LOG (newest first — APPEND on every edit with date + WHY; keep this line):
+- 2026-07-30  side_bias_bull/bear + wrong_side_rate in evaluate() via
+  mind_probe.side_metrics_from_decisions; side_metrics= flag to disable cost —
+  WHY: meta can see WrongSide without expanding obs/dims (Vector teaching Step 1).
 - 2026-07-25  auto_ranges reads goals.yaml goal_conditioning (focus_frac 0.40,
   focus 2.5/3.5, ranges) — WHY: single source for SIGON sampling law.
 - 2026-07-20  review-hardened: CRN seeding, without-replacement days + honest SE,
@@ -51,6 +54,7 @@ if _ROOT not in sys.path:
 
 from training.gpu_rollout import rollout        # noqa: E402
 from core.configs import goals_cfg              # noqa: E402
+from training.fastsim import FRAME, SELF_DIM    # noqa: E402  # same 10 / 12 mind_probe uses
 
 
 # Machine policy (NOT human knobs): the practice envelope is a FIXED wide band so one brain
@@ -75,14 +79,107 @@ def auto_ranges() -> dict:
             "focus_target": goal, "focus_risk": floor, "focus_frac": ff}
 
 
+_SIDE_ZEROS = {"side_bias_bull": 0.0, "side_bias_bear": 0.0, "wrong_side_rate": 0.0}
+
+
+@torch.no_grad()
+def _side_metrics_on_days(brain, sim, day_idx, decide_every: int = 5) -> dict:
+    """Side scoreboard for meta: reuses mind_probe.side_metrics_from_decisions.
+
+    Walks firm-cont bars only (placeholder self-state, same spirit as Mind Probe).
+    FRAME=10 / SELF_DIM=12 match fastsim + mind_probe. Soft-fails to zeros.
+    """
+    from telemetry.mind_probe import (
+        DecisionRecord, side_metrics_from_decisions, LONG_OPS, SHORT_OPS, N_OPS,
+    )
+    try:
+        if not hasattr(sim, "days_obs") or not hasattr(sim, "cont_buy_idx"):
+            return dict(_SIDE_ZEROS)
+        brain.eval()
+        dev = next(brain.parameters()).device
+        if torch.is_tensor(day_idx):
+            days = [int(x) for x in day_idx.detach().cpu().tolist()]
+        else:
+            days = [int(x) for x in day_idx]
+        seen, decisions = set(), []
+        de = max(1, int(decide_every))
+        for d in days:
+            if d in seen:
+                continue
+            seen.add(d)
+            L = int(sim.day_lens[d].item()) if hasattr(sim, "day_lens") else int(sim.Lmax)
+            L = min(L, int(sim.Lmax))
+            day_obs = sim.days_obs[d]  # (Lmax, C)
+            cb_idx, cs_idx = sim.cont_buy_idx, sim.cont_sell_idx
+            t = FRAME
+            while t < L:
+                row = day_obs[t]
+                cont_buy = bool((row[cb_idx] > 0).any().item()) if cb_idx.numel() else False
+                cont_sell = bool((row[cs_idx] > 0).any().item()) if cs_idx.numel() else False
+                if not cont_buy and not cont_sell:
+                    t += de
+                    continue
+                # frame window + placeholder self (goal/floor only) — no dim expand
+                sl = max(0, t - FRAME + 1)
+                window = day_obs[sl: t + 1]
+                if window.shape[0] < FRAME:
+                    pad = window[:1].repeat(FRAME - int(window.shape[0]), 1)
+                    window = torch.cat([pad, window], dim=0)
+                self_pad = torch.zeros(FRAME, SELF_DIM, device=day_obs.device, dtype=day_obs.dtype)
+                self_pad[:, 0] = 3.0
+                self_pad[:, 1] = 3.5
+                obs = torch.cat([window, self_pad], dim=-1).reshape(1, -1).to(dev)
+                result = brain(obs)
+                op_part = result[0] if isinstance(result, (tuple, list)) else result
+                if hasattr(op_part, "probs"):
+                    probs = op_part.probs.detach().reshape(-1)
+                else:
+                    probs = torch.softmax(op_part.logits.detach().reshape(-1), dim=-1)
+                probs = probs[:N_OPS]
+                chosen = int(probs.argmax().item())
+                p_long = float(probs[list(LONG_OPS)].sum().item())
+                p_short = float(probs[list(SHORT_OPS)].sum().item())
+                decisions.append(DecisionRecord(
+                    t=int(t),
+                    op_probs=[float(x) for x in probs.detach().cpu().tolist()],
+                    chosen_op=chosen,
+                    chosen_op_name="",
+                    chosen_size=0.0,
+                    value=0.0,
+                    cont_buy=cont_buy,
+                    cont_sell=cont_sell,
+                    p_long=p_long,
+                    p_short=p_short,
+                    p_hold=float(probs[0].item()),
+                ))
+                t += de
+        if not decisions:
+            return dict(_SIDE_ZEROS)
+        sm = side_metrics_from_decisions(decisions)
+        n_cont = int(sm["n_cont_buy_only"] + sm["n_cont_sell_only"])
+        n_wrong = int(sm["n_wrong_side_under_bull"] + sm["n_wrong_side_under_bear"])
+        return {
+            "side_bias_bull": float(sm["side_bias_bull"]),
+            "side_bias_bear": float(sm["side_bias_bear"]),
+            "wrong_side_rate": float(n_wrong) / float(max(n_cont, 1)),
+        }
+    except Exception:
+        return dict(_SIDE_ZEROS)
+
+
 @torch.no_grad()
 def evaluate(brain, sim, day_pool, n_episodes: int = 512, focus_frac: float = 0.6,
              decide_every: int = 5, gen: "torch.Generator | None" = None,
-             ranges: dict | None = None) -> dict:
+             ranges: dict | None = None, side_metrics: bool = True) -> dict:
     """Greedy-score `brain` over n random (day, target, risk) episodes from `day_pool`.
     Pass the SAME `gen` (a seeded torch.Generator on sim.dev) to two brains to compare
     them on identical episodes (common random numbers -> no luck drift). Returns the true
     consistency (+ honest SE + per-episode cleared mask) and the smooth climb surrogate.
+
+    Also returns side_bias_bull, side_bias_bear, wrong_side_rate (Vector teaching Step 1)
+    when side_metrics=True (default). Pass side_metrics=False to skip the extra firm-cont
+    brain walk if meta-loop runtime becomes painful — keys still present as 0.0.
+
     Every parameter here is internal; only target%/risk% (via auto_ranges) come from the user."""
     dev = sim.dev
     r = ranges or auto_ranges()
@@ -123,11 +220,19 @@ def evaluate(brain, sim, day_pool, n_episodes: int = 512, focus_frac: float = 0.
     barrier = F.softplus((-risk - min_worst) / s_r)                       # ~0 while safe, bites near floor
     surrogate = float((clear + participate - barrier).mean().item())
 
+    # ---- side scoreboard (optional cost; keys always present for stable dict shape) ----
+    side = _side_metrics_on_days(brain, sim, di, decide_every=decide_every) if side_metrics else dict(_SIDE_ZEROS)
+
     return {"consistency": consistency, "surrogate": surrogate,
             "breach_rate": float(breached.mean().item()),
             "cleared": int(cleared.sum().item()), "n": n, "n_distinct_days": n_distinct,
             "se": se, "cleared_mask": cleared.bool(),
-            "day_idx": di.detach().clone()}    # per-episode day -> lets the gate cluster by DAY (kills pseudo-replication)
+            "day_idx": di.detach().clone(),  # per-episode day -> gate can cluster by DAY
+            # Vector teaching Step 1 — future code must not assume old dict-only shape:
+            # always includes side_bias_bull, side_bias_bear, wrong_side_rate
+            "side_bias_bull": float(side["side_bias_bull"]),
+            "side_bias_bear": float(side["side_bias_bear"]),
+            "wrong_side_rate": float(side["wrong_side_rate"])}
 
 
 def split_days(n_days: int, holdout_frac: float = 0.15):

@@ -17,18 +17,24 @@ Everything else is background.
 
 ---
 
-## The score (only one)
+## The mission (one line)
+
+**One bot that works for whatever target % and risk % you type in — without retrain.**  
+Change the numbers → same brain → score again. Not only 3.0 / 3.5.
+
+## The score (at YOUR numbers)
 
 ```text
 python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5
 ```
 
-or double-click: **`USE/1_prove.bat`**
+Change the last two numbers anytime (e.g. `2.5 2.5`). Same brain.  
+Or double-click: **`USE/1_prove.bat`**
 
 | Word | Meaning |
 |------|---------|
-| **Clear %** | Good days (hit target, no floor hit) → climb this |
-| **Breach %** | Bad floor hits → must stay **0** |
+| **Clear %** | Good days (hit **your** target, no floor hit) → climb this |
+| **Breach %** | Floor hits on **your** risk → must stay **0** |
 
 ---
 
@@ -43,14 +49,20 @@ or double-click: **`USE/1_prove.bat`**
 
 ## For AI / Grok sessions
 
-**You do not have to remind Grok.**  
-In this folder, **Grok Build auto-loads [AGENTS.md](AGENTS.md)** into every session  
-(plus `.grok/rules/00_lid_off.md`). That includes the **lid-off jar** mind.
+**You do not have to remind Grok of the goal.**  
+In this folder, Grok Build **auto-loads**:
 
-Check: open a terminal in this folder → run `grok inspect` → look for **Project Instructions**.
+| File | What it burns in |
+|------|------------------|
+| **[GOAL.md](GOAL.md)** | Mission (via AGENTS + rules) |
+| **[AGENTS.md](AGENTS.md)** | Full law — starts with **GOAL (forever)** |
+| **`.grok/rules/00_goal.md`** | Goal only — always on |
+| **`.grok/rules/00_lid_off.md`** | Lid-off mind |
 
-Also on disk for other tools: `CLAUDE.md`, `.github/copilot-instructions.md`.
+Check: terminal in this folder → `grok inspect` → **Project Instructions**.
 
-Law card (human/AI deep dive): **[references/doctrine/00_LID_OFF_THE_JAR.md](references/doctrine/00_LID_OFF_THE_JAR.md)**
+Other tools: `CLAUDE.md`, `.github/copilot-instructions.md` (same goal).
+
+Law card: **[references/doctrine/00_LID_OFF_THE_JAR.md](references/doctrine/00_LID_OFF_THE_JAR.md)**
 
 Keep the repo organized. Do not dump files on the root.

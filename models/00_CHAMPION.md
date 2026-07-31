@@ -2,6 +2,9 @@
 
 **This is the active brain. Start here in `models/`.**
 
+**Mission (from GOAL.md):** one bot that solves for **any** target % / risk % you type in — **without retrain**.  
+Numbers below are the **yardstick** pair (3.0 / 3.5). Re-score at other pairs anytime (same file).
+
 ---
 
 ## Current
@@ -10,19 +13,20 @@
 |-------|--------|
 | **Name** | `PROVEN_SPRINT_row04_clear24_2026-07-20` |
 | **File** | `models/PROVEN_SPRINT_row04_clear24_2026-07-20.pt` |
-| **Clear** | ~24% |
-| **Breach** | 0% |
+| **Clear @ 3.0/3.5** | ~24% |
+| **Breach @ 3.0/3.5** | 0% |
 | **Date** | 2026-07-30 |
 
 ---
 
-## Score it
+## Score it (any target / risk)
 
 ```text
 python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5
+python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 2.5 2.5
 ```
 
-Or: **`USE/1_prove.bat`**
+Or: **`USE/1_prove.bat`** (change numbers if you want a different pair)
 
 ---
 

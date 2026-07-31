@@ -6,14 +6,51 @@
 > Confirm anytime: `grok inspect` → **Project Instructions** should list this file.
 
 **Owner:** Monty (dyslexic). Organization is not optional.  
-**North star:** [GOAL.md](GOAL.md)  
+**Canonical goal file:** [GOAL.md](GOAL.md) — SSOT; never invent a different mission.  
 **Mindset law:** [references/doctrine/00_LID_OFF_THE_JAR.md](references/doctrine/00_LID_OFF_THE_JAR.md)
 
-**Also auto-loaded (belt + suspenders):** `.grok/rules/00_lid_off.md`  
+**Also auto-loaded:** `.grok/rules/00_goal.md` · `.grok/rules/00_lid_off.md`  
 **Other tools:** `CLAUDE.md` + `.github/copilot-instructions.md` point here.
 
 If you do not know where something goes, **stop and put it in the right place**.  
 Do not leave new mess on the root.
+
+---
+
+## GOAL (forever — never confuse this)
+
+**This is the only mission. Permanent. Every session. Every agent.**
+
+### What we are building
+
+**One bot that solves for any target % and risk % Monty types in — without having to retrain.**
+
+Not “the 3% bot.”  
+Not “change numbers → retrain.”  
+Same brain; **whatever pair** goes in the **target** and **risk** places:
+
+1. Hit that **daily profit target %**  
+2. Without breaching that **daily risk floor %**
+
+| | |
+|--|--|
+| **Job** | Goal-conditioned scalper: **any** runtime target + risk pair, **no retrain to switch pairs** |
+| **Win meter** | `prove_it <brain> <target> <risk>` only |
+| **Climb** | **Clear %** at the pair under test |
+| **Sacred** | **Breach % = 0** at that pair |
+| **Also climb** | Streak at that pair |
+| **Filter** | If it does not help clear % or breach 0% **for the numbers Monty cares about** → **skip it** |
+| **Target / risk** | **Inputs you type** at runtime — same `.pt` |
+| **Forbidden** | Retrain **only** because Monty changed 2.5 / 3.0 / 3.5 (or any other pair) |
+| **Yardstick** | 3.0 / 3.5 is a common scoreboard — still test other pairs without retrain |
+| **Champion** | `models/00_CHAMPION.md` + `GOAL.md` |
+| **Score** | `python scripts/prove_it.py <brain> <target%> <risk%>` or `USE/1_prove.bat` |
+
+**Full text:** root `GOAL.md`. If this section and `GOAL.md` disagree, **`GOAL.md` wins** — then update this section.
+
+**Improve order:** diagnose → dials/masks → practice (vary goal/floor when possible) → prove_it → keep or reject.
+
+**Out of scope unless Monty asks:** new UIs, parallel frameworks, essays without `prove_it`, or a single-pair-only bot.
 
 ---
 
@@ -71,9 +108,9 @@ Performance is possible. Low clear rate is not “the market said no.”
 
 ## 1. Read order (every session)
 
-1. `00_START_HERE.md`
-2. `GOAL.md`
-3. **This file** — especially **§0 LID OFF THE JAR**
+1. **GOAL section above** (and root `GOAL.md` if anything is unclear)
+2. `00_START_HERE.md` (human path)
+3. **This file** — **GOAL** + **§0 LID OFF THE JAR**
 4. `references/doctrine/00_LID_OFF_THE_JAR.md` (if doing diagnosis / training / signals)
 5. `DO_THIS.md` (if running commands)
 6. `references/handoffs/HANDOFF.md` (only if you need full history)
@@ -169,11 +206,12 @@ Working packages live at **repo root** (`training/`, `core/`, …).
 ## 6. After you finish work
 
 1. No new junk on root  
-2. Update `GOAL.md` scoreboard if clear/breach changed  
+2. Update `GOAL.md` scoreboard if clear/breach changed (keep AGENTS **GOAL** section in sync if the mission wording changes)  
 3. If champion brain changed → update `models/00_CHAMPION.md`  
 4. If new daily command → add to `USE/` + `scripts/00_DAILY.md` + `DO_THIS.md`  
 5. Long notes → `references/handoffs/` not root  
 6. Run or mention: `python scripts/preflight_train.py` if you touched paths  
+7. Never redefine the mission — only `GOAL.md` may change the goal  
 
 ---
 
