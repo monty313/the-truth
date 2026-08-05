@@ -1,0 +1,236 @@
+{
+  "saved_at": "2026-08-05T03:44:56.826915+00:00",
+  "seed": 7,
+  "start_idx": 40,
+  "full_obs": true,
+  "days": [
+    {
+      "date": "2026-03-17",
+      "target_pct": 3.0,
+      "risk_pct": 3.5,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 3.0028,
+        "n_entries": 2,
+        "mode": "entry_plus_add"
+      },
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 3.1632,
+        "n_entries": 1,
+        "n_disagree": 1
+      },
+      "disagrees": [
+        {
+          "time": "2026-03-17 16:35:00",
+          "bar": 995,
+          "mark_would": "SELL",
+          "policy_did": "HOLD",
+          "equity_pct": 2.012
+        }
+      ]
+    },
+    {
+      "date": "2026-03-18",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 2.1517,
+        "n_entries": 2,
+        "mode": "entry_plus_add"
+      },
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.1487,
+        "n_entries": 2,
+        "n_disagree": 0
+      },
+      "disagrees": []
+    },
+    {
+      "date": "2026-03-19",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 2.2784,
+        "n_entries": 1,
+        "mode": "single"
+      },
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.2863,
+        "n_entries": 1,
+        "n_disagree": 0
+      },
+      "disagrees": []
+    },
+    {
+      "date": "2026-03-20",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 2.5189,
+        "n_entries": 1,
+        "mode": "single"
+      },
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.6743,
+        "n_entries": 1,
+        "n_disagree": 0
+      },
+      "disagrees": []
+    },
+    {
+      "date": "2026-03-23",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 2.0772,
+        "n_entries": 1,
+        "mode": "single"
+      },
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5464,
+        "n_entries": 1,
+        "n_disagree": 0
+      },
+      "disagrees": []
+    },
+    {
+      "date": "2026-03-24",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 2.2598,
+        "n_entries": 2,
+        "mode": "entry_plus_add"
+      },
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -2.17,
+        "n_entries": 4,
+        "n_disagree": 0
+      },
+      "disagrees": []
+    },
+    {
+      "date": "2026-03-25",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 2.575,
+        "n_entries": 2,
+        "mode": "entry_plus_add"
+      },
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5826,
+        "n_entries": 1,
+        "n_disagree": 0
+      },
+      "disagrees": []
+    },
+    {
+      "date": "2026-03-26",
+      "target_pct": 1.5,
+      "risk_pct": 2.0,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 1.5431,
+        "n_entries": 2,
+        "mode": "entry_plus_add"
+      },
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -0.9046,
+        "n_entries": 2,
+        "n_disagree": 3
+      },
+      "disagrees": [
+        {
+          "time": "2026-03-26 15:45:00",
+          "bar": 945,
+          "mark_would": "HOLD",
+          "policy_did": "BUY",
+          "equity_pct": -0.9046
+        },
+        {
+          "time": "2026-03-26 19:30:00",
+          "bar": 1170,
+          "mark_would": "BUY",
+          "policy_did": "HOLD",
+          "equity_pct": -0.9046
+        },
+        {
+          "time": "2026-03-26 20:20:00",
+          "bar": 1220,
+          "mark_would": "BUY",
+          "policy_did": "HOLD",
+          "equity_pct": -0.9046
+        }
+      ]
+    },
+    {
+      "date": "2026-03-27",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 1.0547,
+        "n_entries": 2,
+        "mode": "entry_plus_add"
+      },
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.0709,
+        "n_entries": 2,
+        "n_disagree": 1
+      },
+      "disagrees": [
+        {
+          "time": "2026-03-27 15:20:00",
+          "bar": 920,
+          "mark_would": "HOLD",
+          "policy_did": "BUY",
+          "equity_pct": -1.0709
+        }
+      ]
+    },
+    {
+      "date": "2026-03-30",
+      "target_pct": 1.5,
+      "risk_pct": 2.5,
+      "mark": {
+        "cleared": true,
+        "pnl_pct": 1.5718,
+        "n_entries": 2,
+        "mode": "entry_plus_add"
+      },
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.338,
+        "n_entries": 2,
+        "n_disagree": 0
+      },
+      "disagrees": []
+    }
+  ]
+}

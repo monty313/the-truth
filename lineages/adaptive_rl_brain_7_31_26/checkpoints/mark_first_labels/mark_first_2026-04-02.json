@@ -1,0 +1,213 @@
+{
+  "date": "2026-04-02",
+  "target_pct": 2.0,
+  "risk_pct": 3.0,
+  "who_first": "MARK",
+  "n_labels": 24,
+  "mark_actions": {
+    "HOLD": 19,
+    "SELL": 3,
+    "BUY": 2
+  },
+  "cleared": false,
+  "breached": false,
+  "banked": false,
+  "pnl_pct": 1.4773,
+  "n_entries": 5,
+  "labels": [
+    {
+      "t": 720,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "no_aligned_opportunity",
+      "equity_pct": 0.0
+    },
+    {
+      "t": 745,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 0.0
+    },
+    {
+      "t": 770,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 0.0
+    },
+    {
+      "t": 795,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 0.0
+    },
+    {
+      "t": 820,
+      "mark_action": 2,
+      "mark_name": "SELL",
+      "reason": "aligned_bear n=1 score=6.00>0.00",
+      "equity_pct": 0.0
+    },
+    {
+      "t": 845,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "no_aligned_opportunity",
+      "equity_pct": -0.0719
+    },
+    {
+      "t": 870,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": -0.2578
+    },
+    {
+      "t": 895,
+      "mark_action": 2,
+      "mark_name": "SELL",
+      "reason": "aligned_bear n=1 score=4.60>0.00",
+      "equity_pct": -0.2578
+    },
+    {
+      "t": 920,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "aligned_bear n=1 score=4.00>0.00",
+      "equity_pct": 0.5767
+    },
+    {
+      "t": 945,
+      "mark_action": 1,
+      "mark_name": "BUY",
+      "reason": "aligned_bull n=2 score=10.60>0.00",
+      "equity_pct": 0.0918
+    },
+    {
+      "t": 970,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "aligned_bull n=1 score=4.60>0.00",
+      "equity_pct": 0.8234
+    },
+    {
+      "t": 995,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "aligned_bull n=2 score=10.60>0.00",
+      "equity_pct": 1.4222
+    },
+    {
+      "t": 1020,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 1.2955
+    },
+    {
+      "t": 1045,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 1.1042
+    },
+    {
+      "t": 1070,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 0.9637
+    },
+    {
+      "t": 1095,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 0.9352
+    },
+    {
+      "t": 1120,
+      "mark_action": 2,
+      "mark_name": "SELL",
+      "reason": "aligned_bear n=1 score=4.00>0.00",
+      "equity_pct": 1.0978
+    },
+    {
+      "t": 1145,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "no_aligned_opportunity",
+      "equity_pct": 1.1228
+    },
+    {
+      "t": 1170,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "aligned_bear n=1 score=4.00>0.00",
+      "equity_pct": 1.5437
+    },
+    {
+      "t": 1195,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 1.4578
+    },
+    {
+      "t": 1220,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "no_aligned_opportunity",
+      "equity_pct": 1.3239
+    },
+    {
+      "t": 1245,
+      "mark_action": 1,
+      "mark_name": "BUY",
+      "reason": "aligned_bull n=1 score=6.00>0.00",
+      "equity_pct": 1.1134
+    },
+    {
+      "t": 1270,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "aligned_bull n=2 score=10.60>0.00",
+      "equity_pct": 1.889
+    },
+    {
+      "t": 1295,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "htf_bias_no_ltf_trigger",
+      "equity_pct": 1.1196
+    }
+  ],
+  "y": [
+    0,
+    0,
+    0,
+    0,
+    2,
+    0,
+    0,
+    2,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    2,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0
+  ]
+}

@@ -1,0 +1,384 @@
+{
+  "saved_at": "2026-08-05T00:45:05.121817+00:00",
+  "tallies": {
+    "A_physics_impossible_under_shell": 1,
+    "D_teacher_already_won": 7,
+    "B_principles_block_all_winning_entries": 1,
+    "C_teacher_missed_valid_principle_win": 1
+  },
+  "days": [
+    {
+      "date": "2026-03-17",
+      "target_pct": 3.0,
+      "risk_pct": 3.5,
+      "baseline": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -0.799,
+        "n_entries": 4,
+        "min_eq_pct": -0.799,
+        "banked": false
+      },
+      "pack_mark_cleared": false,
+      "pack_policy_cleared": false,
+      "force_directional_bars": 5,
+      "decision_bars": 27,
+      "physics_wins": 0,
+      "principle_wins": 0,
+      "best_principle": null,
+      "best_physics": null,
+      "issue": "A_physics_impossible_under_shell"
+    },
+    {
+      "date": "2026-03-18",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0666,
+        "n_entries": 2,
+        "min_eq_pct": -0.3232,
+        "banked": true
+      },
+      "pack_mark_cleared": true,
+      "pack_policy_cleared": true,
+      "force_directional_bars": 15,
+      "decision_bars": 27,
+      "physics_wins": 7,
+      "principle_wins": 4,
+      "best_principle": {
+        "entry_t": 770,
+        "side": "SELL",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.1122,
+        "n_entries": 1,
+        "min_eq_pct": -0.149,
+        "banked": true
+      },
+      "best_physics": {
+        "entry_t": 1120,
+        "side": "SELL",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.2505,
+        "n_entries": 1,
+        "min_eq_pct": -0.0915,
+        "banked": true
+      },
+      "issue": "D_teacher_already_won"
+    },
+    {
+      "date": "2026-03-19",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.254,
+        "n_entries": 1,
+        "min_eq_pct": -0.1262,
+        "banked": true
+      },
+      "pack_mark_cleared": true,
+      "pack_policy_cleared": true,
+      "force_directional_bars": 12,
+      "decision_bars": 27,
+      "physics_wins": 4,
+      "principle_wins": 3,
+      "best_principle": {
+        "entry_t": 770,
+        "side": "SELL",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.254,
+        "n_entries": 1,
+        "min_eq_pct": -0.1262,
+        "banked": true
+      },
+      "best_physics": {
+        "entry_t": 770,
+        "side": "SELL",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.254,
+        "n_entries": 1,
+        "min_eq_pct": -0.1262,
+        "banked": true
+      },
+      "issue": "D_teacher_already_won"
+    },
+    {
+      "date": "2026-03-20",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5775,
+        "n_entries": 1,
+        "min_eq_pct": -0.25,
+        "banked": true
+      },
+      "pack_mark_cleared": true,
+      "pack_policy_cleared": true,
+      "force_directional_bars": 8,
+      "decision_bars": 24,
+      "physics_wins": 4,
+      "principle_wins": 2,
+      "best_principle": {
+        "entry_t": 870,
+        "side": "SELL",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5775,
+        "n_entries": 1,
+        "min_eq_pct": -0.25,
+        "banked": true
+      },
+      "best_physics": {
+        "entry_t": 870,
+        "side": "SELL",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5775,
+        "n_entries": 1,
+        "min_eq_pct": -0.25,
+        "banked": true
+      },
+      "issue": "D_teacher_already_won"
+    },
+    {
+      "date": "2026-03-23",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0874,
+        "n_entries": 1,
+        "min_eq_pct": -0.2309,
+        "banked": true
+      },
+      "pack_mark_cleared": true,
+      "pack_policy_cleared": true,
+      "force_directional_bars": 11,
+      "decision_bars": 27,
+      "physics_wins": 1,
+      "principle_wins": 1,
+      "best_principle": {
+        "entry_t": 720,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0874,
+        "n_entries": 1,
+        "min_eq_pct": -0.2309,
+        "banked": true
+      },
+      "best_physics": {
+        "entry_t": 720,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0874,
+        "n_entries": 1,
+        "min_eq_pct": -0.2309,
+        "banked": true
+      },
+      "issue": "D_teacher_already_won"
+    },
+    {
+      "date": "2026-03-24",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.1331,
+        "n_entries": 6,
+        "min_eq_pct": -1.5299,
+        "banked": true
+      },
+      "pack_mark_cleared": true,
+      "pack_policy_cleared": false,
+      "force_directional_bars": 12,
+      "decision_bars": 27,
+      "physics_wins": 6,
+      "principle_wins": 1,
+      "best_principle": {
+        "entry_t": 1245,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.6472,
+        "n_entries": 1,
+        "min_eq_pct": -0.1397,
+        "banked": true
+      },
+      "best_physics": {
+        "entry_t": 1245,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.6472,
+        "n_entries": 1,
+        "min_eq_pct": -0.1397,
+        "banked": true
+      },
+      "issue": "D_teacher_already_won"
+    },
+    {
+      "date": "2026-03-25",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "baseline": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.1535,
+        "n_entries": 3,
+        "min_eq_pct": -1.1535,
+        "banked": false
+      },
+      "pack_mark_cleared": false,
+      "pack_policy_cleared": false,
+      "force_directional_bars": 4,
+      "decision_bars": 27,
+      "physics_wins": 3,
+      "principle_wins": 0,
+      "best_principle": null,
+      "best_physics": {
+        "entry_t": 1170,
+        "side": "SELL",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.8156,
+        "n_entries": 1,
+        "min_eq_pct": -0.1851,
+        "banked": true
+      },
+      "issue": "B_principles_block_all_winning_entries"
+    },
+    {
+      "date": "2026-03-26",
+      "target_pct": 1.5,
+      "risk_pct": 2.0,
+      "baseline": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.5099,
+        "n_entries": 9,
+        "min_eq_pct": -1.5099,
+        "banked": false
+      },
+      "pack_mark_cleared": false,
+      "pack_policy_cleared": false,
+      "force_directional_bars": 14,
+      "decision_bars": 27,
+      "physics_wins": 8,
+      "principle_wins": 2,
+      "best_principle": {
+        "entry_t": 1270,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.8399,
+        "n_entries": 1,
+        "min_eq_pct": -0.0187,
+        "banked": true
+      },
+      "best_physics": {
+        "entry_t": 1270,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.8399,
+        "n_entries": 1,
+        "min_eq_pct": -0.0187,
+        "banked": true
+      },
+      "issue": "C_teacher_missed_valid_principle_win"
+    },
+    {
+      "date": "2026-03-27",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.2487,
+        "n_entries": 3,
+        "min_eq_pct": -0.8512,
+        "banked": true
+      },
+      "pack_mark_cleared": true,
+      "pack_policy_cleared": false,
+      "force_directional_bars": 9,
+      "decision_bars": 24,
+      "physics_wins": 9,
+      "principle_wins": 1,
+      "best_principle": {
+        "entry_t": 945,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0416,
+        "n_entries": 1,
+        "min_eq_pct": -0.0862,
+        "banked": true
+      },
+      "best_physics": {
+        "entry_t": 1145,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.2187,
+        "n_entries": 1,
+        "min_eq_pct": -0.2308,
+        "banked": true
+      },
+      "issue": "D_teacher_already_won"
+    },
+    {
+      "date": "2026-03-30",
+      "target_pct": 1.5,
+      "risk_pct": 2.5,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5275,
+        "n_entries": 1,
+        "min_eq_pct": -0.2376,
+        "banked": true
+      },
+      "pack_mark_cleared": true,
+      "pack_policy_cleared": true,
+      "force_directional_bars": 10,
+      "decision_bars": 24,
+      "physics_wins": 4,
+      "principle_wins": 2,
+      "best_principle": {
+        "entry_t": 795,
+        "side": "BUY",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5275,
+        "n_entries": 1,
+        "min_eq_pct": -0.2376,
+        "banked": true
+      },
+      "best_physics": {
+        "entry_t": 1120,
+        "side": "SELL",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5514,
+        "n_entries": 1,
+        "min_eq_pct": -0.2443,
+        "banked": true
+      },
+      "issue": "D_teacher_already_won"
+    }
+  ]
+}

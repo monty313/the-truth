@@ -1,0 +1,683 @@
+{
+  "g01_integrity": {
+    "pin": "554996ad13d5590d280d659936fc4492e55f97e6ea4fd6dd57b682afcb347253",
+    "live_match": true,
+    "blocks_wave_cci_tamper": true,
+    "helps": "integrity (prevents false forward scores), not clear% by itself"
+  },
+  "g05_leak": {
+    "clean_split": true,
+    "tripwire_catches_all_days": true
+  },
+  "baseline": {
+    "dials": {
+      "risk_use_frac": 0.35,
+      "stop_atr_mult": 2.0,
+      "per_trade_cap_pct": 0.25
+    },
+    "practice": {
+      "n_pass": 9,
+      "all_pass": false,
+      "clears_sum": 347,
+      "breach_sum": 0,
+      "mean_clear_pct": 69.4,
+      "pairs": [
+        {
+          "id": 1,
+          "target": 1.0,
+          "risk": 2.0,
+          "cleared": 41,
+          "breached": 0,
+          "clear_pct": 82.0
+        },
+        {
+          "id": 2,
+          "target": 1.0,
+          "risk": 2.5,
+          "cleared": 41,
+          "breached": 0,
+          "clear_pct": 82.0
+        },
+        {
+          "id": 3,
+          "target": 1.5,
+          "risk": 2.0,
+          "cleared": 35,
+          "breached": 0,
+          "clear_pct": 70.0
+        },
+        {
+          "id": 4,
+          "target": 1.5,
+          "risk": 2.5,
+          "cleared": 36,
+          "breached": 0,
+          "clear_pct": 72.0
+        },
+        {
+          "id": 5,
+          "target": 1.5,
+          "risk": 3.0,
+          "cleared": 36,
+          "breached": 0,
+          "clear_pct": 72.0
+        },
+        {
+          "id": 6,
+          "target": 2.0,
+          "risk": 2.5,
+          "cleared": 33,
+          "breached": 0,
+          "clear_pct": 66.0
+        },
+        {
+          "id": 7,
+          "target": 2.0,
+          "risk": 3.0,
+          "cleared": 33,
+          "breached": 0,
+          "clear_pct": 66.0
+        },
+        {
+          "id": 8,
+          "target": 2.0,
+          "risk": 3.5,
+          "cleared": 33,
+          "breached": 0,
+          "clear_pct": 66.0
+        },
+        {
+          "id": 9,
+          "target": 2.5,
+          "risk": 3.5,
+          "cleared": 31,
+          "breached": 0,
+          "clear_pct": 62.0
+        },
+        {
+          "id": 10,
+          "target": 3.0,
+          "risk": 3.5,
+          "cleared": 28,
+          "breached": 0,
+          "clear_pct": 56.0
+        }
+      ]
+    },
+    "forward": {
+      "n_pass": 5,
+      "all_pass": false,
+      "clears_sum": 278,
+      "breach_sum": 0,
+      "mean_clear_pct": 69.5,
+      "pairs": [
+        {
+          "id": 1,
+          "target": 1.0,
+          "risk": 2.0,
+          "cleared": 35,
+          "breached": 0,
+          "clear_pct": 87.5
+        },
+        {
+          "id": 2,
+          "target": 1.0,
+          "risk": 2.5,
+          "cleared": 35,
+          "breached": 0,
+          "clear_pct": 87.5
+        },
+        {
+          "id": 3,
+          "target": 1.5,
+          "risk": 2.0,
+          "cleared": 30,
+          "breached": 0,
+          "clear_pct": 75.0
+        },
+        {
+          "id": 4,
+          "target": 1.5,
+          "risk": 2.5,
+          "cleared": 34,
+          "breached": 0,
+          "clear_pct": 85.0
+        },
+        {
+          "id": 5,
+          "target": 1.5,
+          "risk": 3.0,
+          "cleared": 34,
+          "breached": 0,
+          "clear_pct": 85.0
+        },
+        {
+          "id": 6,
+          "target": 2.0,
+          "risk": 2.5,
+          "cleared": 27,
+          "breached": 0,
+          "clear_pct": 67.5
+        },
+        {
+          "id": 7,
+          "target": 2.0,
+          "risk": 3.0,
+          "cleared": 27,
+          "breached": 0,
+          "clear_pct": 67.5
+        },
+        {
+          "id": 8,
+          "target": 2.0,
+          "risk": 3.5,
+          "cleared": 27,
+          "breached": 0,
+          "clear_pct": 67.5
+        },
+        {
+          "id": 9,
+          "target": 2.5,
+          "risk": 3.5,
+          "cleared": 17,
+          "breached": 0,
+          "clear_pct": 42.5
+        },
+        {
+          "id": 10,
+          "target": 3.0,
+          "risk": 3.5,
+          "cleared": 12,
+          "breached": 0,
+          "clear_pct": 30.0
+        }
+      ]
+    }
+  },
+  "leaky_search_all_days": {
+    "dials": {
+      "risk_use_frac": 0.25,
+      "stop_atr_mult": 2.5,
+      "per_trade_cap_pct": 0.5
+    },
+    "practice": {
+      "n_pass": 10,
+      "all_pass": true,
+      "clears_sum": 395,
+      "breach_sum": 0,
+      "mean_clear_pct": 79.0,
+      "pairs": [
+        {
+          "id": 1,
+          "target": 1.0,
+          "risk": 2.0,
+          "cleared": 41,
+          "breached": 0,
+          "clear_pct": 82.0
+        },
+        {
+          "id": 2,
+          "target": 1.0,
+          "risk": 2.5,
+          "cleared": 42,
+          "breached": 0,
+          "clear_pct": 84.0
+        },
+        {
+          "id": 3,
+          "target": 1.5,
+          "risk": 2.0,
+          "cleared": 38,
+          "breached": 0,
+          "clear_pct": 76.0
+        },
+        {
+          "id": 4,
+          "target": 1.5,
+          "risk": 2.5,
+          "cleared": 41,
+          "breached": 0,
+          "clear_pct": 82.0
+        },
+        {
+          "id": 5,
+          "target": 1.5,
+          "risk": 3.0,
+          "cleared": 41,
+          "breached": 0,
+          "clear_pct": 82.0
+        },
+        {
+          "id": 6,
+          "target": 2.0,
+          "risk": 2.5,
+          "cleared": 39,
+          "breached": 0,
+          "clear_pct": 78.0
+        },
+        {
+          "id": 7,
+          "target": 2.0,
+          "risk": 3.0,
+          "cleared": 39,
+          "breached": 0,
+          "clear_pct": 78.0
+        },
+        {
+          "id": 8,
+          "target": 2.0,
+          "risk": 3.5,
+          "cleared": 40,
+          "breached": 0,
+          "clear_pct": 80.0
+        },
+        {
+          "id": 9,
+          "target": 2.5,
+          "risk": 3.5,
+          "cleared": 38,
+          "breached": 0,
+          "clear_pct": 76.0
+        },
+        {
+          "id": 10,
+          "target": 3.0,
+          "risk": 3.5,
+          "cleared": 36,
+          "breached": 0,
+          "clear_pct": 72.0
+        }
+      ]
+    },
+    "forward": {
+      "n_pass": 10,
+      "all_pass": true,
+      "clears_sum": 332,
+      "breach_sum": 0,
+      "mean_clear_pct": 83.0,
+      "pairs": [
+        {
+          "id": 1,
+          "target": 1.0,
+          "risk": 2.0,
+          "cleared": 34,
+          "breached": 0,
+          "clear_pct": 85.0
+        },
+        {
+          "id": 2,
+          "target": 1.0,
+          "risk": 2.5,
+          "cleared": 36,
+          "breached": 0,
+          "clear_pct": 90.0
+        },
+        {
+          "id": 3,
+          "target": 1.5,
+          "risk": 2.0,
+          "cleared": 33,
+          "breached": 0,
+          "clear_pct": 82.5
+        },
+        {
+          "id": 4,
+          "target": 1.5,
+          "risk": 2.5,
+          "cleared": 34,
+          "breached": 0,
+          "clear_pct": 85.0
+        },
+        {
+          "id": 5,
+          "target": 1.5,
+          "risk": 3.0,
+          "cleared": 36,
+          "breached": 0,
+          "clear_pct": 90.0
+        },
+        {
+          "id": 6,
+          "target": 2.0,
+          "risk": 2.5,
+          "cleared": 30,
+          "breached": 0,
+          "clear_pct": 75.0
+        },
+        {
+          "id": 7,
+          "target": 2.0,
+          "risk": 3.0,
+          "cleared": 32,
+          "breached": 0,
+          "clear_pct": 80.0
+        },
+        {
+          "id": 8,
+          "target": 2.0,
+          "risk": 3.5,
+          "cleared": 34,
+          "breached": 0,
+          "clear_pct": 85.0
+        },
+        {
+          "id": 9,
+          "target": 2.5,
+          "risk": 3.5,
+          "cleared": 33,
+          "breached": 0,
+          "clear_pct": 82.5
+        },
+        {
+          "id": 10,
+          "target": 3.0,
+          "risk": 3.5,
+          "cleared": 30,
+          "breached": 0,
+          "clear_pct": 75.0
+        }
+      ]
+    }
+  },
+  "clean_search_practice_only": {
+    "dials": {
+      "risk_use_frac": 0.25,
+      "stop_atr_mult": 2.5,
+      "per_trade_cap_pct": 0.5
+    },
+    "practice": {
+      "n_pass": 10,
+      "all_pass": true,
+      "clears_sum": 395,
+      "breach_sum": 0,
+      "mean_clear_pct": 79.0,
+      "pairs": [
+        {
+          "id": 1,
+          "target": 1.0,
+          "risk": 2.0,
+          "cleared": 41,
+          "breached": 0,
+          "clear_pct": 82.0
+        },
+        {
+          "id": 2,
+          "target": 1.0,
+          "risk": 2.5,
+          "cleared": 42,
+          "breached": 0,
+          "clear_pct": 84.0
+        },
+        {
+          "id": 3,
+          "target": 1.5,
+          "risk": 2.0,
+          "cleared": 38,
+          "breached": 0,
+          "clear_pct": 76.0
+        },
+        {
+          "id": 4,
+          "target": 1.5,
+          "risk": 2.5,
+          "cleared": 41,
+          "breached": 0,
+          "clear_pct": 82.0
+        },
+        {
+          "id": 5,
+          "target": 1.5,
+          "risk": 3.0,
+          "cleared": 41,
+          "breached": 0,
+          "clear_pct": 82.0
+        },
+        {
+          "id": 6,
+          "target": 2.0,
+          "risk": 2.5,
+          "cleared": 39,
+          "breached": 0,
+          "clear_pct": 78.0
+        },
+        {
+          "id": 7,
+          "target": 2.0,
+          "risk": 3.0,
+          "cleared": 39,
+          "breached": 0,
+          "clear_pct": 78.0
+        },
+        {
+          "id": 8,
+          "target": 2.0,
+          "risk": 3.5,
+          "cleared": 40,
+          "breached": 0,
+          "clear_pct": 80.0
+        },
+        {
+          "id": 9,
+          "target": 2.5,
+          "risk": 3.5,
+          "cleared": 38,
+          "breached": 0,
+          "clear_pct": 76.0
+        },
+        {
+          "id": 10,
+          "target": 3.0,
+          "risk": 3.5,
+          "cleared": 36,
+          "breached": 0,
+          "clear_pct": 72.0
+        }
+      ]
+    },
+    "forward": {
+      "n_pass": 10,
+      "all_pass": true,
+      "clears_sum": 332,
+      "breach_sum": 0,
+      "mean_clear_pct": 83.0,
+      "pairs": [
+        {
+          "id": 1,
+          "target": 1.0,
+          "risk": 2.0,
+          "cleared": 34,
+          "breached": 0,
+          "clear_pct": 85.0
+        },
+        {
+          "id": 2,
+          "target": 1.0,
+          "risk": 2.5,
+          "cleared": 36,
+          "breached": 0,
+          "clear_pct": 90.0
+        },
+        {
+          "id": 3,
+          "target": 1.5,
+          "risk": 2.0,
+          "cleared": 33,
+          "breached": 0,
+          "clear_pct": 82.5
+        },
+        {
+          "id": 4,
+          "target": 1.5,
+          "risk": 2.5,
+          "cleared": 34,
+          "breached": 0,
+          "clear_pct": 85.0
+        },
+        {
+          "id": 5,
+          "target": 1.5,
+          "risk": 3.0,
+          "cleared": 36,
+          "breached": 0,
+          "clear_pct": 90.0
+        },
+        {
+          "id": 6,
+          "target": 2.0,
+          "risk": 2.5,
+          "cleared": 30,
+          "breached": 0,
+          "clear_pct": 75.0
+        },
+        {
+          "id": 7,
+          "target": 2.0,
+          "risk": 3.0,
+          "cleared": 32,
+          "breached": 0,
+          "clear_pct": 80.0
+        },
+        {
+          "id": 8,
+          "target": 2.0,
+          "risk": 3.5,
+          "cleared": 34,
+          "breached": 0,
+          "clear_pct": 85.0
+        },
+        {
+          "id": 9,
+          "target": 2.5,
+          "risk": 3.5,
+          "cleared": 33,
+          "breached": 0,
+          "clear_pct": 82.5
+        },
+        {
+          "id": 10,
+          "target": 3.0,
+          "risk": 3.5,
+          "cleared": 30,
+          "breached": 0,
+          "clear_pct": 75.0
+        }
+      ]
+    }
+  },
+  "comparisons": {
+    "clean_helps_forward_vs_baseline": true,
+    "leaky_overfits_forward_vs_clean": false,
+    "forward_clears_baseline": 278,
+    "forward_clears_leaky": 332,
+    "forward_clears_clean": 332,
+    "forward_breach_baseline": 0,
+    "forward_breach_leaky": 0,
+    "forward_breach_clean": 0
+  },
+  "trust": {
+    "rows": [
+      {
+        "tag": "higher_bear",
+        "prac": {
+          "plays": 15,
+          "clears": 5,
+          "p_clear": 0.3333333333333333
+        },
+        "fwd": {
+          "plays": 13,
+          "clears": 6,
+          "p_clear": 0.46153846153846156
+        },
+        "decay": -0.12820512820512825,
+        "status": "stable"
+      },
+      {
+        "tag": "higher_bull",
+        "prac": {
+          "plays": 15,
+          "clears": 5,
+          "p_clear": 0.3333333333333333
+        },
+        "fwd": {
+          "plays": 19,
+          "clears": 10,
+          "p_clear": 0.5263157894736842
+        },
+        "decay": -0.19298245614035087,
+        "status": "stable"
+      },
+      {
+        "tag": "other",
+        "prac": {
+          "plays": 30,
+          "clears": 17,
+          "p_clear": 0.5666666666666667
+        },
+        "fwd": {
+          "plays": 28,
+          "clears": 17,
+          "p_clear": 0.6071428571428571
+        },
+        "decay": -0.04047619047619044,
+        "status": "stable"
+      },
+      {
+        "tag": "pullback_vs_bear",
+        "prac": {
+          "plays": 6,
+          "clears": 3,
+          "p_clear": 0.5
+        },
+        "fwd": {
+          "plays": 9,
+          "clears": 4,
+          "p_clear": 0.4444444444444444
+        },
+        "decay": 0.05555555555555558,
+        "status": "stable"
+      },
+      {
+        "tag": "pullback_vs_bull",
+        "prac": {
+          "plays": 3,
+          "clears": 1,
+          "p_clear": 0.3333333333333333
+        },
+        "fwd": {
+          "plays": 2,
+          "clears": 0,
+          "p_clear": 0.0
+        },
+        "decay": null,
+        "status": "low_n"
+      }
+    ],
+    "lying_tags": [],
+    "ban_mode": "weakest_forward_tag_demo",
+    "ban_set": [
+      "pullback_vs_bear"
+    ],
+    "baseline_pair_forward": {
+      "cleared": 19,
+      "breached": 0,
+      "n": 30
+    },
+    "filtered_pair_forward": {
+      "n_days": 30,
+      "cleared": 17,
+      "breached": 0,
+      "clear_pct": 56.666666666666664,
+      "banned": [
+        "pullback_vs_bear"
+      ]
+    },
+    "filter_helps": false
+  },
+  "verdicts": {
+    "practice_only_search": "YES \u2014 practice-only search helped forward clears vs baseline with no extra breach.",
+    "leak_warning": "Leaky search did not dominate forward vs clean on this grid (or similar).",
+    "trust_filter": "NO clear win from tag ban on this sample \u2014 trust loop still useful as diagnostic.",
+    "g01_helps": "YES for honest scoring integrity; does not raise clear% alone",
+    "overall": "PARTIALLY HELPS empirically: practice-only search, G01 integrity gate, G05 leak tripwire. Architecture is worth building; not every knob raised clear this run."
+  }
+}

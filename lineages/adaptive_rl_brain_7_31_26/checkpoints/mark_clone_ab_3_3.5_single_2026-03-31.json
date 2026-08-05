@@ -1,0 +1,59 @@
+{
+  "scored_at": "2026-08-04T23:56:23.813254+00:00",
+  "kind": "teacher_eyes_ab",
+  "policy_ckpt": null,
+  "mode": "single:2026-03-31",
+  "target_pct": 3.0,
+  "risk_pct": 3.5,
+  "eyes_mode": "mark_doctrine",
+  "baseline": {
+    "label": "claim_baseline_legacy_set2",
+    "n_days": 1,
+    "cleared": 0,
+    "breached": 0,
+    "clear_pct": 0.0,
+    "breach_pct": 0.0,
+    "mean_entries": 6.0,
+    "mean_entries_miss": 6.0,
+    "mean_entries_clear": 0.0,
+    "mean_pnl": 1.5902
+  },
+  "teacher": {
+    "label": "mark_teacher_mark_doctrine",
+    "n_days": 1,
+    "cleared": 1,
+    "breached": 0,
+    "clear_pct": 100.0,
+    "breach_pct": 0.0,
+    "mean_entries": 1.0,
+    "mean_entries_miss": 0.0,
+    "mean_entries_clear": 1.0,
+    "mean_pnl": 3.0068
+  },
+  "baseline_day_rows": [
+    {
+      "date": "2026-03-31",
+      "pnl_pct": 1.5902,
+      "min_eq_pct": -0.9553,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 6,
+      "banked": false
+    }
+  ],
+  "teacher_day_rows": [
+    {
+      "date": "2026-03-31",
+      "pnl_pct": 3.0068,
+      "min_eq_pct": -0.2249,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 1,
+      "banked": true
+    }
+  ],
+  "delta_teacher_clear": 1,
+  "delta_teacher_mean_entries": -5.0,
+  "breach_ok_teacher": true,
+  "proven_touched": false
+}

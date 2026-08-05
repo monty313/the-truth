@@ -1,0 +1,761 @@
+{
+  "scored_at": "2026-08-04T23:54:50.863283+00:00",
+  "kind": "teacher_eyes_ab",
+  "policy_ckpt": null,
+  "mode": "forward",
+  "target_pct": 3.0,
+  "risk_pct": 3.5,
+  "eyes_mode": "mark_doctrine",
+  "baseline": {
+    "label": "claim_baseline_legacy_set2",
+    "n_days": 40,
+    "cleared": 12,
+    "breached": 0,
+    "clear_pct": 30.0,
+    "breach_pct": 0.0,
+    "mean_entries": 8.975,
+    "mean_entries_miss": 10.5,
+    "mean_entries_clear": 5.416666666666667,
+    "mean_pnl": 1.52317
+  },
+  "teacher": {
+    "label": "mark_teacher_mark_doctrine",
+    "n_days": 40,
+    "cleared": 6,
+    "breached": 0,
+    "clear_pct": 15.0,
+    "breach_pct": 0.0,
+    "mean_entries": 2.4,
+    "mean_entries_miss": 2.5588235294117645,
+    "mean_entries_clear": 1.5,
+    "mean_pnl": 0.766215
+  },
+  "baseline_day_rows": [
+    {
+      "date": "2026-03-31",
+      "pnl_pct": 1.5902,
+      "min_eq_pct": -0.9553,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 6,
+      "banked": false
+    },
+    {
+      "date": "2026-04-01",
+      "pnl_pct": 1.0975,
+      "min_eq_pct": -0.8939,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 9,
+      "banked": false
+    },
+    {
+      "date": "2026-04-02",
+      "pnl_pct": -0.6488,
+      "min_eq_pct": -1.3243,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 12,
+      "banked": false
+    },
+    {
+      "date": "2026-04-06",
+      "pnl_pct": -1.5295,
+      "min_eq_pct": -1.5295,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 15,
+      "banked": false
+    },
+    {
+      "date": "2026-04-07",
+      "pnl_pct": 1.7583,
+      "min_eq_pct": -1.2025,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 13,
+      "banked": false
+    },
+    {
+      "date": "2026-04-08",
+      "pnl_pct": 0.5762,
+      "min_eq_pct": -1.6556,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 13,
+      "banked": false
+    },
+    {
+      "date": "2026-04-09",
+      "pnl_pct": 2.9306,
+      "min_eq_pct": -0.3918,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 5,
+      "banked": false
+    },
+    {
+      "date": "2026-04-10",
+      "pnl_pct": 3.0981,
+      "min_eq_pct": -0.6822,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 5,
+      "banked": true
+    },
+    {
+      "date": "2026-04-13",
+      "pnl_pct": -2.6051,
+      "min_eq_pct": -2.6051,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 16,
+      "banked": false
+    },
+    {
+      "date": "2026-04-14",
+      "pnl_pct": 0.942,
+      "min_eq_pct": -0.6453,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 11,
+      "banked": false
+    },
+    {
+      "date": "2026-04-15",
+      "pnl_pct": 1.9111,
+      "min_eq_pct": -0.8039,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 11,
+      "banked": false
+    },
+    {
+      "date": "2026-04-16",
+      "pnl_pct": 3.0391,
+      "min_eq_pct": -0.1897,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 11,
+      "banked": true
+    },
+    {
+      "date": "2026-04-17",
+      "pnl_pct": 3.2324,
+      "min_eq_pct": -0.9125,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 4,
+      "banked": true
+    },
+    {
+      "date": "2026-04-20",
+      "pnl_pct": 0.7035,
+      "min_eq_pct": -0.0793,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 10,
+      "banked": false
+    },
+    {
+      "date": "2026-04-21",
+      "pnl_pct": 3.1375,
+      "min_eq_pct": -1.5612,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 9,
+      "banked": true
+    },
+    {
+      "date": "2026-04-22",
+      "pnl_pct": -0.4035,
+      "min_eq_pct": -0.607,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 11,
+      "banked": false
+    },
+    {
+      "date": "2026-04-23",
+      "pnl_pct": 1.2945,
+      "min_eq_pct": -0.1731,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 7,
+      "banked": false
+    },
+    {
+      "date": "2026-04-24",
+      "pnl_pct": 0.4118,
+      "min_eq_pct": -0.147,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 11,
+      "banked": false
+    },
+    {
+      "date": "2026-04-27",
+      "pnl_pct": 0.7727,
+      "min_eq_pct": -0.4398,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 7,
+      "banked": false
+    },
+    {
+      "date": "2026-04-28",
+      "pnl_pct": 3.0915,
+      "min_eq_pct": -0.606,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 3,
+      "banked": true
+    },
+    {
+      "date": "2026-04-29",
+      "pnl_pct": 1.1498,
+      "min_eq_pct": -0.0919,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 12,
+      "banked": false
+    },
+    {
+      "date": "2026-04-30",
+      "pnl_pct": -0.5728,
+      "min_eq_pct": -0.5728,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 12,
+      "banked": false
+    },
+    {
+      "date": "2026-05-01",
+      "pnl_pct": 3.5962,
+      "min_eq_pct": -0.6616,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 4,
+      "banked": true
+    },
+    {
+      "date": "2026-05-04",
+      "pnl_pct": 1.5527,
+      "min_eq_pct": -0.4609,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 10,
+      "banked": false
+    },
+    {
+      "date": "2026-05-05",
+      "pnl_pct": 0.9881,
+      "min_eq_pct": -1.1434,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 8,
+      "banked": false
+    },
+    {
+      "date": "2026-05-06",
+      "pnl_pct": 3.0022,
+      "min_eq_pct": -0.3431,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 7,
+      "banked": true
+    },
+    {
+      "date": "2026-05-07",
+      "pnl_pct": 0.5498,
+      "min_eq_pct": -1.2947,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 8,
+      "banked": false
+    },
+    {
+      "date": "2026-05-08",
+      "pnl_pct": 1.0473,
+      "min_eq_pct": -0.7151,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 15,
+      "banked": false
+    },
+    {
+      "date": "2026-05-11",
+      "pnl_pct": 3.2434,
+      "min_eq_pct": -0.6774,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 3,
+      "banked": true
+    },
+    {
+      "date": "2026-05-12",
+      "pnl_pct": 2.007,
+      "min_eq_pct": -0.2439,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 13,
+      "banked": false
+    },
+    {
+      "date": "2026-05-13",
+      "pnl_pct": 0.9445,
+      "min_eq_pct": -0.0954,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 9,
+      "banked": false
+    },
+    {
+      "date": "2026-05-14",
+      "pnl_pct": 1.5962,
+      "min_eq_pct": -1.1093,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 8,
+      "banked": false
+    },
+    {
+      "date": "2026-05-15",
+      "pnl_pct": 3.253,
+      "min_eq_pct": -0.0819,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 2,
+      "banked": true
+    },
+    {
+      "date": "2026-05-18",
+      "pnl_pct": 0.6227,
+      "min_eq_pct": -0.9483,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 11,
+      "banked": false
+    },
+    {
+      "date": "2026-05-19",
+      "pnl_pct": 2.2284,
+      "min_eq_pct": -0.9254,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 13,
+      "banked": false
+    },
+    {
+      "date": "2026-05-20",
+      "pnl_pct": 2.2349,
+      "min_eq_pct": -0.0679,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 7,
+      "banked": false
+    },
+    {
+      "date": "2026-05-21",
+      "pnl_pct": 3.0815,
+      "min_eq_pct": -0.5542,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 7,
+      "banked": true
+    },
+    {
+      "date": "2026-05-22",
+      "pnl_pct": 3.0019,
+      "min_eq_pct": -0.362,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 8,
+      "banked": true
+    },
+    {
+      "date": "2026-05-25",
+      "pnl_pct": -0.102,
+      "min_eq_pct": -0.7981,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 11,
+      "banked": false
+    },
+    {
+      "date": "2026-05-26",
+      "pnl_pct": 3.1019,
+      "min_eq_pct": -0.2,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 2,
+      "banked": true
+    }
+  ],
+  "teacher_day_rows": [
+    {
+      "date": "2026-03-31",
+      "pnl_pct": 3.0068,
+      "min_eq_pct": -0.2249,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 1,
+      "banked": true
+    },
+    {
+      "date": "2026-04-01",
+      "pnl_pct": -0.3533,
+      "min_eq_pct": -0.4094,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 4,
+      "banked": false
+    },
+    {
+      "date": "2026-04-02",
+      "pnl_pct": 1.1344,
+      "min_eq_pct": -0.0701,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 1,
+      "banked": false
+    },
+    {
+      "date": "2026-04-06",
+      "pnl_pct": -0.4621,
+      "min_eq_pct": -0.4621,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 1,
+      "banked": false
+    },
+    {
+      "date": "2026-04-07",
+      "pnl_pct": 0.9798,
+      "min_eq_pct": -0.4773,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-04-08",
+      "pnl_pct": 0.8843,
+      "min_eq_pct": -0.4096,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-04-09",
+      "pnl_pct": 3.0329,
+      "min_eq_pct": -0.1949,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 2,
+      "banked": true
+    },
+    {
+      "date": "2026-04-10",
+      "pnl_pct": -0.4067,
+      "min_eq_pct": -0.7495,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-04-13",
+      "pnl_pct": 0.0203,
+      "min_eq_pct": -0.9064,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 4,
+      "banked": false
+    },
+    {
+      "date": "2026-04-14",
+      "pnl_pct": 1.1692,
+      "min_eq_pct": -0.3551,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-04-15",
+      "pnl_pct": -0.0872,
+      "min_eq_pct": -0.494,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-04-16",
+      "pnl_pct": 0.8006,
+      "min_eq_pct": -0.0796,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 1,
+      "banked": false
+    },
+    {
+      "date": "2026-04-17",
+      "pnl_pct": 3.17,
+      "min_eq_pct": -0.0632,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 1,
+      "banked": true
+    },
+    {
+      "date": "2026-04-20",
+      "pnl_pct": 1.508,
+      "min_eq_pct": -0.0555,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 1,
+      "banked": false
+    },
+    {
+      "date": "2026-04-21",
+      "pnl_pct": 3.0415,
+      "min_eq_pct": -0.4292,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 2,
+      "banked": true
+    },
+    {
+      "date": "2026-04-22",
+      "pnl_pct": -1.5324,
+      "min_eq_pct": -1.5324,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 5,
+      "banked": false
+    },
+    {
+      "date": "2026-04-23",
+      "pnl_pct": 1.8723,
+      "min_eq_pct": -0.3512,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-04-24",
+      "pnl_pct": 0.2915,
+      "min_eq_pct": -0.2111,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-04-27",
+      "pnl_pct": 1.2633,
+      "min_eq_pct": -0.104,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-04-28",
+      "pnl_pct": 3.2107,
+      "min_eq_pct": -0.3548,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 2,
+      "banked": true
+    },
+    {
+      "date": "2026-04-29",
+      "pnl_pct": -0.4476,
+      "min_eq_pct": -0.7323,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-04-30",
+      "pnl_pct": -0.1049,
+      "min_eq_pct": -0.4838,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-05-01",
+      "pnl_pct": 3.241,
+      "min_eq_pct": -0.2316,
+      "cleared": true,
+      "breached": false,
+      "n_entries": 1,
+      "banked": true
+    },
+    {
+      "date": "2026-05-04",
+      "pnl_pct": 0.7794,
+      "min_eq_pct": -0.4119,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 4,
+      "banked": false
+    },
+    {
+      "date": "2026-05-05",
+      "pnl_pct": 0.9147,
+      "min_eq_pct": -0.2474,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-05-06",
+      "pnl_pct": -0.8294,
+      "min_eq_pct": -0.8294,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-07",
+      "pnl_pct": 0.9527,
+      "min_eq_pct": -0.6506,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-08",
+      "pnl_pct": -0.5408,
+      "min_eq_pct": -0.6815,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-11",
+      "pnl_pct": 0.7282,
+      "min_eq_pct": -0.1249,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-05-12",
+      "pnl_pct": 1.5809,
+      "min_eq_pct": -0.6355,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-13",
+      "pnl_pct": -0.4777,
+      "min_eq_pct": -0.4777,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-05-14",
+      "pnl_pct": 1.1108,
+      "min_eq_pct": -0.4896,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-05-15",
+      "pnl_pct": -0.9028,
+      "min_eq_pct": -0.9028,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-18",
+      "pnl_pct": -0.5967,
+      "min_eq_pct": -0.7171,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-19",
+      "pnl_pct": 0.2684,
+      "min_eq_pct": -0.0984,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-20",
+      "pnl_pct": 0.1625,
+      "min_eq_pct": -0.4289,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-05-21",
+      "pnl_pct": 1.6716,
+      "min_eq_pct": -0.5542,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-22",
+      "pnl_pct": -0.2665,
+      "min_eq_pct": -0.4433,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 2,
+      "banked": false
+    },
+    {
+      "date": "2026-05-25",
+      "pnl_pct": -0.3614,
+      "min_eq_pct": -0.3636,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    },
+    {
+      "date": "2026-05-26",
+      "pnl_pct": 1.2223,
+      "min_eq_pct": -0.3752,
+      "cleared": false,
+      "breached": false,
+      "n_entries": 3,
+      "banked": false
+    }
+  ],
+  "delta_teacher_clear": -6,
+  "delta_teacher_mean_entries": -6.574999999999999,
+  "breach_ok_teacher": true,
+  "proven_touched": false
+}

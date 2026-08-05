@@ -1,42 +1,42 @@
-# Momentum One
+# Momentum One (`the-truth`)
 
-Self-healing RL scalper.
+Self-healing RL scalper: hit **your** daily target without floor breach.
 
-**Goal:** one bot that solves for **any** daily **target %** and **risk %** you type in — **without retrain**.  
-Change the numbers → same brain → hit that target, respect that floor.
+## Start
 
----
+1. **[00_MAP_OF_THE_HOUSE.md](00_MAP_OF_THE_HOUSE.md)** — tracks, order, freeze (anti-confusion)  
+2. **[00_START_HERE.md](00_START_HERE.md)** — short doors  
+3. **[HANDOFF_2026-08-05.md](HANDOFF_2026-08-05.md)** — where we left off  
 
-## Dyslexia-friendly start
+**Mark:** [MARK HERE!.lnk](MARK%20HERE!.lnk) · [SOUL_MATCH.md](SOUL_MATCH.md)  
+**Agents/obs (keep, wire later):** [KEEP_AFTER_SOUL.md](KEEP_AFTER_SOUL.md)
 
-| Step | Open |
+## Layout (cleaner than FinRL’s flat sprawl)
+
+| Path | Role |
 |------|------|
-| 1 | **[00_START_HERE.md](00_START_HERE.md)** |
-| 2 | **[GOAL.md](GOAL.md)** |
-| 3 | **[USE/](USE/)** buttons or **[DO_THIS.md](DO_THIS.md)** |
+| `USE/` | One-click buttons |
+| `models/` | PROVEN champion checkpoints |
+| `lineages/` | Parallel experiment brains |
+| `code/` | All Python packages (`training`, `signals`, `features`, …) |
+| `configs/` | YAML settings |
+| `data/` | Price data |
+| `scripts/` | CLI entrypoints |
+| `tests/` | Unit tests |
+| `docs/` | Long docs |
+| `references/doctrine/flea-jar/` | Active doctrine (**keep**) |
+| `outputs/` | Caches, reports, logs |
+| `tools/` | Colab, notebooks, HUD |
 
-AI sessions: **[AGENTS.md](AGENTS.md)** — keep order + **lid off the jar** (never say impossible).  
-Law card: **[references/doctrine/00_LID_OFF_THE_JAR.md](references/doctrine/00_LID_OFF_THE_JAR.md)**
+## Hard rules
 
----
+- **Never overwrite PROVEN** without an explicit human order  
+- **Flea-jar doctrine stays**  
+- New experiments go under **`lineages/`** only  
 
-## Only score
+## Run
 
-```bash
-python scripts/prove_it.py PROVEN_SPRINT_row04_clear24_2026-07-20 3.0 3.5
+```text
+USE/1_prove.bat
+USE/6_new_brain_tests.bat
 ```
-
-Or: `USE/1_prove.bat`
-
----
-
-## Layout (short)
-
-- **USE/** — what you run daily  
-- **models/** — brains (`00_CHAMPION.md`)  
-- **configs/** — numbers  
-- **scripts/** — all commands (`00_DAILY.md` first)  
-- **references/** — long reading (not daily)  
-- **training/** **features/** **signals/** — code  
-
-Full map: **[MAP.md](MAP.md)**

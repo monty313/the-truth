@@ -1,0 +1,80 @@
+{
+  "comparisons": [
+    {
+      "delta_p_clear": -0.375,
+      "forward": {
+        "insufficient_evidence": false,
+        "may_call_sensor_lying": false,
+        "min_samples": 8,
+        "n": 16,
+        "n_breach": 0,
+        "n_clear": 6,
+        "p_breach": 0.0,
+        "p_clear": 0.375,
+        "status": "OK",
+        "tag": "higher_bull",
+        "wilson_p_clear_high": 0.6135935290206519,
+        "wilson_p_clear_low": 0.18480982554752803
+      },
+      "note": "Sensor may have degraded on forward \u2014 attention/practice only; shell locked.",
+      "practice": {
+        "insufficient_evidence": false,
+        "may_call_sensor_lying": false,
+        "min_samples": 8,
+        "n": 16,
+        "n_breach": 0,
+        "n_clear": 12,
+        "p_breach": 0.0,
+        "p_clear": 0.75,
+        "status": "OK",
+        "tag": "higher_bull",
+        "wilson_p_clear_high": 0.8981809801576265,
+        "wilson_p_clear_low": 0.5050123107060135
+      },
+      "shell_change_authorized": false,
+      "status": "DEGRADED",
+      "tag": "higher_bull"
+    },
+    {
+      "delta_p_clear": null,
+      "forward": {
+        "insufficient_evidence": true,
+        "may_call_sensor_lying": false,
+        "min_samples": 8,
+        "n": 1,
+        "n_breach": 0,
+        "n_clear": 0,
+        "p_breach": 0.0,
+        "p_clear": 0.0,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "tag": "rare_tag",
+        "wilson_p_clear_high": 0.7934567085261071,
+        "wilson_p_clear_low": 0.0
+      },
+      "note": "Do not call sensor lying; sample below threshold.",
+      "practice": {
+        "insufficient_evidence": true,
+        "may_call_sensor_lying": false,
+        "min_samples": 8,
+        "n": 2,
+        "n_breach": 0,
+        "n_clear": 2,
+        "p_breach": 0.0,
+        "p_clear": 1.0,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "tag": "rare_tag",
+        "wilson_p_clear_high": 1.0,
+        "wilson_p_clear_low": 0.3423719528896193
+      },
+      "shell_change_authorized": false,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "tag": "rare_tag"
+    }
+  ],
+  "forward_n_rows": 17,
+  "min_samples": 8,
+  "practice_n_rows": 18,
+  "rule": "Report may identify degraded sensors; it must not unlock shell laws.",
+  "schema_version": 1,
+  "shell_change_authorized": false
+}

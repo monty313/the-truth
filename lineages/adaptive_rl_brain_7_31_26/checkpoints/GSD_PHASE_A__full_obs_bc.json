@@ -1,0 +1,25 @@
+{
+  "phase": "A",
+  "saved_at": "2026-08-05T02:40:00Z",
+  "status": "shipped_with_caveats",
+  "ckpt": "mark_clone_full_obs_v1.pt",
+  "obs_dim": 168,
+  "hidden": 128,
+  "seed": 105,
+  "max_train_days": 20,
+  "epochs": 35,
+  "soul_plan_wins": 20,
+  "samples": 343,
+  "action_counts": {"HOLD": 306, "BUY": 15, "SELL": 22},
+  "train_match": 0.522,
+  "dir_match": 0.784,
+  "eval_greedy_practice": {"clear_pct": 60.0, "breached": 2, "mean_entries": 8.45},
+  "eval_greedy_forward": {"clear_pct": 75.0, "breached": 1, "mean_entries": 5.05},
+  "ab_after": "failed_then_fixed_shape_mismatch_32_vs_168",
+  "proven_touched": false,
+  "gates": {
+    "G1_full_eyes_ckpt": true,
+    "G5_dir_match_0_85": false
+  },
+  "notes": "A/B compare fixed for full_obs; thrash cap (Phase C) wired in equity_day step_action"
+}

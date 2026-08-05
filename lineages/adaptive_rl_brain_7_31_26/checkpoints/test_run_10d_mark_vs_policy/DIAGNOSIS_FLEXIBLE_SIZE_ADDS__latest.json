@@ -1,0 +1,366 @@
+{
+  "saved_at": "2026-08-05T00:54:32.353940+00:00",
+  "tallies": {
+    "C_fixed_shell_missed_flexible_principle_win": 3,
+    "D_already_won_fixed_shell": 7
+  },
+  "n_flex_principle": 10,
+  "n_flex_any": 10,
+  "days": [
+    {
+      "date": "2026-03-17",
+      "target_pct": 3.0,
+      "risk_pct": 3.5,
+      "baseline": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -0.799,
+        "n_entries": 4
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 3.2562,
+          "n_entries": 1,
+          "min_eq_pct": -0.3747,
+          "banked": true,
+          "risk_use_frac": 1.0,
+          "per_trade_cap_pct": 0.7,
+          "n_add_signals": 0,
+          "mode": "single",
+          "t1": 970,
+          "side": "SELL",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "C_fixed_shell_missed_flexible_principle_win"
+    },
+    {
+      "date": "2026-03-18",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0666,
+        "n_entries": 2
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 2.1517,
+          "n_entries": 2,
+          "min_eq_pct": -0.2586,
+          "banked": true,
+          "risk_use_frac": 0.25,
+          "per_trade_cap_pct": 0.2,
+          "n_add_signals": 0,
+          "mode": "entry_plus_add",
+          "t1": 720,
+          "t2": 745,
+          "side": "SELL",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "D_already_won_fixed_shell"
+    },
+    {
+      "date": "2026-03-19",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.254,
+        "n_entries": 1
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 2.2784,
+          "n_entries": 1,
+          "min_eq_pct": -0.101,
+          "banked": true,
+          "risk_use_frac": 0.25,
+          "per_trade_cap_pct": 0.2,
+          "n_add_signals": 0,
+          "mode": "single",
+          "t1": 770,
+          "side": "SELL",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "D_already_won_fixed_shell"
+    },
+    {
+      "date": "2026-03-20",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5775,
+        "n_entries": 1
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 2.5189,
+          "n_entries": 1,
+          "min_eq_pct": -0.2,
+          "banked": true,
+          "risk_use_frac": 0.25,
+          "per_trade_cap_pct": 0.2,
+          "n_add_signals": 0,
+          "mode": "single",
+          "t1": 870,
+          "side": "SELL",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "D_already_won_fixed_shell"
+    },
+    {
+      "date": "2026-03-23",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0874,
+        "n_entries": 1
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 2.0772,
+          "n_entries": 1,
+          "min_eq_pct": -0.1847,
+          "banked": true,
+          "risk_use_frac": 0.25,
+          "per_trade_cap_pct": 0.2,
+          "n_add_signals": 0,
+          "mode": "single",
+          "t1": 720,
+          "side": "BUY",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "D_already_won_fixed_shell"
+    },
+    {
+      "date": "2026-03-24",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.1331,
+        "n_entries": 6
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 2.2598,
+          "n_entries": 2,
+          "min_eq_pct": -0.3536,
+          "banked": true,
+          "risk_use_frac": 0.25,
+          "per_trade_cap_pct": 0.2,
+          "n_add_signals": 0,
+          "mode": "entry_plus_add",
+          "t1": 920,
+          "t2": 1245,
+          "side": "BUY",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "D_already_won_fixed_shell"
+    },
+    {
+      "date": "2026-03-25",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "baseline": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.1535,
+        "n_entries": 3
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 2.8239,
+          "n_entries": 1,
+          "min_eq_pct": -0.3084,
+          "banked": true,
+          "risk_use_frac": 0.8,
+          "per_trade_cap_pct": 0.55,
+          "n_add_signals": 0,
+          "mode": "single",
+          "t1": 720,
+          "side": "BUY",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "C_fixed_shell_missed_flexible_principle_win"
+    },
+    {
+      "date": "2026-03-26",
+      "target_pct": 1.5,
+      "risk_pct": 2.0,
+      "baseline": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.5099,
+        "n_entries": 9
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 1.5431,
+          "n_entries": 2,
+          "min_eq_pct": -0.2248,
+          "banked": true,
+          "risk_use_frac": 0.25,
+          "per_trade_cap_pct": 0.2,
+          "n_add_signals": 0,
+          "mode": "entry_plus_add",
+          "t1": 720,
+          "t2": 1270,
+          "side": "BUY",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "C_fixed_shell_missed_flexible_principle_win"
+    },
+    {
+      "date": "2026-03-27",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.2487,
+        "n_entries": 3
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 1.0547,
+          "n_entries": 2,
+          "min_eq_pct": -0.3442,
+          "banked": true,
+          "risk_use_frac": 0.25,
+          "per_trade_cap_pct": 0.2,
+          "n_add_signals": 0,
+          "mode": "entry_plus_add",
+          "t1": 720,
+          "t2": 1045,
+          "side": "SELL",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "D_already_won_fixed_shell"
+    },
+    {
+      "date": "2026-03-30",
+      "target_pct": 1.5,
+      "risk_pct": 2.5,
+      "baseline": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5275,
+        "n_entries": 1
+      },
+      "principle_flexible": {
+        "winnable": true,
+        "best": {
+          "cleared": true,
+          "breached": false,
+          "pnl_pct": 1.5301,
+          "n_entries": 2,
+          "min_eq_pct": -0.4107,
+          "banked": true,
+          "risk_use_frac": 0.25,
+          "per_trade_cap_pct": 0.2,
+          "n_add_signals": 0,
+          "mode": "entry_plus_add",
+          "t1": 945,
+          "t2": 1120,
+          "side": "SELL",
+          "require_force": true
+        },
+        "n_wins_found": 1
+      },
+      "any_flexible": {
+        "winnable": false,
+        "best": null
+      },
+      "issue": "D_already_won_fixed_shell"
+    }
+  ]
+}

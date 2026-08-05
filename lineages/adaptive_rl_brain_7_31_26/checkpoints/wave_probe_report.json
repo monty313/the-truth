@@ -1,0 +1,170 @@
+{
+  "note": "Offline Wave probe; multi_pair policy code NOT modified",
+  "warmup": "full continuous M1 history (required for 15m CCI100)",
+  "data": "XAUUSD_curriculum_2026.csv",
+  "tfs": [
+    "1m",
+    "5m",
+    "15m"
+  ],
+  "practice_signals": {
+    "window": "practice",
+    "n_decision_bars": 1016,
+    "n_wave_signals": 126,
+    "signal_rate": 0.12401574803149606,
+    "agree_heuristic_rate": 0.8968253968253969,
+    "labels": {
+      "Sell Pullback": 4,
+      "Sell": 66,
+      "Buy": 50,
+      "Buy Pullback": 6
+    },
+    "forward_win_rate_by_label": {
+      "Sell Pullback": 1.0,
+      "Sell": 0.5303030303030303,
+      "Buy": 0.38,
+      "Buy Pullback": 0.8333333333333334
+    },
+    "forward_n_by_label": {
+      "Sell Pullback": 4,
+      "Sell": 66,
+      "Buy": 50,
+      "Buy Pullback": 6
+    },
+    "horizon_m1": 25
+  },
+  "forward_signals": {
+    "window": "forward",
+    "n_decision_bars": 917,
+    "n_wave_signals": 95,
+    "signal_rate": 0.10359869138495092,
+    "agree_heuristic_rate": 0.8947368421052632,
+    "labels": {
+      "Buy": 38,
+      "Sell": 49,
+      "Sell Pullback": 6,
+      "Buy Pullback": 2
+    },
+    "forward_win_rate_by_label": {
+      "Buy": 0.5,
+      "Sell": 0.40816326530612246,
+      "Sell Pullback": 0.5,
+      "Buy Pullback": 0.0
+    },
+    "forward_n_by_label": {
+      "Buy": 38,
+      "Sell": 49,
+      "Sell Pullback": 6,
+      "Buy Pullback": 2
+    },
+    "horizon_m1": 25
+  },
+  "equity": {
+    "heuristic": {
+      "practice": {
+        "n_days": 30,
+        "cleared": 17,
+        "breached": 0,
+        "clear_pct": 56.666666666666664,
+        "breach_pct": 0.0,
+        "mean_entries": 8.6,
+        "target": 2.0,
+        "risk": 3.0,
+        "mode": "heuristic"
+      },
+      "forward": {
+        "n_days": 30,
+        "cleared": 19,
+        "breached": 0,
+        "clear_pct": 63.333333333333336,
+        "breach_pct": 0.0,
+        "mean_entries": 7.166666666666667,
+        "target": 2.0,
+        "risk": 3.0,
+        "mode": "heuristic"
+      }
+    },
+    "wave": {
+      "practice": {
+        "n_days": 30,
+        "cleared": 4,
+        "breached": 0,
+        "clear_pct": 13.333333333333334,
+        "breach_pct": 0.0,
+        "mean_entries": 2.7,
+        "target": 2.0,
+        "risk": 3.0,
+        "mode": "wave"
+      },
+      "forward": {
+        "n_days": 30,
+        "cleared": 3,
+        "breached": 0,
+        "clear_pct": 10.0,
+        "breach_pct": 0.0,
+        "mean_entries": 2.1666666666666665,
+        "target": 2.0,
+        "risk": 3.0,
+        "mode": "wave"
+      }
+    },
+    "hybrid": {
+      "practice": {
+        "n_days": 30,
+        "cleared": 5,
+        "breached": 0,
+        "clear_pct": 16.666666666666668,
+        "breach_pct": 0.0,
+        "mean_entries": 3.3333333333333335,
+        "target": 2.0,
+        "risk": 3.0,
+        "mode": "hybrid"
+      },
+      "forward": {
+        "n_days": 30,
+        "cleared": 5,
+        "breached": 0,
+        "clear_pct": 16.666666666666668,
+        "breach_pct": 0.0,
+        "mean_entries": 2.6333333333333333,
+        "target": 2.0,
+        "risk": 3.0,
+        "mode": "hybrid"
+      }
+    },
+    "heuristic_3p0_3p5_fwd": {
+      "n_days": 25,
+      "cleared": 6,
+      "breached": 0,
+      "clear_pct": 24.0,
+      "breach_pct": 0.0,
+      "mean_entries": 9.4,
+      "target": 3.0,
+      "risk": 3.5,
+      "mode": "heuristic"
+    },
+    "wave_3p0_3p5_fwd": {
+      "n_days": 25,
+      "cleared": 0,
+      "breached": 0,
+      "clear_pct": 0.0,
+      "breach_pct": 0.0,
+      "mean_entries": 2.24,
+      "target": 3.0,
+      "risk": 3.5,
+      "mode": "wave"
+    },
+    "hybrid_3p0_3p5_fwd": {
+      "n_days": 25,
+      "cleared": 1,
+      "breached": 0,
+      "clear_pct": 4.0,
+      "breach_pct": 0.0,
+      "mean_entries": 2.88,
+      "target": 3.0,
+      "risk": 3.5,
+      "mode": "hybrid"
+    }
+  },
+  "verdict": "NO clear win vs heuristic on this sample \u2014 research tag only; shell stays king."
+}

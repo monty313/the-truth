@@ -1,0 +1,353 @@
+{
+  "title": "TEST RUN 10 days \u2014 Mark (pt5) first vs policy",
+  "saved_at": "2026-08-05T00:26:26.621566+00:00",
+  "stamp": "20260805T002614Z",
+  "protocol": [
+    "1. Random (target,risk) from ten_pairs.json per day",
+    "2. MARK documents exact day under pt5 principles + sets law",
+    "3. POLICY pure greedy on same days/pairs",
+    "4. Compare bar-agree and award/clear outcomes"
+  ],
+  "pt5_note": "pt5 = principles of how Mark trades (not full discretionary system)",
+  "pt5_principles": [
+    "pt5.1 HTF permission / gravity \u2014 LTF never votes side against HTF",
+    "pt5.1 slingshot: pullback loads, resume with HTF releases",
+    "pt5.2 breath vs launch \u2014 different playbooks",
+    "pt5.3 regime: bull/bear/chop/flat rewrites what is allowed",
+    "pt5.4 capital: floor and size before edge",
+    "MARK SETS LAW: LTF=first (pullback/cont/add); HTF=last two (confirm); scan all 4"
+  ],
+  "sets_law": [
+    {
+      "set_id": 1,
+      "name": "micro",
+      "ltf_entry": "1m",
+      "htf_confirm": [
+        "15m",
+        "30m"
+      ],
+      "stack": [
+        "1m",
+        "15m",
+        "30m"
+      ],
+      "ltf_job": "pullback_continuation_add",
+      "htf_job": "trend_confirm"
+    },
+    {
+      "set_id": 2,
+      "name": "intraday",
+      "ltf_entry": "5m",
+      "htf_confirm": [
+        "30m",
+        "1h"
+      ],
+      "stack": [
+        "5m",
+        "30m",
+        "1h"
+      ],
+      "ltf_job": "pullback_continuation_add",
+      "htf_job": "trend_confirm"
+    },
+    {
+      "set_id": 3,
+      "name": "swing",
+      "ltf_entry": "15m",
+      "htf_confirm": [
+        "1h",
+        "4h"
+      ],
+      "stack": [
+        "15m",
+        "1h",
+        "4h"
+      ],
+      "ltf_job": "pullback_continuation_add",
+      "htf_job": "trend_confirm"
+    },
+    {
+      "set_id": 4,
+      "name": "macro",
+      "ltf_entry": "30m",
+      "htf_confirm": [
+        "4h",
+        "1d"
+      ],
+      "stack": [
+        "30m",
+        "4h",
+        "1d"
+      ],
+      "ltf_job": "pullback_continuation_add",
+      "htf_job": "trend_confirm"
+    }
+  ],
+  "seed": 7,
+  "start_idx": 40,
+  "n_days": 10,
+  "pairs_source": "ten_pairs.json",
+  "unique_pairs_used": [
+    [
+      1.0,
+      2.0
+    ],
+    [
+      1.5,
+      2.0
+    ],
+    [
+      1.5,
+      2.5
+    ],
+    [
+      2.0,
+      2.5
+    ],
+    [
+      2.0,
+      3.0
+    ],
+    [
+      2.0,
+      3.5
+    ],
+    [
+      2.5,
+      3.5
+    ],
+    [
+      3.0,
+      3.5
+    ]
+  ],
+  "summary": {
+    "mean_bar_agree_mark_vs_policy": 0.7882255892255892,
+    "mark_award_days": 7,
+    "policy_award_days": 5,
+    "same_clear_outcome_days": 8,
+    "breaches_either": 0,
+    "mark_max_clear_streak_in_window": 5,
+    "policy_max_clear_streak_in_window": 4,
+    "random_inputs_no_retrain": true,
+    "proven_touched": false
+  },
+  "days": [
+    {
+      "date": "2026-03-17",
+      "target_pct": 3.0,
+      "risk_pct": 3.5,
+      "mark_cleared": false,
+      "policy_cleared": false,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 4,
+      "policy_entries": 7,
+      "mark_pnl": -0.799,
+      "policy_pnl": -1.5616,
+      "mark_actions": {
+        "HOLD": 23,
+        "SELL": 1,
+        "BUY": 3
+      },
+      "bar_agree_rate": 0.7407407407407407,
+      "bar_disagree": 7,
+      "same_clear_outcome": true,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-17__t3.0_r3.5.md"
+    },
+    {
+      "date": "2026-03-18",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "mark_cleared": true,
+      "policy_cleared": true,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 2,
+      "policy_entries": 2,
+      "mark_pnl": 2.0666,
+      "policy_pnl": 2.0666,
+      "mark_actions": {
+        "SELL": 2,
+        "HOLD": 2
+      },
+      "bar_agree_rate": 0.75,
+      "bar_disagree": 1,
+      "same_clear_outcome": true,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-18__t2.0_r3.0.md"
+    },
+    {
+      "date": "2026-03-19",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "mark_cleared": true,
+      "policy_cleared": true,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 1,
+      "policy_entries": 1,
+      "mark_pnl": 2.254,
+      "policy_pnl": 2.254,
+      "mark_actions": {
+        "HOLD": 4,
+        "SELL": 1
+      },
+      "bar_agree_rate": 0.6,
+      "bar_disagree": 2,
+      "same_clear_outcome": true,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-19__t2.0_r3.0.md"
+    },
+    {
+      "date": "2026-03-20",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "mark_cleared": true,
+      "policy_cleared": true,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 1,
+      "policy_entries": 1,
+      "mark_pnl": 2.5775,
+      "policy_pnl": 2.5143,
+      "mark_actions": {
+        "HOLD": 8,
+        "SELL": 1
+      },
+      "bar_agree_rate": 0.7777777777777778,
+      "bar_disagree": 2,
+      "same_clear_outcome": true,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-20__t2.5_r3.5.md"
+    },
+    {
+      "date": "2026-03-23",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "mark_cleared": true,
+      "policy_cleared": true,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 1,
+      "policy_entries": 1,
+      "mark_pnl": 2.0874,
+      "policy_pnl": 2.0874,
+      "mark_actions": {
+        "BUY": 1
+      },
+      "bar_agree_rate": 1.0,
+      "bar_disagree": 0,
+      "same_clear_outcome": true,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-23__t2.0_r2.5.md"
+    },
+    {
+      "date": "2026-03-24",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "mark_cleared": true,
+      "policy_cleared": false,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 6,
+      "policy_entries": 7,
+      "mark_pnl": 2.1331,
+      "policy_pnl": 1.8344,
+      "mark_actions": {
+        "HOLD": 19,
+        "SELL": 3,
+        "BUY": 3
+      },
+      "bar_agree_rate": 0.84,
+      "bar_disagree": 4,
+      "same_clear_outcome": false,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-24__t2.0_r3.5.md"
+    },
+    {
+      "date": "2026-03-25",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "mark_cleared": false,
+      "policy_cleared": false,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 3,
+      "policy_entries": 8,
+      "mark_pnl": -1.1535,
+      "policy_pnl": -1.0045,
+      "mark_actions": {
+        "BUY": 1,
+        "HOLD": 24,
+        "SELL": 2
+      },
+      "bar_agree_rate": 0.7407407407407407,
+      "bar_disagree": 7,
+      "same_clear_outcome": true,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-25__t2.5_r3.5.md"
+    },
+    {
+      "date": "2026-03-26",
+      "target_pct": 1.5,
+      "risk_pct": 2.0,
+      "mark_cleared": false,
+      "policy_cleared": false,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 9,
+      "policy_entries": 5,
+      "mark_pnl": -1.5099,
+      "policy_pnl": -0.4351,
+      "mark_actions": {
+        "BUY": 7,
+        "HOLD": 18,
+        "SELL": 2
+      },
+      "bar_agree_rate": 0.8148148148148148,
+      "bar_disagree": 5,
+      "same_clear_outcome": true,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-26__t1.5_r2.0.md"
+    },
+    {
+      "date": "2026-03-27",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "mark_cleared": true,
+      "policy_cleared": false,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 3,
+      "policy_entries": 11,
+      "mark_pnl": 1.2487,
+      "policy_pnl": -1.4984,
+      "mark_actions": {
+        "SELL": 1,
+        "HOLD": 8,
+        "BUY": 2
+      },
+      "bar_agree_rate": 0.8181818181818182,
+      "bar_disagree": 2,
+      "same_clear_outcome": false,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-27__t1.0_r2.0.md"
+    },
+    {
+      "date": "2026-03-30",
+      "target_pct": 1.5,
+      "risk_pct": 2.5,
+      "mark_cleared": true,
+      "policy_cleared": true,
+      "mark_breached": false,
+      "policy_breached": false,
+      "mark_entries": 1,
+      "policy_entries": 1,
+      "mark_pnl": 1.5275,
+      "policy_pnl": 1.5275,
+      "mark_actions": {
+        "HOLD": 4,
+        "BUY": 1
+      },
+      "bar_agree_rate": 0.8,
+      "bar_disagree": 1,
+      "same_clear_outcome": true,
+      "diary": "mark_diaries/MARK_DIARY__2026-03-30__t1.5_r2.5.md"
+    }
+  ],
+  "post_bc": null,
+  "out_dir": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\test_run_10d_mark_vs_policy"
+}

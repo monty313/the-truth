@@ -1,0 +1,642 @@
+{
+  "forward_range": [
+    "2026-03-31",
+    "2026-05-26"
+  ],
+  "n_forward": 40,
+  "pairs": {
+    "1/2": {
+      "teacher": {
+        "mode": "teacher_mark_doctrine",
+        "n": 40,
+        "cleared": 27,
+        "breached": 0,
+        "clear_pct": 67.5,
+        "mean_entries": 3.45,
+        "mean_pnl": 0.5018755722643379
+      },
+      "teacher_misses_high_entry": [
+        {
+          "date": "2026-04-13",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 8,
+          "pnl": -1.671,
+          "banked": false,
+          "min_eq": -1.671
+        },
+        {
+          "date": "2026-04-22",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 10,
+          "pnl": -1.928,
+          "banked": false,
+          "min_eq": -1.928
+        },
+        {
+          "date": "2026-04-24",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 9,
+          "pnl": -1.577,
+          "banked": false,
+          "min_eq": -1.638
+        },
+        {
+          "date": "2026-04-29",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 10,
+          "pnl": -1.722,
+          "banked": false,
+          "min_eq": -1.803
+        },
+        {
+          "date": "2026-05-05",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 9,
+          "pnl": -1.712,
+          "banked": false,
+          "min_eq": -1.863
+        }
+      ],
+      "teacher_quiet_clears": [
+        {
+          "date": "2026-03-31",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 1,
+          "pnl": 1.031,
+          "banked": true,
+          "min_eq": -0.25
+        },
+        {
+          "date": "2026-04-01",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 2,
+          "pnl": 1.296,
+          "banked": true,
+          "min_eq": -0.085
+        },
+        {
+          "date": "2026-04-02",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 3,
+          "pnl": 1.032,
+          "banked": true,
+          "min_eq": -0.473
+        },
+        {
+          "date": "2026-04-09",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 3,
+          "pnl": 1.036,
+          "banked": true,
+          "min_eq": -0.43
+        },
+        {
+          "date": "2026-04-10",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 3,
+          "pnl": 1.065,
+          "banked": true,
+          "min_eq": -0.572
+        },
+        {
+          "date": "2026-04-16",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 3,
+          "pnl": 1.043,
+          "banked": true,
+          "min_eq": -0.193
+        },
+        {
+          "date": "2026-04-17",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 1,
+          "pnl": 1.222,
+          "banked": true,
+          "min_eq": -0.063
+        },
+        {
+          "date": "2026-04-20",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 2,
+          "pnl": 1.02,
+          "banked": true,
+          "min_eq": -0.358
+        }
+      ],
+      "policy": {
+        "mode": "policy_greedy_bc",
+        "n": 40,
+        "cleared": 28,
+        "breached": 0,
+        "clear_pct": 70.0,
+        "mean_entries": 4.15,
+        "mean_pnl": 0.45852626655485296,
+        "step_match": 0.6986027944111777,
+        "total_steps": 501
+      },
+      "mark_likeness": {
+        "breach_ok": true,
+        "step_match_vs_teacher": 0.6986027944111777,
+        "entries_vs_teacher": 0.7000000000000002,
+        "clear_delta_pp": 2.5,
+        "policy_as_mark_teacher": false
+      }
+    },
+    "2/3": {
+      "teacher": {
+        "mode": "teacher_mark_doctrine",
+        "n": 40,
+        "cleared": 15,
+        "breached": 0,
+        "clear_pct": 37.5,
+        "mean_entries": 4.375,
+        "mean_pnl": 0.7687454026185253
+      },
+      "teacher_misses_high_entry": [
+        {
+          "date": "2026-04-09",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 8,
+          "pnl": -0.096,
+          "banked": false,
+          "min_eq": -1.142
+        },
+        {
+          "date": "2026-04-13",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 8,
+          "pnl": -1.832,
+          "banked": false,
+          "min_eq": -1.832
+        },
+        {
+          "date": "2026-04-22",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 10,
+          "pnl": -2.775,
+          "banked": false,
+          "min_eq": -2.775
+        },
+        {
+          "date": "2026-04-24",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 9,
+          "pnl": -1.692,
+          "banked": false,
+          "min_eq": -1.833
+        }
+      ],
+      "teacher_quiet_clears": [
+        {
+          "date": "2026-03-31",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 3,
+          "pnl": 2.036,
+          "banked": true,
+          "min_eq": -0.225
+        },
+        {
+          "date": "2026-04-01",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 4,
+          "pnl": 2.093,
+          "banked": true,
+          "min_eq": -0.092
+        },
+        {
+          "date": "2026-04-10",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 3,
+          "pnl": 2.005,
+          "banked": true,
+          "min_eq": -0.572
+        },
+        {
+          "date": "2026-04-17",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 1,
+          "pnl": 2.003,
+          "banked": true,
+          "min_eq": -0.063
+        },
+        {
+          "date": "2026-04-20",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 3,
+          "pnl": 2.057,
+          "banked": true,
+          "min_eq": -0.358
+        },
+        {
+          "date": "2026-04-21",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 4,
+          "pnl": 2.067,
+          "banked": true,
+          "min_eq": -1.134
+        },
+        {
+          "date": "2026-04-23",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 4,
+          "pnl": 2.046,
+          "banked": true,
+          "min_eq": -0.351
+        },
+        {
+          "date": "2026-04-28",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 2,
+          "pnl": 2.186,
+          "banked": true,
+          "min_eq": -0.355
+        }
+      ],
+      "policy": {
+        "mode": "policy_greedy_bc",
+        "n": 40,
+        "cleared": 14,
+        "breached": 0,
+        "clear_pct": 35.0,
+        "mean_entries": 4.95,
+        "mean_pnl": 0.7255626504055938,
+        "step_match": 0.7098765432098766,
+        "total_steps": 810
+      },
+      "mark_likeness": {
+        "breach_ok": true,
+        "step_match_vs_teacher": 0.7098765432098766,
+        "entries_vs_teacher": 0.5750000000000002,
+        "clear_delta_pp": -2.5,
+        "policy_as_mark_teacher": true
+      }
+    },
+    "3/3.5": {
+      "teacher": {
+        "mode": "teacher_mark_doctrine",
+        "n": 40,
+        "cleared": 9,
+        "breached": 0,
+        "clear_pct": 22.5,
+        "mean_entries": 4.75,
+        "mean_pnl": 0.9500452776622081
+      },
+      "teacher_misses_high_entry": [
+        {
+          "date": "2026-04-09",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 8,
+          "pnl": -0.096,
+          "banked": false,
+          "min_eq": -1.142
+        },
+        {
+          "date": "2026-04-13",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 8,
+          "pnl": -1.832,
+          "banked": false,
+          "min_eq": -1.832
+        },
+        {
+          "date": "2026-04-22",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 10,
+          "pnl": -2.957,
+          "banked": false,
+          "min_eq": -2.957
+        },
+        {
+          "date": "2026-04-24",
+          "cleared": false,
+          "breached": false,
+          "n_entries": 9,
+          "pnl": -1.692,
+          "banked": false,
+          "min_eq": -1.833
+        }
+      ],
+      "teacher_quiet_clears": [
+        {
+          "date": "2026-04-01",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 4,
+          "pnl": 3.009,
+          "banked": true,
+          "min_eq": -0.092
+        },
+        {
+          "date": "2026-04-17",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 1,
+          "pnl": 3.17,
+          "banked": true,
+          "min_eq": -0.063
+        },
+        {
+          "date": "2026-04-20",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 4,
+          "pnl": 3.01,
+          "banked": true,
+          "min_eq": -0.358
+        },
+        {
+          "date": "2026-04-23",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 4,
+          "pnl": 3.054,
+          "banked": true,
+          "min_eq": -0.351
+        },
+        {
+          "date": "2026-04-28",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 2,
+          "pnl": 3.211,
+          "banked": true,
+          "min_eq": -0.355
+        },
+        {
+          "date": "2026-05-01",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 1,
+          "pnl": 3.361,
+          "banked": true,
+          "min_eq": -0.063
+        },
+        {
+          "date": "2026-05-11",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 1,
+          "pnl": 3.119,
+          "banked": true,
+          "min_eq": -0.1
+        },
+        {
+          "date": "2026-05-13",
+          "cleared": true,
+          "breached": false,
+          "n_entries": 3,
+          "pnl": 3.171,
+          "banked": true,
+          "min_eq": -0.107
+        }
+      ],
+      "policy": {
+        "mode": "policy_greedy_bc",
+        "n": 40,
+        "cleared": 8,
+        "breached": 0,
+        "clear_pct": 20.0,
+        "mean_entries": 5.125,
+        "mean_pnl": 0.9123601008948604,
+        "step_match": 0.7094211123723042,
+        "total_steps": 881
+      },
+      "mark_likeness": {
+        "breach_ok": true,
+        "step_match_vs_teacher": 0.7094211123723042,
+        "entries_vs_teacher": 0.375,
+        "clear_delta_pp": -2.5,
+        "policy_as_mark_teacher": true
+      }
+    }
+  },
+  "walks": [
+    {
+      "date": "2026-04-02",
+      "target": 3.0,
+      "risk": 3.5,
+      "eod": {
+        "pnl": 1.4772557807296836,
+        "min_eq": -0.4154523572140844,
+        "cleared": false,
+        "breached": false,
+        "n_entries": 5,
+        "banked": false
+      },
+      "reasons": [
+        [
+          "law3_no_permission_or_trigger",
+          9
+        ],
+        [
+          "law1_slingshot_release_long n_aligned=2 vel=2",
+          2
+        ],
+        [
+          "law1_soft_single_set_scalp aligned_bear n=1 score=6.00>0.00",
+          1
+        ],
+        [
+          "law1_soft_single_set_scalp aligned_bear n=1 score=4.60>0.00",
+          1
+        ],
+        [
+          "law1_soft_single_set_scalp aligned_bear n=1 score=4.00>0.00",
+          1
+        ],
+        [
+          "law1_slingshot_release_long n_aligned=1 vel=1",
+          1
+        ],
+        [
+          "law1_bull_tide_wait_ltf_resume",
+          1
+        ]
+      ],
+      "acts": {
+        "HOLD": 13,
+        "SELL": 2,
+        "BUY": 1
+      },
+      "verdict": "MARK WOULD OWN THIS PATH",
+      "notes": [
+        "waited for LTF resume \u2014 good Law 1 slingshot",
+        "fired on aligned release \u2014 good Law 1/2"
+      ]
+    },
+    {
+      "date": "2026-04-01",
+      "target": 1.0,
+      "risk": 2.0,
+      "eod": {
+        "pnl": 1.295796557511392,
+        "min_eq": -0.08506944444443189,
+        "cleared": true,
+        "breached": false,
+        "n_entries": 2,
+        "banked": true
+      },
+      "reasons": [
+        [
+          "law3_no_permission_or_trigger",
+          3
+        ],
+        [
+          "law1_slingshot_release_long n_aligned=2 vel=2",
+          2
+        ],
+        [
+          "law1_soft_single_set_scalp aligned_bear n=1 score=4.00>0.00",
+          2
+        ]
+      ],
+      "acts": {
+        "HOLD": 5,
+        "BUY": 1,
+        "SELL": 1
+      },
+      "verdict": "MARK WOULD OWN THIS PATH",
+      "notes": [
+        "BANK with few entries \u2014 Mark-like",
+        "fired on aligned release \u2014 good Law 1/2"
+      ]
+    },
+    {
+      "date": "2026-05-15",
+      "target": 3.0,
+      "risk": 3.5,
+      "eod": {
+        "pnl": 0.5273396140528203,
+        "min_eq": -0.3486151521896576,
+        "cleared": false,
+        "breached": false,
+        "n_entries": 5,
+        "banked": false
+      },
+      "reasons": [
+        [
+          "law3_no_permission_or_trigger",
+          8
+        ],
+        [
+          "law1_soft_single_set_scalp aligned_bull n=1 score=4.00>0.00",
+          3
+        ],
+        [
+          "law1_slingshot_release_short n_aligned=1 vel=2",
+          2
+        ],
+        [
+          "law1_bear_tide_wait_ltf_resume",
+          1
+        ],
+        [
+          "law1_slingshot_release_short n_aligned=2 vel=1",
+          1
+        ],
+        [
+          "law1_soft_single_set_scalp aligned_bull n=1 score=6.00>0.00",
+          1
+        ]
+      ],
+      "acts": {
+        "BUY": 2,
+        "HOLD": 12,
+        "SELL": 2
+      },
+      "verdict": "MARK WOULD OWN THIS PATH",
+      "notes": [
+        "waited for LTF resume \u2014 good Law 1 slingshot",
+        "fired on aligned release \u2014 good Law 1/2"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "target": 3.0,
+      "risk": 3.5,
+      "eod": {
+        "pnl": -1.8321257868123502,
+        "min_eq": -1.8321257868123502,
+        "cleared": false,
+        "breached": false,
+        "n_entries": 8,
+        "banked": false
+      },
+      "reasons": [
+        [
+          "law3_no_permission_or_trigger",
+          9
+        ],
+        [
+          "law1_slingshot_release_long n_aligned=1 vel=1",
+          2
+        ],
+        [
+          "law1_soft_single_set_scalp aligned_bear n=1 score=6.00>0.00",
+          2
+        ],
+        [
+          "law1_soft_single_set_scalp aligned_bear n=1 score=4.00>0.00",
+          1
+        ],
+        [
+          "law1_slingshot_release_short n_aligned=2 vel=2",
+          1
+        ],
+        [
+          "law1_slingshot_release_long n_aligned=2 vel=1",
+          1
+        ]
+      ],
+      "acts": {
+        "HOLD": 10,
+        "SELL": 3,
+        "BUY": 3
+      },
+      "verdict": "MARK WOULD OWN THIS PATH",
+      "notes": [
+        "fired on aligned release \u2014 good Law 1/2"
+      ]
+    }
+  ],
+  "bottom_line": {
+    "question": "Is MARK HERE = policy (the move he would make) on FORWARD?",
+    "answer_teacher": "PARTIAL YES \u2014 doctrine is Mark-logic (force/regime/velocity); fewer thrash entries; breach 0; not max clear% yet.",
+    "answer_policy_bc": "CLOSER ON DIRECTION than on HOLD \u2014 step_match mid; breach 0; not full clone until match high and day walks match teacher.",
+    "hard_teacher_clear_pct": 22.5,
+    "hard_policy_clear_pct": 20.0,
+    "soft_teacher_clear_pct": 67.5,
+    "soft_policy_clear_pct": 70.0,
+    "hard_step_match": 0.7094211123723042,
+    "proven_touched": false
+  },
+  "proven_touched": false
+}

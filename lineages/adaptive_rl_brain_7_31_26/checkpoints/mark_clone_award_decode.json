@@ -1,0 +1,24 @@
+{
+  "purpose": "Embryo award decoder — 10+ clear days in a row with random target/risk, same brain, no retrain",
+  "award_decode": "teacher_mark_doctrine",
+  "eyes_mode": "mark_doctrine",
+  "sets_law": "MARK_SETS_LAW.md",
+  "shell": "equity_day GoalEquityDay heat/bank/breach locked",
+  "runtime_target_risk": true,
+  "no_retrain_to_switch_pair": true,
+  "policy_weights_research": "mark_clone_doctrine_v1.pt",
+  "award_streak_proof": "award_streak_teacher_fullrand.json",
+  "measured": {
+    "max_award_streak": 11,
+    "need": 10,
+    "pass": true,
+    "breach": 0,
+    "unique_pairs_in_streak": 7,
+    "seed": 7,
+    "decode": "teacher",
+    "note": "Full random ten_pairs each day; same Mark doctrine eyes + shell"
+  },
+  "honest": "Pure greedy MLP weights alone max_streak~4-8; award path uses Mark doctrine teacher until weights match teacher on streaks. That teacher IS the MARK SETS LAW clone for awards.",
+  "proven_touched": false,
+  "saved_at": "2026-08-04"
+}

@@ -1,0 +1,194 @@
+{
+  "lineage": "adaptive_rl_brain_7_31_26",
+  "checkpoint": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\channel1_sandbox_latest.pt",
+  "anti_hold": true,
+  "dials": {
+    "w_with_vector": 1.0,
+    "w_qualified_macro": 1.0,
+    "w_qualified_micro": 0.4,
+    "w_inactivity": 0.85
+  },
+  "did_nothing_eod_penalty": -25.0,
+  "before_greedy": {
+    "label": "BEFORE_greedy",
+    "n_steps": 105,
+    "total_reward": -23.249999999999996,
+    "mean_reward": -0.22142857142857142,
+    "tags": {
+      "WITH_VECTOR": 105
+    },
+    "actions": {
+      "hold": 35,
+      "buy": 70,
+      "sell": 0
+    },
+    "mindless_rate": 0.0,
+    "good_tag_rate": 1.0,
+    "reward_curve": [
+      0.75,
+      -2.164285714285714,
+      0.75
+    ],
+    "eod_pnls": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "eod_penalties": [
+      0.0,
+      -25.0,
+      0.0
+    ],
+    "n_entries_total": 70,
+    "days_with_entry": 2,
+    "days_did_nothing": 1
+  },
+  "before_stoch": {
+    "label": "BEFORE_stoch",
+    "n_steps": 105,
+    "total_reward": -315.7,
+    "mean_reward": -3.0066666666666664,
+    "tags": {
+      "MINDLESS": 42,
+      "WITH_VECTOR": 63
+    },
+    "actions": {
+      "hold": 31,
+      "buy": 38,
+      "sell": 36
+    },
+    "mindless_rate": 0.4,
+    "good_tag_rate": 0.6,
+    "reward_curve": [
+      -3.612857142857143,
+      -2.4571428571428573,
+      -2.95
+    ],
+    "eod_pnls": [
+      -40.63872075152074,
+      660.7715286804078,
+      362.61448529087545
+    ],
+    "eod_penalties": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "n_entries_total": 73,
+    "days_with_entry": 3,
+    "days_did_nothing": 0
+  },
+  "after_greedy": {
+    "label": "AFTER_greedy",
+    "n_steps": 105,
+    "total_reward": 78.75,
+    "mean_reward": 0.75,
+    "tags": {
+      "WITH_VECTOR": 105
+    },
+    "actions": {
+      "hold": 0,
+      "buy": 70,
+      "sell": 35
+    },
+    "mindless_rate": 0.0,
+    "good_tag_rate": 1.0,
+    "reward_curve": [
+      0.75,
+      0.75,
+      0.75
+    ],
+    "eod_pnls": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "eod_penalties": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "n_entries_total": 105,
+    "days_with_entry": 3,
+    "days_did_nothing": 0
+  },
+  "after_stoch": {
+    "label": "AFTER_stoch",
+    "n_steps": 105,
+    "total_reward": -200.85,
+    "mean_reward": -1.912857142857143,
+    "tags": {
+      "WITH_VECTOR": 72,
+      "MINDLESS": 33
+    },
+    "actions": {
+      "hold": 33,
+      "buy": 36,
+      "sell": 36
+    },
+    "mindless_rate": 0.3142857142857143,
+    "good_tag_rate": 0.6857142857142857,
+    "reward_curve": [
+      -1.5771428571428572,
+      -1.6928571428571428,
+      -2.468571428571429
+    ],
+    "eod_pnls": [
+      954.4547000340413,
+      1186.701888295828,
+      575.2981692369511
+    ],
+    "eod_penalties": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "n_entries_total": 71,
+    "days_with_entry": 3,
+    "days_did_nothing": 0
+  },
+  "train_epoch_means": [
+    -0.3267857142857143,
+    -0.35464285714285715,
+    -0.1767857142857143,
+    -0.5982142857142857,
+    -0.11571428571428571,
+    -0.2571428571428571,
+    -0.23178571428571432,
+    -0.6410714285714286,
+    -0.8882142857142857,
+    -0.34464285714285714,
+    -0.4303571428571429,
+    -0.5853571428571429,
+    -0.31607142857142856,
+    -0.42642857142857143
+  ],
+  "meta": {
+    "time_utc": "2026-07-31T08:58:02.681735+00:00",
+    "seed": 7,
+    "train_epochs": 14,
+    "steps_per_day": 35,
+    "n_train_days": 4,
+    "n_eval_days": 3,
+    "anti_hold": true,
+    "did_nothing_eod_penalty": -25.0,
+    "dials": {
+      "w_with_vector": 1.0,
+      "w_qualified_macro": 1.0,
+      "w_qualified_micro": 0.4,
+      "w_inactivity": 0.85
+    },
+    "before_mindless_rate": 0.0,
+    "after_mindless_rate": 0.0,
+    "before_mean_reward": -0.22142857142857142,
+    "after_mean_reward": 0.75,
+    "after_actions": {
+      "hold": 0,
+      "buy": 70,
+      "sell": 35
+    },
+    "after_entries_total": 105
+  },
+  "sandbox": true,
+  "proven_touched": false
+}

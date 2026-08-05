@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "description": "Exactly 10 distinct (target%, risk%) runtime input pairs. Same brain weights for all. No retrain to switch numbers.",
+  "seed": 42,
+  "data_source": "data/raw/XAUUSD_curriculum_2026.csv",
+  "eq0": 100000.0,
+  "practice_day_count": 50,
+  "forward_day_count": 40,
+  "min_clear_days_per_pair": 30,
+  "require_breach_pct": 0.0,
+  "pairs": [
+    {"id": 1, "target_pct": 1.0, "risk_pct": 2.0},
+    {"id": 2, "target_pct": 1.0, "risk_pct": 2.5},
+    {"id": 3, "target_pct": 1.5, "risk_pct": 2.0},
+    {"id": 4, "target_pct": 1.5, "risk_pct": 2.5},
+    {"id": 5, "target_pct": 1.5, "risk_pct": 3.0},
+    {"id": 6, "target_pct": 2.0, "risk_pct": 2.5},
+    {"id": 7, "target_pct": 2.0, "risk_pct": 3.0},
+    {"id": 8, "target_pct": 2.0, "risk_pct": 3.5},
+    {"id": 9, "target_pct": 2.5, "risk_pct": 3.5},
+    {"id": 10, "target_pct": 3.0, "risk_pct": 3.5}
+  ],
+  "checkpoint": "lineages/adaptive_rl_brain_7_31_26/checkpoints/multi_pair_consistent_v1.pt",
+  "score_command": "python lineages/adaptive_rl_brain_7_31_26/score_ten_pairs.py",
+  "forward_command": "python lineages/adaptive_rl_brain_7_31_26/score_ten_pairs.py --mode forward"
+}

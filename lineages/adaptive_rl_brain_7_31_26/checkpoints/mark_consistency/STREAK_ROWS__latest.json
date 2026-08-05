@@ -1,0 +1,402 @@
+[
+  {
+    "date": "2026-03-31",
+    "target_pct": 1.0,
+    "risk_pct": 2.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.2587,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-04-01",
+    "target_pct": 2.0,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.1721,
+    "n_entries": 3,
+    "award": true
+  },
+  {
+    "date": "2026-04-02",
+    "target_pct": 2.0,
+    "risk_pct": 3.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.0356,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-04-06",
+    "target_pct": 1.5,
+    "risk_pct": 3.0,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -1.6273,
+    "n_entries": 3,
+    "award": false
+  },
+  {
+    "date": "2026-04-07",
+    "target_pct": 1.5,
+    "risk_pct": 3.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.815,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-04-08",
+    "target_pct": 2.5,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.908,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-04-09",
+    "target_pct": 1.0,
+    "risk_pct": 2.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.0242,
+    "n_entries": 4,
+    "award": true
+  },
+  {
+    "date": "2026-04-10",
+    "target_pct": 2.0,
+    "risk_pct": 3.0,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -1.366,
+    "n_entries": 2,
+    "award": false
+  },
+  {
+    "date": "2026-04-13",
+    "target_pct": 1.5,
+    "risk_pct": 2.0,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -1.0246,
+    "n_entries": 3,
+    "award": false
+  },
+  {
+    "date": "2026-04-14",
+    "target_pct": 1.0,
+    "risk_pct": 2.0,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -1.0252,
+    "n_entries": 3,
+    "award": false
+  },
+  {
+    "date": "2026-04-15",
+    "target_pct": 2.0,
+    "risk_pct": 2.5,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -1.125,
+    "n_entries": 3,
+    "award": false
+  },
+  {
+    "date": "2026-04-16",
+    "target_pct": 3.0,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 3.7483,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-04-17",
+    "target_pct": 2.0,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.0711,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-04-20",
+    "target_pct": 2.0,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.3113,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-04-21",
+    "target_pct": 2.0,
+    "risk_pct": 3.5,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -2.2346,
+    "n_entries": 2,
+    "award": false
+  },
+  {
+    "date": "2026-04-22",
+    "target_pct": 2.0,
+    "risk_pct": 3.5,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -1.6093,
+    "n_entries": 2,
+    "award": false
+  },
+  {
+    "date": "2026-04-23",
+    "target_pct": 2.0,
+    "risk_pct": 2.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.1402,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-04-24",
+    "target_pct": 1.0,
+    "risk_pct": 2.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.0265,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-04-27",
+    "target_pct": 2.5,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.5342,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-04-28",
+    "target_pct": 1.5,
+    "risk_pct": 3.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.7603,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-04-29",
+    "target_pct": 2.0,
+    "risk_pct": 2.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.4239,
+    "n_entries": 3,
+    "award": true
+  },
+  {
+    "date": "2026-04-30",
+    "target_pct": 1.5,
+    "risk_pct": 2.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.6567,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-05-01",
+    "target_pct": 1.0,
+    "risk_pct": 2.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.0456,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-05-04",
+    "target_pct": 3.0,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 3.2646,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-05-05",
+    "target_pct": 2.0,
+    "risk_pct": 3.5,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -1.6192,
+    "n_entries": 2,
+    "award": false
+  },
+  {
+    "date": "2026-05-06",
+    "target_pct": 2.0,
+    "risk_pct": 3.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.192,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-05-07",
+    "target_pct": 1.5,
+    "risk_pct": 3.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.5765,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-05-08",
+    "target_pct": 2.5,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.7547,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-05-11",
+    "target_pct": 2.0,
+    "risk_pct": 2.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.4504,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-05-12",
+    "target_pct": 1.5,
+    "risk_pct": 3.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.0551,
+    "n_entries": 2,
+    "award": true
+  },
+  {
+    "date": "2026-05-13",
+    "target_pct": 1.5,
+    "risk_pct": 3.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.643,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-05-14",
+    "target_pct": 1.5,
+    "risk_pct": 2.0,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -0.9354,
+    "n_entries": 2,
+    "award": false
+  },
+  {
+    "date": "2026-05-15",
+    "target_pct": 1.0,
+    "risk_pct": 2.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.0042,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-05-18",
+    "target_pct": 2.0,
+    "risk_pct": 2.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.0291,
+    "n_entries": 4,
+    "award": true
+  },
+  {
+    "date": "2026-05-19",
+    "target_pct": 2.5,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 3.4789,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-05-20",
+    "target_pct": 1.0,
+    "risk_pct": 2.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 1.0205,
+    "n_entries": 1,
+    "award": true
+  },
+  {
+    "date": "2026-05-21",
+    "target_pct": 2.5,
+    "risk_pct": 3.5,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.5203,
+    "n_entries": 3,
+    "award": true
+  },
+  {
+    "date": "2026-05-22",
+    "target_pct": 2.5,
+    "risk_pct": 3.5,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -0.7461,
+    "n_entries": 2,
+    "award": false
+  },
+  {
+    "date": "2026-05-25",
+    "target_pct": 1.5,
+    "risk_pct": 2.0,
+    "cleared": false,
+    "breached": false,
+    "pnl_pct": -1.2732,
+    "n_entries": 3,
+    "award": false
+  },
+  {
+    "date": "2026-05-26",
+    "target_pct": 2.0,
+    "risk_pct": 3.0,
+    "cleared": true,
+    "breached": false,
+    "pnl_pct": 2.4216,
+    "n_entries": 1,
+    "award": true
+  }
+]

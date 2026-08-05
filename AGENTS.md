@@ -7,13 +7,19 @@
 
 **Owner:** Monty (dyslexic). Organization is not optional.  
 **Canonical goal file:** [GOAL.md](GOAL.md) — SSOT; never invent a different mission.  
-**Mindset law:** [references/doctrine/00_LID_OFF_THE_JAR.md](references/doctrine/00_LID_OFF_THE_JAR.md)
+**House map (anti-confusion):** [00_MAP_OF_THE_HOUSE.md](00_MAP_OF_THE_HOUSE.md) — tracks T1–T4, work order, freeze list.  
+**Current handoff:** [HANDOFF_2026-08-05.md](HANDOFF_2026-08-05.md)  
+**Mindset law:** [references/doctrine/00_LID_OFF_THE_JAR.md](references/doctrine/00_LID_OFF_THE_JAR.md)  
+**Second Brain (Mark):** [MARK HERE!.lnk](MARK%20HERE!.lnk) · soul bridge [SOUL_MATCH.md](SOUL_MATCH.md) · thinking laws [references/doctrine/llm_basic_thinking/00_INDEX.md](references/doctrine/llm_basic_thinking/00_INDEX.md) — **same MarkOS as ARMY**, not a second personality.  
+**pt5 → code map:** [references/doctrine/llm_basic_thinking/HOW_PT5_MAPS_HERE.md](references/doctrine/llm_basic_thinking/HOW_PT5_MAPS_HERE.md)  
+**Agents/obs after soul:** [KEEP_AFTER_SOUL.md](KEEP_AFTER_SOUL.md) — **keep all; do not wire until Mark soul is full in policy.**
 
-**Also auto-loaded:** `.grok/rules/00_goal.md` · `.grok/rules/00_lid_off.md`  
+**Also auto-loaded:** `.grok/rules/00_goal.md` · `.grok/rules/00_lid_off.md` · `.grok/rules/00_map_house.md`  
 **Other tools:** `CLAUDE.md` + `.github/copilot-instructions.md` point here.
 
 If you do not know where something goes, **stop and put it in the right place**.  
-Do not leave new mess on the root.
+Do not leave new mess on the root.  
+**Always name the track (T1–T4)** before changing code.
 
 ---
 

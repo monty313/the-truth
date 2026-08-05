@@ -1,0 +1,43 @@
+MOMENTUM ONE / the-truth — simple map
+=====================================
+Master map (anti-confusion):  00_MAP_OF_THE_HOUSE.md
+Current handoff:              HANDOFF_2026-08-05.md
+Mission:                      GOAL.md
+Talk to Mark:                 MARK HERE!.lnk  (+ SOUL_MATCH.md)
+
+ROOT has FEW big folders:
+
+  USE/         buttons to RUN
+  models/      PROVEN champion brains (never overwrite)
+  lineages/    Mark-soul + experiment brain (T3)
+  code/        all Python (training, signals, features, telemetry)
+  configs/     settings (goals, rewards, signal_slots, sets)
+  data/        price files
+  scripts/     command tools (prove_it, ...)
+  tests/       auto checks
+  docs/        long docs
+  references/  doctrine + flea-jar + pt5 basic knowledge (KEEP)
+  outputs/     caches, reports, logs
+  tools/       Colab, notebooks, HUD
+  _archive/    old junk copies
+  mark_here/   MarkOS launcher
+
+TWO BRAINS:
+  1) PROVEN  = models/                              (T1)
+  2) NEW     = lineages/adaptive_rl_brain_7_31_26/  (T3 Mark soul)
+
+WORK ORDER (long-term consistency):
+  1. Mark SOUL in policy     ← active now (teacher 10/10, policy ~8/10)
+  2. Then agents + obs       ← KEEP_AFTER_SOUL.md (do not delete; wire later)
+  3. Award streak / multi-pair consistency
+
+TRACKS (always name which):
+  T1 PROVEN production
+  T2 Multi-pair tutor
+  T3 Mark soul → policy   ← current
+  T4 Channel1 pure RL     (parked)
+
+pt5 principles:  references/doctrine/llm_basic_thinking/
+Signals (later): code/signals/ + configs/signal_slots.yaml
+
+If lost: open 00_MAP_OF_THE_HOUSE.md only.

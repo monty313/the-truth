@@ -1,0 +1,360 @@
+{
+  "lineage": "adaptive_rl_brain_7_31_26",
+  "phase": "C",
+  "checkpoint": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\channel1_curriculum_v1.pt",
+  "report": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\curriculum_train_report.json",
+  "source": "XAUUSD_curriculum_2026.csv",
+  "train_dates": [
+    "2026-01-28",
+    "2026-02-27",
+    "2026-03-18"
+  ],
+  "eval_dates": [
+    "2026-04-21",
+    "2026-05-06"
+  ],
+  "anti_hold": true,
+  "thrash_control": {
+    "max_open_units": 3,
+    "reverse_cooldown_bars": 100,
+    "flip_flop_penalty": -1.0
+  },
+  "dials": {
+    "w_with_vector": 1.0,
+    "w_qualified_macro": 1.0,
+    "w_qualified_micro": 0.4,
+    "w_inactivity": 0.85
+  },
+  "did_nothing_eod_penalty": -25.0,
+  "before_greedy": {
+    "label": "BEFORE_greedy",
+    "n_steps": 48,
+    "total_reward": -37.65,
+    "mean_reward": -0.7843749999999999,
+    "tags": {
+      "QUALIFIED_MICRO": 19,
+      "WITH_VECTOR": 11,
+      "MINDLESS": 14,
+      "QUALIFIED_MACRO": 4
+    },
+    "actions": {
+      "hold": 43,
+      "buy": 4,
+      "sell": 1
+    },
+    "mindless_rate": 0.2916666666666667,
+    "good_tag_rate": 0.7083333333333334,
+    "reward_curve": [
+      -0.12916666666666665,
+      -1.4395833333333332
+    ],
+    "eod_pnls": [
+      0.0,
+      0.0
+    ],
+    "eod_penalties": [
+      0.0,
+      0.0
+    ],
+    "n_entries_total": 3,
+    "days_with_entry": 2,
+    "days_did_nothing": 0,
+    "n_reverses": 0,
+    "n_scale_blocks": 0,
+    "n_cooldown_blocks": 0,
+    "hold_rate": 0.8958333333333334
+  },
+  "before_stoch": {
+    "label": "BEFORE_stoch",
+    "n_steps": 48,
+    "total_reward": -52.1,
+    "mean_reward": -1.0854166666666667,
+    "tags": {
+      "QUALIFIED_MICRO": 14,
+      "MINDLESS": 23,
+      "WITH_VECTOR": 7,
+      "QUALIFIED_MACRO": 4
+    },
+    "actions": {
+      "hold": 32,
+      "buy": 9,
+      "sell": 7
+    },
+    "mindless_rate": 0.4791666666666667,
+    "good_tag_rate": 0.5208333333333334,
+    "reward_curve": [
+      -1.3687500000000001,
+      -0.8020833333333334
+    ],
+    "eod_pnls": [
+      -114.69999999999982,
+      -50.26000000000204
+    ],
+    "eod_penalties": [
+      0.0,
+      0.0
+    ],
+    "n_entries_total": 16,
+    "days_with_entry": 2,
+    "days_did_nothing": 0,
+    "n_reverses": 5,
+    "n_scale_blocks": 9,
+    "n_cooldown_blocks": 3,
+    "hold_rate": 0.6666666666666666
+  },
+  "after_warm_greedy": {
+    "label": "AFTER_WARM_greedy",
+    "n_steps": 48,
+    "total_reward": -93.1,
+    "mean_reward": -1.9395833333333332,
+    "tags": {
+      "QUALIFIED_MICRO": 28,
+      "WITH_VECTOR": 14,
+      "QUALIFIED_MACRO": 6
+    },
+    "actions": {
+      "hold": 48,
+      "buy": 0,
+      "sell": 0
+    },
+    "mindless_rate": 0.0,
+    "good_tag_rate": 1.0,
+    "reward_curve": [
+      -1.9729166666666667,
+      -1.90625
+    ],
+    "eod_pnls": [
+      0.0,
+      0.0
+    ],
+    "eod_penalties": [
+      -25.0,
+      -25.0
+    ],
+    "n_entries_total": 0,
+    "days_with_entry": 0,
+    "days_did_nothing": 2,
+    "n_reverses": 0,
+    "n_scale_blocks": 0,
+    "n_cooldown_blocks": 0,
+    "hold_rate": 1.0
+  },
+  "after_greedy": {
+    "label": "AFTER_greedy",
+    "n_steps": 48,
+    "total_reward": -93.1,
+    "mean_reward": -1.9395833333333332,
+    "tags": {
+      "QUALIFIED_MICRO": 28,
+      "WITH_VECTOR": 14,
+      "QUALIFIED_MACRO": 6
+    },
+    "actions": {
+      "hold": 48,
+      "buy": 0,
+      "sell": 0
+    },
+    "mindless_rate": 0.0,
+    "good_tag_rate": 1.0,
+    "reward_curve": [
+      -1.9729166666666667,
+      -1.90625
+    ],
+    "eod_pnls": [
+      0.0,
+      0.0
+    ],
+    "eod_penalties": [
+      -25.0,
+      -25.0
+    ],
+    "n_entries_total": 0,
+    "days_with_entry": 0,
+    "days_did_nothing": 2,
+    "n_reverses": 0,
+    "n_scale_blocks": 0,
+    "n_cooldown_blocks": 0,
+    "hold_rate": 1.0
+  },
+  "after_stoch": {
+    "label": "AFTER_stoch",
+    "n_steps": 48,
+    "total_reward": -48.85,
+    "mean_reward": -1.0177083333333334,
+    "tags": {
+      "QUALIFIED_MICRO": 16,
+      "MINDLESS": 14,
+      "WITH_VECTOR": 13,
+      "QUALIFIED_MACRO": 5
+    },
+    "actions": {
+      "hold": 32,
+      "buy": 8,
+      "sell": 8
+    },
+    "mindless_rate": 0.2916666666666667,
+    "good_tag_rate": 0.7083333333333334,
+    "reward_curve": [
+      -0.9583333333333334,
+      -1.0770833333333332
+    ],
+    "eod_pnls": [
+      225.94000000000142,
+      3.1700000000009823
+    ],
+    "eod_penalties": [
+      0.0,
+      0.0
+    ],
+    "n_entries_total": 16,
+    "days_with_entry": 2,
+    "days_did_nothing": 0,
+    "n_reverses": 6,
+    "n_scale_blocks": 5,
+    "n_cooldown_blocks": 1,
+    "hold_rate": 0.6666666666666666
+  },
+  "after_antihold_greedy": {
+    "label": "AFTER_antihold_greedy",
+    "n_steps": 48,
+    "total_reward": 0.75,
+    "mean_reward": 0.015625,
+    "tags": {
+      "QUALIFIED_MICRO": 17,
+      "MINDLESS": 17,
+      "WITH_VECTOR": 10,
+      "QUALIFIED_MACRO": 4
+    },
+    "actions": {
+      "hold": 46,
+      "buy": 1,
+      "sell": 1
+    },
+    "mindless_rate": 0.3541666666666667,
+    "good_tag_rate": 0.6458333333333334,
+    "reward_curve": [
+      0.0,
+      0.03125
+    ],
+    "eod_pnls": [
+      0.0,
+      0.0
+    ],
+    "eod_penalties": [
+      0.0,
+      0.0
+    ],
+    "n_entries_total": 2,
+    "days_with_entry": 2,
+    "days_did_nothing": 0,
+    "n_reverses": 0,
+    "n_scale_blocks": 0,
+    "n_cooldown_blocks": 0,
+    "hold_rate": 0.9583333333333334
+  },
+  "after_syn_greedy": {
+    "label": "AFTER_syn_greedy",
+    "n_steps": 80,
+    "total_reward": 1.5,
+    "mean_reward": 0.01875,
+    "tags": {
+      "WITH_VECTOR": 80
+    },
+    "actions": {
+      "hold": 78,
+      "buy": 1,
+      "sell": 1
+    },
+    "mindless_rate": 0.0,
+    "good_tag_rate": 1.0,
+    "reward_curve": [
+      0.01875,
+      0.01875
+    ],
+    "eod_pnls": [
+      0.0,
+      0.0
+    ],
+    "eod_penalties": [
+      0.0,
+      0.0
+    ],
+    "n_entries_total": 2,
+    "days_with_entry": 2,
+    "days_did_nothing": 0,
+    "n_reverses": 0,
+    "n_scale_blocks": 0,
+    "n_cooldown_blocks": 0,
+    "hold_rate": 0.975
+  },
+  "train_epoch_means": [
+    -0.3765625,
+    -0.2640625,
+    -0.2965625,
+    -0.3875,
+    -0.3246875,
+    -0.7825,
+    -0.51875,
+    -0.7559375,
+    -0.7474999999999999,
+    -0.829375,
+    -0.25333333333333335,
+    -0.112,
+    -0.016,
+    -0.44,
+    -0.5680000000000001,
+    -0.5873333333333333,
+    0.009333333333333332,
+    -0.5466666666666666,
+    -0.43933333333333335,
+    -0.42466666666666664,
+    -0.10200000000000001,
+    -0.42,
+    -0.2773333333333333,
+    -0.16466666666666666
+  ],
+  "meta": {
+    "time_utc": "2026-07-31T09:19:03.088850+00:00",
+    "seed": 11,
+    "source": "XAUUSD_curriculum_2026.csv",
+    "warm_epochs": 10,
+    "real_epochs": 14,
+    "steps_per_day": 40,
+    "decide_every": 25,
+    "train_dates": [
+      "2026-01-28",
+      "2026-02-27",
+      "2026-03-18"
+    ],
+    "eval_dates": [
+      "2026-04-21",
+      "2026-05-06"
+    ],
+    "anti_hold": true,
+    "thrash_control": true,
+    "use_signal_majority": false,
+    "did_nothing_eod_penalty": -25.0,
+    "dials": {
+      "w_with_vector": 1.0,
+      "w_qualified_macro": 1.0,
+      "w_qualified_micro": 0.4,
+      "w_inactivity": 0.85
+    },
+    "before_mean_reward": -0.7843749999999999,
+    "after_mean_reward": -1.9395833333333332,
+    "before_mindless_rate": 0.2916666666666667,
+    "after_mindless_rate": 0.0,
+    "after_actions": {
+      "hold": 48,
+      "buy": 0,
+      "sell": 0
+    },
+    "after_hold_rate": 1.0,
+    "after_entries_total": 0,
+    "after_days_did_nothing": 2
+  },
+  "health_gate": false,
+  "partial_progress": true,
+  "sandbox": true,
+  "proven_touched": false
+}

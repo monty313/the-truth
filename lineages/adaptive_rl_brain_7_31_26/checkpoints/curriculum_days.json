@@ -1,0 +1,58 @@
+{
+  "lineage": "adaptive_rl_brain_7_31_26",
+  "source_file": "XAUUSD_curriculum_2026.csv",
+  "raw_dir": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\data\\raw",
+  "days": [
+    {
+      "date": "2026-01-28",
+      "role": "trend_bull",
+      "n_bars": 1380,
+      "net_move": 243.5699999999997,
+      "trend_strength": 0.08214036401161441,
+      "source_file": "XAUUSD_curriculum_2026.csv",
+      "start_ts": "2026-01-28 00:00:00",
+      "end_ts": "2026-01-28 22:59:00"
+    },
+    {
+      "date": "2026-02-27",
+      "role": "pullback_mix",
+      "n_bars": 1243,
+      "net_move": 101.47000000000025,
+      "trend_strength": 0.0657986032305975,
+      "source_file": "XAUUSD_curriculum_2026.csv",
+      "start_ts": "2026-02-27 02:17:00",
+      "end_ts": "2026-02-27 22:59:00"
+    },
+    {
+      "date": "2026-03-18",
+      "role": "pullback_mix",
+      "n_bars": 1380,
+      "net_move": -167.05000000000018,
+      "trend_strength": 0.07280231154421021,
+      "source_file": "XAUUSD_curriculum_2026.csv",
+      "start_ts": "2026-03-18 00:00:00",
+      "end_ts": "2026-03-18 23:59:00"
+    },
+    {
+      "date": "2026-04-21",
+      "role": "trend_bear",
+      "n_bars": 1320,
+      "net_move": -142.27999999999975,
+      "trend_strength": 0.08816785851500251,
+      "source_file": "XAUUSD_curriculum_2026.csv",
+      "start_ts": "2026-04-21 00:00:00",
+      "end_ts": "2026-04-21 21:59:00"
+    },
+    {
+      "date": "2026-05-06",
+      "role": "trend_bull",
+      "n_bars": 1320,
+      "net_move": 135.07000000000062,
+      "trend_strength": 0.08217086332029387,
+      "source_file": "XAUUSD_curriculum_2026.csv",
+      "start_ts": "2026-05-06 00:00:00",
+      "end_ts": "2026-05-06 21:59:00"
+    }
+  ],
+  "proven_touched": false
+}

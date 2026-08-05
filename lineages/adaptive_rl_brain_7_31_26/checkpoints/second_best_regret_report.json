@@ -1,0 +1,158 @@
+{
+  "time_utc": "2026-07-31T12:10:03.640423+00:00",
+  "seed": 23,
+  "source": "XAUUSD_curriculum_2026.csv",
+  "src_ckpt": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\channel1_curriculum_v2_hold_shape.pt",
+  "out_ckpt": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\channel1_curriculum_v3_second_best.pt",
+  "real_epochs": 14,
+  "directional_hold_penalty": -3.5,
+  "structure_match_entry_bonus": 2.0,
+  "second_best_regret_penalty": -3.0,
+  "second_best_horizon_bars": 25,
+  "second_best_fee_px": 0.5,
+  "did_nothing_eod_penalty": -25.0,
+  "train_dates": [
+    "2026-01-28",
+    "2026-02-27",
+    "2026-03-18"
+  ],
+  "eval_dates": [
+    "2026-04-21",
+    "2026-05-06"
+  ],
+  "before_pure_greedy": {
+    "n_steps": 48,
+    "chosen_counts": {
+      "SELL": 24,
+      "HOLD": 24
+    },
+    "hold_rate": 0.5,
+    "tags": {
+      "QUALIFIED_MICRO": 17,
+      "MINDLESS": 12,
+      "WITH_VECTOR": 13,
+      "QUALIFIED_MACRO": 6
+    },
+    "entries_by_day": {
+      "2026-04-21": 3,
+      "2026-05-06": 3
+    },
+    "n_entries_total": 6,
+    "entries_every_day": true,
+    "match_structure_on_dir_flat": {
+      "n": 5,
+      "match": 2,
+      "rate": 0.4
+    },
+    "mindless_rate": 0.25,
+    "second_best_on_hold": {
+      "n_hold_flat": 3,
+      "n_second_best_valid": 3,
+      "n_second_best_profitable": 1,
+      "profitable_rate_when_hold": 0.3333333333333333,
+      "n_regret_applied": 1,
+      "second_best_side_counts": {
+        "BUY": 3
+      }
+    },
+    "buy_vs_sell": {
+      "buy": 0,
+      "sell": 24,
+      "sell_heavy": true,
+      "buy_bias_improved": false
+    }
+  },
+  "after_pure_greedy": {
+    "n_steps": 48,
+    "chosen_counts": {
+      "SELL": 25,
+      "HOLD": 21,
+      "BUY": 2
+    },
+    "hold_rate": 0.4375,
+    "tags": {
+      "QUALIFIED_MICRO": 14,
+      "MINDLESS": 14,
+      "WITH_VECTOR": 14,
+      "QUALIFIED_MACRO": 6
+    },
+    "entries_by_day": {
+      "2026-04-21": 6,
+      "2026-05-06": 4
+    },
+    "n_entries_total": 10,
+    "entries_every_day": true,
+    "match_structure_on_dir_flat": {
+      "n": 4,
+      "match": 2,
+      "rate": 0.5
+    },
+    "mindless_rate": 0.2916666666666667,
+    "second_best_on_hold": {
+      "n_hold_flat": 2,
+      "n_second_best_valid": 2,
+      "n_second_best_profitable": 1,
+      "profitable_rate_when_hold": 0.5,
+      "n_regret_applied": 1,
+      "second_best_side_counts": {
+        "BUY": 2
+      }
+    },
+    "buy_vs_sell": {
+      "buy": 2,
+      "sell": 25,
+      "sell_heavy": true,
+      "buy_bias_improved": true
+    }
+  },
+  "before_mean_logits": {
+    "HOLD": 0.21943901479244232,
+    "BUY": -0.27086350321769714,
+    "SELL": 0.07100412249565125
+  },
+  "after_mean_logits": {
+    "HOLD": 0.09019619226455688,
+    "BUY": -0.2820650339126587,
+    "SELL": 0.26845037937164307
+  },
+  "train_epoch_means": [
+    -0.03333333333333333,
+    -0.013333333333333334,
+    0.112,
+    -0.02,
+    -0.06266666666666668,
+    -0.16,
+    -0.05,
+    -0.38666666666666666,
+    -0.1753333333333333,
+    -0.14666666666666667,
+    -0.3046666666666667,
+    -0.07,
+    -0.36933333333333335,
+    -0.48133333333333334
+  ],
+  "proven_touched": false,
+  "sandbox": true,
+  "checkpoint": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\channel1_curriculum_v3_second_best.pt",
+  "report": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\second_best_regret_report.json",
+  "after_stats": {
+    "label": "AFTER_pure_greedy",
+    "actions": {
+      "hold": 43,
+      "buy": 2,
+      "sell": 3
+    },
+    "tags": {
+      "QUALIFIED_MICRO": 11,
+      "MINDLESS": 17,
+      "WITH_VECTOR": 14,
+      "QUALIFIED_MACRO": 6
+    },
+    "hold_rate": 0.8958333333333334,
+    "mindless_rate": 0.3541666666666667,
+    "mean_reward": -0.1875,
+    "n_entries_total": 5,
+    "days_with_entry": 2,
+    "days_did_nothing": 0
+  }
+}

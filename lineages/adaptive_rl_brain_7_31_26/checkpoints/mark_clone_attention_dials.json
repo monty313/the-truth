@@ -1,0 +1,26 @@
+{
+  "note": "Mark-clone ATTENTION dials only. Shell dials stay in multi_pair_dials.json. Defaults here are OFF for claim safety; enable mark_clone true only in compare/train experiments.",
+  "claim_safe_default": {
+    "mark_clone": false,
+    "sig_confirm_decisions": 1,
+    "post_stop_cooldown_decisions": 0,
+    "max_entries_day": 0,
+    "refuse_open_on_pullback": false
+  },
+  "mark_clone_suggested": {
+    "mark_clone": true,
+    "sig_confirm_decisions": 2,
+    "post_stop_cooldown_decisions": 2,
+    "max_entries_day": 8,
+    "refuse_open_on_pullback": false
+  },
+  "issues": "MARK_CLONE_AS_POLICY_ISSUES.md",
+  "shell_locked": [
+    "heat/refuse-open",
+    "floor-scale size",
+    "every-bar marks",
+    "bank at target",
+    "breach death",
+    "no trail+cushion+scale-in package"
+  ]
+}

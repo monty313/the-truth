@@ -21,6 +21,30 @@ N_ACTIONS = 3
 ACTION_HOLD, ACTION_BUY, ACTION_SELL = 0, 1, 2
 
 
+def greedy_action_ban_hold_if_directional(
+    logits: np.ndarray | "torch.Tensor",
+    recommended: int,
+) -> int:
+    """Pure-greedy decode experiment: ban HOLD when structure is directional.
+
+    If recommended is BUY or SELL → argmax among {BUY, SELL} only.
+    If recommended is HOLD → argmax among all three (HOLD still allowed).
+    Stochastic / training paths must not call this.
+    """
+    if hasattr(logits, "detach"):
+        arr = logits.detach().cpu().numpy().reshape(-1)
+    else:
+        arr = np.asarray(logits, dtype=np.float64).reshape(-1)
+    rec = int(recommended)
+    if rec in (ACTION_BUY, ACTION_SELL):
+        return (
+            ACTION_BUY
+            if float(arr[ACTION_BUY]) >= float(arr[ACTION_SELL])
+            else ACTION_SELL
+        )
+    return int(np.argmax(arr[:N_ACTIONS]))
+
+
 def action_to_trade_side(action: int) -> Direction | None:
     """Map action → trade side; HOLD → None (flat)."""
     a = int(action)

@@ -1,6 +1,8 @@
 # DO THIS
 
 **Mission:** [GOAL.md](GOAL.md)  
+**House map:** [00_MAP_OF_THE_HOUSE.md](00_MAP_OF_THE_HOUSE.md)  
+**Current handoff:** [HANDOFF_2026-08-05.md](HANDOFF_2026-08-05.md)  
 **Buttons:** [USE/](USE/) ← easiest  
 **Daily scripts list:** [scripts/00_DAILY.md](scripts/00_DAILY.md)
 
@@ -13,7 +15,23 @@ Do **not** retrain only because the number changed.
 
 ---
 
-## Path A — no typing (recommended)
+## Path T3 — Mark soul (active 2026-08-05)
+
+Soul first; agents frozen (`KEEP_AFTER_SOUL.md`).
+
+```powershell
+cd C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth
+$env:PYTHONPATH = ".;code"
+# Full policy soul next: more BC days + thrash penalty
+python lineages/adaptive_rl_brain_7_31_26/train_mark_clone_bc.py --epochs 40 --max-train-days 40
+python lineages/adaptive_rl_brain_7_31_26/test_run_10d_mark_vs_policy.py --seed 7 --start-idx 40
+```
+
+Details: `lineages/adaptive_rl_brain_7_31_26/00_TRACK_ORDER.md`
+
+---
+
+## Path A — PROVEN buttons (T1)
 
 Open folder **`USE/`** and double-click:
 

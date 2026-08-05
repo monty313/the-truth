@@ -1,0 +1,132 @@
+{
+  "note": "Architecture idea test only; multi_pair policy code not modified",
+  "g01_g02": {
+    "gap": "G01_G02",
+    "live_hash": "704cf2f59f504e34ca8ede32f53300d3eefccc638243cb6ae4c2c65d2308205c",
+    "gate_pass_when_pin_matches": true,
+    "gate_blocks_silent_cci_change": true,
+    "tampered_hash": "db8404eb22d11c42eb568cef8a18c0d206f813b33d7c37532192cccabce8dcb6",
+    "ckpt_path": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\multi_pair_consistent_v1.pt",
+    "ckpt_already_has_meaning_hash": false,
+    "ckpt_top_keys": [
+      "all_pass",
+      "claim",
+      "decide_every",
+      "decode",
+      "dials",
+      "hidden",
+      "n_pass",
+      "proven_touched",
+      "saved_at",
+      "seed",
+      "state_dict",
+      "tag"
+    ],
+    "idea_works": true,
+    "deployed_today": false,
+    "dream_fit": "YES \u2014 this is the pin/gate; not shipped on ckpt yet"
+  },
+  "g04_g05": {
+    "gap": "G04_G05",
+    "practice_n": 50,
+    "forward_n": 40,
+    "overlap_count": 0,
+    "chronological_wall": true,
+    "tripwire_passes_clean_split": true,
+    "tripwire_panics_on_all_days_search": true,
+    "current_train_multi_pair_search_dials_uses_ALL_days": true,
+    "idea_works": true,
+    "deployed_today": false,
+    "dream_fit": "YES \u2014 wall+tripwire is correct; search-on-ALL is the live gap"
+  },
+  "g14_g15": {
+    "gap": "G14_G15",
+    "pair": {
+      "target": 2.0,
+      "risk": 3.0
+    },
+    "threshold_decay": 0.2,
+    "practice": {
+      "n_days": 30,
+      "day_clear": 17,
+      "day_breach": 0
+    },
+    "forward": {
+      "n_days": 30,
+      "day_clear": 19,
+      "day_breach": 0
+    },
+    "tag_trust_table": [
+      {
+        "tag": "higher_bear",
+        "practice_p_clear": 0.3333333333333333,
+        "practice_plays": 15,
+        "forward_p_clear": 0.46153846153846156,
+        "forward_plays": 13,
+        "trust_decay": -0.12820512820512825,
+        "status": "stable"
+      },
+      {
+        "tag": "higher_bull",
+        "practice_p_clear": 0.3333333333333333,
+        "practice_plays": 15,
+        "forward_p_clear": 0.5263157894736842,
+        "forward_plays": 19,
+        "trust_decay": -0.19298245614035087,
+        "status": "stable"
+      },
+      {
+        "tag": "lower_bear_fallback",
+        "practice_p_clear": 0.5357142857142857,
+        "practice_plays": 28,
+        "forward_p_clear": 0.5925925925925926,
+        "forward_plays": 27,
+        "trust_decay": -0.05687830687830686,
+        "status": "stable"
+      },
+      {
+        "tag": "lower_bull_fallback",
+        "practice_p_clear": 0.5666666666666667,
+        "practice_plays": 30,
+        "forward_p_clear": 0.5769230769230769,
+        "forward_plays": 26,
+        "trust_decay": -0.01025641025641022,
+        "status": "stable"
+      },
+      {
+        "tag": "pullback_vs_bear_higher",
+        "practice_p_clear": 0.5,
+        "practice_plays": 6,
+        "forward_p_clear": 0.4444444444444444,
+        "forward_plays": 9,
+        "trust_decay": 0.05555555555555558,
+        "status": "stable"
+      },
+      {
+        "tag": "pullback_vs_bull_higher",
+        "practice_p_clear": 0.3333333333333333,
+        "practice_plays": 3,
+        "forward_p_clear": 0.0,
+        "forward_plays": 2,
+        "trust_decay": null,
+        "status": "low_n"
+      }
+    ],
+    "meta_trigger_example": {
+      "shell_locked": true,
+      "attention_unlock_tags": [],
+      "reason": "no tag exceeded decay threshold (or low n)"
+    },
+    "idea_works": true,
+    "deployed_today": false,
+    "dream_fit": "YES \u2014 P_clear delta is the right meta signal; not a product loop yet"
+  },
+  "is_this_the_dream_architecture": true,
+  "shipped_today": {
+    "meaning_hash_on_ckpt": false,
+    "leak_free_split": true,
+    "search_only_practice": false,
+    "regime_trust_loop": false
+  },
+  "tutor_verdict": "YES \u2014 these three mechanisms ARE the dream's skeleton. Wall already exists; pin+gate and practice-only search and trust loop are NOT fully shipped."
+}

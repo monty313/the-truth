@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "n_days": 6,
+    "n_samples": 162,
+    "action_counts": {
+      "SELL": 15,
+      "HOLD": 132,
+      "BUY": 15
+    },
+    "frac_hold": 0.8148148148148148,
+    "frac_directional": 0.18518518518518517,
+    "target_pct": 2.0,
+    "risk_pct": 3.0,
+    "eyes_mode": "mark_all_sets",
+    "obs_dim": 32,
+    "all_hold": false
+  },
+  "per_day": [
+    {
+      "date": "2026-01-20",
+      "n_decisions": 27,
+      "n_directional": 7,
+      "n_entries": 7,
+      "actions": {
+        "SELL": 4,
+        "HOLD": 20,
+        "BUY": 3
+      },
+      "banked": false,
+      "breached": false,
+      "pnl_pct": 0.994656792939597
+    },
+    {
+      "date": "2026-01-21",
+      "n_decisions": 27,
+      "n_directional": 2,
+      "n_entries": 2,
+      "actions": {
+        "HOLD": 25,
+        "BUY": 1,
+        "SELL": 1
+      },
+      "banked": false,
+      "breached": false,
+      "pnl_pct": -0.978499260719589
+    },
+    {
+      "date": "2026-01-22",
+      "n_decisions": 27,
+      "n_directional": 6,
+      "n_entries": 6,
+      "actions": {
+        "HOLD": 21,
+        "BUY": 3,
+        "SELL": 3
+      },
+      "banked": false,
+      "breached": false,
+      "pnl_pct": -1.6326383110524767
+    },
+    {
+      "date": "2026-01-23",
+      "n_decisions": 27,
+      "n_directional": 6,
+      "n_entries": 6,
+      "actions": {
+        "HOLD": 21,
+        "BUY": 4,
+        "SELL": 2
+      },
+      "banked": false,
+      "breached": false,
+      "pnl_pct": 0.5779178767192352
+    },
+    {
+      "date": "2026-01-26",
+      "n_decisions": 27,
+      "n_directional": 4,
+      "n_entries": 4,
+      "actions": {
+        "SELL": 2,
+        "HOLD": 23,
+        "BUY": 2
+      },
+      "banked": false,
+      "breached": false,
+      "pnl_pct": -0.44383273617383384
+    },
+    {
+      "date": "2026-01-27",
+      "n_decisions": 27,
+      "n_directional": 5,
+      "n_entries": 5,
+      "actions": {
+        "HOLD": 22,
+        "SELL": 3,
+        "BUY": 2
+      },
+      "banked": false,
+      "breached": false,
+      "pnl_pct": -1.2450760854610272
+    }
+  ],
+  "saved_at": "2026-08-04T12:04:16.585968+00:00"
+}

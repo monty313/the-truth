@@ -1,0 +1,32 @@
+{
+  "deterministic": true,
+  "errors": [],
+  "forward_dates": [
+    "2026-03-31",
+    "2026-04-01",
+    "2026-04-02",
+    "2026-04-06",
+    "2026-04-07"
+  ],
+  "forward_n_decision_rows": 75,
+  "heuristic_changed": false,
+  "label_contract_version": "label_contract_v1",
+  "meaning_hash": "8f75acadba924f016fec370250263073c2c59686b103f906e29ffab345ba7c6c",
+  "paths": {
+    "forward": "lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\honest_gate\\replay_forward_5d_v1.json",
+    "practice": "lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\honest_gate\\replay_practice_5d_v1.json"
+  },
+  "practice_dates": [
+    "2026-01-20",
+    "2026-01-21",
+    "2026-01-22",
+    "2026-01-23",
+    "2026-01-26"
+  ],
+  "practice_n_decision_rows": 75,
+  "proven_touched": false,
+  "risk_pct": 2.0,
+  "shell_changed": false,
+  "target_pct": 1.0,
+  "verdict": "PASS"
+}

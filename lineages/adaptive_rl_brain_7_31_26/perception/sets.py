@@ -1,23 +1,33 @@
 """Official Sets + Sub-Sets for adaptive_rl_brain_7_31_26.
 
 CHANGE LOG:
+- 2026-08-04  MARK SETS LAW pin + assert — WHY: Monty lock Mark-on-chart:
+  LTF=first (pullback/cont/add); HTF=last two (trend confirm); scan all 4.
+  See MARK_SETS_LAW.md. Do not edit stacks without rewriting that law + tests.
 - 2026-07-31  created — WHY: Phase 1 data structures from SPEC_PHASE1
   (4 Official Sets, 5 Sub-Sets; roles relative Entry vs Confirmation).
 """
 from __future__ import annotations
 
-from typing import Dict, List, Tuple
+from typing import Dict, List, Sequence, Tuple
 
 from lineages.adaptive_rl_brain_7_31_26.perception.types import OfficialSet, SubSet
 
 
-# ---- Official Sets (full strength) ----
+# ---- MARK SETS LAW (immutable without human rewrite of MARK_SETS_LAW.md) ----
+# LTF (first) = pullbacks / continuations / adds.
+# HTF (second, third) = trend confirmation (two TFs).
+MARK_SETS_LAW: Tuple[Tuple[int, str, str, Tuple[str, str]], ...] = (
+    (1, "micro", "1m", ("15m", "30m")),
+    (2, "intraday", "5m", ("30m", "1h")),
+    (3, "swing", "15m", ("1h", "4h")),
+    (4, "macro", "30m", ("4h", "1d")),
+)
+
+# ---- Official Sets (full strength) — MUST match MARK_SETS_LAW ----
 # Entry = first; Confirmation = remaining two higher TFs.
-OFFICIAL_SETS: Tuple[OfficialSet, ...] = (
-    OfficialSet(1, "micro", "1m", ("15m", "30m")),
-    OfficialSet(2, "intraday", "5m", ("30m", "1h")),
-    OfficialSet(3, "swing", "15m", ("1h", "4h")),
-    OfficialSet(4, "macro", "30m", ("4h", "1d")),
+OFFICIAL_SETS: Tuple[OfficialSet, ...] = tuple(
+    OfficialSet(sid, name, ltf, htfs) for sid, name, ltf, htfs in MARK_SETS_LAW
 )
 
 # ---- Sub-Sets (weaker / lower confidence) ----
@@ -67,3 +77,56 @@ def confirmation_tfs(set_or_sub: OfficialSet | SubSet) -> Tuple[str, ...]:
     if isinstance(set_or_sub, OfficialSet):
         return set_or_sub.confirmation_tfs
     return (set_or_sub.confirmation_tf,)
+
+
+def mark_sets_law_table() -> List[dict]:
+    """Human/agent table: LTF first, HTF last two — Mark on the chart."""
+    return [
+        {
+            "set_id": s.set_id,
+            "name": s.name,
+            "ltf_entry": s.entry_tf,
+            "htf_confirm": list(s.confirmation_tfs),
+            "stack": list(s.tfs),
+            "ltf_job": "pullback_continuation_add",
+            "htf_job": "trend_confirm",
+        }
+        for s in OFFICIAL_SETS
+    ]
+
+
+def assert_mark_sets_law(
+    stacks: Sequence[Tuple[str, str, str]] | None = None,
+) -> None:
+    """Hard fail if official stacks drift from MARK SETS LAW.
+
+    Expected stacks (LTF, HTF1, HTF2):
+      1m,15m,30m · 5m,30m,1h · 15m,1h,4h · 30m,4h,1d
+    """
+    expected = [
+        ("1m", "15m", "30m"),
+        ("5m", "30m", "1h"),
+        ("15m", "1h", "4h"),
+        ("30m", "4h", "1d"),
+    ]
+    if stacks is None:
+        stacks = [s.tfs for s in OFFICIAL_SETS]
+    got = [tuple(x) for x in stacks]
+    if len(got) != 4:
+        raise AssertionError(f"MARK SETS LAW requires 4 sets, got {len(got)}")
+    for i, (e, g) in enumerate(zip(expected, got), start=1):
+        if e != g:
+            raise AssertionError(
+                f"MARK SETS LAW broken on set {i}: expected {e}, got {g}. "
+                "Rewrite MARK_SETS_LAW.md + tests only with Monty order."
+            )
+    # Roles: first is LTF, last two HTF
+    for s in OFFICIAL_SETS:
+        if s.entry_tf != s.tfs[0]:
+            raise AssertionError(f"set {s.set_id}: LTF must be first TF")
+        if s.confirmation_tfs != s.tfs[1:]:
+            raise AssertionError(f"set {s.set_id}: HTF confirm must be last two TFs")
+
+
+# Fail import if law is ever hand-edited wrong
+assert_mark_sets_law()

@@ -1,0 +1,54 @@
+{
+  "breach": "Breach day: equity% (incl. intrabar worst on open risk) touched \u2212risk% at any point; day cannot be clear even if later recovers.",
+  "claim_legacy_bar": {
+    "label": "IN_SAMPLE_CLAIM",
+    "min_clear_days_per_pair": 30,
+    "n_pairs": 10,
+    "note": "Absolute \u226530 clears depends on window length; report rates too.",
+    "require_breach_count": 0
+  },
+  "clear": "Clear day: final equity% (after flatten/bank costs path) >= target% AND floor (\u2212risk%) was never touched that day.",
+  "diagnostic_only": [
+    "pnl",
+    "mean_pnl",
+    "n_entries",
+    "looks_good"
+  ],
+  "forward_bar": {
+    "any_breach": "REJECT",
+    "breach_0_but_weak_clear": "diagnose regime/sensor on practice; do not fit forward"
+  },
+  "hundred_day": {
+    "if_eligible_days_lt_100": "NOT_YET_MEASURABLE",
+    "no_synthetic_pad": true
+  },
+  "never_compare_raw_clears_across_window_lengths_as_equal_rates": true,
+  "official_meters": [
+    "clear_count",
+    "breach_count",
+    "clear_streak_max",
+    "clear_streak_end"
+  ],
+  "required_report_fields": [
+    "clear_count",
+    "clear_rate_pct",
+    "breach_count",
+    "max_clear_streak",
+    "end_clear_streak",
+    "near_floor_rate_pct",
+    "checkpoint_sha256",
+    "dials_sha256",
+    "meaning_hash",
+    "data_sha256",
+    "practice_dates",
+    "forward_dates",
+    "decode",
+    "seed",
+    "window"
+  ],
+  "windows_reported_separately": [
+    "practice",
+    "forward",
+    "claim_all"
+  ]
+}

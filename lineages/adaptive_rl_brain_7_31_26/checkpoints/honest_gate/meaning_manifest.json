@@ -1,0 +1,264 @@
+{
+  "channel1": {
+    "dim": 32,
+    "features_per_set": 3,
+    "layout": [
+      {
+        "index": 0,
+        "name": "official_1_direction"
+      },
+      {
+        "index": 1,
+        "name": "official_1_velocity"
+      },
+      {
+        "index": 2,
+        "name": "official_1_confluence"
+      },
+      {
+        "index": 3,
+        "name": "official_2_direction"
+      },
+      {
+        "index": 4,
+        "name": "official_2_velocity"
+      },
+      {
+        "index": 5,
+        "name": "official_2_confluence"
+      },
+      {
+        "index": 6,
+        "name": "official_3_direction"
+      },
+      {
+        "index": 7,
+        "name": "official_3_velocity"
+      },
+      {
+        "index": 8,
+        "name": "official_3_confluence"
+      },
+      {
+        "index": 9,
+        "name": "official_4_direction"
+      },
+      {
+        "index": 10,
+        "name": "official_4_velocity"
+      },
+      {
+        "index": 11,
+        "name": "official_4_confluence"
+      },
+      {
+        "index": 12,
+        "name": "sub_A_direction"
+      },
+      {
+        "index": 13,
+        "name": "sub_A_velocity"
+      },
+      {
+        "index": 14,
+        "name": "sub_A_confluence"
+      },
+      {
+        "index": 15,
+        "name": "sub_B_direction"
+      },
+      {
+        "index": 16,
+        "name": "sub_B_velocity"
+      },
+      {
+        "index": 17,
+        "name": "sub_B_confluence"
+      },
+      {
+        "index": 18,
+        "name": "sub_C_direction"
+      },
+      {
+        "index": 19,
+        "name": "sub_C_velocity"
+      },
+      {
+        "index": 20,
+        "name": "sub_C_confluence"
+      },
+      {
+        "index": 21,
+        "name": "sub_D_direction"
+      },
+      {
+        "index": 22,
+        "name": "sub_D_velocity"
+      },
+      {
+        "index": 23,
+        "name": "sub_D_confluence"
+      },
+      {
+        "index": 24,
+        "name": "sub_E_direction"
+      },
+      {
+        "index": 25,
+        "name": "sub_E_velocity"
+      },
+      {
+        "index": 26,
+        "name": "sub_E_confluence"
+      },
+      {
+        "index": 27,
+        "name": "pullback"
+      },
+      {
+        "index": 28,
+        "name": "scale_conflict"
+      },
+      {
+        "index": 29,
+        "name": "progress_to_goal"
+      },
+      {
+        "index": 30,
+        "name": "danger"
+      },
+      {
+        "index": 31,
+        "name": "session_phase"
+      }
+    ],
+    "n_official": 4,
+    "n_sub": 5,
+    "normalization": {
+      "confluence_score": "(n_bull - n_bear) / max(n_groups, 1) in [-1,1]",
+      "danger": "clip((-equity_pct)/risk_pct, 0, 1) when equity < 0 else 0",
+      "direction": "int enum BULL=+1 BEAR=-1 NEUTRAL=0 as float",
+      "progress_to_goal": "clip(equity_pct / target_pct, -1, 1)",
+      "session_phase": "t / (n_bars-1) in [0,1]",
+      "velocity": "NONE=0 WEAK=1/3 MEDIUM=2/3 STRONG=1"
+    }
+  },
+  "equity_day_decision_stride_default": 25,
+  "indicators": {
+    "cci_fast": 30,
+    "cci_slow": 100,
+    "channel_n": 4,
+    "channel_shift": 2,
+    "dual_confirm_required": true,
+    "entry_tf_votes": false,
+    "group_keys": [
+      "cci",
+      "rsi",
+      "channel"
+    ],
+    "ref_sma_n": 1,
+    "ref_sma_shift": 4,
+    "rsi_fast": 5,
+    "rsi_slow": 14
+  },
+  "meaning_hash": "8f75acadba924f016fec370250263073c2c59686b103f906e29ffab345ba7c6c",
+  "meaning_version": "mp_tutor_meaning_v1_8f75acadba92",
+  "not_tracks": [
+    "PROVEN_champion",
+    "channel1_rl_sandbox"
+  ],
+  "official_sets": [
+    {
+      "confirmation_tfs": [
+        "15m",
+        "30m"
+      ],
+      "entry_tf": "1m",
+      "id": 1,
+      "name": "micro"
+    },
+    {
+      "confirmation_tfs": [
+        "30m",
+        "1h"
+      ],
+      "entry_tf": "5m",
+      "id": 2,
+      "name": "intraday"
+    },
+    {
+      "confirmation_tfs": [
+        "1h",
+        "4h"
+      ],
+      "entry_tf": "15m",
+      "id": 3,
+      "name": "swing"
+    },
+    {
+      "confirmation_tfs": [
+        "4h",
+        "1d"
+      ],
+      "entry_tf": "30m",
+      "id": 4,
+      "name": "macro"
+    }
+  ],
+  "schema_version": 1,
+  "source_file_hashes": {
+    "lineages/adaptive_rl_brain_7_31_26/data/mtf.py": "99ea1778d54652015b15f17ae1a014bd339d2fbf37e97b5e2afa6fa91491c70c",
+    "lineages/adaptive_rl_brain_7_31_26/day_runner.py": "0768008b063b03eeaa4c3dc980c02a994ea022e4b4205e5f186f82a1e9231afc",
+    "lineages/adaptive_rl_brain_7_31_26/equity_day.py": "63fea82137e2fad5df4beabf78dbd1a078f244f819b521033a6e04d69d1d48fa",
+    "lineages/adaptive_rl_brain_7_31_26/perception/classify.py": "a369e8b46eecd1f5f6e10ac074810ecc1143099afe7514ba8deb781244121582",
+    "lineages/adaptive_rl_brain_7_31_26/perception/confluence.py": "560494b6d8b85eff5e48d291972484459a6e6d3f7a55f839a2b1fed9e85d4825",
+    "lineages/adaptive_rl_brain_7_31_26/perception/live_indicators.py": "962f2927f4a71c51d22ff6b04a01428c07615f16b724b89d9b686c2ae87d7b7b",
+    "lineages/adaptive_rl_brain_7_31_26/perception/observation.py": "ad0d15db3a86c39eac1515361ee4075478b41e5d7611c6350b46a7f11a03de22",
+    "lineages/adaptive_rl_brain_7_31_26/perception/sets.py": "b2cb9749368d1c4c3561e91cfa11c9a160c43baefe83fc973c4b49b9957151cf",
+    "lineages/adaptive_rl_brain_7_31_26/perception/structure.py": "a9c0042350d2d75912ad382f788219c5d6d5b53951f52acafe325bd3dffecf92"
+  },
+  "structure_rules": {
+    "flat_and_in_trade_same_eyes": true,
+    "heuristic_direction": "prefer higher TF; if NEUTRAL fall back to lower/entry",
+    "pullback": "higher clear AND lower clear AND lower == opposite(higher)",
+    "reverse_only_on_opposite": true,
+    "scale_conflict": "major clear AND minor clear AND major != minor"
+  },
+  "sub_sets": [
+    {
+      "confirmation_tf": "5m",
+      "entry_tf": "1m",
+      "id": "A"
+    },
+    {
+      "confirmation_tf": "15m",
+      "entry_tf": "5m",
+      "id": "B"
+    },
+    {
+      "confirmation_tf": "30m",
+      "entry_tf": "15m",
+      "id": "C"
+    },
+    {
+      "confirmation_tf": "4h",
+      "entry_tf": "1h",
+      "id": "D"
+    },
+    {
+      "confirmation_tf": "1d",
+      "entry_tf": "4h",
+      "id": "E"
+    }
+  ],
+  "timeframe_stack": [
+    "1m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "4h",
+    "1d"
+  ],
+  "track": "multi_pair_tutor"
+}

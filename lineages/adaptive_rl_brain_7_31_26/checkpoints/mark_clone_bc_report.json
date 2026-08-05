@@ -1,0 +1,110 @@
+{
+  "saved_at": "2026-08-05T01:43:52.349564+00:00",
+  "ckpt": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\mark_clone_doctrine_v1.pt",
+  "teacher_action_counts": {
+    "0": 289,
+    "1": 18,
+    "2": 17
+  },
+  "train_match": {
+    "match": 0.6851851851851852,
+    "dir_match": 0.6857142857142857,
+    "pred_hold_rate": 0.6450617283950617,
+    "n": 324
+  },
+  "forward_label_match": {
+    "match": 0.6973684210526315,
+    "dir_match": 0.7083333333333334,
+    "pred_hold_rate": 0.631578947368421,
+    "n": 152
+  },
+  "bc_losses": [
+    1.7386233806610107,
+    1.351932406425476,
+    1.5180733799934387,
+    1.2927354574203491,
+    1.3424213528633118,
+    1.0859303772449493,
+    1.6342536211013794,
+    1.351988434791565,
+    1.4819164872169495,
+    2.3589340448379517,
+    1.2864733934402466,
+    1.6624974012374878,
+    1.1360561847686768,
+    1.7709243893623352,
+    1.2803527116775513,
+    1.5739316940307617,
+    1.1096145510673523,
+    1.4486628770828247,
+    1.3743964433670044,
+    1.328494668006897,
+    1.367103397846222,
+    1.271941363811493,
+    1.024090200662613,
+    1.7368623614311218,
+    0.9410257637500763,
+    1.1787657737731934,
+    1.5193194150924683,
+    1.2486951351165771,
+    1.605818510055542,
+    1.1182679533958435,
+    0.9276552200317383,
+    0.9955264925956726,
+    1.0042843520641327,
+    1.429781436920166,
+    1.0298629701137543
+  ],
+  "eval_greedy_practice": {
+    "n_days": 20,
+    "cleared": 14,
+    "breached": 0,
+    "clear_pct": 70.0,
+    "mean_entries": 6.8,
+    "step_match_rate": 0.5942622950819673,
+    "total_steps": 244
+  },
+  "eval_greedy_forward": {
+    "n_days": 20,
+    "cleared": 15,
+    "breached": 2,
+    "clear_pct": 75.0,
+    "mean_entries": 4.8,
+    "step_match_rate": 0.65,
+    "total_steps": 180
+  },
+  "teacher_practice": {
+    "cleared": 12,
+    "breached": 0,
+    "clear_pct": 60.0,
+    "mean_entries": 3.8,
+    "n_days": 20
+  },
+  "teacher_forward": {
+    "cleared": 13,
+    "breached": 0,
+    "clear_pct": 65.0,
+    "mean_entries": 3.15,
+    "n_days": 20
+  },
+  "doctrine": "MARK_DOCTRINE_FIVE_LAWS.md",
+  "proven_touched": false,
+  "clone_ready_heuristic": true,
+  "clone_ready_policy": false,
+  "next_morning": "Read report + mark_clone_policy_ab_hard_soft.json; if pass_gates and clone_ready_policy, promote Mark decode; else more BC epochs / doctrine tweak. Never PROVEN.",
+  "policy_ab": {
+    "hard_clear_pct": 70.0,
+    "hard_mean_entries": 5.82,
+    "base_hard_clear_pct": 36.0,
+    "base_hard_mean_entries": 9.3,
+    "soft_clear_pct": 78.0,
+    "soft_mean_entries": 4.5,
+    "base_soft_clear_pct": 86.0,
+    "pass_gates": {
+      "hard_breach_0": false,
+      "soft_breach_0": false,
+      "soft_no_collapse": true,
+      "hard_thrash_improved": true
+    }
+  }
+}

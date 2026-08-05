@@ -1,0 +1,594 @@
+{
+  "data_path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/data/raw/XAUUSD_curriculum_2026.csv",
+  "data_sha256": "2c3826af2623872d762dfc6d7a3289afd3957740192dbf7f93e29ac2550ddd20",
+  "data_source": "XAUUSD_curriculum_2026.csv",
+  "days": [
+    {
+      "date": "2026-01-20",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-01-21",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-01-22",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-01-23",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-01-26",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-01-27",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-01-28",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-01-29",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-01-30",
+      "n_bars": 1377,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-02",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-03",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-04",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-05",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-06",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-09",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-10",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-11",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-12",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-13",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-16",
+      "n_bars": 1230,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-17",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-18",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-19",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-20",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-23",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-24",
+      "n_bars": 1379,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-25",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-26",
+      "n_bars": 1248,
+      "split": "practice"
+    },
+    {
+      "date": "2026-02-27",
+      "n_bars": 1243,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-02",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-03",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-04",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-05",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-06",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-09",
+      "n_bars": 1321,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-10",
+      "n_bars": 1321,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-11",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-12",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-13",
+      "n_bars": 1320,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-16",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-17",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-18",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-19",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-20",
+      "n_bars": 1320,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-23",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-24",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-25",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-26",
+      "n_bars": 1380,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-27",
+      "n_bars": 1320,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-30",
+      "n_bars": 1320,
+      "split": "practice"
+    },
+    {
+      "date": "2026-03-31",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-01",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-02",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-06",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-07",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-08",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-09",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-10",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-13",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-14",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-15",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-16",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-17",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-20",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-21",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-22",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-23",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-24",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-27",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-28",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-29",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-04-30",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-01",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-04",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-05",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-06",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-07",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-08",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-11",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-12",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-13",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-14",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-15",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-18",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-19",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-20",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-21",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-22",
+      "n_bars": 1320,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-25",
+      "n_bars": 1231,
+      "split": "forward"
+    },
+    {
+      "date": "2026-05-26",
+      "n_bars": 1320,
+      "split": "forward"
+    }
+  ],
+  "filter_rule": "calendar day kept iff n_bars >= 900",
+  "forward_dates": [
+    "2026-03-31",
+    "2026-04-01",
+    "2026-04-02",
+    "2026-04-06",
+    "2026-04-07",
+    "2026-04-08",
+    "2026-04-09",
+    "2026-04-10",
+    "2026-04-13",
+    "2026-04-14",
+    "2026-04-15",
+    "2026-04-16",
+    "2026-04-17",
+    "2026-04-20",
+    "2026-04-21",
+    "2026-04-22",
+    "2026-04-23",
+    "2026-04-24",
+    "2026-04-27",
+    "2026-04-28",
+    "2026-04-29",
+    "2026-04-30",
+    "2026-05-01",
+    "2026-05-04",
+    "2026-05-05",
+    "2026-05-06",
+    "2026-05-07",
+    "2026-05-08",
+    "2026-05-11",
+    "2026-05-12",
+    "2026-05-13",
+    "2026-05-14",
+    "2026-05-15",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-25",
+    "2026-05-26"
+  ],
+  "forward_day_count": 40,
+  "forward_first": "2026-03-31",
+  "forward_last": "2026-05-26",
+  "hundred_day_conclusion": {
+    "eligible_days": 90,
+    "note": "90 eligible real days < 100; do not call any result a 100-day pass. Do not pad with synthetic days.",
+    "required_for_100_day_conclusion": 100,
+    "status": "NOT_YET_MEASURABLE"
+  },
+  "leak_check": {
+    "forward_n": 40,
+    "ok": true,
+    "overlap": [],
+    "overlap_n": 0,
+    "search_n": 50
+  },
+  "min_bars_eligible": 900,
+  "n_eligible_days": 90,
+  "practice_dates": [
+    "2026-01-20",
+    "2026-01-21",
+    "2026-01-22",
+    "2026-01-23",
+    "2026-01-26",
+    "2026-01-27",
+    "2026-01-28",
+    "2026-01-29",
+    "2026-01-30",
+    "2026-02-02",
+    "2026-02-03",
+    "2026-02-04",
+    "2026-02-05",
+    "2026-02-06",
+    "2026-02-09",
+    "2026-02-10",
+    "2026-02-11",
+    "2026-02-12",
+    "2026-02-13",
+    "2026-02-16",
+    "2026-02-17",
+    "2026-02-18",
+    "2026-02-19",
+    "2026-02-20",
+    "2026-02-23",
+    "2026-02-24",
+    "2026-02-25",
+    "2026-02-26",
+    "2026-02-27",
+    "2026-03-02",
+    "2026-03-03",
+    "2026-03-04",
+    "2026-03-05",
+    "2026-03-06",
+    "2026-03-09",
+    "2026-03-10",
+    "2026-03-11",
+    "2026-03-12",
+    "2026-03-13",
+    "2026-03-16",
+    "2026-03-17",
+    "2026-03-18",
+    "2026-03-19",
+    "2026-03-20",
+    "2026-03-23",
+    "2026-03-24",
+    "2026-03-25",
+    "2026-03-26",
+    "2026-03-27",
+    "2026-03-30"
+  ],
+  "practice_day_count": 50,
+  "practice_first": "2026-01-20",
+  "practice_last": "2026-03-30",
+  "prior_claim_label": {
+    "reason": "Historical dial search could use ALL days (train_multi_pair --search-dials). Do not present ten_pair_score_all / ten_pair_score_forward as pure unseen if dials were fit with forward visible. Preserve as in-sample claim only.",
+    "ten_pair_score_all": "IN_SAMPLE_CLAIM"
+  },
+  "schema_version": 1,
+  "session_convention": {
+    "min_bars_eligible": 900,
+    "session": "full M1 calendar day slices via real_curriculum.split_calendar_days",
+    "symbol": "XAUUSD",
+    "timezone": "as stored in MT5 M1 index (data_io.loader.read_mt5_m1)"
+  },
+  "spread_fee_assumptions": {
+    "bank_after_flatten": true,
+    "contract_scale": 100.0,
+    "eq0": 100000.0,
+    "point_size": 0.01,
+    "spread_source": "per-bar spread column from MT5 export when present; else engine default path",
+    "synthetic_days_allowed": false
+  },
+  "symbol": "XAUUSD",
+  "track": "multi_pair_tutor"
+}

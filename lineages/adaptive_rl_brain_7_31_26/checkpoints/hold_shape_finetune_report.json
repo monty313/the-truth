@@ -1,0 +1,137 @@
+{
+  "time_utc": "2026-07-31T11:57:47.655913+00:00",
+  "seed": 17,
+  "source": "XAUUSD_curriculum_2026.csv",
+  "src_ckpt": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\channel1_curriculum_v1.pt",
+  "out_ckpt": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\channel1_curriculum_v2_hold_shape.pt",
+  "real_epochs": 16,
+  "real_bc_epochs": 6,
+  "directional_hold_penalty": -3.5,
+  "structure_match_entry_bonus": 2.0,
+  "did_nothing_eod_penalty": -25.0,
+  "train_dates": [
+    "2026-01-28",
+    "2026-02-27",
+    "2026-03-18"
+  ],
+  "eval_dates": [
+    "2026-04-21",
+    "2026-05-06"
+  ],
+  "before_pure_greedy": {
+    "n_steps": 48,
+    "chosen_counts": {
+      "HOLD": 48
+    },
+    "hold_rate": 1.0,
+    "tags": {
+      "QUALIFIED_MICRO": 28,
+      "WITH_VECTOR": 14,
+      "QUALIFIED_MACRO": 6
+    },
+    "entries_by_day": {
+      "2026-04-21": 0,
+      "2026-05-06": 0
+    },
+    "n_entries_total": 0,
+    "entries_every_day": false,
+    "match_structure_on_dir_flat": {
+      "n": 47,
+      "match": 0,
+      "rate": 0.0
+    },
+    "mindless_rate": 0.0
+  },
+  "after_pure_greedy": {
+    "n_steps": 48,
+    "chosen_counts": {
+      "SELL": 24,
+      "HOLD": 24
+    },
+    "hold_rate": 0.5,
+    "tags": {
+      "QUALIFIED_MICRO": 17,
+      "MINDLESS": 12,
+      "WITH_VECTOR": 13,
+      "QUALIFIED_MACRO": 6
+    },
+    "entries_by_day": {
+      "2026-04-21": 3,
+      "2026-05-06": 3
+    },
+    "n_entries_total": 6,
+    "entries_every_day": true,
+    "match_structure_on_dir_flat": {
+      "n": 5,
+      "match": 2,
+      "rate": 0.4
+    },
+    "mindless_rate": 0.25
+  },
+  "before_mean_logits": {
+    "HOLD": 0.4417438507080078,
+    "BUY": -0.24495179951190948,
+    "SELL": -0.1650201380252838
+  },
+  "after_mean_logits": {
+    "HOLD": 0.21943901479244232,
+    "BUY": -0.27086350321769714,
+    "SELL": 0.07100412249565125
+  },
+  "before_hold_rate": 1.0,
+  "after_hold_rate": 0.5,
+  "after_entries_by_day": {
+    "2026-04-21": 3,
+    "2026-05-06": 3
+  },
+  "after_actions": {
+    "hold": 46,
+    "buy": 0,
+    "sell": 2
+  },
+  "train_epoch_means": [
+    0.11,
+    -0.17800000000000002,
+    -0.092,
+    -0.03,
+    -0.023333333333333334,
+    0.10333333333333333,
+    -0.47,
+    -0.33,
+    -0.3326666666666667,
+    -0.59,
+    -0.15533333333333335,
+    -0.64,
+    -0.40199999999999997,
+    -0.18266666666666664,
+    -0.46,
+    0.011333333333333329
+  ],
+  "success_raw_not_100_hold": true,
+  "success_entries": true,
+  "proven_touched": false,
+  "sandbox": true,
+  "checkpoint": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\channel1_curriculum_v2_hold_shape.pt",
+  "report": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\hold_shape_finetune_report.json",
+  "after_stats": {
+    "label": "AFTER_pure_greedy",
+    "n_steps": 48,
+    "actions": {
+      "hold": 46,
+      "buy": 0,
+      "sell": 2
+    },
+    "tags": {
+      "QUALIFIED_MICRO": 17,
+      "MINDLESS": 12,
+      "WITH_VECTOR": 13,
+      "QUALIFIED_MACRO": 6
+    },
+    "hold_rate": 0.9583333333333334,
+    "mindless_rate": 0.25,
+    "mean_reward": -0.13541666666666666,
+    "n_entries_total": 2,
+    "days_with_entry": 2,
+    "days_did_nothing": 0
+  }
+}

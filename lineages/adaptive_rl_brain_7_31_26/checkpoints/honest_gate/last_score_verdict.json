@@ -1,0 +1,306 @@
+{
+  "artifact_sha256": "f666ae81f2a1bb1ef784a1fb16c87586482d9e352adbe6b5f1169c0f6b8dbea7",
+  "bar_export_schema": [
+    {
+      "name": "date",
+      "type": "str"
+    },
+    {
+      "name": "t",
+      "type": "int"
+    },
+    {
+      "name": "target_pct",
+      "type": "float"
+    },
+    {
+      "name": "risk_pct",
+      "type": "float"
+    },
+    {
+      "name": "equity_pct",
+      "type": "float"
+    },
+    {
+      "name": "min_eq_pct",
+      "type": "float"
+    },
+    {
+      "name": "danger",
+      "type": "float"
+    },
+    {
+      "name": "progress_to_goal",
+      "type": "float"
+    },
+    {
+      "name": "heat_ok",
+      "type": "bool"
+    },
+    {
+      "name": "action",
+      "type": "int"
+    },
+    {
+      "name": "side",
+      "type": "str"
+    },
+    {
+      "name": "higher_dir",
+      "type": "str"
+    },
+    {
+      "name": "lower_dir",
+      "type": "str"
+    },
+    {
+      "name": "pullback",
+      "type": "bool"
+    },
+    {
+      "name": "scale_conflict",
+      "type": "bool"
+    },
+    {
+      "name": "tag",
+      "type": "str"
+    },
+    {
+      "name": "banked",
+      "type": "bool"
+    },
+    {
+      "name": "breached",
+      "type": "bool"
+    },
+    {
+      "name": "split",
+      "type": "str"
+    }
+  ],
+  "experiment_id": "multi_pair_tutor_honest_v1_pretrain_gate",
+  "extra": {
+    "allowed_training_parameters": [
+      "risk_use_frac",
+      "stop_atr_mult",
+      "per_trade_cap_pct",
+      "channel1_policy_weights",
+      "bc_epochs",
+      "bc_lr",
+      "hidden_size",
+      "seed",
+      "practice_day_subset_for_bc"
+    ],
+    "cannot_yet_claim": [
+      "100-day consistency (eligible days < 100)",
+      "pure unseen multi-pair performance from prior ten_pair_score_* (IN_SAMPLE_CLAIM / possible CONTAMINATED dial fit)",
+      "robust / ready for production",
+      "PROVEN champion replacement",
+      "any KEEP on a new training candidate (no training run yet)"
+    ],
+    "checks_summary": {
+      "bar_export": true,
+      "data_contract": true,
+      "decode": true,
+      "dial_search_policy": true,
+      "experiment_id": true,
+      "hundred_day_note": true,
+      "meaning": true,
+      "regime_demo": true,
+      "score_rules": true,
+      "seed": true,
+      "shell": true,
+      "tracks_separated": true
+    },
+    "dials_tuned_this_run": false,
+    "failures": [],
+    "forbidden_training_parameters": [
+      "target_pct_baked_into_weights",
+      "risk_pct_baked_into_weights",
+      "trail_stop_enabled",
+      "floor_cushion_pct",
+      "scale_in_on_claim_path",
+      "decision_bar_only_stops",
+      "weaker_in_trade_eyes",
+      "decode=pure_greedy_as_claim_default",
+      "forward_day_in_dial_search",
+      "forward_day_in_reward_selection",
+      "forward_day_in_feature_selection",
+      "shell_law_mutation_without_unlock",
+      "retrain_only_because_target_risk_changed",
+      "cross_track_promote_to_PROVEN",
+      "cross_track_promote_channel1_to_multi_pair_claim"
+    ],
+    "prior_claim_label": "IN_SAMPLE_CLAIM",
+    "promoted": false,
+    "training_started": false
+  },
+  "pins": {
+    "checkpoint_sha256": "cd89f6441d50ee06fe59d39291083ed867ed497f3b5dd4bb31568ad5dc7e112c",
+    "data_sha256": "2c3826af2623872d762dfc6d7a3289afd3957740192dbf7f93e29ac2550ddd20",
+    "decode": "heuristic",
+    "dials_sha256": "327d190a6f13319a44cacfe65463ae2153673a098e79a8fe4a9d7013eaba0daf",
+    "meaning_hash": "8f75acadba924f016fec370250263073c2c59686b103f906e29ffab345ba7c6c",
+    "seed": 42
+  },
+  "reason": "Pre-training honesty gate complete; infrastructure ready.",
+  "schema_version": 1,
+  "score_rules": {
+    "breach": "Breach day: equity% (incl. intrabar worst on open risk) touched \u2212risk% at any point; day cannot be clear even if later recovers.",
+    "claim_legacy_bar": {
+      "label": "IN_SAMPLE_CLAIM",
+      "min_clear_days_per_pair": 30,
+      "n_pairs": 10,
+      "note": "Absolute \u226530 clears depends on window length; report rates too.",
+      "require_breach_count": 0
+    },
+    "clear": "Clear day: final equity% (after flatten/bank costs path) >= target% AND floor (\u2212risk%) was never touched that day.",
+    "diagnostic_only": [
+      "pnl",
+      "mean_pnl",
+      "n_entries",
+      "looks_good"
+    ],
+    "forward_bar": {
+      "any_breach": "REJECT",
+      "breach_0_but_weak_clear": "diagnose regime/sensor on practice; do not fit forward"
+    },
+    "hundred_day": {
+      "if_eligible_days_lt_100": "NOT_YET_MEASURABLE",
+      "no_synthetic_pad": true
+    },
+    "never_compare_raw_clears_across_window_lengths_as_equal_rates": true,
+    "official_meters": [
+      "clear_count",
+      "breach_count",
+      "clear_streak_max",
+      "clear_streak_end"
+    ],
+    "required_report_fields": [
+      "clear_count",
+      "clear_rate_pct",
+      "breach_count",
+      "max_clear_streak",
+      "end_clear_streak",
+      "near_floor_rate_pct",
+      "checkpoint_sha256",
+      "dials_sha256",
+      "meaning_hash",
+      "data_sha256",
+      "practice_dates",
+      "forward_dates",
+      "decode",
+      "seed",
+      "window"
+    ],
+    "windows_reported_separately": [
+      "practice",
+      "forward",
+      "claim_all"
+    ]
+  },
+  "verdict": "GATE_PASS",
+  "windows": {
+    "forward_dates": [
+      "2026-03-31",
+      "2026-04-01",
+      "2026-04-02",
+      "2026-04-06",
+      "2026-04-07",
+      "2026-04-08",
+      "2026-04-09",
+      "2026-04-10",
+      "2026-04-13",
+      "2026-04-14",
+      "2026-04-15",
+      "2026-04-16",
+      "2026-04-17",
+      "2026-04-20",
+      "2026-04-21",
+      "2026-04-22",
+      "2026-04-23",
+      "2026-04-24",
+      "2026-04-27",
+      "2026-04-28",
+      "2026-04-29",
+      "2026-04-30",
+      "2026-05-01",
+      "2026-05-04",
+      "2026-05-05",
+      "2026-05-06",
+      "2026-05-07",
+      "2026-05-08",
+      "2026-05-11",
+      "2026-05-12",
+      "2026-05-13",
+      "2026-05-14",
+      "2026-05-15",
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-25",
+      "2026-05-26"
+    ],
+    "hundred_day": {
+      "eligible_days": 90,
+      "note": "90 eligible real days < 100; do not call any result a 100-day pass. Do not pad with synthetic days.",
+      "required_for_100_day_conclusion": 100,
+      "status": "NOT_YET_MEASURABLE"
+    },
+    "n_eligible": 90,
+    "practice_dates": [
+      "2026-01-20",
+      "2026-01-21",
+      "2026-01-22",
+      "2026-01-23",
+      "2026-01-26",
+      "2026-01-27",
+      "2026-01-28",
+      "2026-01-29",
+      "2026-01-30",
+      "2026-02-02",
+      "2026-02-03",
+      "2026-02-04",
+      "2026-02-05",
+      "2026-02-06",
+      "2026-02-09",
+      "2026-02-10",
+      "2026-02-11",
+      "2026-02-12",
+      "2026-02-13",
+      "2026-02-16",
+      "2026-02-17",
+      "2026-02-18",
+      "2026-02-19",
+      "2026-02-20",
+      "2026-02-23",
+      "2026-02-24",
+      "2026-02-25",
+      "2026-02-26",
+      "2026-02-27",
+      "2026-03-02",
+      "2026-03-03",
+      "2026-03-04",
+      "2026-03-05",
+      "2026-03-06",
+      "2026-03-09",
+      "2026-03-10",
+      "2026-03-11",
+      "2026-03-12",
+      "2026-03-13",
+      "2026-03-16",
+      "2026-03-17",
+      "2026-03-18",
+      "2026-03-19",
+      "2026-03-20",
+      "2026-03-23",
+      "2026-03-24",
+      "2026-03-25",
+      "2026-03-26",
+      "2026-03-27",
+      "2026-03-30"
+    ]
+  }
+}

@@ -1,0 +1,295 @@
+{
+  "cannot_yet_claim": [
+    "100-day consistency (eligible days < 100)",
+    "pure unseen multi-pair performance from prior ten_pair_score_* (IN_SAMPLE_CLAIM / possible CONTAMINATED dial fit)",
+    "robust / ready for production",
+    "PROVEN champion replacement",
+    "any KEEP on a new training candidate (no training run yet)"
+  ],
+  "checks": {
+    "bar_export": {
+      "errors": [],
+      "forward_date": "2026-03-31",
+      "forward_rows_exported": 3,
+      "ok": true,
+      "practice_date": "2026-01-20",
+      "practice_rows_exported": 3,
+      "schema_columns": [
+        "date",
+        "t",
+        "target_pct",
+        "risk_pct",
+        "equity_pct",
+        "min_eq_pct",
+        "danger",
+        "progress_to_goal",
+        "heat_ok",
+        "action",
+        "side",
+        "higher_dir",
+        "lower_dir",
+        "pullback",
+        "scale_conflict",
+        "tag",
+        "banked",
+        "breached",
+        "split"
+      ]
+    },
+    "data_contract": {
+      "forward_n": 40,
+      "hundred_day": {
+        "eligible_days": 90,
+        "note": "90 eligible real days < 100; do not call any result a 100-day pass. Do not pad with synthetic days.",
+        "required_for_100_day_conclusion": 100,
+        "status": "NOT_YET_MEASURABLE"
+      },
+      "leak": {
+        "forward_n": 40,
+        "ok": true,
+        "overlap": [],
+        "overlap_n": 0,
+        "search_n": 50
+      },
+      "n_eligible": 90,
+      "ok": true,
+      "practice_n": 50
+    },
+    "decode": "heuristic",
+    "dial_search_policy": {
+      "note": "Prior all-day results remain IN_SAMPLE_CLAIM",
+      "ok": true,
+      "practice_only_path_present": true
+    },
+    "experiment_id": "multi_pair_tutor_honest_v1_pretrain_gate",
+    "hundred_day_note": {
+      "eligible_days": 90,
+      "note": "90 eligible real days < 100; do not call any result a 100-day pass. Do not pad with synthetic days.",
+      "required_for_100_day_conclusion": 100,
+      "status": "NOT_YET_MEASURABLE"
+    },
+    "meaning": {
+      "frozen_hash": "8f75acadba924f016fec370250263073c2c59686b103f906e29ffab345ba7c6c",
+      "live_hash": "8f75acadba924f016fec370250263073c2c59686b103f906e29ffab345ba7c6c",
+      "meaning_version": "mp_tutor_meaning_v1_8f75acadba92",
+      "ok": true,
+      "path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/honest_gate/meaning_manifest.json"
+    },
+    "pins": {
+      "banned_rule_families": {
+        "exists": true,
+        "path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/honest_gate/banned_rule_families.json",
+        "sha256": "f26211c01da64487eab43d5f01bc10215a1a18c2663764deb89c274aeee4b4e3",
+        "size": 2375
+      },
+      "checkpoint": {
+        "exists": true,
+        "path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/multi_pair_consistent_v1.pt",
+        "sha256": "cd89f6441d50ee06fe59d39291083ed867ed497f3b5dd4bb31568ad5dc7e112c",
+        "size": 10119
+      },
+      "data": {
+        "exists": true,
+        "path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/data/raw/XAUUSD_curriculum_2026.csv",
+        "sha256": "2c3826af2623872d762dfc6d7a3289afd3957740192dbf7f93e29ac2550ddd20",
+        "size": 7387559
+      },
+      "data_contract": {
+        "exists": true,
+        "path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/honest_gate/data_contract.json",
+        "sha256": "0738f6ed70fe0170b3c8436fd448757f40721d5a010049a84573e0d0852e2445",
+        "size": 12077
+      },
+      "dials": {
+        "exists": true,
+        "path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/multi_pair_dials.json",
+        "sha256": "327d190a6f13319a44cacfe65463ae2153673a098e79a8fe4a9d7013eaba0daf",
+        "size": 283
+      },
+      "meaning_manifest": {
+        "exists": true,
+        "path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/honest_gate/meaning_manifest.json",
+        "sha256": "aed6d20c42fb2bc3cce9104a85cb48f5dcd759228d9ebd76ba8b945f4432c2cd",
+        "size": 6455
+      }
+    },
+    "regime_demo": {
+      "comparisons": [
+        {
+          "delta_p_clear": -0.375,
+          "forward": {
+            "insufficient_evidence": false,
+            "may_call_sensor_lying": false,
+            "min_samples": 8,
+            "n": 16,
+            "n_breach": 0,
+            "n_clear": 6,
+            "p_breach": 0.0,
+            "p_clear": 0.375,
+            "status": "OK",
+            "tag": "higher_bull",
+            "wilson_p_clear_high": 0.6135935290206519,
+            "wilson_p_clear_low": 0.18480982554752803
+          },
+          "note": "Sensor may have degraded on forward \u2014 attention/practice only; shell locked.",
+          "practice": {
+            "insufficient_evidence": false,
+            "may_call_sensor_lying": false,
+            "min_samples": 8,
+            "n": 16,
+            "n_breach": 0,
+            "n_clear": 12,
+            "p_breach": 0.0,
+            "p_clear": 0.75,
+            "status": "OK",
+            "tag": "higher_bull",
+            "wilson_p_clear_high": 0.8981809801576265,
+            "wilson_p_clear_low": 0.5050123107060135
+          },
+          "shell_change_authorized": false,
+          "status": "DEGRADED",
+          "tag": "higher_bull"
+        },
+        {
+          "delta_p_clear": null,
+          "forward": {
+            "insufficient_evidence": true,
+            "may_call_sensor_lying": false,
+            "min_samples": 8,
+            "n": 1,
+            "n_breach": 0,
+            "n_clear": 0,
+            "p_breach": 0.0,
+            "p_clear": 0.0,
+            "status": "INSUFFICIENT_EVIDENCE",
+            "tag": "rare_tag",
+            "wilson_p_clear_high": 0.7934567085261071,
+            "wilson_p_clear_low": 0.0
+          },
+          "note": "Do not call sensor lying; sample below threshold.",
+          "practice": {
+            "insufficient_evidence": true,
+            "may_call_sensor_lying": false,
+            "min_samples": 8,
+            "n": 2,
+            "n_breach": 0,
+            "n_clear": 2,
+            "p_breach": 0.0,
+            "p_clear": 1.0,
+            "status": "INSUFFICIENT_EVIDENCE",
+            "tag": "rare_tag",
+            "wilson_p_clear_high": 1.0,
+            "wilson_p_clear_low": 0.3423719528896193
+          },
+          "shell_change_authorized": false,
+          "status": "INSUFFICIENT_EVIDENCE",
+          "tag": "rare_tag"
+        }
+      ],
+      "forward_n_rows": 17,
+      "min_samples": 8,
+      "practice_n_rows": 18,
+      "rule": "Report may identify degraded sensors; it must not unlock shell laws.",
+      "schema_version": 1,
+      "shell_change_authorized": false
+    },
+    "score_rules": {
+      "ok": true,
+      "path": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\honest_gate\\score_rules.json"
+    },
+    "seed": 42,
+    "shell": {
+      "SHELL_LOCKED": true,
+      "checks": {
+        "ban_floor_cushion": true,
+        "ban_scale_in=True on claim path": true,
+        "ban_trail_stop assignment": true,
+        "ban_trailing_stop": true,
+        "bank_at_target": true,
+        "breach_termination": true,
+        "every_bar_marks": true,
+        "floor_scaled_sizing": true,
+        "force_flat_perception": true,
+        "heat_refuse_open": true,
+        "mark_loop_between_decisions": true,
+        "one_signal_flat_and_in_trade": true
+      },
+      "errors": [],
+      "ok": true,
+      "path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/equity_day.py",
+      "shell_laws": [
+        "heat_refuse_open",
+        "floor_scaled_sizing",
+        "every_bar_marks",
+        "bank_at_target",
+        "breach_termination",
+        "one_signal_flat_and_in_trade"
+      ],
+      "warnings": []
+    },
+    "tracks_separated": {
+      "PROVEN_champion": "never auto-write models/PROVEN_*.pt",
+      "channel1_rl": "separate scoreboard; not claim decode",
+      "multi_pair_tutor": true
+    }
+  },
+  "experiment_id": "multi_pair_tutor_honest_v1_pretrain_gate",
+  "failures": [],
+  "generated_at_utc": "2026-07-31T19:26:50.245260+00:00",
+  "outputs_dir": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/honest_gate",
+  "score_rules": {
+    "breach": "Breach day: equity% (incl. intrabar worst on open risk) touched \u2212risk% at any point; day cannot be clear even if later recovers.",
+    "claim_legacy_bar": {
+      "label": "IN_SAMPLE_CLAIM",
+      "min_clear_days_per_pair": 30,
+      "n_pairs": 10,
+      "note": "Absolute \u226530 clears depends on window length; report rates too.",
+      "require_breach_count": 0
+    },
+    "clear": "Clear day: final equity% (after flatten/bank costs path) >= target% AND floor (\u2212risk%) was never touched that day.",
+    "diagnostic_only": [
+      "pnl",
+      "mean_pnl",
+      "n_entries",
+      "looks_good"
+    ],
+    "forward_bar": {
+      "any_breach": "REJECT",
+      "breach_0_but_weak_clear": "diagnose regime/sensor on practice; do not fit forward"
+    },
+    "hundred_day": {
+      "if_eligible_days_lt_100": "NOT_YET_MEASURABLE",
+      "no_synthetic_pad": true
+    },
+    "never_compare_raw_clears_across_window_lengths_as_equal_rates": true,
+    "official_meters": [
+      "clear_count",
+      "breach_count",
+      "clear_streak_max",
+      "clear_streak_end"
+    ],
+    "required_report_fields": [
+      "clear_count",
+      "clear_rate_pct",
+      "breach_count",
+      "max_clear_streak",
+      "end_clear_streak",
+      "near_floor_rate_pct",
+      "checkpoint_sha256",
+      "dials_sha256",
+      "meaning_hash",
+      "data_sha256",
+      "practice_dates",
+      "forward_dates",
+      "decode",
+      "seed",
+      "window"
+    ],
+    "windows_reported_separately": [
+      "practice",
+      "forward",
+      "claim_all"
+    ]
+  },
+  "verdict": "GATE_PASS"
+}

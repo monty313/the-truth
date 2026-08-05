@@ -1,0 +1,64 @@
+{
+  "match": {
+    "n": 162,
+    "match_rate": 0.5493827160493827,
+    "pred_actions": {
+      "SELL": 49,
+      "HOLD": 63,
+      "BUY": 50
+    },
+    "hold_rate": 0.3888888888888889,
+    "not_all_hold": true,
+    "entries_signal": 99
+  },
+  "walks": [
+    {
+      "date": "2026-04-02",
+      "pnl_pct": 1.1675,
+      "min_eq_pct": -0.7252,
+      "cleared": false,
+      "breached": false,
+      "banked": false,
+      "n_entries": 6,
+      "n_decisions": 24,
+      "teacher_match_rate": 0.75,
+      "actions": {
+        "HOLD": 13,
+        "BUY": 6,
+        "SELL": 5
+      },
+      "hold_rate": 0.5416666666666666
+    },
+    {
+      "date": "2026-04-01",
+      "pnl_pct": 1.2958,
+      "min_eq_pct": -0.0851,
+      "cleared": true,
+      "breached": false,
+      "banked": true,
+      "n_entries": 2,
+      "n_decisions": 6,
+      "teacher_match_rate": 1.0,
+      "actions": {
+        "HOLD": 4,
+        "BUY": 1,
+        "SELL": 1
+      },
+      "hold_rate": 0.6666666666666666
+    }
+  ],
+  "ab": {
+    "n_days": 8,
+    "pair": [
+      3.0,
+      3.5
+    ],
+    "baseline_clear": 5,
+    "mark_eyes_clear": 2,
+    "policy_clear": 3,
+    "baseline_mean_entries": 8.5,
+    "policy_mean_entries": 7.25,
+    "total_breaches": 0,
+    "breach_ok": true
+  }
+}

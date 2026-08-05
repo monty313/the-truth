@@ -1,0 +1,52 @@
+{
+  "date": "2026-03-18",
+  "target_pct": 2.0,
+  "risk_pct": 3.0,
+  "who_first": "MARK",
+  "n_labels": 4,
+  "mark_actions": {
+    "SELL": 2,
+    "HOLD": 2
+  },
+  "cleared": true,
+  "breached": false,
+  "banked": true,
+  "pnl_pct": 2.0666,
+  "n_entries": 2,
+  "labels": [
+    {
+      "t": 720,
+      "mark_action": 2,
+      "mark_name": "SELL",
+      "reason": "aligned_bear n=1 score=4.60>0.00",
+      "equity_pct": 0.0
+    },
+    {
+      "t": 745,
+      "mark_action": 2,
+      "mark_name": "SELL",
+      "reason": "aligned_bear n=1 score=6.00>0.00",
+      "equity_pct": -0.2554
+    },
+    {
+      "t": 770,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "aligned_bear n=1 score=5.65>0.00",
+      "equity_pct": 0.8233
+    },
+    {
+      "t": 795,
+      "mark_action": 0,
+      "mark_name": "HOLD",
+      "reason": "aligned_bear n=2 score=10.60>0.00",
+      "equity_pct": 1.78
+    }
+  ],
+  "y": [
+    2,
+    2,
+    0,
+    0
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "saved_at": "2026-08-04T12:04:38.625361+00:00",
+  "ckpt": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\mark_clone_channel1_v1.pt",
+  "match": {
+    "n": 162,
+    "match_rate": 0.5493827160493827,
+    "pred_actions": {
+      "SELL": 49,
+      "HOLD": 63,
+      "BUY": 50
+    },
+    "hold_rate": 0.3888888888888889,
+    "not_all_hold": true,
+    "entries_signal": 99
+  },
+  "label_meta": {
+    "n_days": 6,
+    "n_samples": 162,
+    "action_counts": {
+      "SELL": 15,
+      "HOLD": 132,
+      "BUY": 15
+    },
+    "frac_hold": 0.8148148148148148,
+    "frac_directional": 0.18518518518518517,
+    "target_pct": 2.0,
+    "risk_pct": 3.0,
+    "eyes_mode": "mark_all_sets",
+    "obs_dim": 32,
+    "all_hold": false
+  },
+  "walks": [
+    {
+      "date": "2026-04-02",
+      "pnl_pct": 1.1675,
+      "min_eq_pct": -0.7252,
+      "cleared": false,
+      "breached": false,
+      "banked": false,
+      "n_entries": 6,
+      "n_decisions": 24,
+      "teacher_match_rate": 0.75,
+      "actions": {
+        "HOLD": 13,
+        "BUY": 6,
+        "SELL": 5
+      },
+      "hold_rate": 0.5416666666666666
+    },
+    {
+      "date": "2026-04-01",
+      "pnl_pct": 1.2958,
+      "min_eq_pct": -0.0851,
+      "cleared": true,
+      "breached": false,
+      "banked": true,
+      "n_entries": 2,
+      "n_decisions": 6,
+      "teacher_match_rate": 1.0,
+      "actions": {
+        "HOLD": 4,
+        "BUY": 1,
+        "SELL": 1
+      },
+      "hold_rate": 0.6666666666666666
+    }
+  ],
+  "ab_practice8": {
+    "n_days": 8,
+    "pair": [
+      3.0,
+      3.5
+    ],
+    "baseline_clear": 5,
+    "mark_eyes_clear": 2,
+    "policy_clear": 3,
+    "baseline_mean_entries": 8.5,
+    "policy_mean_entries": 7.25,
+    "total_breaches": 0,
+    "breach_ok": true
+  },
+  "proven_touched": false,
+  "stop_rule": {
+    "breach_must_be_0": true,
+    "not_all_hold": true,
+    "teacher_match_min_hint": 0.4,
+    "next_if_fail": "raise epochs / more practice labels / reinforce BC weight on BUY/SELL"
+  }
+}

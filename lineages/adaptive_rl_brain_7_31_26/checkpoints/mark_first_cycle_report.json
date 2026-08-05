@@ -1,0 +1,315 @@
+{
+  "saved_at": "2026-08-04T23:51:23.426878+00:00",
+  "law": "MARK_ALWAYS_LEARNING.md \u2014 Mark chart first, then policy, then harvest",
+  "sets_law": "MARK_SETS_LAW.md",
+  "dates": [
+    "2026-04-02",
+    "2026-04-01",
+    "2026-03-18",
+    "2026-03-19",
+    "2026-03-20"
+  ],
+  "mark_first": [
+    {
+      "date": "2026-04-02",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "who_first": "MARK",
+      "n_labels": 24,
+      "mark_actions": {
+        "HOLD": 19,
+        "SELL": 3,
+        "BUY": 2
+      },
+      "cleared": false,
+      "breached": false,
+      "banked": false,
+      "pnl_pct": 1.4773,
+      "n_entries": 5
+    },
+    {
+      "date": "2026-04-01",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "who_first": "MARK",
+      "n_labels": 20,
+      "mark_actions": {
+        "HOLD": 16,
+        "BUY": 2,
+        "SELL": 2
+      },
+      "cleared": true,
+      "breached": false,
+      "banked": true,
+      "pnl_pct": 2.0927,
+      "n_entries": 4
+    },
+    {
+      "date": "2026-03-18",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "who_first": "MARK",
+      "n_labels": 4,
+      "mark_actions": {
+        "SELL": 2,
+        "HOLD": 2
+      },
+      "cleared": true,
+      "breached": false,
+      "banked": true,
+      "pnl_pct": 2.0666,
+      "n_entries": 2
+    },
+    {
+      "date": "2026-03-19",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "who_first": "MARK",
+      "n_labels": 5,
+      "mark_actions": {
+        "HOLD": 4,
+        "SELL": 1
+      },
+      "cleared": true,
+      "breached": false,
+      "banked": true,
+      "pnl_pct": 2.254,
+      "n_entries": 1
+    },
+    {
+      "date": "2026-03-20",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "who_first": "MARK",
+      "n_labels": 8,
+      "mark_actions": {
+        "HOLD": 7,
+        "SELL": 1
+      },
+      "cleared": true,
+      "breached": false,
+      "banked": true,
+      "pnl_pct": 2.0708,
+      "n_entries": 1
+    }
+  ],
+  "compare_before_update": [
+    {
+      "date": "2026-04-02",
+      "agree": 16,
+      "disagree": 8,
+      "agree_rate": 0.6666666666666666,
+      "policy_actions": {
+        "HOLD": 13,
+        "BUY": 6,
+        "SELL": 5
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.0021,
+      "policy_entries": 3,
+      "mark_cleared": false,
+      "mark_entries": 5
+    },
+    {
+      "date": "2026-04-01",
+      "agree": 15,
+      "disagree": 5,
+      "agree_rate": 0.75,
+      "policy_actions": {
+        "HOLD": 11,
+        "BUY": 6,
+        "SELL": 3
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.0927,
+      "policy_entries": 4,
+      "mark_cleared": true,
+      "mark_entries": 4
+    },
+    {
+      "date": "2026-03-18",
+      "agree": 2,
+      "disagree": 2,
+      "agree_rate": 0.5,
+      "policy_actions": {
+        "SELL": 4
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.0666,
+      "policy_entries": 2,
+      "mark_cleared": true,
+      "mark_entries": 2
+    },
+    {
+      "date": "2026-03-19",
+      "agree": 3,
+      "disagree": 2,
+      "agree_rate": 0.6,
+      "policy_actions": {
+        "HOLD": 2,
+        "SELL": 3
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.254,
+      "policy_entries": 1,
+      "mark_cleared": true,
+      "mark_entries": 1
+    },
+    {
+      "date": "2026-03-20",
+      "agree": 5,
+      "disagree": 3,
+      "agree_rate": 0.625,
+      "policy_actions": {
+        "HOLD": 4,
+        "SELL": 4
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.1774,
+      "policy_entries": 2,
+      "mark_cleared": true,
+      "mark_entries": 1
+    }
+  ],
+  "update": {
+    "updated": true,
+    "n_samples": 61,
+    "match_after": 0.7213114754098361,
+    "loss_final": 0.30859801173210144,
+    "epochs": 40
+  },
+  "harvest": {
+    "harvested": true,
+    "museum": [
+      {
+        "name": "multi_pair_consistent_v1.pt",
+        "status": "ok",
+        "agree_with_mark": 42,
+        "agree_rate": 0.6885245901639344,
+        "benefit": "distill_agree_bars"
+      },
+      {
+        "name": "channel1_curriculum_v3_second_best.pt",
+        "status": "load_fail:'state_dict'"
+      },
+      {
+        "name": "channel1_curriculum_v2_hold_shape.pt",
+        "status": "load_fail:'state_dict'"
+      },
+      {
+        "name": "mark_clone_channel1_v1.pt",
+        "status": "ok",
+        "agree_with_mark": 42,
+        "agree_rate": 0.6885245901639344,
+        "benefit": "distill_agree_bars"
+      }
+    ],
+    "distill": {
+      "updated": true,
+      "n_samples": 84,
+      "match_after": 0.8452380952380952,
+      "loss_final": 0.24649029225111008,
+      "epochs": 13,
+      "n_harvest_bars": 84,
+      "distilled": true
+    }
+  },
+  "compare_after_update": [
+    {
+      "date": "2026-04-02",
+      "agree": 18,
+      "disagree": 6,
+      "agree_rate": 0.75,
+      "policy_actions": {
+        "HOLD": 13,
+        "BUY": 5,
+        "SELL": 6
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.0021,
+      "policy_entries": 3,
+      "mark_cleared": false,
+      "mark_entries": 5
+    },
+    {
+      "date": "2026-04-01",
+      "agree": 15,
+      "disagree": 5,
+      "agree_rate": 0.75,
+      "policy_actions": {
+        "HOLD": 11,
+        "BUY": 6,
+        "SELL": 3
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.0927,
+      "policy_entries": 4,
+      "mark_cleared": true,
+      "mark_entries": 4
+    },
+    {
+      "date": "2026-03-18",
+      "agree": 2,
+      "disagree": 2,
+      "agree_rate": 0.5,
+      "policy_actions": {
+        "SELL": 4
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.0666,
+      "policy_entries": 2,
+      "mark_cleared": true,
+      "mark_entries": 2
+    },
+    {
+      "date": "2026-03-19",
+      "agree": 3,
+      "disagree": 2,
+      "agree_rate": 0.6,
+      "policy_actions": {
+        "HOLD": 2,
+        "SELL": 3
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.254,
+      "policy_entries": 1,
+      "mark_cleared": true,
+      "mark_entries": 1
+    },
+    {
+      "date": "2026-03-20",
+      "agree": 5,
+      "disagree": 3,
+      "agree_rate": 0.625,
+      "policy_actions": {
+        "HOLD": 4,
+        "SELL": 4
+      },
+      "policy_cleared": true,
+      "policy_breached": false,
+      "policy_pnl": 2.1774,
+      "policy_entries": 2,
+      "mark_cleared": true,
+      "mark_entries": 1
+    }
+  ],
+  "mean_agree_before": 0.6283333333333333,
+  "mean_agree_after": 0.645,
+  "agree_improved": true,
+  "embryo_ckpt": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\mark_clone_doctrine_v1.pt",
+  "proven_touched": false,
+  "streak_note": {
+    "teacher_streak_file": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\award_streak_teacher_fullrand.json",
+    "note": "re-run eval_award_streak.py --decode teacher for live meter"
+  },
+  "always_learning": true
+}

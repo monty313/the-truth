@@ -1,0 +1,12 @@
+{
+  "dials": {
+    "risk_use_frac": 0.35,
+    "stop_atr_mult": 2.0,
+    "per_trade_cap_pct": 0.25,
+    "decode": "heuristic"
+  },
+  "seed": 42,
+  "pairs": "ten_pairs.json",
+  "data": "data/raw/XAUUSD_curriculum_2026.csv",
+  "saved_at": "2026-07-31T11:05:33.997675+00:00"
+}

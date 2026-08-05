@@ -1,0 +1,87 @@
+{
+  "SHELL_LOCKED": true,
+  "allowed_attention_dials": [
+    "risk_use_frac",
+    "stop_atr_mult",
+    "per_trade_cap_pct"
+  ],
+  "allowed_training_parameters": [
+    "risk_use_frac",
+    "stop_atr_mult",
+    "per_trade_cap_pct",
+    "channel1_policy_weights",
+    "bc_epochs",
+    "bc_lr",
+    "hidden_size",
+    "seed",
+    "practice_day_subset_for_bc"
+  ],
+  "banned_rule_families": [
+    {
+      "id": "R1",
+      "name": "trail_cushion_scale_in_package",
+      "patterns": [
+        "trail_stop",
+        "trailing_stop",
+        "floor_cushion",
+        "big_cushion",
+        "scale_in.*trail",
+        "trail.*scale"
+      ],
+      "why": "IRAC-01: multi-pair pass 6/10 \u2192 0/10"
+    },
+    {
+      "id": "R2",
+      "name": "decision_bar_only_stops",
+      "require_positive": [
+        "_mark_bar",
+        "for bt in range"
+      ],
+      "why": "Floor walk-through between strides; dishonest breach"
+    },
+    {
+      "id": "R3",
+      "name": "weaker_in_trade_signal",
+      "patterns": [],
+      "why": "High targets stuck; IRAC-03 kept one signal path"
+    },
+    {
+      "id": "R4",
+      "name": "pure_greedy_as_default_claim",
+      "note": "decode must be heuristic for multi-pair claim path",
+      "why": "Channel1 pure greedy freezes; claim decode is heuristic"
+    }
+  ],
+  "forbidden_training_parameters": [
+    "target_pct_baked_into_weights",
+    "risk_pct_baked_into_weights",
+    "trail_stop_enabled",
+    "floor_cushion_pct",
+    "scale_in_on_claim_path",
+    "decision_bar_only_stops",
+    "weaker_in_trade_eyes",
+    "decode=pure_greedy_as_claim_default",
+    "forward_day_in_dial_search",
+    "forward_day_in_reward_selection",
+    "forward_day_in_feature_selection",
+    "shell_law_mutation_without_unlock",
+    "retrain_only_because_target_risk_changed",
+    "cross_track_promote_to_PROVEN",
+    "cross_track_promote_channel1_to_multi_pair_claim"
+  ],
+  "schema_version": 1,
+  "shell_laws": [
+    "heat_refuse_open",
+    "floor_scaled_sizing",
+    "every_bar_marks",
+    "bank_at_target",
+    "breach_termination",
+    "one_signal_flat_and_in_trade"
+  ],
+  "unlock_requires": [
+    "explicit SHELL_LOCKED=False flag in experiment identity",
+    "new experiment_id",
+    "full practice+forward+claim re-score",
+    "never smuggle via dial grid"
+  ]
+}
