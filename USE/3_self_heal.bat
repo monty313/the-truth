@@ -1,5 +1,6 @@
 @echo off
 cd /d "%~dp0.."
+set "PYTHONPATH=%CD%;%CD%\code"
 echo.
 echo === SELF HEAL EPOCH ===
 echo.

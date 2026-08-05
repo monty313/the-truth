@@ -8,6 +8,7 @@ REM  Stop anytime: close this window or press Ctrl+C.
 REM  Resume: just double-click this file again.
 REM ============================================================
 cd /d "%~dp0"
+set "PYTHONPATH=%CD%;%CD%\code"
 echo Starting continuous training. Progress -> artifacts\drill2x_progress.json
 :loop
 python scripts\drill_2x.py --minutes 600 --eval-every 8 --ckpt drill_live

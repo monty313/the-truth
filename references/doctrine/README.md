@@ -3,12 +3,15 @@
 ## Read in this order
 
 0. **`00_LID_OFF_THE_JAR.md`** — permanent mindset (every LLM session)  
+0b. **`llm_basic_thinking/`** — HOW A LLM SHOULD THINK (pt1–pt5 pack; soul-matched to ARMY MarkOS)  
 1. **SUCCESS_LEDGER.md** — wins (never erase)  
 2. **SYSTEM_DOCTRINE_CMO.md** — full CMO persona (+ flea-jar)  
 3. **flea-jar/THE_FLEA_CURE.md** — full flea cure autopsy  
 4. **policy_skill.md** — SkillOpt skill memory  
 5. **STANDING_LAWS.md** — hard laws  
 6. **LLM_REGIME_DEFINITIONS.yaml** — regimes + indicators  
+
+**Talk to Mark from this repo:** root `MARK HERE!.lnk` (same Second Brain as ARMY — `SOUL_MATCH.md`).
 
 Also always load repo root **`AGENTS.md`** (organization + §0 lid-off).
 

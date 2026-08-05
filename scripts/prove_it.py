@@ -10,7 +10,11 @@ If you changed include_signal_agent_slots in features.yaml, delete:
 before running.
 """
 import os, sys
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'src')); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# FinRL-clean layout: packages live under code/ (also set by USE/*.bat PYTHONPATH)
+for _p in (ROOT, os.path.join(ROOT, "code"), os.path.join(ROOT, "src")):
+    if os.path.isdir(_p) and _p not in sys.path:
+        sys.path.insert(0, _p)
 import torch
 from core.configs import path as rpath, decide_every as cfg_decide
 DE = cfg_decide()

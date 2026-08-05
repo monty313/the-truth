@@ -20,6 +20,35 @@ from lineages.adaptive_rl_brain_7_31_26.policy_stub import (
 )
 
 
+def _is_dead_regime(regime: str) -> bool:
+    """True only for regimes that mean sit out — not 'flat_undefined' false positive.
+
+    BUGFIX 2026-08-05: bare ``\"flat\" in reg`` blocked ``flat_undefined`` and killed
+    Mark-agreed SELLs (e.g. 2026-04-06 t=745 pol=S rec=S → gated HOLD). That
+    broke award streaks: policy had the right action; gate erased it.
+    """
+    reg = (regime or "").lower().strip()
+    if not reg:
+        return False
+    # exact / token dead regimes
+    dead = {
+        "chop",
+        "flat",
+        "range",
+        "choppy",
+        "no_trade",
+        "dead",
+    }
+    if reg in dead:
+        return True
+    if reg.startswith("chop") or reg.endswith("_chop"):
+        return True
+    # explicit multi-token
+    if "chop" in reg and "undefined" not in reg:
+        return True
+    return False
+
+
 def mark_force_gate_action(
     policy_action: int,
     *,
@@ -29,20 +58,30 @@ def mark_force_gate_action(
     force_dir: float = 0.0,
     m_conf: float = 1.0,
     regime: str = "",
+    recommended: int = ACTION_HOLD,
 ) -> int:
-    """Filter policy action by Mark force + capital sense."""
+    """Filter policy action by Mark force + capital sense.
+
+    When online Mark ``recommended`` agrees with policy side, only the capital
+    danger wall may block — force/regime noise must not erase Mark-agreed entries
+    (soul-plan wins were being zeroed by flat_undefined + force=0).
+    """
     pol = int(policy_action)
+    rec = int(recommended)
     danger = max(0.0, -float(equity_pct)) / max(float(risk_pct), 1e-6)
     reg = (regime or "").lower()
 
     if side is None and pol in (ACTION_BUY, ACTION_SELL):
         if danger >= 0.45:
             return ACTION_HOLD
-        if "chop" in reg or "flat" in reg:
+        # Mark online agrees → allow (capital already checked)
+        if rec == pol:
+            return pol
+        if _is_dead_regime(reg):
             return ACTION_HOLD
         if float(m_conf) <= 1e-9:
             return ACTION_HOLD
-        # against force
+        # against clear HTF force
         if force_dir > 0.5 and pol == ACTION_SELL:
             return ACTION_HOLD
         if force_dir < -0.5 and pol == ACTION_BUY:
@@ -52,14 +91,16 @@ def mark_force_gate_action(
     if side is not None and pol in (ACTION_BUY, ACTION_SELL):
         want = 1 if pol == ACTION_BUY else -1
         if want != int(side):
-            # reverse: only if force agrees
+            # reverse: only if force agrees / not dead
+            if rec == pol and danger < 0.55:
+                return pol
             if force_dir > 0.5 and want < 0:
                 return ACTION_HOLD
             if force_dir < -0.5 and want > 0:
                 return ACTION_HOLD
             if danger >= 0.55:
                 return ACTION_HOLD
-            if "chop" in reg or "flat" in reg:
+            if _is_dead_regime(reg):
                 return ACTION_HOLD
         return pol
     return pol
@@ -98,6 +139,7 @@ def mark_aligned_action(
             force_dir=force_dir,
             m_conf=m_conf,
             regime=regime,
+            recommended=mark,
         )
     return mark_force_gate_action(
         int(policy_action),
@@ -107,6 +149,7 @@ def mark_aligned_action(
         force_dir=force_dir,
         m_conf=m_conf,
         regime=regime,
+        recommended=int(mark_action),
     )
 
 

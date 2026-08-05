@@ -1,0 +1,39 @@
+{
+  "symbol": "XAUUSD",
+  "m1_bars": 360064,
+  "m1_start": "2025-07-21 01:05:00",
+  "m1_end": "2026-07-31 22:58:00",
+  "set_a_rows": 358520,
+  "set_b_rows": 71476,
+  "train_days": 60,
+  "test_days": 10,
+  "step_days": 10,
+  "purge_bars": 5,
+  "agreement_wf": {
+    "n_aligned": 52549,
+    "agree_rate": 0.7750861101067575,
+    "acc_when_agree_vs_B_y": 0.5182420820034372,
+    "acc_when_disagree_vs_B_y": 0.50478043827735,
+    "acc_when_agree_vs_A_y": 0.4855389148048122,
+    "acc_when_disagree_vs_A_y": 0.6331330907860225,
+    "acc_A_on_overlap": 0.518734895050334,
+    "acc_B_on_overlap": 0.515214371348646
+  },
+  "agreement_holdout": {
+    "n_aligned": 7147,
+    "agree_rate": 0.7660556877011333,
+    "acc_when_agree_vs_B_y": 0.5101369863013698,
+    "acc_when_disagree_vs_B_y": 0.4922248803827751,
+    "acc_when_agree_vs_A_y": 0.47506849315068495,
+    "acc_when_disagree_vs_A_y": 0.6363636363636364,
+    "acc_A_on_overlap": 0.512802574506786,
+    "acc_B_on_overlap": 0.5059465510004197
+  },
+  "verdict_lines": [
+    "A_y1: acc=0.5090 vs maj=0.5025 (\u0394=+0.64pp)  AUC=0.5137  mono_buckets=False  NO-EDGE",
+    "A_y5: acc=0.5161 vs maj=0.5066 (\u0394=+0.95pp)  AUC=0.5206  mono_buckets=True  NO-EDGE",
+    "B_y1: acc=0.5152 vs maj=0.5065 (\u0394=+0.87pp)  AUC=0.5201  mono_buckets=True  NO-EDGE",
+    "B_y5: acc=0.5157 vs maj=0.5124 (\u0394=+0.32pp)  AUC=0.5213  mono_buckets=True  NO-EDGE"
+  ],
+  "created": "2026-08-01T06:13:52"
+}

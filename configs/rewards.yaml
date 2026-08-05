@@ -1,6 +1,10 @@
 # WHO: ADR-0005 (Monty's reward doctrine). WHAT: every reward weight. WHEN: 2026-07-18.
-# NOTE: weights are STARTING values; meta-optimizer PROPOSES changes; Monty approves.
+# NOTE: weights are STARTING values; meta-tuner SEARCHES within bounds; Monty/ADR for freezes.
+# POLICY = MARK ON CHART: dials map to five laws (see POLICY_EQUALS_MARK_ON_CHART.md).
 # CHANGE LOG:
+# - 2026-08-04  Mark-on-chart mapping comments + w_quick_pull_close 0->0.08 start
+#               — WHY: Law 2 slingshot release (breath→aligned) must be payable;
+#               meta still owns further search; not a frozen human cure.
 # - 2026-07-30  self-heal dials w_with_trend_close / w_against_trend_close / w_quick_pull_close / w_setup_skip default 0 — WHY: meta learns to fix side bias; humans install dials not answers.
 # - 2026-07-24  w_pullback_with_htf 0.02->0.25 — WHY: IRAC Policy — multi-day Mind Probe policy_hold on HTF-trend pull/cont (not blindness).
 # - 2026-07-30  w_with_trend_close 0.0000->0.0500 — WHY: self_heal_epoch gated nudge
@@ -9,23 +13,26 @@ pay_only_on_close: true
 day_dd_extra_scale: 0.5
 trade_consistency_target: 0.3
 no_drawdown_tolerance: 0.0
-w_net_profit: 6.0
+w_net_profit: 6.0                    # Law 4 path — PnL on closed only
 w_trade_consistency: 0.10
-w_day_goal_hit: 2.0
+w_day_goal_hit: 2.0                  # Law 4 — bank target
 w_streak_per_day: 0.15
 w_no_drawdown_close: 0.02
-w_pyramid_stack_green: 0.20
+w_pyramid_stack_green: 0.20          # keep small; trail/scale package still banned
+# Law 1–2: HTF force + LTF pullback resume (slingshot with tide)
 w_pullback_with_htf: 0.25
-# Self-heal toolkit dials (default 0 = off until meta/self_heal moves them)
+# Law 1: close with force / punish against force
 w_with_trend_close: 0.0500
 w_against_trend_close: -0.0500
-w_quick_pull_close: 0.0
+# Law 2+5: fast release after breath (quick pull close with HTF)
+w_quick_pull_close: 0.08
 quick_pull_max_bars: 20
-w_setup_skip: 0.0
+# Law 1 fire: flat while Mark setup visible (meta may deepen)
+w_setup_skip: -0.02
 w_idleness_hunger: -0.002
-w_did_nothing: -6.0
+w_did_nothing: -6.0                  # Law 4 anti-hold without mandating thrash
 did_nothing_band: 0.25
 w_record_win: 0.25
-w_antigravity_penalty: -0.50
+w_antigravity_penalty: -0.50         # against gravity / force
 antigravity_decay_updates: 300
-w_death_penalty: -10.0
+w_death_penalty: -10.0               # Law 4 floor sacred

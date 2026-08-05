@@ -60,9 +60,29 @@ PROVEN: **untouched**
 
 ---
 
+## Streak gap autopsy (2026-08-05) — no-opp vs Mark-would-take
+
+**Report:** `AUTOPSY_GAPS__latest.md` · dials: `STREAK_REWARD_DIALS__latest.json`  
+**ARMY goal:** `2026-08-05__goal__streak-gap-autopsy-rewards-only.md`
+
+| Class | Count | Meaning |
+|-------|------:|---------|
+| AWARD | 29 | Policy cleared |
+| **MARK_WOULD_TAKE** | **10** | Mark soul plan clears; policy missed (**learnable**) |
+| **NO_OPPORTUNITY** | **1** | Hard target, no force path (2026-05-22) — do not thrash |
+| Learnable fraction | **0.91** | Almost all gaps are Mark-would-take |
+
+All 10 learnable gaps subclass: `policy_wrong_size_or_timing` (policy lost while Mark plan hit target).
+
+**Rewards-only dials after autopsy:** streak_award_base 5 · per_prior 1.5 · break −7.5 · mark_would_take EOD −10 · soul_side +3 / misread −4  
+**Not touched:** shell · PROVEN · entry physics.
+
+---
+
 ## Next for 100s of days
 
-1. Mark signs HITL on 3/24 + 3/26  
-2. More curriculum days / longer forward  
-3. Another BC cycle with new Mark corrections  
-4. Keep breach 0 while climbing award_pct on 100+ day windows  
+1. Train on **MARK_WOULD_TAKE** soul labels + streak reward pack (rewards only)  
+2. Re-score streak; re-autopsy (Mark-would-take count should fall)  
+3. Mark HITL on stubborn miss days  
+4. More curriculum days / longer forward for true 100d window  
+5. Keep **breach 0** while climbing award_pct  

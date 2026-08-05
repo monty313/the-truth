@@ -1,70 +1,35 @@
 {
-  "saved_at": "2026-08-05T03:30:28.880022+00:00",
-  "goal": "soul=policy long consistency (100s of days)",
-  "train_match": {
-    "match": 0.8430379746835444,
-    "dir_match": 0.8441558441558441,
-    "pred_hold_rate": 0.6417721518987342,
-    "n": 790
-  },
-  "bc_losses_tail": [
-    0.37055958062410355,
-    0.3965577557682991,
-    0.3778354078531265,
-    0.3471420891582966,
-    0.4345511719584465
-  ],
-  "score_10d": {
-    "mark_clear": 10,
-    "policy_clear": 7,
-    "breach": 0,
-    "n": 10
-  },
+  "saved_at": "2026-08-05T14:33:31.873928+00:00",
   "streak": {
     "n_days": 40,
-    "max_award_streak": 8,
-    "n_award": 29,
+    "max_award_streak": 12,
+    "n_award": 31,
     "n_breach": 0,
+    "award_pct": 77.5,
+    "streak_dates": [
+      "2026-05-06",
+      "2026-05-07",
+      "2026-05-08",
+      "2026-05-11",
+      "2026-05-12",
+      "2026-05-13",
+      "2026-05-14",
+      "2026-05-15",
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21"
+    ],
+    "seed": 42,
+    "mark_align_policy": true,
+    "full_obs": true
+  },
+  "baseline": {
+    "max_award_streak": 8,
     "award_pct": 72.5,
-    "pass_10_streak_breach0": false,
-    "streak_dates": [
-      "2026-04-23",
-      "2026-04-24",
-      "2026-04-27",
-      "2026-04-28",
-      "2026-04-29",
-      "2026-04-30",
-      "2026-05-01",
-      "2026-05-04"
-    ],
-    "mark_align_policy": true
-  },
-  "pure_diag_30": {
-    "n_days": 30,
-    "max_award_streak": 8,
-    "n_award": 23,
     "n_breach": 0,
-    "award_pct": 76.66666666666667,
-    "pass_10_streak_breach0": false,
-    "streak_dates": [
-      "2026-04-23",
-      "2026-04-24",
-      "2026-04-27",
-      "2026-04-28",
-      "2026-04-29",
-      "2026-04-30",
-      "2026-05-01",
-      "2026-05-04"
-    ],
-    "mark_align_policy": false
+    "n_days": 40
   },
-  "ckpt": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\mark_clone_full_obs_v1.pt",
-  "proven_touched": false,
-  "mark_sense_rules": [
-    "Mark HOLD \u2192 no open",
-    "no opposite side to Mark force",
-    "danger>=0.45 no new open",
-    "soft target thrash cap 4",
-    "Mark-aligned decode default ON for mark_doctrine"
-  ]
+  "gate_pass": false,
+  "proven_touched": false
 }

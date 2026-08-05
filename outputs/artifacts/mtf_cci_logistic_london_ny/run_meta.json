@@ -1,0 +1,52 @@
+{
+  "symbol": "XAUUSD",
+  "sessions": "london_ny",
+  "session_utc": {
+    "london": [
+      7,
+      16
+    ],
+    "newyork": [
+      12,
+      21
+    ]
+  },
+  "m1_bars": 360064,
+  "m1_start": "2025-07-21 01:05:00",
+  "m1_end": "2026-07-31 22:58:00",
+  "set_a_rows": 223145,
+  "set_b_rows": 44475,
+  "set_a_rows_all_hours": 358520,
+  "set_b_rows_all_hours": 71476,
+  "train_days": 60,
+  "test_days": 10,
+  "step_days": 10,
+  "purge_bars": 5,
+  "agreement_wf": {
+    "n_aligned": 32778,
+    "agree_rate": 0.7704863017877845,
+    "acc_when_agree_vs_B_y": 0.5189863393387448,
+    "acc_when_disagree_vs_B_y": 0.5007310913199522,
+    "acc_when_agree_vs_A_y": 0.4867946941199762,
+    "acc_when_disagree_vs_A_y": 0.6155788913997076,
+    "acc_A_on_overlap": 0.516352431508939,
+    "acc_B_on_overlap": 0.5147965098541705
+  },
+  "agreement_holdout": {
+    "n_aligned": 4447,
+    "agree_rate": 0.7946930514953902,
+    "acc_when_agree_vs_B_y": 0.510752688172043,
+    "acc_when_disagree_vs_B_y": 0.4950711938663746,
+    "acc_when_agree_vs_A_y": 0.4818902093944539,
+    "acc_when_disagree_vs_A_y": 0.6615553121577218,
+    "acc_A_on_overlap": 0.5187767033955476,
+    "acc_B_on_overlap": 0.5075331684281538
+  },
+  "verdict_lines": [
+    "A_y1: acc=0.5080 vs maj=0.5031 (\u0394=+0.48pp)  AUC=0.5117  mono_buckets=True  NO-EDGE",
+    "A_y5: acc=0.5164 vs maj=0.5046 (\u0394=+1.19pp)  AUC=0.5208  mono_buckets=True  NO-EDGE",
+    "B_y1: acc=0.5149 vs maj=0.5040 (\u0394=+1.09pp)  AUC=0.5219  mono_buckets=False  NO-EDGE",
+    "B_y5: acc=0.5195 vs maj=0.5096 (\u0394=+0.99pp)  AUC=0.5228  mono_buckets=False  NO-EDGE"
+  ],
+  "created": "2026-08-01T06:19:18"
+}

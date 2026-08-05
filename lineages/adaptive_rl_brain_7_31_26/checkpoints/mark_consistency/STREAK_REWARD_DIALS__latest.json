@@ -1,0 +1,13 @@
+{
+  "saved_at": "2026-08-05T14:35:09.382350+00:00",
+  "dials": {
+    "streak_award_base": 6.0,
+    "streak_award_per_prior": 2.0,
+    "streak_break_penalty": -12.0,
+    "mark_would_take_eod_penalty": -16.0,
+    "no_opp_hold_bonus": 2.0,
+    "no_opp_inactivity_scale": 0.35,
+    "soul_side_entry_bonus": 5.0,
+    "soul_side_misread_penalty": -6.5
+  }
+}

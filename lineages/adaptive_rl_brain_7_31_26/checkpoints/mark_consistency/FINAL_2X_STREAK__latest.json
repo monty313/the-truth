@@ -1,0 +1,63 @@
+{
+  "saved_at": "2026-08-05T14:33:31.873928+00:00",
+  "method": "mark_force_gate_fix_flat_undefined_plus_reward_dials",
+  "baseline": {
+    "max_award_streak": 8,
+    "award_pct": 72.5,
+    "n_breach": 0,
+    "n_days": 40
+  },
+  "final_run1": {
+    "n_days": 40,
+    "max_award_streak": 12,
+    "n_award": 31,
+    "n_breach": 0,
+    "award_pct": 77.5,
+    "streak_dates": [
+      "2026-05-06",
+      "2026-05-07",
+      "2026-05-08",
+      "2026-05-11",
+      "2026-05-12",
+      "2026-05-13",
+      "2026-05-14",
+      "2026-05-15",
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21"
+    ],
+    "seed": 42,
+    "mark_align_policy": true,
+    "full_obs": true
+  },
+  "final_run2": {
+    "n_days": 40,
+    "max_award_streak": 12,
+    "n_award": 31,
+    "n_breach": 0,
+    "award_pct": 77.5,
+    "streak_dates": [
+      "2026-05-06",
+      "2026-05-07",
+      "2026-05-08",
+      "2026-05-11",
+      "2026-05-12",
+      "2026-05-13",
+      "2026-05-14",
+      "2026-05-15",
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21"
+    ],
+    "seed": 42,
+    "mark_align_policy": true,
+    "full_obs": true
+  },
+  "gate_pass": false,
+  "proven_touched": false,
+  "shell_touched": false,
+  "rewards_penalties_cause": true,
+  "gate_fix": "flat_undefined no longer blocks Mark-agreed entries; recommended-agree path"
+}

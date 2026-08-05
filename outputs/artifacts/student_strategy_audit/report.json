@@ -1,0 +1,662 @@
+{
+  "sheet": {
+    "n_rows": 423,
+    "n_strategies": 12,
+    "n_duplicate_base_strat_groups": 12,
+    "all_published_returns_positive": true,
+    "min_ret": 18.0,
+    "max_ret": 703.5,
+    "has_trade_count": false,
+    "has_max_dd": false,
+    "has_sample_size": false,
+    "has_R_multiple": false,
+    "methodology": "TradingView BarReplay discretionary; self-reported; screenshots claimed not attached here",
+    "strategies": {
+      "Orderblocks": {
+        "n": 10,
+        "wr_mean": 58.72,
+        "wr_med": 58.67,
+        "wr_std": 6.96,
+        "wr_min": 47.0,
+        "wr_max": 70.63,
+        "frac_wr_ge_70": 0.1,
+        "ret_mean": 147.77,
+        "ret_med": 107.91,
+        "ret_min": 61.14,
+        "ret_max": 496.28,
+        "all_ret_positive": true
+      },
+      "Supply & Demand": {
+        "n": 31,
+        "wr_mean": 61.87,
+        "wr_med": 62.67,
+        "wr_std": 11.16,
+        "wr_min": 40.0,
+        "wr_max": 82.32,
+        "frac_wr_ge_70": 0.29,
+        "ret_mean": 161.05,
+        "ret_med": 146.97,
+        "ret_min": 18.0,
+        "ret_max": 437.1,
+        "all_ret_positive": true
+      },
+      "Reversal Method": {
+        "n": 180,
+        "wr_mean": 70.0,
+        "wr_med": 70.47,
+        "wr_std": 9.11,
+        "wr_min": 45.18,
+        "wr_max": 88.82,
+        "frac_wr_ge_70": 0.511,
+        "ret_mean": 217.76,
+        "ret_med": 184.39,
+        "ret_min": 33.0,
+        "ret_max": 703.5,
+        "all_ret_positive": true
+      },
+      "Fibonacci": {
+        "n": 33,
+        "wr_mean": 65.58,
+        "wr_med": 66.33,
+        "wr_std": 9.11,
+        "wr_min": 45.48,
+        "wr_max": 86.33,
+        "frac_wr_ge_70": 0.242,
+        "ret_mean": 289.6,
+        "ret_med": 263.62,
+        "ret_min": 48.16,
+        "ret_max": 583.92,
+        "all_ret_positive": true
+      },
+      "SID Method": {
+        "n": 94,
+        "wr_mean": 78.1,
+        "wr_med": 77.76,
+        "wr_std": 7.52,
+        "wr_min": 61.08,
+        "wr_max": 96.33,
+        "frac_wr_ge_70": 0.862,
+        "ret_mean": 169.26,
+        "ret_med": 157.76,
+        "ret_min": 36.35,
+        "ret_max": 421.52,
+        "all_ret_positive": true
+      },
+      "DXY": {
+        "n": 43,
+        "wr_mean": 73.44,
+        "wr_med": 75.44,
+        "wr_std": 6.99,
+        "wr_min": 57.94,
+        "wr_max": 87.16,
+        "frac_wr_ge_70": 0.744,
+        "ret_mean": 186.62,
+        "ret_med": 160.36,
+        "ret_min": 47.52,
+        "ret_max": 698.0,
+        "all_ret_positive": true
+      },
+      "Head & Shoulders": {
+        "n": 1,
+        "wr_mean": 44.67,
+        "wr_med": 44.67,
+        "wr_std": 0.0,
+        "wr_min": 44.67,
+        "wr_max": 44.67,
+        "frac_wr_ge_70": 0.0,
+        "ret_mean": 460.7,
+        "ret_med": 460.7,
+        "ret_min": 460.7,
+        "ret_max": 460.7,
+        "all_ret_positive": true
+      },
+      "M&W's": {
+        "n": 1,
+        "wr_mean": 71.48,
+        "wr_med": 71.48,
+        "wr_std": 0.0,
+        "wr_min": 71.48,
+        "wr_max": 71.48,
+        "frac_wr_ge_70": 1.0,
+        "ret_mean": 182.37,
+        "ret_med": 182.37,
+        "ret_min": 182.37,
+        "ret_max": 182.37,
+        "all_ret_positive": true
+      },
+      "Bollinger Bands": {
+        "n": 27,
+        "wr_mean": 72.99,
+        "wr_med": 72.51,
+        "wr_std": 7.57,
+        "wr_min": 58.33,
+        "wr_max": 86.33,
+        "frac_wr_ge_70": 0.667,
+        "ret_mean": 132.91,
+        "ret_med": 123.74,
+        "ret_min": 20.5,
+        "ret_max": 284.45,
+        "all_ret_positive": true
+      },
+      "Reversal Method (MW)": {
+        "n": 1,
+        "wr_mean": 65.23,
+        "wr_med": 65.23,
+        "wr_std": 0.0,
+        "wr_min": 65.23,
+        "wr_max": 65.23,
+        "frac_wr_ge_70": 0.0,
+        "ret_mean": 107.62,
+        "ret_med": 107.62,
+        "ret_min": 107.62,
+        "ret_max": 107.62,
+        "all_ret_positive": true
+      },
+      "Reversal Method (HS)": {
+        "n": 1,
+        "wr_mean": 72.94,
+        "wr_med": 72.94,
+        "wr_std": 0.0,
+        "wr_min": 72.94,
+        "wr_max": 72.94,
+        "frac_wr_ge_70": 1.0,
+        "ret_mean": 198.08,
+        "ret_med": 198.08,
+        "ret_min": 198.08,
+        "ret_max": 198.08,
+        "all_ret_positive": true
+      },
+      "Supply & Demand & OBs": {
+        "n": 1,
+        "wr_mean": 53.16,
+        "wr_med": 53.16,
+        "wr_std": 0.0,
+        "wr_min": 53.16,
+        "wr_max": 53.16,
+        "frac_wr_ge_70": 0.0,
+        "ret_mean": 114.19,
+        "ret_med": 114.19,
+        "ret_min": 114.19,
+        "ret_max": 114.19,
+        "all_ret_positive": true
+      }
+    },
+    "red_flags": [
+      "100% of published returns are positive (survivor / showcase selection bias)",
+      "No trade count, no max DD, no expectancy, no R-multiples, no out-of-sample split",
+      "Win rate alone is not edge (low WR + high return rows prove payoff asymmetry, not skill)",
+      "Duplicate student+strategy rows inflate n",
+      "Strategies are discretionary academy methods \u2014 not closed-form rules we can paste into encode.py",
+      "Marketing header claims 'average win rate over 70%' \u2014 only true after selection into this list"
+    ]
+  },
+  "proxies": {
+    "EURUSD": {
+      "proxy_bollinger_mr_5m": {
+        "name": "proxy_bollinger_mr_5m",
+        "n_fires_h5": 179862,
+        "hit_5": 0.4928,
+        "n_fires_h10": 179857,
+        "hit_10": 0.4971,
+        "n_fires_h20": 179847,
+        "hit_20": 0.5008,
+        "nonzero_frac": 0.9993
+      },
+      "proxy_fib_pullback_15m": {
+        "name": "proxy_fib_pullback_15m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_supply_demand_15m": {
+        "name": "proxy_supply_demand_15m",
+        "n_fires_h5": 146301,
+        "hit_5": 0.4901,
+        "n_fires_h10": 146296,
+        "hit_10": 0.4975,
+        "n_fires_h20": 146286,
+        "hit_20": 0.4987,
+        "nonzero_frac": 0.8128
+      },
+      "proxy_orderblock_15m": {
+        "name": "proxy_orderblock_15m",
+        "n_fires_h5": 178886,
+        "hit_5": 0.492,
+        "n_fires_h10": 178881,
+        "hit_10": 0.494,
+        "n_fires_h20": 178871,
+        "hit_20": 0.4983,
+        "nonzero_frac": 0.9938
+      },
+      "proxy_mw_15m": {
+        "name": "proxy_mw_15m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_hs_30m": {
+        "name": "proxy_hs_30m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_rsi_reversal_5m": {
+        "name": "proxy_rsi_reversal_5m",
+        "n_fires_h5": 179912,
+        "hit_5": 0.4926,
+        "n_fires_h10": 179907,
+        "hit_10": 0.4956,
+        "n_fires_h20": 179897,
+        "hit_20": 0.4997,
+        "nonzero_frac": 0.9995
+      },
+      "baseline_sma_trend_15m": {
+        "name": "baseline_sma_trend_15m",
+        "n_fires_h5": 179272,
+        "hit_5": 0.4857,
+        "n_fires_h10": 179267,
+        "hit_10": 0.4884,
+        "n_fires_h20": 179257,
+        "hit_20": 0.4897,
+        "nonzero_frac": 0.996
+      }
+    },
+    "US30": {
+      "proxy_bollinger_mr_5m": {
+        "name": "proxy_bollinger_mr_5m",
+        "n_fires_h5": 179838,
+        "hit_5": 0.495,
+        "n_fires_h10": 179833,
+        "hit_10": 0.4969,
+        "n_fires_h20": 179823,
+        "hit_20": 0.4971,
+        "nonzero_frac": 0.9991
+      },
+      "proxy_fib_pullback_15m": {
+        "name": "proxy_fib_pullback_15m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_supply_demand_15m": {
+        "name": "proxy_supply_demand_15m",
+        "n_fires_h5": 88651,
+        "hit_5": 0.4888,
+        "n_fires_h10": 88646,
+        "hit_10": 0.4936,
+        "n_fires_h20": 88636,
+        "hit_20": 0.4939,
+        "nonzero_frac": 0.4925
+      },
+      "proxy_orderblock_15m": {
+        "name": "proxy_orderblock_15m",
+        "n_fires_h5": 179733,
+        "hit_5": 0.4993,
+        "n_fires_h10": 179728,
+        "hit_10": 0.503,
+        "n_fires_h20": 179718,
+        "hit_20": 0.5037,
+        "nonzero_frac": 0.9985
+      },
+      "proxy_mw_15m": {
+        "name": "proxy_mw_15m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_hs_30m": {
+        "name": "proxy_hs_30m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_rsi_reversal_5m": {
+        "name": "proxy_rsi_reversal_5m",
+        "n_fires_h5": 179773,
+        "hit_5": 0.4922,
+        "n_fires_h10": 179768,
+        "hit_10": 0.4908,
+        "n_fires_h20": 179758,
+        "hit_20": 0.4871,
+        "nonzero_frac": 0.9988
+      },
+      "baseline_sma_trend_15m": {
+        "name": "baseline_sma_trend_15m",
+        "n_fires_h5": 179268,
+        "hit_5": 0.4902,
+        "n_fires_h10": 179263,
+        "hit_10": 0.4926,
+        "n_fires_h20": 179253,
+        "hit_20": 0.4964,
+        "nonzero_frac": 0.996
+      }
+    },
+    "XAUUSD": {
+      "proxy_bollinger_mr_5m": {
+        "name": "proxy_bollinger_mr_5m",
+        "n_fires_h5": 120925,
+        "hit_5": 0.5116,
+        "n_fires_h10": 120920,
+        "hit_10": 0.5137,
+        "n_fires_h20": 120910,
+        "hit_20": 0.5136,
+        "nonzero_frac": 0.999
+      },
+      "proxy_fib_pullback_15m": {
+        "name": "proxy_fib_pullback_15m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_supply_demand_15m": {
+        "name": "proxy_supply_demand_15m",
+        "n_fires_h5": 27206,
+        "hit_5": 0.503,
+        "n_fires_h10": 27201,
+        "hit_10": 0.5015,
+        "n_fires_h20": 27191,
+        "hit_20": 0.5094,
+        "nonzero_frac": 0.2248
+      },
+      "proxy_orderblock_15m": {
+        "name": "proxy_orderblock_15m",
+        "n_fires_h5": 120070,
+        "hit_5": 0.5039,
+        "n_fires_h10": 120065,
+        "hit_10": 0.5058,
+        "n_fires_h20": 120055,
+        "hit_20": 0.5022,
+        "nonzero_frac": 0.9919
+      },
+      "proxy_mw_15m": {
+        "name": "proxy_mw_15m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_hs_30m": {
+        "name": "proxy_hs_30m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_rsi_reversal_5m": {
+        "name": "proxy_rsi_reversal_5m",
+        "n_fires_h5": 120955,
+        "hit_5": 0.5061,
+        "n_fires_h10": 120950,
+        "hit_10": 0.5041,
+        "n_fires_h20": 120940,
+        "hit_20": 0.5029,
+        "nonzero_frac": 0.9993
+      },
+      "baseline_sma_trend_15m": {
+        "name": "baseline_sma_trend_15m",
+        "n_fires_h5": 120310,
+        "hit_5": 0.5045,
+        "n_fires_h10": 120305,
+        "hit_10": 0.5036,
+        "n_fires_h20": 120295,
+        "hit_20": 0.5048,
+        "nonzero_frac": 0.9939
+      }
+    },
+    "GBPUSD": {
+      "proxy_bollinger_mr_5m": {
+        "name": "proxy_bollinger_mr_5m",
+        "n_fires_h5": 179854,
+        "hit_5": 0.495,
+        "n_fires_h10": 179849,
+        "hit_10": 0.4991,
+        "n_fires_h20": 179839,
+        "hit_20": 0.5043,
+        "nonzero_frac": 0.9992
+      },
+      "proxy_fib_pullback_15m": {
+        "name": "proxy_fib_pullback_15m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_supply_demand_15m": {
+        "name": "proxy_supply_demand_15m",
+        "n_fires_h5": 64837,
+        "hit_5": 0.486,
+        "n_fires_h10": 64832,
+        "hit_10": 0.4865,
+        "n_fires_h20": 64822,
+        "hit_20": 0.4934,
+        "nonzero_frac": 0.3602
+      },
+      "proxy_orderblock_15m": {
+        "name": "proxy_orderblock_15m",
+        "n_fires_h5": 178691,
+        "hit_5": 0.4917,
+        "n_fires_h10": 178686,
+        "hit_10": 0.4956,
+        "n_fires_h20": 178676,
+        "hit_20": 0.4984,
+        "nonzero_frac": 0.9928
+      },
+      "proxy_mw_15m": {
+        "name": "proxy_mw_15m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_hs_30m": {
+        "name": "proxy_hs_30m",
+        "n_fires_h5": 0,
+        "hit_5": null,
+        "n_fires_h10": 0,
+        "hit_10": null,
+        "n_fires_h20": 0,
+        "hit_20": null,
+        "nonzero_frac": 0.0
+      },
+      "proxy_rsi_reversal_5m": {
+        "name": "proxy_rsi_reversal_5m",
+        "n_fires_h5": 179909,
+        "hit_5": 0.4966,
+        "n_fires_h10": 179904,
+        "hit_10": 0.4999,
+        "n_fires_h20": 179894,
+        "hit_20": 0.503,
+        "nonzero_frac": 0.9995
+      },
+      "baseline_sma_trend_15m": {
+        "name": "baseline_sma_trend_15m",
+        "n_fires_h5": 179274,
+        "hit_5": 0.4901,
+        "n_fires_h10": 179269,
+        "hit_10": 0.4934,
+        "n_fires_h20": 179259,
+        "hit_20": 0.4928,
+        "nonzero_frac": 0.996
+      }
+    }
+  },
+  "verdicts": [
+    {
+      "strategy": "Bollinger Bands",
+      "verdict": "SKIP (already covered)",
+      "sheet_n": 27,
+      "sheet_wr_med": 72.51,
+      "sheet_ret_med": 123.74,
+      "our_proxy": "proxy_bollinger_mr_5m",
+      "our_hit10": 0.5017,
+      "baseline_sma_hit10": 0.4945,
+      "already": "YES \u2014 slots 90-92 bb_rsi_sma + phase_bb_mid",
+      "why": [
+        "We already have BB family agents with measured recipes. Do not add a second weaker BB.",
+        "Naive BB proxy hit10=0.5017 (baseline SMA hit10=0.4945).",
+        "Sheet: n=27 students, WR med=72.51%, ret med=123.74% \u2014 ALL selected winners, no losers published."
+      ]
+    },
+    {
+      "strategy": "Fibonacci",
+      "verdict": "SKIP",
+      "sheet_n": 33,
+      "sheet_wr_med": 66.33,
+      "sheet_ret_med": 263.62,
+      "our_proxy": "proxy_fib_pullback_15m",
+      "our_hit10": null,
+      "baseline_sma_hit10": 0.4945,
+      "already": "NO pure fib slot; trend pullback covered by rsi2/stoch/sma families",
+      "why": [
+        "Proxy failed or too few fires on our data.",
+        "Sheet: n=33 students, WR med=66.33%, ret med=263.62% \u2014 ALL selected winners, no losers published."
+      ]
+    },
+    {
+      "strategy": "Supply & Demand",
+      "verdict": "SKIP",
+      "sheet_n": 31,
+      "sheet_wr_med": 62.67,
+      "sheet_ret_med": 146.97,
+      "our_proxy": "proxy_supply_demand_15m",
+      "our_hit10": 0.4948,
+      "baseline_sma_hit10": 0.4945,
+      "already": "NO dedicated S/D zone agent",
+      "why": [
+        "Proxy hit10=0.4948 is noise / worse than coin. Marketing WR does not transfer.",
+        "Sheet: n=31 students, WR med=62.67%, ret med=146.97% \u2014 ALL selected winners, no losers published."
+      ]
+    },
+    {
+      "strategy": "Orderblocks",
+      "verdict": "SKIP",
+      "sheet_n": 10,
+      "sheet_wr_med": 58.67,
+      "sheet_ret_med": 107.91,
+      "our_proxy": "proxy_orderblock_15m",
+      "our_hit10": 0.4996,
+      "baseline_sma_hit10": 0.4945,
+      "already": "NO dedicated OB agent",
+      "why": [
+        "Proxy hit10=0.4996 is noise / worse than coin. Marketing WR does not transfer.",
+        "Sheet: n=10 students, WR med=58.67%, ret med=107.91% \u2014 ALL selected winners, no losers published."
+      ]
+    },
+    {
+      "strategy": "Reversal Method (M&W / H&S)",
+      "verdict": "SKIP",
+      "sheet_n": 180,
+      "sheet_wr_med": 70.47,
+      "sheet_ret_med": 184.39,
+      "our_proxy": "proxy_mw_15m",
+      "our_hit10": null,
+      "baseline_sma_hit10": 0.4945,
+      "already": "NO pattern agent; RSI/stoch reversals exist",
+      "why": [
+        "Proxy failed or too few fires on our data.",
+        "Sheet: n=180 students, WR med=70.47%, ret med=184.39% \u2014 ALL selected winners, no losers published."
+      ]
+    },
+    {
+      "strategy": "Head & Shoulders (named)",
+      "verdict": "SKIP",
+      "sheet_n": 1,
+      "sheet_wr_med": 44.67,
+      "sheet_ret_med": 460.7,
+      "our_proxy": "proxy_hs_30m",
+      "our_hit10": null,
+      "baseline_sma_hit10": 0.4945,
+      "already": "NO",
+      "why": [
+        "Proxy failed or too few fires on our data.",
+        "Sheet: n=1 students, WR med=44.67%, ret med=460.7% \u2014 ALL selected winners, no losers published."
+      ]
+    },
+    {
+      "strategy": "SID Method",
+      "verdict": "SKIP",
+      "sheet_n": 94,
+      "sheet_wr_med": 77.76,
+      "sheet_ret_med": 157.76,
+      "our_proxy": "proxy_rsi_reversal_5m",
+      "our_hit10": 0.4976,
+      "baseline_sma_hit10": 0.4945,
+      "already": "NO \u2014 proprietary discretionary; not published as rules",
+      "why": [
+        "No closed-form rules in the sheet. Cannot code SID/academy black box without reverse-engineering.",
+        "Even generic reversal proxy hit10=0.4976 is coin-flip / sub-threshold.",
+        "Sheet: n=94 students, WR med=77.76%, ret med=157.76% \u2014 ALL selected winners, no losers published."
+      ]
+    },
+    {
+      "strategy": "DXY",
+      "verdict": "SKIP",
+      "sheet_n": 43,
+      "sheet_wr_med": 75.44,
+      "sheet_ret_med": 160.36,
+      "our_proxy": null,
+      "our_hit10": null,
+      "baseline_sma_hit10": 0.4945,
+      "already": "NO \u2014 external symbol correlation, not a price-pattern agent on trade pair",
+      "why": [
+        "Not a tradeable signal family on the pair; needs DXY feed + correlation model. Wrong abstraction for signal slots.",
+        "Sheet: n=43 students, WR med=75.44%, ret med=160.36% \u2014 ALL selected winners, no losers published."
+      ]
+    }
+  ],
+  "bottom_line": {
+    "add_now": [],
+    "maybe_research": [],
+    "skip": [
+      "Bollinger Bands",
+      "Fibonacci",
+      "Supply & Demand",
+      "Orderblocks",
+      "Reversal Method (M&W / H&S)",
+      "Head & Shoulders (named)",
+      "SID Method",
+      "DXY"
+    ],
+    "note": "Student sheet cannot be taken as evidence for signal slots. Our mission filter: raise clear% or protect breach 0 on prove_it. None of these marketing WRs prove that without closed rules + our scoreboard."
+  }
+}

@@ -150,7 +150,18 @@ def train_bc(
     seed: int = 42,
     warm_state: Optional[dict] = None,
     obs_dim: Optional[int] = None,
+    sample_weights: Optional[np.ndarray] = None,
+    kl_anchor_state: Optional[dict] = None,
+    kl_coef: float = 0.0,
 ) -> Tuple[Channel1Policy, List[float]]:
+    """BC clone. Optional per-sample weights (streak/gap rewards → importance).
+
+    sample_weights: shape (n,) from reward dials — MARK_WOULD_TAKE / soul-side
+    labels get higher weight so rewards/penalties cause the update.
+
+    kl_anchor_state + kl_coef: keep new policy close to a prior good embryo
+    so miss-day corrections do not destroy award-day behavior.
+    """
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = torch.device("cpu")
@@ -162,6 +173,14 @@ def train_bc(
             print("  warm-start: loaded prior embryo weights", flush=True)
         except Exception as e:
             print(f"  warm-start skip ({e})", flush=True)
+    anchor = None
+    if kl_anchor_state is not None and float(kl_coef) > 0.0:
+        anchor = Channel1Policy(obs_dim=dim, hidden=hidden).to(device)
+        anchor.load_state_dict(kl_anchor_state)
+        anchor.eval()
+        for p in anchor.parameters():
+            p.requires_grad_(False)
+        print(f"  KL anchor on (coef={kl_coef})", flush=True)
     # Slightly lower LR when warm-starting so we polish, not thrash
     use_lr = float(lr) * (0.35 if warm_state is not None else 1.0)
     opt = torch.optim.Adam(policy.parameters(), lr=use_lr)
@@ -178,9 +197,18 @@ def train_bc(
     # Keep directional at least as strong as HOLD for sparse entries
     w[ACTION_BUY] = float(max(w[ACTION_BUY], w[ACTION_HOLD] * 0.95))
     w[ACTION_SELL] = float(max(w[ACTION_SELL], w[ACTION_HOLD] * 0.95))
-    weight = torch.tensor(w, dtype=torch.float32, device=device)
+    class_weight = torch.tensor(w, dtype=torch.float32, device=device)
     Xt = torch.tensor(X, dtype=torch.float32, device=device)
     yt = torch.tensor(y, dtype=torch.long, device=device)
+    if sample_weights is not None:
+        sw = np.asarray(sample_weights, dtype=np.float32).reshape(-1)
+        if sw.shape[0] != n:
+            raise ValueError(f"sample_weights len {sw.shape[0]} != n {n}")
+        sw = np.maximum(sw, 1e-6)
+        sw = sw / float(sw.mean())
+        sw_t = torch.tensor(sw, dtype=torch.float32, device=device)
+    else:
+        sw_t = None
     for ep in range(epochs):
         perm = np.random.permutation(n)
         ep_loss = 0.0
@@ -188,7 +216,22 @@ def train_bc(
         for i in range(0, n, batch):
             idx = perm[i : i + batch]
             logits = policy(Xt[idx])
-            loss = F.cross_entropy(logits, yt[idx], weight=weight)
+            if sw_t is None:
+                loss = F.cross_entropy(logits, yt[idx], weight=class_weight)
+            else:
+                # per-sample CE × reward-derived weight × class weight via nll
+                logp = F.log_softmax(logits, dim=-1)
+                nll = F.nll_loss(logp, yt[idx], weight=class_weight, reduction="none")
+                loss = (nll * sw_t[idx]).mean()
+            if anchor is not None:
+                with torch.no_grad():
+                    a_logits = anchor(Xt[idx])
+                    a_logp = F.log_softmax(a_logits, dim=-1)
+                    a_p = a_logp.exp()
+                logp_new = F.log_softmax(logits, dim=-1)
+                # KL(anchor || new) keeps new near old good policy
+                kl = (a_p * (a_logp - logp_new)).sum(dim=-1).mean()
+                loss = loss + float(kl_coef) * kl
             opt.zero_grad()
             loss.backward()
             opt.step()

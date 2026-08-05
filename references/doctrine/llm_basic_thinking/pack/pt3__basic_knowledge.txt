@@ -1,0 +1,897 @@
+HOW A LLM SHOULD THINK.
+
+Doctrine answers (chat only)
+
+Grounded in how your lab actually encodes these ideas (MTF bias → LTF entry, dual-CCI / slingshot, envelope regime, BB trend vs RSI snap, ATR/risk QC). Where a named artifact isn’t in-repo (full 14+1 table), the process is stated objectively; fill names from your matrix when you lock it.
+
+───
+
+1. Law of Dominant Trends (Multi-Timeframe Alignment)
+
+Law: Higher timeframe defines allowed direction. Lower timeframe only times entry. LTF never votes on side against HTF.
+
+How the long-term tide controls short-term timing
+
+┌────────────────────────┬───────────────┬─────────────────────────────┬─────────────────┐
+│ Layer                  │ Job           │ May do                      │ May not do      │
+├────────────────────────┼───────────────┼─────────────────────────────┼─────────────────┤
+│ Dominant TF (H1 / M30  │ Permission /  │ Long-only, short-only, or   │ Trigger the     │
+│ / M5 envelope / M5     │ gravity       │ flat                        │ scalp           │
+│ EMA50)                 │               │                             │                 │
+├────────────────────────┼───────────────┼─────────────────────────────┼─────────────────┤
+│ Execution TF (M5 / M1) │ Slingshot     │ Enter on pullback / reclaim │ Reverse against │
+│                        │ timing        │ / break aligned with        │ permission      │
+│                        │               │ permission                  │                 │
+└────────────────────────┴───────────────┴─────────────────────────────┴─────────────────┘
+
+Exact control chain
+
+1. Classify tide: price vs HTF structure (e.g. above BB mid / above envelope of SMA(high)/SMA(low) / both CCI > SMA on HTF / close > HTF EMA).
+2. Hard filter: if tide = long → discard all short LTF setups; if short → discard all longs; if flat / conflict → no trade.
+3. Slingshot only with the tide: on LTF, wait for against-the-entry micro move that does not break HTF structure (pullback into ribbon, fast CCI below its SMA while slow still above, RSI into lower band while price still above HTF BB, etc.).
+4. Fire only when LTF resumes with HTF: reclaim / cross / close back outside envelope on the HTF side.
+5. Kill if tide breaks: HTF close wrong side of regime line → flatten; no averaging against gravity.
+
+One sentence:
+HTF is the binary gate on side; LTF only chooses when within that gate — pullback = load the slingshot; resume with HTF = release.
+
+Lab examples: dual CCI same side on second TF; BB on M5+M30+H1 then RSI entry on M5; shifted envelope M5 regime then M1 outside envelope; SNAP-8 M5 EMA50 then M1 8/21 + RSI.
+
+───
+
+2. Mechanics of Price Acceleration (Momentum vs Mean Reversion)
+
+Two different markets; two different rules.
+
+┌──────────────────┬──────────────┬─────────────────────────────────┬────────────────────┐
+│ State            │ What price   │ Objective signature             │ Correct play       │
+│                  │ is doing     │                                 │                    │
+├──────────────────┼──────────────┼─────────────────────────────────┼────────────────────┤
+│ Breather (mean   │ Extended →   │ Stretch vs mean without HTF     │ Fade the stretch   │
+│ reversion /      │ snaps toward │ regime flip; oscillator extreme │ or wait for        │
+│ equilibrium)     │ mean         │ then revert; bands wide then    │ pullback to mean   │
+│                  │              │ price back to mid               │ in trend then      │
+│                  │              │                                 │ rejoin             │
+├──────────────────┼──────────────┼─────────────────────────────────┼────────────────────┤
+│ Launch (momentum │ Leaves mean  │ Close outside HTF+LTF           │ Do not fade; ride  │
+│ / conservation)  │ and keeps    │ structure; successive closes on │ / add only with    │
+│                  │ expanding    │ same side of envelope; dual     │ structure          │
+│                  │              │ momentum (fast and slow) same   │                    │
+│                  │              │ side of threshold; ATR rising   │                    │
+│                  │              │ with direction                  │                    │
+└──────────────────┴──────────────┴─────────────────────────────────┴────────────────────┘
+
+Objective separation (measurable)
+
+1. Location vs mean: distance to SMA/EMA/VWAP/BB mid in ATR units.
+   • Snap-back: stretch high then closes reverse toward mean while HTF regime unchanged.
+   • Acceleration: stretch high and new closes make new extremes away from mean.
+
+2. Dual-speed momentum:
+   • Fast (CCI30 / RSI7 / EMA8): velocity of the last move.
+   • Slow (CCI100 / RSI slow / EMA21 / BB100): inertia.
+   • Breather: slow still with tide; fast dips against tide (slingshot).
+   • Launch: fast and slow both through thresholds same side and stay (not a one-bar spike).
+
+3. Band / envelope test:
+   • Mean reversion: pierce outer band → reject back inside.
+   • Acceleration: close beyond full envelope (high and low SMA) on HTF and LTF (your shifted-envelope king logic).
+
+4. Volatility path: ATR expanding with directional closes → momentum regime; ATR expanding with two-way wicks and mean re-crosses → chop / failed launch.
+
+Rule:
+If slow structure is unbroken and only fast snapped → pullback toolkit.
+If slow structure breaks and confirms on HTF → momentum toolkit; mean-reversion fades are forbidden.
+
+───
+
+3. Environmental Survival (Regime Detection)
+
+Mandate: Environment is a state machine. Strategy set is a function of state. Wrong playbook in new state = account damage.
+
+Strict process (objective)
+
+1. Measure, don’t feel — fixed features every bar/session:
+   • Direction: HTF slope / side of mid / envelope side
+   • Range vs trend: ADX or |close−mid|/ATR, HH/HL vs LH/LL structure
+   • Volatility: ATR%ile vs lookback
+   • Efficiency: net move / path length (choppy vs clean)
+   • Session / news flags if in rules
+
+2. Map to discrete regime — bull / bear / chop (and your finer 14+1 labels when codified: e.g. strong trend, weak trend, range, breakout, post-news, dead session, etc.).
+   • One active regime id at a time; hysteresis so one bar doesn’t flip state.
+
+3. Confirm shift — regime change only when:
+   • HTF structure flips and
+   • Hold for N HTF bars or a close beyond invalidation level and
+   • Optional: volatility regime change (ATR band jump).
+
+4. Instant rewrite (hard switches)
+
+┌─────────────────────┬──────────────────────────────────────────────────────────────────┐
+│ New regime          │ System must                                                      │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Bull trend          │ Long-only (or long-bias) playbooks; disable short fades against  │
+│                     │ tide                                                             │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Bear trend          │ Short-only mirror                                                │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Chop / range        │ Mean-reversion or flat; disable breakout chase / trend pullback  │
+│                     │ size                                                             │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Vol shock           │ Widen stops or stand down; cut size; no new risk until ATR       │
+│                     │ normalizes                                                       │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Undefined /         │ No trade (your flat HTF = 0)                                     │
+│ conflict            │                                                                  │
+└─────────────────────┴──────────────────────────────────────────────────────────────────┘
+
+5. Account rule: open positions that violate the new regime are reduced or closed on the shift signal — environment outranks open thesis.
+
+Note: Full named 14+1 table is not loaded as a single codified file in the lab outputs I searched; the survival law is: detect state → swap logic → if unknown, size = 0.
+
+───
+
+4. Capital Preservation Mandate (Risk & Sizing)
+
+Highest mandate: never breach max daily loss (and max DD). Edge is optional; survival is not.
+
+Math (per trade)
+
+  Risk$ = E × r_(base) × m_(conf) × m_(regime)
+
+  Size = Risk$/(StopDistance in $ per unit)
+
+• E = equity (or challenge balance)
+• r_(base) = base risk fraction (e.g. 0.25–0.5% scalp; challenge often ≤0.5–1% hard cap)
+• m_(conf) = confidence multiplier ≤ 1…m_(max)
+• m_(regime) = environment multiplier (chop ≪ trend)
+
+Scale up only when all true (high confidence)
+
+• HTF + LTF aligned (Law 1)
+• Momentum/launch or clean pullback signature (Law 2) matches playbook
+• Regime allows that playbook (Law 3)
+• Spread/ATR acceptable
+• Daily loss budget remaining
+
+Then m_(conf) may rise (e.g. 1.0 → 1.25 → 1.5) only inside a hard ceiling so
+Risk$ ≤ R_(max_trade) and projected loss if SL hit still fits daily budget.
+
+Scale down / zero under uncertainty
+
+• HTF flat or conflict → m = 0 or min micro
+• Chop regime → m ≪ 1 or flat
+• After loss streak / approaching daily cap → m collapses
+
+Daily loss hard gate
+
+  RemainingDaily = L_(day) − RealizedLoss_(today) − OpenRisk
+
+• New trade only if Risk$ ≤ RemainingDaily
+• If RealizedLoss ≥ L_(day) → flat rest of day (no “get it back”)
+• Open risk counts: no stacking that could breach L_(day) if all stops hit
+
+Prop-style: max daily, max total DD, and often max per-trade are hard stops on the system, not guidelines. Size is the only continuous control that guarantees those bounds.
+
+───
+
+5. Speed Versus Weight (Velocity and Force)
+
+Split the signal into two clocks.
+
+┌──────────────┬───────────────────────┬───────────────────────────┬─────────────────────┐
+│ Concept      │ Meaning               │ Typical measure           │ Role                │
+├──────────────┼───────────────────────┼───────────────────────────┼─────────────────────┤
+│ Velocity (   │ Short-term, erratic   │ Fast CCI/RSI/EMA; Δprice  │ Timing, pullback    │
+│ speed)       │ rate of change        │ / few bars; LTF only      │ depth, entry        │
+│              │                       │                           │ trigger             │
+├──────────────┼───────────────────────┼───────────────────────────┼─────────────────────┤
+│ Force /      │ Heavy, slower         │ Slow CCI/SMA; HTF         │ Direction           │
+│ weight (     │ structure that “      │ envelope; BB(100); multi  │ permission, trade   │
+│ mass)        │ drives” path          │ -TF same side             │ validity            │
+└──────────────┴───────────────────────┴───────────────────────────┴─────────────────────┘
+
+Mathematical separation
+
+1. Two periods on same series:
+   • vₜ = f(price; P_(fast)) e.g. CCI(30), RSI(7), EMA(8)
+   • Fₜ = f(price; P_(slow)) e.g. CCI(100), EMA(21)/BB(100), HTF SMA envelope
+
+2. Two timeframes:
+   • Velocity lives on LTF
+   • Force is HTF state projected onto LTF (align HTF bar → N LTF bars) — weight is not re-estimated every M1 tick as if it were M1 noise
+
+3. Shifted / envelope structure (your king family):
+   • Force ≈ price vs SMA(high) and SMA(low) on M5 (must clear both → full body of mass outside band)
+   • Speed ≈ same test on M1 for trigger
+   • Implementation note: lab uses trailing SMA(period), not future-leaking plot shift
+
+4. Slingshot identity:
+   • Force with tide (F bull)
+   • Velocity temporarily against (v dips) → breath
+   • Velocity re-aligns with force → entry
+   • If force flips, velocity signals are invalid regardless of how fast they look
+
+One sentence:
+Velocity answers “how fast is this bar’s move?”; force answers “which way is the market’s mass leaning?” — only trade when velocity is used inside force, never when fast noise is treated as the trend.
+
+───
+
+Stack map (how the five laws lock)
+
+FORCE (HTF) → REGIME → allowed playbook + size multiplier
+     ↓
+VELOCITY (LTF) → pullback vs launch classification
+     ↓
+ENTRY only if side(force) == side(setup) and Risk$ ≤ RemainingDaily
+     ↓
+Regime shift → rewrite rules / flatten / m→0
+
+That is the full exam set: gravity filters slingshots; measure breath vs launch; state machine swaps logic; size is the daily-loss guarantee; fast indicators never outrank slow mass.
+
+───
+
+Stack map (how the five laws lock)
+
+FORCE (HTF) → REGIME → allowed playbook + size multiplier
+     ↓
+VELOCITY (LTF) → pullback vs launch classification
+     ↓
+ENTRY only if side(force) == side(setup) and Risk$ ≤ RemainingDaily
+     ↓
+Regime shift → rewrite rules / flatten / m→0
+
+That is the full exam set: gravity filters slingshots; measure breath vs launch; state machine swaps logic; size is the daily-loss guarantee; fast indicators never outrank slow mass.
+
+
+part 2.
+Mechanical application answers (physics frame → math)
+
+Notation used throughout:
+
+• Mass / gravity = slow structure on higher TF (permission)
+• Velocity = fast oscillator / LTF path
+• Tension = intentional LTF contradiction while mass holds
+• Collapse = mass itself loses side
+
+───
+
+1. Time-Displaced Bounding Vectors (shifted SMA envelopes)
+
+Construction of the mass tunnel
+
+On each timeframe T ∈ {M5_(macro), M1_(micro)}:
+
+  U_T(t) = SMA(H_T; n)
+  L_T(t) = SMA(L_T; n)
+
+with n ∈ {3,4,…} (catalog default 4; crowned mutants often 2–4).
+(U_T, L_T) is the bounding vector pair — a tunnel of extremes, not a mid-line.
+
+Doctrine shift (library intent): plot/compute as
+U^(shift)(t) = U(t−s) or forward-display +4/+8 so the tunnel sits ahead of current price visually — a displaced “rail.”
+
+Lab code honesty: MarkOS currently uses trailing SMA of highs/lows without future-leak plot shift (signal_shifted_envelope). Physics below is the same topology; only the x-offset differs.
+
+Macro mass state (gravity)
+
+  G = +1 iff C_(M5) > U_(M5) ∧ C_(M5) > L_(M5)
+  G = −1 iff C_(M5) < U_(M5) ∧ C_(M5) < L_(M5)
+  G = 0 otherwise (inside or mixed tunnel)
+
+Price must clear both rails. That is full-body mass outside the tunnel, not a wick tickle.
+
+Project gravity onto micro: for each M5 bar, repeat G across its 5 M1 children.
+
+Spatial predicates on micro close C_(M1)
+
+┌────────────────┬──────────────────────────────────────────────┬────────────────────────┐
+│ Spatial        │ Condition                                    │ Physics read           │
+│ relation       │                                              │                        │
+├────────────────┼──────────────────────────────────────────────┼────────────────────────┤
+│ Inside tunnel  │ L_(M1) ≤ C_(M1) ≤ U_(M1) (or not fully       │ Compressed / reloading │
+│                │ outside both)                                │                        │
+├────────────────┼──────────────────────────────────────────────┼────────────────────────┤
+│ Bull break     │ C_(M1) > U_(M1) ∧ C_(M1) > L_(M1)            │ Micro expansion with   │
+│                │                                              │ mass                   │
+├────────────────┼──────────────────────────────────────────────┼────────────────────────┤
+│ Bear break     │ C_(M1) < U_(M1) ∧ C_(M1) < L_(M1)            │ Micro expansion with   │
+│                │                                              │ mass                   │
+└────────────────┴──────────────────────────────────────────────┴────────────────────────┘
+
+Differentiation: slingshot reload vs regime collapse
+
+High-probability slingshot reload (permission preserved, micro loads):
+
+  G = +1 ∧ (C_(M1) fails full bull break OR dips toward L_(M1)) ∧ G still +1 on next HTF update
+
+• Macro still above entire mass tunnel → gravity intact.
+• Micro temporarily not confirming full break (or pulls into rails) → reload, not flip.
+• Release when micro re-achieves full bull break while G=+1:
+
+  BUY ⟺ G=+1 ∧ C_(M1)>U_(M1) ∧ C_(M1)>L_(M1)
+
+(symmetric for shorts).
+
+Structural regime collapse (permission revoked):
+
+  G: +1 → 0 or −1
+
+i.e. macro close fails C_(M5)>U_(M5) ∧ C_(M5)>L_(M5) — re-enters or flips the mass tunnel.
+
+┌──────────────┬────────────┬──────────────────────────┬─────────────────────────────────┐
+│ Event        │ Macro      │ Micro close              │ Action                          │
+│              │ tunnel     │                          │                                 │
+├──────────────┼────────────┼──────────────────────────┼─────────────────────────────────┤
+│ Slingshot    │ G fixed    │ Pulls in / loses full    │ Wait → fire on micro re-break   │
+│ reload       │            │ break then reclaims      │ with G                          │
+├──────────────┼────────────┼──────────────────────────┼─────────────────────────────────┤
+│ Regime       │ G flips or │ Any                      │ No trade / flatten — micro “    │
+│ collapse     │ zeros      │                          │ break” is noise without mass    │
+└──────────────┴────────────┴──────────────────────────┴─────────────────────────────────┘
+
+One line:
+Macro tunnel membership is mass; micro tunnel membership is velocity phase. Same-side full exits on both = fire. Macro loses the tunnel = collapse. Micro alone losing then regaining the tunnel under fixed G = slingshot.
+
+───
+
+2. Dual-Frequency Kinetic Isolation (CCI 30 / CCI 100 vs their MAs)
+
+Series
+
+On each TF, typical price TP = (H+L+C)/3:
+
+  CCI_P(t) = (TP(t) − T̄P̄_P)/(0.015 ⋅ MD_P)
+
+• Velocity: V = CCI₃₀
+• Inertia: I = CCI₁₀₀
+
+Kinetic baselines (SMA on the CCI series, length k, default 2):
+
+  V̄ = SMA(V; k),  Ī = SMA(I; k)
+
+Macro authorization (both frequencies with mass)
+
+  G = +1 ⟺ V_(M5) > V̄_(M5) ∧ I_(M5) > Ī_(M5)
+
+(and mirror for −1).
+Inertia and velocity both above their own means on HTF = long-term force + local kinetic still bullish.
+
+Exact slingshot topology (LTF) — maximum tension, not false reversal
+
+Long release authorized only when:
+
+  underbraceG=+1_(macro mass) ∧ underbraceI_(M1) > Ī_(M1)_(inertia still long) ∧ underbraceV_(M1) < V̄_(M1)_(velocity dipped against)
+
+Short:
+
+  G=−1 ∧ I_(M1) < Ī_(M1) ∧ V_(M1) > V̄_(M1)
+
+Why this is tension, not reversal
+
+┌───────────┬───────────────┬────────────────────────────────────────┐
+│ Component │ State         │ Meaning                                │
+├───────────┼───────────────┼────────────────────────────────────────┤
+│ I vs Ī    │ With trend    │ Slow mass unbroken → not a regime flip │
+├───────────┼───────────────┼────────────────────────────────────────┤
+│ V vs V̄    │ Against trend │ Fast kinetic pullback = loaded spring  │
+├───────────┼───────────────┼────────────────────────────────────────┤
+│ G         │ Same side     │ HTF dual-kinetic still owns direction  │
+└───────────┴───────────────┴────────────────────────────────────────┘
+
+False reversal (invalid):
+
+• I also crosses against Ī on LTF or G flips → inertia broke → not a slingshot, it's a failure.
+• Dual threshold law variant (both CCI > +100): that is co-aligned launch, not slingshot; slingshot requires the fast–slow disagreement relative to their MAs.
+
+Topological signature (long):
+HTF: V,I both above their MAs.
+LTF: I above MA, V below MA.
+That single inequality pair is the max-tension state. Release is that topology becoming true (or held) under G=+1 — velocity reloads under intact inertia.
+
+───
+
+3. Volatility Compression as Phase Boundary (fractional Bollinger)
+
+Fractional boundary
+
+  m = SMA(C; N), N=100
+  σ = stdev(C; N)
+  U = m + d⋅σ, L = m − d⋅σ, d = 0.5
+
+d=0.5 is ultra-tight vs classic d=2. The “tube” is a phase boundary: small distance from mean counts as escape.
+
+Escape velocity (redefined)
+
+Under d=2, escape = rare 2σ event.
+Under d=0.5:
+
+  escape velocity achieved ⟺ C > U_(0.5) = m + 0.5σ
+
+(or C < L_(0.5)).
+So “escape” means: persistent mild expansion beyond a thin shell, not a statistical outlier.
+
+Momentum conservation vs mean reversion (breach conditions)
+
+Law baseline (Strategy 2 context): multi-TF closes outside fractional shell:
+
+  C_(M5)>U^((0.5))_(M5) ∧ C_(M30)>U^((0.5))_(M30) ∧ C_(H1)>U^((0.5))_(H1)
+
+→ pure momentum / gravity elevated (mass above compressed ceiling on all clocks).
+
+Collapse of gravity (momentum dies):
+
+  C falls back through U_(0.5) toward m (re-enters tube)
+
+→ conservation broken; mean-reversion / no-trend tools only.
+
+Dual-band refinement (library dual_bb_trend_reversion):
+
+• Wide shell: N_w=100, d=0.5
+• Tight shell: Nₜ=10, d=0.5
+
+Macro momentum:
+
+  C₅ > U_w ∧ C₅ > Uₜ
+
+Micro pullback without losing wide gravity:
+
+  C₁ > L_w ∧ C₁ < Uₜ
+
+Still above wide floor, back inside tight shell = breath inside momentum, not phase death.
+
+Phase transition table
+
+┌──────────────────────────────────────────────────┬──────────────────────────────┐
+│ Condition                                        │ State                        │
+├──────────────────────────────────────────────────┼──────────────────────────────┤
+│ Continuous multi-TF closes outside U_(0.5)       │ Momentum conservation        │
+├──────────────────────────────────────────────────┼──────────────────────────────┤
+│ Close returns inside [L_(0.5), U_(0.5)] on macro │ Gravity collapse / MR regime │
+├──────────────────────────────────────────────────┼──────────────────────────────┤
+│ Outside wide, inside tight (LTF)                 │ Tension reload inside trend  │
+└──────────────────────────────────────────────────┴──────────────────────────────┘
+
+───
+
+4. Vector Efficiency and Entropy Masking (chop kill-switch)
+
+Premise: G aligned is necessary, not sufficient. High-entropy micro path produces false velocity triggers.
+
+Efficiency ratio (Kaufman-style; already in lab feature code)
+
+Over window W (e.g. 10–14 bars on LTF):
+
+  E = (lvert Cₜ − C_(t−W)rvert)/(∑ᵢ₌₀^(W−1)lvert Cₜ₋ᵢ−Cₜ₋ᵢ₋₁rvert)
+
+• E → 1: straight vector (low entropy)
+• E → 0: path cancels (high entropy / chop)
+
+Mask (example hard gate used in doctrine tests):
+
+  allow triggers ⟺ E ≥ θ_E,  θ_E ≈ 0.35
+
+else force signal = 0 even if oscillators scream.
+
+Directional dominance (ADX-class)
+
+  allow ⟺ ADX(P) > θ_(ADX),  θ_(ADX) ≈ 25
+
+ADX is smoothed |+DI − −DI| dominance — low ADX = no directional mass in the DI field.
+
+Combined paralysis rule
+
+  Executable = [G ≠ 0] ∧ [E ≥ 0.35 ∨ ADX>25] ∧ [setup topology]
+
+Practical AND of efficiency and ADX is stricter; OR is looser. Prop-safe default: AND, or ADX primary + E secondary.
+
+What gets masked: any LTF momentum/slingshot predicate (CCI crosses, micro envelope breaks, RSI snaps) while entropy high — those are false-positive velocity under broken local vector efficiency.
+
+Note: core hunter entries do not all hard-code ADX yet; this gate is the correct mechanical mask when micro-entropy is the failure mode.
+
+───
+
+5. Counter-Vector Tension Protocol (HTF elevated / LTF crash into lower bands)
+
+Macro mass elevated (no fracture)
+
+Price gravity on higher TFs (fractional BB law):
+
+  C_(HTF) > U_(HTF)^((100, 0.5))   on required set (M5 ∧ M30 ∧ H1)
+
+Macro is above the upper volatility shell → dominant gravitational long.
+(Short: all below lower shell.)
+
+Micro counter-vector (explicit contradiction = load)
+
+Entry clock (M5 in law; RSI as kinetic proxy):
+
+  R = RSI(C; 14)
+  (U_R, m_R, L_R) = BB(R; 10, 1.0)
+
+Long pullback tension (max kinetic load without macro fracture):
+
+  underbraceC_(HTF) > U_(price)^((0.5))_(macro mass elevated) ∧ underbraceR < L_R_(micro kinetic crashed into its own lower band)
+
+Sell mirror: macro below lower price BB and R > U_R.
+
+Why this is setup, not failure
+
+┌────────────────────────────────────────┬─────────────────────┬─────────────────────────┐
+│ Layer                                  │ Location            │ Integrity               │
+├────────────────────────────────────────┼─────────────────────┼─────────────────────────┤
+│ Macro price                            │ Above upper         │ Structure not fractured │
+│                                        │ fractional BB       │                         │
+├────────────────────────────────────────┼─────────────────────┼─────────────────────────┤
+│ Micro RSI (or LTF price vs its lower   │ At/below lower band │ Local counter-vector =  │
+│ BB in dual-BB form)                    │                     │ tension                 │
+└────────────────────────────────────────┴─────────────────────┴─────────────────────────┘
+
+Failure (fracture), not pullback:
+
+  C_(HTF) loses U_(price) (closes back inside / through mid)
+
+while LTF is “oversold” → that is regime break, not load.
+
+Dual-BB price-only form of same law
+
+  G=+1: C₅ > U_w ∧ C₅ > Uₜ
+  tension long: C₁ > L_w ∧ C₁ < Uₜ
+
+Micro has counter-moved into the tight band while still above the wide floor that defines mass.
+
+Exact cross-TF condition (canonical long)
+
+  ⋀_(τ ∈ {M5,M30,H1}) (C_τ > U_τ^((100,0.5))) ∧ (RSI_(M5) < L^((10,1.0))_(RSI))
+
+That is maximum tension: macro elevated on price shells; micro indicator (or LTF price) explicitly opposes into its lower shell; macro shell still intact → slingshot armed. Entry on that state (or reclaim from it) is the protocol; entry on macro shell loss is forbidden.
+
+───
+
+Master coupling (all five)
+
+[1] Mass tunnel G from displaced/trailing extreme SMAs
+        ↓ permission
+[3] Fractional σ-shells: outside = momentum phase; re-entry = phase death
+        ↓
+[2] Dual CCI: I with trend, V against MA = kinetic tension
+        or
+[5] HTF price above U_0.5, LTF RSI < its lower BB = counter-vector load
+        ↓
+[4] E ≥ 0.35 and/or ADX > 25 else MASK (entropy veto)
+        ↓
+RELEASE only if G still holds after load
+
+Collapse anywhere in mass (1/3) voids tension (2/5).
+Entropy (4) voids release even when tension looks perfect.
+
+part 3
+Final five — invented protocols (physics engine, new indicator sets)
+
+FA ADK constraint kept: HTF mass = permission · LTF tension = load · release only if mass unbroken · paper / dual-metric proof later.
+No SMA-envelope / dual-CCI / fractional-BB / ADX / Kaufman-ER as primary tools below.
+
+───
+
+1. Volume-Gravity Slingshot
+Name: VOG-ALLI-DM (Volume Gravity · Alligator · DeMarker)
+
+Roles
+
+┌───────────────────┬─────────────────────┬───────────┬──────────────────────────────────┐
+│ Physics           │ Indicator           │ TF        │ Formula core                     │
+├───────────────────┼─────────────────────┼───────────┼──────────────────────────────────┤
+│ Mass / Gravity    │ OBV + MFI +         │ M5 (      │ Volume structure + BW jaw/teeth  │
+│                   │ Alligator           │ macro)    │ /lips                            │
+├───────────────────┼─────────────────────┼───────────┼──────────────────────────────────┤
+│ Velocity /        │ DeMarker            │ M1        │ Local demand/supply pressure     │
+│ Tension           │                     │           │                                  │
+├───────────────────┼─────────────────────┼───────────┼──────────────────────────────────┤
+│ Confirm release   │ RVI (secondary)     │ M1        │ Optional co-release filter       │
+└───────────────────┴─────────────────────┴───────────┴──────────────────────────────────┘
+
+Mass construction (volume-defined gravity)
+
+OBV mass slope (M5):
+  OBVₜ = OBVₜ₋₁ + sign(Cₜ−Cₜ₋₁)⋅ Vₜ
+  S_(OBV) = SMA(OBV, 13) − SMA(OBV, 34)
+
+MFI mass (M5, period 14): money-flow “weight”
+  MFI = 100 − 100/(1 + MoneyFlowRatio)
+
+Alligator mass rails (M5, standard BW):
+  Jaw = SMMA(HL2, 13) shifted 8
+  Teeth = SMMA(HL2, 8) shifted 5
+  Lips = SMMA(HL2, 5) shifted 3
+
+Gravity state G (long only example):
+  G = +1 ⟺ S_(OBV) > 0
+  ∧ MFI > 50
+  ∧ C > Jaw > Teeth > Lips (stacked bull Alligator)
+  ∧ Lips−Jaw > 0 expanding or non-collapsing
+
+  G = −1 ⟺ S_(OBV)<0 ∧ MFI<50 ∧ C < Jaw < Teeth < Lips
+
+  G = 0 otherwise (volume mass absent or Alligator sleeping/mouth closed)
+
+Volume is mass: price tunnels not required. No OBV slope + MFI side + open Alligator → no permission.
+
+Localized tension (DeMarker, M1)
+
+  DeMaxₜ = max(Hₜ − Hₜ₋₁, 0), DeMinₜ = max(Lₜ₋₁ − Lₜ, 0)
+  DeM = SMA(DeMax,14)/(SMA(DeMax,14)+SMA(DeMin,14))
+
+Baseline: D̄ēM̄ = SMA(DeM, 5).
+
+Load-and-release sequence
+
+LOAD (max tension, long):
+  G=+1 ∧ DeM < 0.30 ∧ DeM < D̄ēM̄
+Micro demand collapsed (DeMarker oversold) while volume gravity still bull.
+
+RELEASE (fire long):
+  G=+1 ∧ DeM_(prev) ≤ 0.30 ∧ DeM > D̄ēM̄ ∧ DeM > 0.30
+Optional RVI co-release: RVI > Signal_(RVI) same bar.
+
+Invalid (false reverse):
+G → 0/−1 while DeM is low → mass fracture, not slingshot. Flatten / no entry.
+
+Short: mirror (DeM > 0.70 load; cross back below MA + 0.70 release; G=−1).
+
+Lock summary: Alligator+OBV+MFI = who owns the market by volume/structure; DeMarker dip under gravity = coil; DeM reclaim = release.
+
+───
+
+2. Ichimoku / Envelope Phase Transition
+Name: ICHI-ENV Phase Gate
+
+Definitions (per TF)
+
+Ichimoku (standard):
+  Tenkan = ½(max₉H + min₉L)
+  Kijun = ½(max₂₆H + min₂₆L)
+  SpanA = ½(Tenkan+Kijun) shifted +26
+  SpanB = ½(max₅₂H + min₅₂L) shifted +26
+  CloudTop = max(SpanA,SpanB), CloudBot = min(SpanA,SpanB)
+
+Envelope (period N=20, pct p=0.5%):
+  U_(env) = SMA(C,N) (1+p),  L_(env) = SMA(C,N) (1−p)
+
+Escape velocity (replaces fractional BB)
+
+On TF τ:
+  EV_τ = +1 ⟺ C_τ > CloudTop_τ ∧ C_τ > U_(env,τ) ∧ Tenkan_τ > Kijun_τ
+  EV_τ = −1 ⟺ C_τ < CloudBot_τ ∧ C_τ < L_(env,τ) ∧ Tenkan_τ < Kijun_τ
+
+Escape = price clears both the displaced equilibrium slab (cloud) and the percent envelope shell, with TK still aligned. Cloud alone or envelope alone is not enough.
+
+Momentum conservation vs breather
+
+┌───────────────────┬───────────────────────────────────────────────┬────────────────────┐
+│ State             │ Math                                          │ Physics            │
+├───────────────────┼───────────────────────────────────────────────┼────────────────────┤
+│ Momentum          │ EV_(H1)=EV_(M15)=EV_(M5)=s∈{+1,−1} and C      │ Phase lock: multi- │
+│ conservation      │ stays on that side of cloud for ≥ k HTF bars  │ clock escape held  │
+│                   │ (e.g. k=3)                                    │                    │
+├───────────────────┼───────────────────────────────────────────────┼────────────────────┤
+│ Breather (MR /    │ EV_(HTF)=s but L_(env) ≤ C_(LTF) ≤ U_(env)    │ Local shell re-    │
+│ coil allowed)     │ while C_(LTF) still outside cloud on side s ( │ entry, cloud mass  │
+│                   │ or above cloud for long)                      │ intact             │
+├───────────────────┼───────────────────────────────────────────────┼────────────────────┤
+│ Phase death       │ C_(HTF) re-enters cloud or TK flips against s │ Gravity lost       │
+│                   │ or EV_(HTF)=0                                 │                    │
+└───────────────────┴───────────────────────────────────────────────┴────────────────────┘
+
+Exact cross-TF phase-transition signature (bull launch)
+
+  EV_(H1)=+1 ∧ EV_(M15)=+1 ∧ EV_(M5)=+1
+  ∧ SpanA_(H1) > SpanB_(H1) (bull cloud color)
+  ∧ dist(C_(M5), CloudTop_(M5)) / ATR_(M5) non-decreasing over last m bars
+
+Transition bar (breather → launch): first M5 bar where EV_(M5) flips 0→ +1 while EV_(H1)=EV_(M15)=+1 already true.
+
+Transition bar (launch → death): first HTF close with C < CloudTop (bull) after a conservation streak — all velocity strategies mask.
+
+───
+
+3. Multi-Vector Tension Trap
+Name: FI-STO Dual Spring
+
+Macro floor (Force Index = structural inertia proxy)
+
+Force Index (Elder), period 13 on M5:
+  FIₜ = (Cₜ − Cₜ₋₁)⋅ Vₜ,  FI₁₃ = EMA(FI, 13)
+
+Macro floor holds long:
+  F = +1 ⟺ FI₁₃ > 0 ∧ EMA(FI₁₃, 3) > 0 ∧ C_(M5) > EMA(C_(M5), 34)
+
+FI₁₃>0 = volume-backed thrust still positive = floor.
+EMA34 = simple structural shelf (not BB/SMA-envelope tunnel).
+
+Micro contradiction (Stochastic = coiled kinetic)
+
+On M1, Stochastic (14,3,3):
+  %K = 100⋅(C−min₁₄L)/(max₁₄H−min₁₄L),  %D = SMA(%K,3)
+
+Max tension long (coiled spring):
+  F=+1 ∧ %K < 20 ∧ %K < %D ∧ FI₂ < 0
+
+where FI₂=EMA(FI,2) on M1 (fast force negative = local selling into macro bid).
+
+┌────────────────────┬───────────────────────┬──────────────────────────────────────┐
+│ Layer              │ Vector                │ State at max tension                 │
+├────────────────────┼───────────────────────┼──────────────────────────────────────┤
+│ Macro FI13 + EMA34 │ Inertia / floor       │ Positive FI, price above EMA34       │
+├────────────────────┼───────────────────────┼──────────────────────────────────────┤
+│ Micro Stoch        │ Kinetic contradiction │ Oversold, %K under %D                │
+├────────────────────┼───────────────────────┼──────────────────────────────────────┤
+│ Micro FI2          │ Local force against   │ Negative (volume selling into floor) │
+└────────────────────┴───────────────────────┴──────────────────────────────────────┘
+
+Release
+  F=+1 ∧ %K_(prev)<20 ∧ %K crosses above %D ∧ FI₂ crosses > 0
+
+Fracture (abort): FI₁₃ ≤ 0 or C closes below EMA34 → floor broken; spring was collapse, not trap.
+
+Short: F=−1 (FI13<0, price < EMA34); load with %K>80 and %K>%D and FI2>0; release on %K cross down through %D + FI2 cross <0.
+
+───
+
+4. Universal Mass/Velocity Normalization Rule
+Name: MV-Class Ω (for RL indicator swap)
+
+Any MT5 indicator I is a map I: ℋ_T → ℝᵈ on timeframe T. Classify by what it is allowed to gate, not by vendor name.
+
+Step A — Compute three scalar properties on a rolling window
+
+1. Persistence π(I)
+   Autocorrelation of I (or of sign(I−I₀)) at lag ℓ proportional to HTF bar length:
+
+  π(I) = corr(Iₜ, I_(t−ℓ))
+
+2. Update frequency ν(I)
+   Mean absolute change rate normalized by ATR or by σ(I):
+
+  ν(I) = (mean|Iₜ − Iₜ₋₁|)/(stdev(I)+ε)
+
+3. Structural coupling κ(I)
+   Absolute correlation with a pure structure proxy S (e.g. sign(C−SMA₂₀₀) or cloud side) on HTF:
+
+  κ(I) = |corr(I, S)|
+
+Step B — Hard class assignment
+
+  𝐌𝐀𝐒𝐒 ⟺ π(I) ≥ π₀ ∧ ν(I) ≤ ν₀ ∧ κ(I) ≥ κ₀
+  𝐕𝐄𝐋𝐎𝐂𝐈𝐓𝐘 ⟺ π(I) < π₀ ∨ ν(I) > ν₀
+  𝐇𝐘𝐁𝐑𝐈𝐃 ⟺ borderline; may only vote as Mass if used on HTF with hysteresis
+
+Default thresholds (start locks): π₀=0.55, ν₀=0.35, κ₀=0.40 — calibrate once offline; freeze for live paper.
+
+Step C — Role wiring (universal)
+
+┌──────────┬────────────────────────────────────────────┬────────────────────────────────┐
+│ Class    │ Allowed role                               │ Forbidden role                 │
+├──────────┼────────────────────────────────────────────┼────────────────────────────────┤
+│ MASS     │ Define G ∈ {−1,0,+1} on HTF only; size /   │ Solo M1 entry trigger          │
+│          │ permission                                 │                                │
+├──────────┼────────────────────────────────────────────┼────────────────────────────────┤
+│ VELOCITY │ Load/release on LTF under fixed G          │ Override G; define daily       │
+│          │                                            │ regime alone                   │
+├──────────┼────────────────────────────────────────────┼────────────────────────────────┤
+│ HYBRID   │ Mass only if π passes after SMA smooth on  │ Raw LTF fire                   │
+│          │ HTF                                        │                                │
+└──────────┴────────────────────────────────────────────┴────────────────────────────────┘
+
+Step D — Instant bipolarization of any continuous I
+
+Map to side for Mass:
+  g(I) = sign(I − ref(I))
+ref = 0 for centered oscillators (Bulls/Bears, Force), midline for banded (Stoch 50, %R -50), or SMA(I) for drifting (OBV, SAR distance).
+
+Map to tension for Velocity:
+  Load long ⟺ G=+1 ∧ I < L_(band)(I)
+  Release long ⟺ G=+1 ∧ I crosses up through ref(I) or signal line
+
+Step E — RL swap legality
+
+Agent may replace I_(mass) with I′_(mass) iff 𝐂𝐥𝐚𝐬𝐬(I′)=𝐌𝐀𝐒𝐒 and new G′ agrees with old G on ≥ ρ of last HTF bars (e.g. ρ=0.7) during shadow eval — else reject swap.
+Velocity swaps free if class is VELOCITY and release rate stays within QC bounds.
+
+Examples under Ω
+
+┌───────────────────────────────────────────┬─────────────────────┬──────────────────────┐
+│ Indicator                                 │ Typical class       │ Why                  │
+├───────────────────────────────────────────┼─────────────────────┼──────────────────────┤
+│ PSAR, ADX+DI side, Alligator, Ichimoku    │ MASS                │ High persistence /   │
+│ cloud side, Envelopes side                │                     │ structure            │
+├───────────────────────────────────────────┼─────────────────────┼──────────────────────┤
+│ Williams %R, Stoch, Bulls/Bears Power,    │ VELOCITY            │ High ν, mean-        │
+│ DeM, RVI, CCI-fast                        │                     │ reverting            │
+├───────────────────────────────────────────┼─────────────────────┼──────────────────────┤
+│ MFI, FI13                                 │ HYBRID→MASS if HTF- │ Volume-weight with   │
+│                                           │ smoothed            │ medium π             │
+└───────────────────────────────────────────┴─────────────────────┴──────────────────────┘
+
+One rule sentence for the bot:
+If it changes slowly and locks to multi-bar structure → Gravity; if it oscillates and tags extremes → Tension; only Gravity may grant permission; only Tension may trigger under that permission.
+
+───
+
+5. Zero-Gravity Entropy Protocol
+Name: AC-σ Paralysis Gate (no ADX, no Kaufman ER)
+
+Building blocks (M5 primary, confirm M1)
+
+Accelerator Oscillator (Williams):
+  AO = SMA(HL2,5) − SMA(HL2,34),  AC = AO − SMA(AO,5)
+
+Momentum:
+  Mₙ = Cₜ − Cₜ₋ₙ,  n∈{5,10}
+
+Deviation field:
+  σₙ = stdev(C, n),  n∈{10,20}
+  r_σ = σ₁₀/(σ₂₀+ε)
+
+AC flip density (entropy of drive):
+  ϕ_(AC) = 1/W∑ᵢ₌₀^(W−1)𝟏[sign(ACₜ₋ᵢ) ≠ sign(ACₜ₋ᵢ₋₁)]
+W=20 M5 bars.
+
+Momentum cancel ratio:
+  χ_M = 1 − |M₁₀|/(∑ⱼ₌₁¹⁰|Cₜ₋ⱼ₊₁−Cₜ₋ⱼ|+ε)
+(χ_M→ 1 = path cancels; high entropy.)
+
+AC energy vs noise:
+  η = |AC|/(SMA(|AC|,20)+ε)
+
+Zero-Gravity score
+  Z = underbraceϕ_(AC)_(drive flip rate) + underbraceχ_M_(path cancel) + underbrace𝟏[r_σ > 1.15]⋅ 0.5_(short-vol > long-vol spike) + underbrace𝟏[η < 0.6]⋅ 0.5_(AC weak vs its mean)
+
+Kill threshold (paralyze all execution)
+
+  𝐙𝐄𝐑𝐎-𝐆𝐑𝐀𝐕𝐈𝐓𝐘 ⟺ Z ≥ 2.0
+  OR (ϕ_(AC) ≥ 0.45 ∧ χ_M ≥ 0.65)
+  OR (|AC| < 0.25⋅SMA(|AC|,50) ∧ χ_M ≥ 0.55)
+
+When 𝐙𝐄𝐑𝐎-𝐆𝐑𝐀𝐕𝐈𝐓𝐘=true:
+
+  all strategy signals ← 0,  no new risk,  optional flatten if policy says stand-down
+
+Hysteresis: require Z < 1.4 for h=5 M5 bars before re-arming (anti-whipsaw).
+
+Why this is “no mass”
+
+• AC flip density high → BW accelerator has no sustained drive (force direction unstable).
+• Momentum cancel high → price path entropy dominates net displacement.
+• σ₁₀>σ₂₀ without AC energy → noisy expansion, not directed escape.
+Together = zero gravity: velocity indicators will still fire; they are masked.
+
+───
+
+How the five plug into one engine
+
+[5] if ZERO-GRAVITY → halt
+[4] Class indicators → MASS set defines G; VELOCITY set may load/release
+[1]/[2]/[3] optional Mass/Velocity packs (volume / ichimoku / FI-stoch)
+Release only if G stable across load→fire bars
+
+┌───────────────┬─────────────────────┬────────────────────────────┬─────────────────────┐
+│ Pack          │ Mass                │ Velocity / tension         │ Phase / mask        │
+├───────────────┼─────────────────────┼────────────────────────────┼─────────────────────┤
+│ 1 VOG-ALLI-DM │ OBV+MFI+Alligator   │ DeMarker (+RVI)            │ G=0 sleep           │
+├───────────────┼─────────────────────┼────────────────────────────┼─────────────────────┤
+│ 2 ICHI-ENV    │ Cloud+TK+Envelope   │ LTF shell re-entry =       │ Multi-TF EV lock    │
+│               │ EV                  │ breath                     │                     │
+├───────────────┼─────────────────────┼────────────────────────────┼─────────────────────┤
+│ 3 FI-STO      │ FI13+EMA34 floor    │ Stoch oversold + FI2 <0    │ Floor break = abort │
+├───────────────┼─────────────────────┼────────────────────────────┼─────────────────────┤
+│ 4 Ω           │ any high-π          │ any high-ν oscillator      │ RL-legal swap       │
+│               │ structure           │                            │                     │
+├───────────────┼─────────────────────┼────────────────────────────┼─────────────────────┤
+│ 5 AC-σ        │ —                   │ —                          │ Z≥2.0 hard          │
+│               │                     │                            │ paralysis           │
+└───────────────┴─────────────────────┴────────────────────────────┴─────────────────────┘
+
+Paper only until dual-gate QC. These are inventions under your physics laws, not proven kings.
+
+If you want next: encode pack 1 or 3 as a hunter _base signal and run the same XAU walk-forward as SNAP-8.

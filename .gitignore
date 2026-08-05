@@ -80,3 +80,13 @@ data/external/*
 !data/processed/.gitkeep
 !data/external/.gitkeep
 !data/.gitkeep
+
+# Understand-Anything graph data
+.ua/
+.understand-anything/
+.copilot/
+
+
+# Windows shortcuts
+*.lnk
+

@@ -1,0 +1,18 @@
+{
+  "frozen_at": "2026-08-05Tbaseline-frozen",
+  "recipe": {
+    "mode": "forward_after_practice_50",
+    "seed": 42,
+    "n_days": 40,
+    "decode": "policy_full_obs_mark_align",
+    "ckpt": "mark_clone_full_obs_v1.pt",
+    "soft_bias": false
+  },
+  "max_award_streak": 8,
+  "n_award": 29,
+  "n_days": 40,
+  "award_pct": 72.5,
+  "n_breach": 0,
+  "target_2x_max_award_streak": 16,
+  "source": "CONSISTENCY__latest.json streak window seed=42"
+}

@@ -1,7 +1,15 @@
 # WHAT: observation space per ADR-0004/0008 + Monty's physics spec.
 # CHANGE LOG:
+# - 2026-08-04  sets_lock proven_legacy | mark — WHY: policy=Mark on chart needs
+#               correct 1m/15m/30m · 5m/30m/1h · 15m/1h/4h · 30m/4h/1d for NEW
+#               trains; PROVEN stays on proven_legacy (see POLICY_EQUALS_MARK_ON_CHART.md).
 # - 2026-07-25  SIGON path: include_signal_agent_slots true for NEW lineage only — WHY: all signal agents in obs
 # - 2026-07-25  cache plain-English warning — WHY: no more 6820 vs 1820 confusion
+
+# SETS LOCK (semantic obs):
+#   proven_legacy = PROVEN_* compatible stacks (2026-07-24 wrong set2/set3 vs Mark law)
+#   mark          = Mark-on-chart stacks — NEW brain only; wipe gpu_cache; no PROVEN warm-start
+sets_lock: proven_legacy
 
 frame_stack: 10
 no_raw_prices: true

@@ -1,0 +1,32 @@
+﻿[
+    {
+        "file":  "MARK_PERSONALITY.md",
+        "path":  "C:\\Users\\user\\OneDrive\\Desktop\\ARMY\\01_SYSTEM\\config\\agents\\MARK_PERSONALITY.md",
+        "hash16":  "C88CBF404795D9BB",
+        "bytes":  13321
+    },
+    {
+        "file":  "FABLE_METHOD.md",
+        "path":  "C:\\Users\\user\\OneDrive\\Desktop\\ARMY\\01_SYSTEM\\config\\agents\\FABLE_METHOD.md",
+        "hash16":  "1AFA5DF8D6D3D368",
+        "bytes":  5910
+    },
+    {
+        "file":  "ARMY_MORAL_DOCTRINE.md",
+        "path":  "C:\\Users\\user\\OneDrive\\Desktop\\ARMY\\01_SYSTEM\\config\\agents\\ARMY_MORAL_DOCTRINE.md",
+        "hash16":  "77AD3592D5E420AE",
+        "bytes":  4284
+    },
+    {
+        "file":  "mark_personality.json",
+        "path":  "C:\\Users\\user\\OneDrive\\Desktop\\ARMY\\01_SYSTEM\\config\\agents\\mark_personality.json",
+        "hash16":  "224FEDCC579545E6",
+        "bytes":  4123
+    },
+    {
+        "file":  "army_moral.json",
+        "path":  "C:\\Users\\user\\OneDrive\\Desktop\\ARMY\\01_SYSTEM\\config\\agents\\army_moral.json",
+        "hash16":  "A564EE2B18B9E6C3",
+        "bytes":  7302
+    }
+]

@@ -1,0 +1,245 @@
+HOW A LLM SHOULD THINK.
+
+Doctrine answers (chat only)
+
+Grounded in how your lab actually encodes these ideas (MTF bias → LTF entry, dual-CCI / slingshot, envelope regime, BB trend vs RSI snap, ATR/risk QC). Where a named artifact isn’t in-repo (full 14+1 table), the process is stated objectively; fill names from your matrix when you lock it.
+
+───
+
+1. Law of Dominant Trends (Multi-Timeframe Alignment)
+
+Law: Higher timeframe defines allowed direction. Lower timeframe only times entry. LTF never votes on side against HTF.
+
+How the long-term tide controls short-term timing
+
+┌────────────────────────┬───────────────┬─────────────────────────────┬─────────────────┐
+│ Layer                  │ Job           │ May do                      │ May not do      │
+├────────────────────────┼───────────────┼─────────────────────────────┼─────────────────┤
+│ Dominant TF (H1 / M30  │ Permission /  │ Long-only, short-only, or   │ Trigger the     │
+│ / M5 envelope / M5     │ gravity       │ flat                        │ scalp           │
+│ EMA50)                 │               │                             │                 │
+├────────────────────────┼───────────────┼─────────────────────────────┼─────────────────┤
+│ Execution TF (M5 / M1) │ Slingshot     │ Enter on pullback / reclaim │ Reverse against │
+│                        │ timing        │ / break aligned with        │ permission      │
+│                        │               │ permission                  │                 │
+└────────────────────────┴───────────────┴─────────────────────────────┴─────────────────┘
+
+Exact control chain
+
+1. Classify tide: price vs HTF structure (e.g. above BB mid / above envelope of SMA(high)/SMA(low) / both CCI > SMA on HTF / close > HTF EMA).
+2. Hard filter: if tide = long → discard all short LTF setups; if short → discard all longs; if flat / conflict → no trade.
+3. Slingshot only with the tide: on LTF, wait for against-the-entry micro move that does not break HTF structure (pullback into ribbon, fast CCI below its SMA while slow still above, RSI into lower band while price still above HTF BB, etc.).
+4. Fire only when LTF resumes with HTF: reclaim / cross / close back outside envelope on the HTF side.
+5. Kill if tide breaks: HTF close wrong side of regime line → flatten; no averaging against gravity.
+
+One sentence:
+HTF is the binary gate on side; LTF only chooses when within that gate — pullback = load the slingshot; resume with HTF = release.
+
+Lab examples: dual CCI same side on second TF; BB on M5+M30+H1 then RSI entry on M5; shifted envelope M5 regime then M1 outside envelope; SNAP-8 M5 EMA50 then M1 8/21 + RSI.
+
+───
+
+2. Mechanics of Price Acceleration (Momentum vs Mean Reversion)
+
+Two different markets; two different rules.
+
+┌──────────────────┬──────────────┬─────────────────────────────────┬────────────────────┐
+│ State            │ What price   │ Objective signature             │ Correct play       │
+│                  │ is doing     │                                 │                    │
+├──────────────────┼──────────────┼─────────────────────────────────┼────────────────────┤
+│ Breather (mean   │ Extended →   │ Stretch vs mean without HTF     │ Fade the stretch   │
+│ reversion /      │ snaps toward │ regime flip; oscillator extreme │ or wait for        │
+│ equilibrium)     │ mean         │ then revert; bands wide then    │ pullback to mean   │
+│                  │              │ price back to mid               │ in trend then      │
+│                  │              │                                 │ rejoin             │
+├──────────────────┼──────────────┼─────────────────────────────────┼────────────────────┤
+│ Launch (momentum │ Leaves mean  │ Close outside HTF+LTF           │ Do not fade; ride  │
+│ / conservation)  │ and keeps    │ structure; successive closes on │ / add only with    │
+│                  │ expanding    │ same side of envelope; dual     │ structure          │
+│                  │              │ momentum (fast and slow) same   │                    │
+│                  │              │ side of threshold; ATR rising   │                    │
+│                  │              │ with direction                  │                    │
+└──────────────────┴──────────────┴─────────────────────────────────┴────────────────────┘
+
+Objective separation (measurable)
+
+1. Location vs mean: distance to SMA/EMA/VWAP/BB mid in ATR units.
+   • Snap-back: stretch high then closes reverse toward mean while HTF regime unchanged.
+   • Acceleration: stretch high and new closes make new extremes away from mean.
+
+2. Dual-speed momentum:
+   • Fast (CCI30 / RSI7 / EMA8): velocity of the last move.
+   • Slow (CCI100 / RSI slow / EMA21 / BB100): inertia.
+   • Breather: slow still with tide; fast dips against tide (slingshot).
+   • Launch: fast and slow both through thresholds same side and stay (not a one-bar spike).
+
+3. Band / envelope test:
+   • Mean reversion: pierce outer band → reject back inside.
+   • Acceleration: close beyond full envelope (high and low SMA) on HTF and LTF (your shifted-envelope king logic).
+
+4. Volatility path: ATR expanding with directional closes → momentum regime; ATR expanding with two-way wicks and mean re-crosses → chop / failed launch.
+
+Rule:
+If slow structure is unbroken and only fast snapped → pullback toolkit.
+If slow structure breaks and confirms on HTF → momentum toolkit; mean-reversion fades are forbidden.
+
+───
+
+3. Environmental Survival (Regime Detection)
+
+Mandate: Environment is a state machine. Strategy set is a function of state. Wrong playbook in new state = account damage.
+
+Strict process (objective)
+
+1. Measure, don’t feel — fixed features every bar/session:
+   • Direction: HTF slope / side of mid / envelope side
+   • Range vs trend: ADX or |close−mid|/ATR, HH/HL vs LH/LL structure
+   • Volatility: ATR%ile vs lookback
+   • Efficiency: net move / path length (choppy vs clean)
+   • Session / news flags if in rules
+
+2. Map to discrete regime — bull / bear / chop (and your finer 14+1 labels when codified: e.g. strong trend, weak trend, range, breakout, post-news, dead session, etc.).
+   • One active regime id at a time; hysteresis so one bar doesn’t flip state.
+
+3. Confirm shift — regime change only when:
+   • HTF structure flips and
+   • Hold for N HTF bars or a close beyond invalidation level and
+   • Optional: volatility regime change (ATR band jump).
+
+4. Instant rewrite (hard switches)
+
+┌─────────────────────┬──────────────────────────────────────────────────────────────────┐
+│ New regime          │ System must                                                      │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Bull trend          │ Long-only (or long-bias) playbooks; disable short fades against  │
+│                     │ tide                                                             │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Bear trend          │ Short-only mirror                                                │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Chop / range        │ Mean-reversion or flat; disable breakout chase / trend pullback  │
+│                     │ size                                                             │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Vol shock           │ Widen stops or stand down; cut size; no new risk until ATR       │
+│                     │ normalizes                                                       │
+├─────────────────────┼──────────────────────────────────────────────────────────────────┤
+│ Undefined /         │ No trade (your flat HTF = 0)                                     │
+│ conflict            │                                                                  │
+└─────────────────────┴──────────────────────────────────────────────────────────────────┘
+
+5. Account rule: open positions that violate the new regime are reduced or closed on the shift signal — environment outranks open thesis.
+
+Note: Full named 14+1 table is not loaded as a single codified file in the lab outputs I searched; the survival law is: detect state → swap logic → if unknown, size = 0.
+
+───
+
+4. Capital Preservation Mandate (Risk & Sizing)
+
+Highest mandate: never breach max daily loss (and max DD). Edge is optional; survival is not.
+
+Math (per trade)
+
+  Risk$ = E × r_(base) × m_(conf) × m_(regime)
+
+  Size = Risk$/(StopDistance in $ per unit)
+
+• E = equity (or challenge balance)
+• r_(base) = base risk fraction (e.g. 0.25–0.5% scalp; challenge often ≤0.5–1% hard cap)
+• m_(conf) = confidence multiplier ≤ 1…m_(max)
+• m_(regime) = environment multiplier (chop ≪ trend)
+
+Scale up only when all true (high confidence)
+
+• HTF + LTF aligned (Law 1)
+• Momentum/launch or clean pullback signature (Law 2) matches playbook
+• Regime allows that playbook (Law 3)
+• Spread/ATR acceptable
+• Daily loss budget remaining
+
+Then m_(conf) may rise (e.g. 1.0 → 1.25 → 1.5) only inside a hard ceiling so
+Risk$ ≤ R_(max_trade) and projected loss if SL hit still fits daily budget.
+
+Scale down / zero under uncertainty
+
+• HTF flat or conflict → m = 0 or min micro
+• Chop regime → m ≪ 1 or flat
+• After loss streak / approaching daily cap → m collapses
+
+Daily loss hard gate
+
+  RemainingDaily = L_(day) − RealizedLoss_(today) − OpenRisk
+
+• New trade only if Risk$ ≤ RemainingDaily
+• If RealizedLoss ≥ L_(day) → flat rest of day (no “get it back”)
+• Open risk counts: no stacking that could breach L_(day) if all stops hit
+
+Prop-style: max daily, max total DD, and often max per-trade are hard stops on the system, not guidelines. Size is the only continuous control that guarantees those bounds.
+
+───
+
+5. Speed Versus Weight (Velocity and Force)
+
+Split the signal into two clocks.
+
+┌──────────────┬───────────────────────┬───────────────────────────┬─────────────────────┐
+│ Concept      │ Meaning               │ Typical measure           │ Role                │
+├──────────────┼───────────────────────┼───────────────────────────┼─────────────────────┤
+│ Velocity (   │ Short-term, erratic   │ Fast CCI/RSI/EMA; Δprice  │ Timing, pullback    │
+│ speed)       │ rate of change        │ / few bars; LTF only      │ depth, entry        │
+│              │                       │                           │ trigger             │
+├──────────────┼───────────────────────┼───────────────────────────┼─────────────────────┤
+│ Force /      │ Heavy, slower         │ Slow CCI/SMA; HTF         │ Direction           │
+│ weight (     │ structure that “      │ envelope; BB(100); multi  │ permission, trade   │
+│ mass)        │ drives” path          │ -TF same side             │ validity            │
+└──────────────┴───────────────────────┴───────────────────────────┴─────────────────────┘
+
+Mathematical separation
+
+1. Two periods on same series:
+   • vₜ = f(price; P_(fast)) e.g. CCI(30), RSI(7), EMA(8)
+   • Fₜ = f(price; P_(slow)) e.g. CCI(100), EMA(21)/BB(100), HTF SMA envelope
+
+2. Two timeframes:
+   • Velocity lives on LTF
+   • Force is HTF state projected onto LTF (align HTF bar → N LTF bars) — weight is not re-estimated every M1 tick as if it were M1 noise
+
+3. Shifted / envelope structure (your king family):
+   • Force ≈ price vs SMA(high) and SMA(low) on M5 (must clear both → full body of mass outside band)
+   • Speed ≈ same test on M1 for trigger
+   • Implementation note: lab uses trailing SMA(period), not future-leaking plot shift
+
+4. Slingshot identity:
+   • Force with tide (F bull)
+   • Velocity temporarily against (v dips) → breath
+   • Velocity re-aligns with force → entry
+   • If force flips, velocity signals are invalid regardless of how fast they look
+
+One sentence:
+Velocity answers “how fast is this bar’s move?”; force answers “which way is the market’s mass leaning?” — only trade when velocity is used inside force, never when fast noise is treated as the trend.
+
+───
+
+Stack map (how the five laws lock)
+
+FORCE (HTF) → REGIME → allowed playbook + size multiplier
+     ↓
+VELOCITY (LTF) → pullback vs launch classification
+     ↓
+ENTRY only if side(force) == side(setup) and Risk$ ≤ RemainingDaily
+     ↓
+Regime shift → rewrite rules / flatten / m→0
+
+That is the full exam set: gravity filters slingshots; measure breath vs launch; state machine swaps logic; size is the daily-loss guarantee; fast indicators never outrank slow mass.
+
+───
+
+Stack map (how the five laws lock)
+
+FORCE (HTF) → REGIME → allowed playbook + size multiplier
+     ↓
+VELOCITY (LTF) → pullback vs launch classification
+     ↓
+ENTRY only if side(force) == side(setup) and Risk$ ≤ RemainingDaily
+     ↓
+Regime shift → rewrite rules / flatten / m→0
+
+That is the full exam set: gravity filters slingshots; measure breath vs launch; state machine swaps logic; size is the daily-loss guarantee; fast indicators never outrank slow mass.

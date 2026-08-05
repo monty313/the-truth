@@ -92,6 +92,8 @@ AI: [AGENTS.md](AGENTS.md) (**GOAL** + §0) · [references/doctrine/00_LID_OFF_T
 | Folder map | [MAP.md](MAP.md) |
 | Active brain | [models/00_CHAMPION.md](models/00_CHAMPION.md) |
 | Daily scripts only | [scripts/00_DAILY.md](scripts/00_DAILY.md) |
+| **GOAL playbook from multi-pair IRAC** | [references/plans/GOAL_FROM_TEN_PAIR_IRAC.md](references/plans/GOAL_FROM_TEN_PAIR_IRAC.md) |
+| Ten-pair process log | [references/plans/TEN_PAIR_CONSISTENCY_IRAC.md](references/plans/TEN_PAIR_CONSISTENCY_IRAC.md) |
 | Wins | [references/doctrine/SUCCESS_LEDGER.md](references/doctrine/SUCCESS_LEDGER.md) |
 | Full history | [references/handoffs/HANDOFF.md](references/handoffs/HANDOFF.md) |
 | AI rules | [AGENTS.md](AGENTS.md) |

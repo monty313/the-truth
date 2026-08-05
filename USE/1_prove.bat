@@ -1,5 +1,6 @@
 @echo off
 cd /d "%~dp0.."
+set "PYTHONPATH=%CD%;%CD%\code"
 echo.
 echo === PROVE IT (champion 3.0 / 3.5) ===
 echo.

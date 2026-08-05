@@ -1,0 +1,39 @@
+{"span_id": "cad4f2092cf9", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1784971831.7965593, "attrs": {"rows": 121050}, "status": "ok", "t1": 1784971837.9074957, "ms": 6110.936}
+{"span_id": "283c3c6aa2aa", "name": "state_classification", "parent": null, "run_id": null, "t0": 1784971837.9084601, "attrs": {}, "status": "ok", "t1": 1784971838.1844234, "ms": 275.963}
+{"span_id": "7c6af04849d9", "name": "mask_check", "parent": null, "run_id": null, "t0": 1784971838.1851013, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1784971838.1922166, "ms": 7.115}
+{"span_id": "c122d4978907", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1784975482.111812, "attrs": {"rows": 121050}, "status": "ok", "t1": 1784975491.046178, "ms": 8934.366}
+{"span_id": "aa444184b7e0", "name": "state_classification", "parent": null, "run_id": null, "t0": 1784975491.0474865, "attrs": {}, "status": "ok", "t1": 1784975491.370367, "ms": 322.881}
+{"span_id": "c5051bc70a81", "name": "mask_check", "parent": null, "run_id": null, "t0": 1784975491.371539, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1784975491.3778474, "ms": 6.308}
+{"span_id": "127a07f2ede8", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1784995493.456016, "attrs": {"rows": 121050}, "status": "ok", "t1": 1784995501.684352, "ms": 8228.336}
+{"span_id": "6b861333e2bf", "name": "state_classification", "parent": null, "run_id": null, "t0": 1784995501.685753, "attrs": {}, "status": "ok", "t1": 1784995502.4547927, "ms": 769.04}
+{"span_id": "04f53385c82e", "name": "mask_check", "parent": null, "run_id": null, "t0": 1784995502.4556642, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1784995502.464631, "ms": 8.967}
+{"span_id": "797338bd71a1", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785381628.9622705, "attrs": {"rows": 121050}, "status": "ok", "t1": 1785381636.1952877, "ms": 7233.017}
+{"span_id": "71a276bf1442", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785381636.200936, "attrs": {}, "status": "ok", "t1": 1785381636.5325162, "ms": 331.58}
+{"span_id": "149c6fd95bdf", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785381636.5333228, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785381636.5431087, "ms": 9.786}
+{"span_id": "a18f0a084503", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785384426.6296713, "attrs": {"rows": 121050}, "status": "ok", "t1": 1785384433.2610624, "ms": 6631.391}
+{"span_id": "bc27000b2fb1", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785384433.2618778, "attrs": {}, "status": "ok", "t1": 1785384433.679235, "ms": 417.357}
+{"span_id": "aaf3baae5429", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785384433.6798189, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785384433.6872764, "ms": 7.457}
+{"span_id": "788fbf582b7d", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785399703.745266, "attrs": {"rows": 2880}, "status": "ok", "t1": 1785399704.5092201, "ms": 763.954}
+{"span_id": "8cfefdf27282", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785399704.5099251, "attrs": {}, "status": "ok", "t1": 1785399704.645126, "ms": 135.201}
+{"span_id": "ff2e6f62e8fe", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785399704.6456747, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785399704.656145, "ms": 10.47}
+{"span_id": "efa7866952c0", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785399708.9380555, "attrs": {"rows": 4320}, "status": "ok", "t1": 1785399709.5987191, "ms": 660.664}
+{"span_id": "ec8be0b73218", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785399709.5993395, "attrs": {}, "status": "ok", "t1": 1785399709.7255468, "ms": 126.207}
+{"span_id": "cdfaa850866e", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785399709.7261004, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785399709.7349315, "ms": 8.831}
+{"span_id": "5286ac35157b", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785399714.1644435, "attrs": {"rows": 4320}, "status": "ok", "t1": 1785399714.8917224, "ms": 727.279}
+{"span_id": "133ab095fb38", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785399714.8925707, "attrs": {}, "status": "ok", "t1": 1785399715.1397605, "ms": 247.19}
+{"span_id": "5d04855c430b", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785399715.1407106, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785399715.1519482, "ms": 11.238}
+{"span_id": "e76246b243a6", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785399719.7707682, "attrs": {"rows": 7200}, "status": "ok", "t1": 1785399720.6613605, "ms": 890.592}
+{"span_id": "5338afc231d9", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785399720.6619859, "attrs": {}, "status": "ok", "t1": 1785399720.8039825, "ms": 141.997}
+{"span_id": "e32c70d91d41", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785399720.8045585, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785399720.8139882, "ms": 9.43}
+{"span_id": "f3752cbcbe17", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785399725.181542, "attrs": {"rows": 5760}, "status": "ok", "t1": 1785399725.887795, "ms": 706.253}
+{"span_id": "28be47becd2b", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785399725.888388, "attrs": {}, "status": "ok", "t1": 1785399726.019609, "ms": 131.221}
+{"span_id": "d083f33fb215", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785399726.0205486, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785399726.030748, "ms": 10.199}
+{"span_id": "6251ad06d2c0", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785399729.7508092, "attrs": {"rows": 5760}, "status": "ok", "t1": 1785399730.4989474, "ms": 748.138}
+{"span_id": "78130dd9d5f0", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785399730.4995575, "attrs": {}, "status": "ok", "t1": 1785399730.6189003, "ms": 119.343}
+{"span_id": "6be06a74c91b", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785399730.6194513, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785399730.6267045, "ms": 7.253}
+{"span_id": "0f5e65365233", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785405714.3901172, "attrs": {"rows": 121050}, "status": "ok", "t1": 1785405722.229557, "ms": 7839.44}
+{"span_id": "d2e1efa90ad0", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785405722.2304919, "attrs": {}, "status": "ok", "t1": 1785405722.585681, "ms": 355.189}
+{"span_id": "e847fc678b89", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785405722.586309, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785405722.6141005, "ms": 27.792}
+{"span_id": "057b81ddf37b", "name": "feature_generation", "parent": null, "run_id": null, "t0": 1785405758.5533173, "attrs": {"rows": 121050}, "status": "ok", "t1": 1785405766.1176867, "ms": 7564.369}
+{"span_id": "deed6d1293f9", "name": "state_classification", "parent": null, "run_id": null, "t0": 1785405766.118324, "attrs": {}, "status": "ok", "t1": 1785405766.5141351, "ms": 395.811}
+{"span_id": "181f34489b13", "name": "mask_check", "parent": null, "run_id": null, "t0": 1785405766.5149493, "attrs": {"stage": "precompute"}, "status": "ok", "t1": 1785405766.5533442, "ms": 38.395}

@@ -40,6 +40,13 @@ Or: **`USE/1_prove.bat`** (change numbers if you want a different pair)
 
 ---
 
+## Rebuild from blank (IRAC)
+
+**`HOW_TO_ACHIEVE_GOAL_FROM_BLANK_IRAC.md`** — what works / fails; steps to get multi-pair prove_it (breach 0) again from a new policy.
+
+**GOAL playbook from multi-pair IRAC** (equity shell KEEP/REJECT, checklist, score commands):  
+`references/plans/GOAL_FROM_TEN_PAIR_IRAC.md`
+
 ## Rule for AI
 
 When a new brain **beats** champion on `prove_it` (higher clear, breach still 0):

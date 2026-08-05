@@ -1,0 +1,1119 @@
+{
+  "saved_at": "2026-08-05T10:19:15.012704+00:00",
+  "source": "STREAK_ROWS",
+  "summary": {
+    "n_days": 40,
+    "n_award": 29,
+    "n_gaps": 11,
+    "counts": {
+      "AWARD": 29,
+      "MARK_WOULD_TAKE": 10,
+      "NO_OPPORTUNITY": 1
+    },
+    "sub_counts": {
+      "AWARD:clear": 29,
+      "MARK_WOULD_TAKE:policy_wrong_size_or_timing": 10,
+      "NO_OPPORTUNITY:hard_target_no_force_path": 1
+    },
+    "mark_would_take_pct_of_gaps": 90.9,
+    "no_opportunity_pct_of_gaps": 9.1,
+    "max_award_streak": 8,
+    "learnable_fraction": 0.909,
+    "headline": "Of 11 non-award days: 10 Mark-would-take (learnable), 1 no-opportunity (do not thrash)."
+  },
+  "rows": [
+    {
+      "date": "2026-03-31",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.2587,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0442,
+        "n_entries": 1,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-01",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.1721,
+        "n_entries": 3,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0458,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-02",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0356,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0065,
+        "n_entries": 1,
+        "side": "BUY",
+        "risk_use_frac": 0.5,
+        "per_trade_cap_pct": 0.35
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-06",
+      "target_pct": 1.5,
+      "risk_pct": 3.0,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.6273,
+        "n_entries": 3,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5214,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-04-07",
+      "target_pct": 1.5,
+      "risk_pct": 3.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.815,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.8049,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-08",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.908,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5699,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-09",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0242,
+        "n_entries": 4,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.1732,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-10",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.366,
+        "n_entries": 2,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0229,
+        "n_entries": 1,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-04-13",
+      "target_pct": 1.5,
+      "risk_pct": 2.0,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.0246,
+        "n_entries": 3,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5639,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.35,
+        "per_trade_cap_pct": 0.25
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-04-14",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.0252,
+        "n_entries": 3,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0672,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-04-15",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.125,
+        "n_entries": 3,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0387,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.5,
+        "per_trade_cap_pct": 0.35
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-04-16",
+      "target_pct": 3.0,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 3.7483,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 3.4589,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.8,
+        "per_trade_cap_pct": 0.55
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-17",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0711,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.3027,
+        "n_entries": 1,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-20",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.3113,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0072,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-21",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -2.2346,
+        "n_entries": 2,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.1606,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-04-22",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.6093,
+        "n_entries": 2,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0276,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.5,
+        "per_trade_cap_pct": 0.35
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-04-23",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.1402,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0587,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-24",
+      "target_pct": 1.0,
+      "risk_pct": 2.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0265,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.2245,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-27",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5342,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5121,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-28",
+      "target_pct": 1.5,
+      "risk_pct": 3.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.7603,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.7488,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-29",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.4239,
+        "n_entries": 3,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0523,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.35,
+        "per_trade_cap_pct": 0.25
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-04-30",
+      "target_pct": 1.5,
+      "risk_pct": 2.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.6567,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5705,
+        "n_entries": 1,
+        "side": "BUY",
+        "risk_use_frac": 0.5,
+        "per_trade_cap_pct": 0.35
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-01",
+      "target_pct": 1.0,
+      "risk_pct": 2.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0456,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0405,
+        "n_entries": 1,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-04",
+      "target_pct": 3.0,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 3.2646,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 3.0285,
+        "n_entries": 1,
+        "side": "SELL",
+        "risk_use_frac": 0.5,
+        "per_trade_cap_pct": 0.35
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-05",
+      "target_pct": 2.0,
+      "risk_pct": 3.5,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.6192,
+        "n_entries": 2,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.163,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-05-06",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.192,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.2557,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-07",
+      "target_pct": 1.5,
+      "risk_pct": 3.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5765,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.7004,
+        "n_entries": 1,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-08",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.7547,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5653,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.8,
+        "per_trade_cap_pct": 0.55
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-11",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.4504,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0815,
+        "n_entries": 1,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-12",
+      "target_pct": 1.5,
+      "risk_pct": 3.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0551,
+        "n_entries": 2,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5342,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-13",
+      "target_pct": 1.5,
+      "risk_pct": 3.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.643,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.53,
+        "n_entries": 1,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-14",
+      "target_pct": 1.5,
+      "risk_pct": 2.0,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -0.9354,
+        "n_entries": 2,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5117,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-05-15",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0042,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.1188,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-18",
+      "target_pct": 2.0,
+      "risk_pct": 2.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0291,
+        "n_entries": 4,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.1966,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.5,
+        "per_trade_cap_pct": 0.35
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-19",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 3.4789,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.7334,
+        "n_entries": 1,
+        "side": "SELL",
+        "risk_use_frac": 0.8,
+        "per_trade_cap_pct": 0.55
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-20",
+      "target_pct": 1.0,
+      "risk_pct": 2.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0205,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "single",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.0103,
+        "n_entries": 1,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-21",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5203,
+        "n_entries": 3,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.5456,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    },
+    {
+      "date": "2026-05-22",
+      "target_pct": 2.5,
+      "risk_pct": 3.5,
+      "gap_class": "NO_OPPORTUNITY",
+      "sub_class": "hard_target_no_force_path",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -0.7461,
+        "n_entries": 2,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": false,
+        "source": "soul_online_fallback",
+        "mode": "walk",
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -0.7461,
+        "n_entries": 2,
+        "side": null,
+        "risk_use_frac": "dynamic",
+        "per_trade_cap_pct": "dynamic"
+      },
+      "reward_hint": "reward patient HOLD; cut inactivity tax when force neutral"
+    },
+    {
+      "date": "2026-05-25",
+      "target_pct": 1.5,
+      "risk_pct": 2.0,
+      "gap_class": "MARK_WOULD_TAKE",
+      "sub_class": "policy_wrong_size_or_timing",
+      "policy": {
+        "cleared": false,
+        "breached": false,
+        "pnl_pct": -1.2732,
+        "n_entries": 3,
+        "award": false
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 1.5796,
+        "n_entries": 2,
+        "side": "BUY",
+        "risk_use_frac": 0.8,
+        "per_trade_cap_pct": 0.55
+      },
+      "reward_hint": "penalty misread; boost soul-side entry; EOD streak-break penalty"
+    },
+    {
+      "date": "2026-05-26",
+      "target_pct": 2.0,
+      "risk_pct": 3.0,
+      "gap_class": "AWARD",
+      "sub_class": "clear",
+      "policy": {
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.4216,
+        "n_entries": 1,
+        "award": true
+      },
+      "mark": {
+        "plan_winnable": true,
+        "source": "soul_plan",
+        "mode": "entry_plus_add",
+        "cleared": true,
+        "breached": false,
+        "pnl_pct": 2.0595,
+        "n_entries": 2,
+        "side": "SELL",
+        "risk_use_frac": 0.25,
+        "per_trade_cap_pct": 0.2
+      },
+      "reward_hint": "EOD streak award bonus"
+    }
+  ],
+  "streak_reward_dials": {
+    "streak_award_base": 5.0,
+    "streak_award_per_prior": 1.5,
+    "streak_break_penalty": -7.5,
+    "mark_would_take_eod_penalty": -10.0,
+    "no_opp_hold_bonus": 2.0,
+    "no_opp_inactivity_scale": 0.35,
+    "soul_side_entry_bonus": 3.0,
+    "soul_side_misread_penalty": -4.0
+  },
+  "proven_touched": false,
+  "shell_touched": false,
+  "only_rewards_penalties": true
+}

@@ -19,7 +19,7 @@ MINDLESS → fixed penalty (not scaled by PnL luck).
 from __future__ import annotations
 
 from dataclasses import dataclass, fields
-from typing import Dict, Mapping, Optional
+from typing import Any, Dict, Mapping, Optional
 
 from lineages.adaptive_rl_brain_7_31_26.perception.types import Direction, TradeTag
 
@@ -385,3 +385,227 @@ def majority_agents_idle_penalty(
     if int(n_open) >= int(min_open_exempt):
         return 0.0
     return -abs(float(penalty))
+
+
+# =============================================================================
+# STREAK-ONLY reward / penalty pack (2026-08-05)
+# WHY: longer award streaks without shell/PROVEN/entry-rule changes.
+# Source of truth for magnitudes: autopsy_streak_gaps → STREAK_REWARD_DIALS__latest
+# Only these dials may be retuned day-by-day from gap classes.
+# =============================================================================
+
+# Bounds inclusive for streak dials (searchable; not shell)
+STREAK_REWARD_DIALS: Dict[str, tuple[float, float]] = {
+    # EOD when cleared & not breached: base + per prior award in current streak
+    "streak_award_base": (0.0, 20.0),
+    "streak_award_per_prior": (0.0, 5.0),
+    # EOD when miss after ≥1 award in current streak (breaks chain)
+    "streak_break_penalty": (-25.0, 0.0),
+    # EOD when miss AND Mark soul plan was winnable (misread valid opportunity)
+    "mark_would_take_eod_penalty": (-20.0, 0.0),
+    # EOD when miss AND no force-aligned plan exists (patient hold is correct)
+    "no_opp_hold_bonus": (0.0, 8.0),
+    # Multiplier on flat_hold / setup inactivity when force is neutral (no opp)
+    "no_opp_inactivity_scale": (0.0, 1.0),
+    # Extra shaping when action matches Mark soul side on learnable days
+    "soul_side_entry_bonus": (0.0, 5.0),
+    # Extra penalty when policy opens against Mark soul side on learnable days
+    "soul_side_misread_penalty": (-8.0, 0.0),
+}
+
+DEFAULT_STREAK_DIALS: Dict[str, float] = {
+    "streak_award_base": 4.0,
+    "streak_award_per_prior": 1.0,
+    "streak_break_penalty": -6.0,
+    "mark_would_take_eod_penalty": -8.0,
+    "no_opp_hold_bonus": 2.0,
+    "no_opp_inactivity_scale": 0.35,
+    "soul_side_entry_bonus": 2.5,
+    "soul_side_misread_penalty": -3.5,
+}
+
+
+def default_streak_dials() -> Dict[str, float]:
+    return dict(DEFAULT_STREAK_DIALS)
+
+
+def clip_streak_dials(dials: Mapping[str, float]) -> Dict[str, float]:
+    out: Dict[str, float] = {}
+    for k, (lo, hi) in STREAK_REWARD_DIALS.items():
+        v = float(dials.get(k, DEFAULT_STREAK_DIALS[k]))
+        out[k] = float(min(max(v, lo), hi))
+    return out
+
+
+def streak_award_bonus(
+    *,
+    cleared: bool,
+    breached: bool,
+    prior_streak: int = 0,
+    dials: Mapping[str, float] | None = None,
+) -> float:
+    """EOD positive credit for an award day; grows with ongoing streak length."""
+    if breached or not cleared:
+        return 0.0
+    d = clip_streak_dials(dials or DEFAULT_STREAK_DIALS)
+    return float(d["streak_award_base"]) + float(prior_streak) * float(
+        d["streak_award_per_prior"]
+    )
+
+
+def streak_break_penalty(
+    *,
+    cleared: bool,
+    breached: bool,
+    prior_streak: int,
+    dials: Mapping[str, float] | None = None,
+) -> float:
+    """EOD penalty when a non-award day breaks a live award streak."""
+    if breached:
+        return 0.0  # floor wall handled elsewhere; do not double-count
+    if cleared:
+        return 0.0
+    if int(prior_streak) <= 0:
+        return 0.0
+    d = clip_streak_dials(dials or DEFAULT_STREAK_DIALS)
+    return float(d["streak_break_penalty"])
+
+
+def gap_class_eod_reward(
+    *,
+    gap_class: str,
+    dials: Mapping[str, float] | None = None,
+) -> float:
+    """Once-per-day terminal shaping from autopsy class (miss days only)."""
+    d = clip_streak_dials(dials or DEFAULT_STREAK_DIALS)
+    g = str(gap_class or "").upper()
+    if g == "MARK_WOULD_TAKE":
+        return float(d["mark_would_take_eod_penalty"])
+    if g == "NO_OPPORTUNITY":
+        return float(d["no_opp_hold_bonus"])
+    return 0.0
+
+
+def soul_alignment_step_reward(
+    *,
+    action: int,
+    mark_soul_action: int,
+    gap_class: str = "MARK_WOULD_TAKE",
+    dials: Mapping[str, float] | None = None,
+) -> float:
+    """Per-decision shaping vs Mark soul side on learnable days only.
+
+    action / mark_soul_action: 0=HOLD, 1=BUY, 2=SELL.
+    """
+    if str(gap_class or "").upper() != "MARK_WOULD_TAKE":
+        return 0.0
+    d = clip_streak_dials(dials or DEFAULT_STREAK_DIALS)
+    act = int(action)
+    mark = int(mark_soul_action)
+    if mark in (1, 2) and act == mark:
+        return float(d["soul_side_entry_bonus"])
+    if mark in (1, 2) and act in (1, 2) and act != mark:
+        return float(d["soul_side_misread_penalty"])
+    if mark == 0 and act in (1, 2):
+        # Mark HOLD, policy fired early → half misread penalty
+        return float(d["soul_side_misread_penalty"]) * 0.5
+    return 0.0
+
+
+def scale_inactivity_for_no_opp(
+    base_penalty: float,
+    *,
+    gap_class: str,
+    dials: Mapping[str, float] | None = None,
+) -> float:
+    """Shrink inactivity pressure on true no-opportunity days (patient Mark)."""
+    if str(gap_class or "").upper() != "NO_OPPORTUNITY":
+        return float(base_penalty)
+    d = clip_streak_dials(dials or DEFAULT_STREAK_DIALS)
+    return float(base_penalty) * float(d["no_opp_inactivity_scale"])
+
+
+def apply_autopsy_to_streak_dials(
+    summary: Mapping[str, Any],
+    *,
+    base: Mapping[str, float] | None = None,
+) -> Dict[str, float]:
+    """Retune streak dials from one autopsy summary — rewards only.
+
+    Rules (monotonic, bounded):
+      - High MARK_WOULD_TAKE share → stronger misread / streak-break / soul-side
+      - High NO_OPPORTUNITY share → more patient HOLD bonus, lower inactivity scale
+      - Low max streak → slightly larger streak_award_per_prior
+    Never touches shell, PROVEN, or entry physics.
+    """
+    d = clip_streak_dials(base or DEFAULT_STREAK_DIALS)
+    counts = dict(summary.get("counts") or {})
+    n_gaps = max(int(summary.get("n_gaps") or 0), 1)
+    n_mark = int(counts.get("MARK_WOULD_TAKE") or 0)
+    n_no = int(counts.get("NO_OPPORTUNITY") or 0)
+    mark_frac = n_mark / n_gaps
+    no_frac = n_no / n_gaps
+    max_s = int(summary.get("max_award_streak") or 0)
+
+    # Learnable misses dominate → punish misread harder, reward soul side more
+    if mark_frac >= 0.5:
+        d["mark_would_take_eod_penalty"] = max(
+            d["mark_would_take_eod_penalty"] - 2.0, -20.0
+        )
+        d["soul_side_entry_bonus"] = min(d["soul_side_entry_bonus"] + 0.5, 5.0)
+        d["soul_side_misread_penalty"] = max(
+            d["soul_side_misread_penalty"] - 0.5, -8.0
+        )
+        d["streak_break_penalty"] = max(d["streak_break_penalty"] - 1.5, -25.0)
+    elif mark_frac >= 0.25:
+        d["mark_would_take_eod_penalty"] = max(
+            d["mark_would_take_eod_penalty"] - 1.0, -20.0
+        )
+        d["soul_side_entry_bonus"] = min(d["soul_side_entry_bonus"] + 0.25, 5.0)
+
+    # True dead / hard days dominate → teach patience, not thrash
+    if no_frac >= 0.5:
+        d["no_opp_hold_bonus"] = min(d["no_opp_hold_bonus"] + 1.5, 8.0)
+        d["no_opp_inactivity_scale"] = max(d["no_opp_inactivity_scale"] - 0.15, 0.0)
+    elif no_frac >= 0.25:
+        d["no_opp_hold_bonus"] = min(d["no_opp_hold_bonus"] + 0.75, 8.0)
+        d["no_opp_inactivity_scale"] = max(d["no_opp_inactivity_scale"] - 0.08, 0.0)
+
+    # Short streaks → pay more for extending the chain
+    if max_s < 10:
+        d["streak_award_per_prior"] = min(d["streak_award_per_prior"] + 0.5, 5.0)
+        d["streak_award_base"] = min(d["streak_award_base"] + 1.0, 20.0)
+    elif max_s < 20:
+        d["streak_award_per_prior"] = min(d["streak_award_per_prior"] + 0.25, 5.0)
+
+    return clip_streak_dials(d)
+
+
+def day_terminal_streak_reward(
+    *,
+    cleared: bool,
+    breached: bool,
+    prior_streak: int,
+    gap_class: str = "",
+    dials: Mapping[str, float] | None = None,
+) -> Dict[str, float]:
+    """Bundle EOD streak shaping for one day. Sum values for total credit."""
+    d = clip_streak_dials(dials or DEFAULT_STREAK_DIALS)
+    parts = {
+        "streak_award": streak_award_bonus(
+            cleared=cleared,
+            breached=breached,
+            prior_streak=prior_streak,
+            dials=d,
+        ),
+        "streak_break": streak_break_penalty(
+            cleared=cleared,
+            breached=breached,
+            prior_streak=prior_streak,
+            dials=d,
+        ),
+        "gap_class": gap_class_eod_reward(gap_class=gap_class, dials=d),
+    }
+    parts["total"] = float(sum(parts.values()))
+    return parts
+
