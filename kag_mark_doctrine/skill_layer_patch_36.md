@@ -11,27 +11,29 @@
 ltf_entry[1..4]              → velocity (ACT timing only)
 tension_scalar               → equilibrium ↔ expansion (BREATH vs LAUNCH feel)
 htf_permission_age           → regime_gate / path clock
+pullback_depth_atr           → Continuous: max adverse excursion of LTF close vs pre-breath extreme / ATR
+floor_dist_atr               → Structural heat at proposed fill: |close - ltf_swing_extreme| / ATR14
 
 ## 2. Logical Forms
 # Macro Tide & Permission
-tide_macro := sign_agree(4h_solo_dir, 1d_solo_dir) if both |dir|=1 else 0
-mass_alive := (4h_solo_mass ≥ m_min) ∧ (1d_solo_mass ≥ m_min)
-rails_conflict := (4h_solo_dir * 1d_solo_dir < 0)
-permission := (tide_macro ≠ 0) ∧ mass_alive ∧ ¬rails_conflict
+mass_alive := (4h_solo_mass ≥ m_min) ∨ (1d_solo_mass ≥ m_min) ∨ (abs(doc_force) ≥ min_force ∧ ¬rails_conflict)
+permission := mass_alive ∧ ¬rails_conflict ∧ side ≠ 0
+
+# Breath & Heat (Continuation Gates)
+ltf_rested   := (against_bars ≥ 3) ∧ ¬shallow_tick ∧ (pullback_depth_atr ≥ 0.35)
+tight_floor  := floor_dist_atr ≤ max_stop_atr  # Dial start: 2.5
 
 # Tension & Launch States
 is_chop      := tension_low_entropy ∧ ¬mass_building
-is_loaded    := permission ∧ tension_cocking ∧ ltf_against_or_soft
 is_launch    := permission ∧ ltf_with_tide ∧ (age ≥ 0)
 
 # Path Clock (Deriving Classes without memos)
 path_class:
-  premature     := ltf_fire_edge ∧ ¬permission
-  fire_window   := is_launch ∧ age ∈ [1, A_young]
-  continuation  := is_launch ∧ age ≥ A_cont ∧ mass_alive
-  wait_loaded   := is_loaded
-  wait_no_trade := is_chop ∨ ¬permission
-  pullback_hold := in_trade ∧ permission ∧ ltf_against_or_soft ∧ ¬collapse
+  premature            := ltf_fire_edge ∧ ¬permission
+  wait_loaded          := permission ∧ ltf_against_or_soft ∧ ¬ltf_rested_complete_to_align
+  wait_no_trade        := is_chop ∨ ¬permission
+  pullback_hold        := in_trade ∧ permission ∧ ltf_against_or_soft ∧ ¬collapse
+  continuation_fire_hq := permission ∧ (age ≥ A_cont) ∧ ltf_with_tide ∧ ltf_rested ∧ tight_floor ∧ (entropy_chop < 0.65)
 
 ## 3. Skill Decode Overlay
 # Path laws override child_greedy safely
@@ -41,7 +43,7 @@ skill_a := map(path_class → HOLD|BUY|SELL)
 # Decode Laws:
 - if path_class == premature|anti_thrash → HOLD
 - if path_class == wait_loaded → HOLD (cocking slingshot)
-- if path_class == fire_window|continuation → child_a (permitted fire)
+- if path_class == continuation_fire_hq → child_a (permitted fire)
 - if in_trade ∧ pullback_hold → HOLD (do not exit on tension decay)
 - if in_trade ∧ is_collapse|force_flip → KILL
 
