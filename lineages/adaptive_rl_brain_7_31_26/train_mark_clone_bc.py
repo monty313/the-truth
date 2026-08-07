@@ -153,6 +153,8 @@ def train_bc(
     sample_weights: Optional[np.ndarray] = None,
     kl_anchor_state: Optional[dict] = None,
     kl_coef: float = 0.0,
+    freeze_trunk: bool = False,
+    multi_head: bool = False,
 ) -> Tuple[Channel1Policy, List[float]]:
     """BC clone. Optional per-sample weights (streak/gap rewards → importance).
 
@@ -161,29 +163,45 @@ def train_bc(
 
     kl_anchor_state + kl_coef: keep new policy close to a prior good embryo
     so miss-day corrections do not destroy award-day behavior.
+
+    freeze_trunk: freeze feature trunk; only train action head.
+    Protects pack features while adjusting fire timing (Spine Shadow climb).
+
+    multi_head: use ReLU dual-layer trunk + aux heads (action still trained here).
     """
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = torch.device("cpu")
     dim = int(obs_dim) if obs_dim is not None else int(X.shape[-1] if len(X) else CHANNEL1_DIM)
-    policy = Channel1Policy(obs_dim=dim, hidden=hidden).to(device)
+    policy = Channel1Policy(obs_dim=dim, hidden=hidden, multi_head=multi_head).to(device)
     if warm_state is not None:
         try:
-            policy.load_state_dict(warm_state)
-            print("  warm-start: loaded prior embryo weights", flush=True)
+            info = policy.load_state_dict_flexible(warm_state, strict=False)
+            print(f"  warm-start: loaded prior embryo weights ({info})", flush=True)
         except Exception as e:
             print(f"  warm-start skip ({e})", flush=True)
+    if freeze_trunk and warm_state is not None:
+        for p in policy.trunk_parameters():
+            p.requires_grad_(False)
+        n_train = sum(p.numel() for p in policy.parameters() if p.requires_grad)
+        print(f"  freeze_trunk: training head only ({n_train} params)", flush=True)
     anchor = None
     if kl_anchor_state is not None and float(kl_coef) > 0.0:
-        anchor = Channel1Policy(obs_dim=dim, hidden=hidden).to(device)
-        anchor.load_state_dict(kl_anchor_state)
+        anchor = Channel1Policy(obs_dim=dim, hidden=hidden, multi_head=multi_head).to(device)
+        try:
+            anchor.load_state_dict_flexible(kl_anchor_state, strict=False)
+        except Exception:
+            anchor.load_state_dict(kl_anchor_state, strict=False)
         anchor.eval()
         for p in anchor.parameters():
             p.requires_grad_(False)
         print(f"  KL anchor on (coef={kl_coef})", flush=True)
     # Slightly lower LR when warm-starting so we polish, not thrash
     use_lr = float(lr) * (0.35 if warm_state is not None else 1.0)
-    opt = torch.optim.Adam(policy.parameters(), lr=use_lr)
+    if freeze_trunk:
+        use_lr = use_lr * 1.4  # head can move a bit more when trunk fixed
+    trainable = [p for p in policy.parameters() if p.requires_grad]
+    opt = torch.optim.Adam(trainable if trainable else policy.parameters(), lr=use_lr)
     n = len(y)
     losses: List[float] = []
     if n == 0:
@@ -249,6 +267,8 @@ def match_rate(policy: Channel1Policy, X: np.ndarray, y: np.ndarray) -> Dict[str
         return {"match": 0.0, "n": 0}
     device = next(policy.parameters()).device
     logits = policy(torch.tensor(X, dtype=torch.float32, device=device))
+    if isinstance(logits, dict):
+        logits = logits["action"]
     pred = logits.argmax(dim=-1).cpu().numpy()
     match = float((pred == y).mean())
     # match when teacher is directional
@@ -260,6 +280,165 @@ def match_rate(policy: Channel1Policy, X: np.ndarray, y: np.ndarray) -> Dict[str
         "dir_match": dir_match,
         "pred_hold_rate": hold_rate,
         "n": int(len(y)),
+    }
+
+
+def multitask_loss(
+    preds: Dict[str, torch.Tensor],
+    y_act: torch.Tensor,
+    y_topo: torch.Tensor,
+    y_wait: torch.Tensor,
+    *,
+    topo_coef: float = 0.5,
+    wait_coef: float = 0.5,
+    act_weight: Optional[torch.Tensor] = None,
+) -> Tuple[torch.Tensor, Dict[str, float]]:
+    """GROK_PROMPT multi-task CE — hidden layers must find links in 168-dim obs."""
+    loss_act = F.cross_entropy(preds["action"], y_act, weight=act_weight)
+    loss_topo = F.cross_entropy(preds["topology"], y_topo)
+    loss_wait = F.cross_entropy(preds["wait_subtype"], y_wait)
+    total = loss_act + float(topo_coef) * loss_topo + float(wait_coef) * loss_wait
+    return total, {
+        "loss_act": float(loss_act.item()),
+        "loss_topo": float(loss_topo.item()),
+        "loss_wait": float(loss_wait.item()),
+        "loss_total": float(total.item()),
+    }
+
+
+def train_bc_multitask(
+    X: np.ndarray,
+    y_act: np.ndarray,
+    y_topology: np.ndarray,
+    y_wait: np.ndarray,
+    *,
+    epochs: int = 40,
+    batch: int = 256,
+    lr: float = 2.5e-4,
+    hidden: int = 128,
+    seed: int = 42,
+    warm_state: Optional[dict] = None,
+    obs_dim: Optional[int] = None,
+    topo_coef: float = 0.5,
+    wait_coef: float = 0.5,
+    kl_anchor_state: Optional[dict] = None,
+    kl_coef: float = 0.0,
+) -> Tuple[Channel1Policy, List[Dict[str, float]]]:
+    """Multi-head BC: action + topology + wait (physics teach path)."""
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    device = torch.device("cpu")
+    dim = int(obs_dim) if obs_dim is not None else int(X.shape[-1] if len(X) else CHANNEL1_DIM)
+    policy = Channel1Policy(obs_dim=dim, hidden=hidden, multi_head=True).to(device)
+    if warm_state is not None:
+        try:
+            info = policy.load_state_dict_flexible(warm_state, strict=False)
+            print(f"  multitask warm-start: {info}", flush=True)
+        except Exception as e:
+            print(f"  multitask warm-start skip ({e})", flush=True)
+    anchor = None
+    if kl_anchor_state is not None and float(kl_coef) > 0.0:
+        anchor = Channel1Policy(obs_dim=dim, hidden=hidden, multi_head=True).to(device)
+        try:
+            anchor.load_state_dict_flexible(kl_anchor_state, strict=False)
+        except Exception:
+            pass
+        anchor.eval()
+        for p in anchor.parameters():
+            p.requires_grad_(False)
+    # Full LR on multi-head teach path — warm partial map should not crawl
+    use_lr = float(lr)
+    opt = torch.optim.Adam(policy.parameters(), lr=use_lr)
+    n = int(len(y_act))
+    history: List[Dict[str, float]] = []
+    if n == 0:
+        return policy, history
+    counts = np.bincount(y_act, minlength=3).astype(np.float64) + 1.0
+    w = (counts.sum() / (3.0 * counts)).astype(np.float32)
+    w[ACTION_HOLD] = float(max(w[ACTION_HOLD], 1.2))
+    w[ACTION_BUY] = float(max(w[ACTION_BUY], w[ACTION_HOLD] * 0.95))
+    w[ACTION_SELL] = float(max(w[ACTION_SELL], w[ACTION_HOLD] * 0.95))
+    act_weight = torch.tensor(w, dtype=torch.float32, device=device)
+    # Topology class weights (continuation vs chop often imbalanced)
+    tcounts = np.bincount(y_topology, minlength=4).astype(np.float64) + 1.0
+    tw = (tcounts.sum() / (4.0 * tcounts)).astype(np.float32)
+    topo_weight = torch.tensor(tw, dtype=torch.float32, device=device)
+    Xt = torch.tensor(X, dtype=torch.float32, device=device)
+    ya = torch.tensor(y_act, dtype=torch.long, device=device)
+    yt = torch.tensor(y_topology, dtype=torch.long, device=device)
+    yw = torch.tensor(y_wait, dtype=torch.long, device=device)
+    for ep in range(epochs):
+        perm = np.random.permutation(n)
+        ep_parts = {"loss_act": 0.0, "loss_topo": 0.0, "loss_wait": 0.0, "loss_total": 0.0}
+        nb = 0
+        for i in range(0, n, batch):
+            idx = perm[i : i + batch]
+            preds = policy.forward_heads(Xt[idx])
+            loss_act = F.cross_entropy(preds["action"], ya[idx], weight=act_weight)
+            loss_topo = F.cross_entropy(preds["topology"], yt[idx], weight=topo_weight)
+            loss_wait = F.cross_entropy(preds["wait_subtype"], yw[idx])
+            loss = loss_act + float(topo_coef) * loss_topo + float(wait_coef) * loss_wait
+            parts = {
+                "loss_act": float(loss_act.item()),
+                "loss_topo": float(loss_topo.item()),
+                "loss_wait": float(loss_wait.item()),
+                "loss_total": float(loss.item()),
+            }
+            if anchor is not None:
+                with torch.no_grad():
+                    a_logits = anchor(Xt[idx])
+                    if isinstance(a_logits, dict):
+                        a_logits = a_logits["action"]
+                    a_logp = F.log_softmax(a_logits, dim=-1)
+                    a_p = a_logp.exp()
+                logp_new = F.log_softmax(preds["action"], dim=-1)
+                kl = (a_p * (a_logp - logp_new)).sum(dim=-1).mean()
+                loss = loss + float(kl_coef) * kl
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            for k, v in parts.items():
+                ep_parts[k] += v
+            nb += 1
+        row = {k: v / max(nb, 1) for k, v in ep_parts.items()}
+        history.append(row)
+        if (ep + 1) % 5 == 0 or ep == 0:
+            print(
+                f"  mt epoch {ep+1}/{epochs} total={row['loss_total']:.4f} "
+                f"act={row['loss_act']:.4f} topo={row['loss_topo']:.4f} "
+                f"wait={row['loss_wait']:.4f}",
+                flush=True,
+            )
+    return policy, history
+
+
+@torch.no_grad()
+def multitask_match_rate(
+    policy: Channel1Policy,
+    X: np.ndarray,
+    y_act: np.ndarray,
+    y_topology: np.ndarray,
+    y_wait: np.ndarray,
+) -> Dict[str, float]:
+    """Action + topology + wait accuracy (discovery success uses topology)."""
+    if len(y_act) == 0:
+        return {
+            "action_accuracy": 0.0,
+            "topology_accuracy": 0.0,
+            "wait_accuracy": 0.0,
+            "n": 0,
+        }
+    device = next(policy.parameters()).device
+    preds = policy.forward_heads(torch.tensor(X, dtype=torch.float32, device=device))
+    pa = preds["action"].argmax(dim=-1).cpu().numpy()
+    pt = preds["topology"].argmax(dim=-1).cpu().numpy()
+    pw = preds["wait_subtype"].argmax(dim=-1).cpu().numpy()
+    return {
+        "action_accuracy": float((pa == y_act).mean()),
+        "topology_accuracy": float((pt == y_topology).mean()),
+        "wait_accuracy": float((pw == y_wait).mean()),
+        "n": int(len(y_act)),
+        "pred_hold_rate": float((pa == ACTION_HOLD).mean()),
     }
 
 
@@ -365,6 +544,15 @@ def main(argv: Optional[List[str]] = None) -> int:
         action="store_true",
         help="168-dim Mark board: sets+doctrine+92 agents+self (full clone eyes)",
     )
+    ap.add_argument(
+        "--reason-labels",
+        action="store_true",
+        help=(
+            "With full_obs: also run Reason Teacher + pattern graph + learn-to-learn "
+            "on decision bars; write multi-head labels (topology/wait/roles). "
+            "Act-only BC is COPY FAIL — reason labels teach learn-to-learn."
+        ),
+    )
     args = ap.parse_args(argv)
 
     os.makedirs(CKPT_DIR, exist_ok=True)
@@ -415,6 +603,47 @@ def main(argv: Optional[List[str]] = None) -> int:
         f"full_obs={args.full_obs} X_dim={X.shape[-1] if len(y) else 0}",
         flush=True,
     )
+
+    reason_meta: Dict[str, Any] = {"enabled": bool(args.reason_labels)}
+    if args.reason_labels:
+        if not args.full_obs:
+            print(
+                "  --reason-labels requires --full-obs (bot must SEE all 168 channels)",
+                flush=True,
+            )
+            return 2
+        print(
+            "Reason Teacher + pattern graph + learn-to-learn on practice days…",
+            flush=True,
+        )
+        try:
+            from lineages.adaptive_rl_brain_7_31_26.kag_teachers.full_obs_reason_hook import (
+                collect_full_obs_reason_labels,
+            )
+
+            Xr, yr, aux_list, reason_meta = collect_full_obs_reason_labels(
+                practice,
+                target=args.target,
+                risk=args.risk,
+                max_days=min(8, args.max_train_days),
+                max_bars_per_day=30,
+                seed=train_seed,
+                write=True,
+            )
+            print(
+                f"  reason labels: n={reason_meta.get('n_rows')} "
+                f"l2l_ok={reason_meta.get('n_l2l_ok')} "
+                f"path={reason_meta.get('labels_path')}",
+                flush=True,
+            )
+            # Optional: blend reason topology-weighted sample weights into BC later
+            reason_meta["aux_heads_note"] = (
+                "Train topology/wait/role_map with act — never act-only"
+            )
+        except Exception as e:
+            print(f"  reason-labels collect failed (BC continues): {e}", flush=True)
+            reason_meta = {"ok": False, "error": str(e)}
+
     if len(y) < 50:
         print("Too few samples — abort", flush=True)
         return 2
@@ -569,6 +798,13 @@ def main(argv: Optional[List[str]] = None) -> int:
         "eval_greedy_forward": ev_f,
         "teacher_practice": t_p,
         "teacher_forward": t_f,
+        "full_obs": bool(args.full_obs),
+        "obs_dim": obs_dim,
+        "reason_labels": reason_meta,
+        "learn_to_learn": (
+            "full_obs + reason-labels: see all 168, pattern graph, multi-head aux; "
+            "act-only = COPY FAIL; meta attention only"
+        ),
         "doctrine": "MARK_DOCTRINE_FIVE_LAWS.md",
         "proven_touched": False,
         "clone_ready_heuristic": (

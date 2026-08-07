@@ -1,0 +1,7 @@
+L2L_FIRE QUICKREAD
+same=36 mwt=14 breach=0 stage=teen
+method=fable_kag_l2l
+stop_gate_pass_35=MET
+primary=fable_kag_l2l.py --keep-floor 36
+forbid=self_climb_l2l as primary
+load=mark_clone_full_obs_v1.pt (teen) NOT CHILD_STAGE demote

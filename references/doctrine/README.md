@@ -10,6 +10,8 @@
 4. **policy_skill.md** — SkillOpt skill memory  
 5. **STANDING_LAWS.md** — hard laws  
 6. **LLM_REGIME_DEFINITIONS.yaml** — regimes + indicators  
+7. **`kag_mark_doctrine/`** — KAG seed pack (teach meta-RL; learn ≠ copy; novel roles). Merge additive only — see `MERGE_AND_PRESERVE.md` inside.  
+8. Code twin: `lineages/adaptive_rl_brain_7_31_26/kag_teachers/` + `KAG_TEACHER_META_RL.md`
 
 **Talk to Mark from this repo:** root `MARK HERE!.lnk` (same Second Brain as ARMY — `SOUL_MATCH.md`).
 

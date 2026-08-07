@@ -1,0 +1,332 @@
+{
+  "ts": "2026-08-06T04:21:16.098758+00:00",
+  "round": 6,
+  "best_same": 35,
+  "best_policy": 35,
+  "best_mwt": 15,
+  "best_breach": 0,
+  "last_focus": "2026-02-06",
+  "last_keep": false,
+  "target_same": 50,
+  "cycles_tail": [
+    {
+      "cycle": 0,
+      "same": 33,
+      "policy": 33,
+      "mwt": 17,
+      "breach": 0
+    },
+    {
+      "round": 1,
+      "focus": "2026-01-27",
+      "focus_ok": false,
+      "same": 29,
+      "policy": 29,
+      "mwt": 21,
+      "breach": 0,
+      "keep": false,
+      "repaired": false,
+      "principle_bias": {
+        "load": {
+          "name": "load_long",
+          "dir_mult": 1.4,
+          "hold_mult": 2.2,
+          "act": "wait_loaded",
+          "topology": "slingshot_load",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension",
+            "wait_is_skill"
+          ]
+        },
+        "release": {
+          "name": "release_long",
+          "dir_mult": 2.5,
+          "hold_mult": 1.1,
+          "act": "fire_buy",
+          "topology": "launch",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension"
+          ]
+        },
+        "chop": {
+          "name": "chop",
+          "dir_mult": 0.4,
+          "hold_mult": 2.8,
+          "act": "wait_no_trade",
+          "topology": "chop",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy"
+          ]
+        }
+      }
+    },
+    {
+      "round": 2,
+      "focus": "2026-02-13",
+      "focus_ok": false,
+      "same": 35,
+      "policy": 35,
+      "mwt": 15,
+      "breach": 0,
+      "keep": true,
+      "repaired": false,
+      "principle_bias": {
+        "load": {
+          "name": "load_long",
+          "dir_mult": 1.4,
+          "hold_mult": 2.2,
+          "act": "wait_loaded",
+          "topology": "slingshot_load",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension",
+            "wait_is_skill"
+          ]
+        },
+        "release": {
+          "name": "release_long",
+          "dir_mult": 2.5,
+          "hold_mult": 1.1,
+          "act": "fire_buy",
+          "topology": "launch",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension"
+          ]
+        },
+        "chop": {
+          "name": "chop",
+          "dir_mult": 0.4,
+          "hold_mult": 2.8,
+          "act": "wait_no_trade",
+          "topology": "chop",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy"
+          ]
+        }
+      }
+    },
+    {
+      "round": 3,
+      "focus": "2026-02-20",
+      "focus_ok": true,
+      "same": 30,
+      "policy": 30,
+      "mwt": 20,
+      "breach": 0,
+      "keep": false,
+      "repaired": true,
+      "principle_bias": {
+        "load": {
+          "name": "load_long",
+          "dir_mult": 1.4,
+          "hold_mult": 2.2,
+          "act": "wait_loaded",
+          "topology": "slingshot_load",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension",
+            "wait_is_skill"
+          ]
+        },
+        "release": {
+          "name": "release_long",
+          "dir_mult": 2.5,
+          "hold_mult": 1.1,
+          "act": "fire_buy",
+          "topology": "launch",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension"
+          ]
+        },
+        "chop": {
+          "name": "chop",
+          "dir_mult": 0.4,
+          "hold_mult": 2.8,
+          "act": "wait_no_trade",
+          "topology": "chop",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy"
+          ]
+        }
+      }
+    },
+    {
+      "round": 4,
+      "focus": "2026-02-05",
+      "focus_ok": false,
+      "same": 31,
+      "policy": 31,
+      "mwt": 18,
+      "breach": 1,
+      "keep": false,
+      "repaired": false,
+      "principle_bias": {
+        "load": {
+          "name": "load_long",
+          "dir_mult": 1.4,
+          "hold_mult": 2.2,
+          "act": "wait_loaded",
+          "topology": "slingshot_load",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension",
+            "wait_is_skill"
+          ]
+        },
+        "release": {
+          "name": "release_long",
+          "dir_mult": 2.5,
+          "hold_mult": 1.1,
+          "act": "fire_buy",
+          "topology": "launch",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension"
+          ]
+        },
+        "chop": {
+          "name": "chop",
+          "dir_mult": 0.4,
+          "hold_mult": 2.8,
+          "act": "wait_no_trade",
+          "topology": "chop",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy"
+          ]
+        }
+      }
+    },
+    {
+      "round": 5,
+      "focus": "2026-03-11",
+      "focus_ok": false,
+      "same": 29,
+      "policy": 29,
+      "mwt": 21,
+      "breach": 0,
+      "keep": false,
+      "repaired": false,
+      "principle_bias": {
+        "load": {
+          "name": "load_long",
+          "dir_mult": 1.4,
+          "hold_mult": 2.2,
+          "act": "wait_loaded",
+          "topology": "slingshot_load",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension",
+            "wait_is_skill"
+          ]
+        },
+        "release": {
+          "name": "release_long",
+          "dir_mult": 2.5,
+          "hold_mult": 1.1,
+          "act": "fire_buy",
+          "topology": "launch",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension"
+          ]
+        },
+        "chop": {
+          "name": "chop",
+          "dir_mult": 0.4,
+          "hold_mult": 2.8,
+          "act": "wait_no_trade",
+          "topology": "chop",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy"
+          ]
+        }
+      }
+    },
+    {
+      "round": 6,
+      "focus": "2026-02-06",
+      "focus_ok": false,
+      "same": 33,
+      "policy": 33,
+      "mwt": 16,
+      "breach": 1,
+      "keep": false,
+      "repaired": false,
+      "principle_bias": {
+        "load": {
+          "name": "load_long",
+          "dir_mult": 1.4,
+          "hold_mult": 2.2,
+          "act": "wait_loaded",
+          "topology": "slingshot_load",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension",
+            "wait_is_skill"
+          ]
+        },
+        "release": {
+          "name": "release_long",
+          "dir_mult": 2.5,
+          "hold_mult": 1.1,
+          "act": "fire_buy",
+          "topology": "launch",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy",
+            "dual_period_tension"
+          ]
+        },
+        "chop": {
+          "name": "chop",
+          "dir_mult": 0.4,
+          "hold_mult": 2.8,
+          "act": "wait_no_trade",
+          "topology": "chop",
+          "principle_ids": [
+            "dominant_trends",
+            "ltf_never_votes_side",
+            "learn_not_copy"
+          ]
+        }
+      }
+    }
+  ]
+}

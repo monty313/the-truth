@@ -1,0 +1,18 @@
+﻿{
+    "message":  "PASS 35 GATE MET. BEST is 36. Do not report 35. Primary climb = fable_kag_l2l.py --keep-floor 36. Forbid self_climb as primary.",
+    "growth_method":  "fable_kag_l2l",
+    "same_outcome":  36,
+    "mwt":  14,
+    "stop_gate_pass_35":  true,
+    "updated_at":  "2026-08-07T00:31:07.4691521Z",
+    "core_skill":  "fire_skill multi-day pattern transfer",
+    "read_first":  [
+                       "BEST__latest.json",
+                       "BEST__meters.txt",
+                       "L2L_FIRE__QUICKREAD.txt",
+                       "FABLE_KAG_L2L_HARNESS__latest.json"
+                   ],
+    "stop_gate_met":  true,
+    "stage":  "teen",
+    "breach":  0
+}

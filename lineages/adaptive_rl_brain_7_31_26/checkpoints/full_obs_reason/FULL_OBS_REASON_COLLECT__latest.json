@@ -1,0 +1,12 @@
+{
+  "ts": "2026-08-06T01:23:29.122754+00:00",
+  "n_rows": 10,
+  "obs_dim": 168,
+  "n_days": 2,
+  "n_reason_ok": 10,
+  "n_l2l_ok": 9,
+  "n_fail": 0,
+  "labels_path": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\full_obs_reason\\FULL_OBS_REASON_LABELS__lineage.jsonl",
+  "law": "full_obs always; multi-head labels; agents=sensors; PROVEN never touched",
+  "success": true
+}

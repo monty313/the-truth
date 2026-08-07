@@ -1,0 +1,99 @@
+{
+  "saved_at": "2026-08-06T09:16:45.369403+00:00",
+  "best_50d": {},
+  "principle_cycle": {
+    "decision": "KEEP",
+    "practice": null,
+    "forward": null,
+    "gates": {
+      "promote": true,
+      "decision": "KEEP",
+      "gates": [
+        {
+          "gate": "learn_not_copy",
+          "passed": true,
+          "metrics": {
+            "act_match": 1.0,
+            "topology_match": 1.0,
+            "role_map_match": 1.0,
+            "wait_match": 1.0,
+            "copying": false,
+            "freeze_copy": false
+          },
+          "reason": "OK principles track with act"
+        },
+        {
+          "gate": "held_out_family_swap",
+          "passed": true,
+          "metrics": {
+            "n": 20,
+            "topology_agree": 1.0,
+            "act_family_agree": 1.0,
+            "agree": 1.0,
+            "min_agree": 0.85
+          },
+          "reason": "OK transfer across families"
+        },
+        {
+          "gate": "forward_accuracy",
+          "passed": true,
+          "metrics": {
+            "practice_acc": 1.0,
+            "forward_acc": 1.0,
+            "baseline_forward_acc": 0.109375,
+            "improved": true,
+            "above_bar": true,
+            "breach_flag": false,
+            "min_forward": 0.7
+          },
+          "reason": "OK forward principle accuracy"
+        },
+        {
+          "gate": "hard_task_accuracy",
+          "passed": true,
+          "metrics": {
+            "hard_forward_acc": 1.0,
+            "soft_forward_acc": 1.0,
+            "gap": 0.0,
+            "min_hard": 0.55,
+            "max_soft_hard_gap": 0.45
+          },
+          "reason": "OK hard-task principles"
+        }
+      ],
+      "law": "forward_is_adopt_judge; learn_not_copy; no_shell_touch"
+    },
+    "adopt": null,
+    "keep": null,
+    "saved_at": null
+  },
+  "principle_raw_keys": [
+    "when",
+    "mission",
+    "partner_lane",
+    "pt5_laws_in_curriculum",
+    "gsd",
+    "mwt_focus",
+    "curriculum",
+    "cold_forward",
+    "practice_score",
+    "forward_score",
+    "hard_forward_score",
+    "soft_forward_score",
+    "baseline_forward_acc",
+    "act_only_ablation",
+    "gates",
+    "decision",
+    "promote",
+    "feel",
+    "champion_path",
+    "student_path",
+    "partner_bus"
+  ],
+  "l2l": {
+    "n": 0,
+    "note": "run learn_to_learn_path.py for path-class memory"
+  },
+  "adult_like": true,
+  "proven_touched": false
+}

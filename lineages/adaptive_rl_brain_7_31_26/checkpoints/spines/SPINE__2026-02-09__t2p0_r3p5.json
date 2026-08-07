@@ -1,0 +1,280 @@
+{
+  "day": "2026-02-09",
+  "target_pct": 2.0,
+  "risk_pct": 3.5,
+  "tide_day": "+1",
+  "regime_day": "soul_compiled",
+  "events": [
+    {
+      "t": 720,
+      "kind": "wait_loaded",
+      "tide": "+1",
+      "topo": "slingshot_load",
+      "reason": "pre_fire_hold"
+    },
+    {
+      "t": 745,
+      "kind": "wait_loaded",
+      "tide": "+1",
+      "topo": "slingshot_load",
+      "reason": "pre_fire_hold"
+    },
+    {
+      "t": 770,
+      "kind": "wait_loaded",
+      "tide": "+1",
+      "topo": "slingshot_load",
+      "reason": "pre_fire_hold"
+    },
+    {
+      "t": 795,
+      "kind": "wait_loaded",
+      "tide": "+1",
+      "topo": "slingshot_load",
+      "reason": "pre_fire_hold"
+    },
+    {
+      "t": 820,
+      "kind": "wait_loaded",
+      "tide": "+1",
+      "topo": "slingshot_load",
+      "reason": "pre_fire_hold"
+    },
+    {
+      "t": 845,
+      "kind": "wait_loaded",
+      "tide": "+1",
+      "topo": "slingshot_load",
+      "reason": "pre_fire_hold"
+    },
+    {
+      "t": 870,
+      "kind": "wait_loaded",
+      "tide": "+1",
+      "topo": "slingshot_load",
+      "reason": "pre_fire_hold"
+    },
+    {
+      "t": 895,
+      "kind": "wait_loaded",
+      "tide": "+1",
+      "topo": "slingshot_load",
+      "reason": "pre_fire_hold"
+    },
+    {
+      "t": 920,
+      "kind": "fire",
+      "side": "BUY",
+      "size_bucket": "micro",
+      "tide": "+1",
+      "topo": "slingshot_release",
+      "reason": "soul_entry"
+    },
+    {
+      "t": 945,
+      "kind": "add",
+      "side": "BUY",
+      "size_bucket": "micro",
+      "tide": "+1",
+      "topo": "force_add",
+      "reason": "soul_add"
+    },
+    {
+      "t": 970,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 995,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1020,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1045,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1070,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1095,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1120,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1145,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1170,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1195,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1220,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1245,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1270,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1295,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1320,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1345,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1370,
+      "kind": "hold_on_spine",
+      "tide": "0",
+      "topo": "in_trade_or_done",
+      "reason": "spine_hold"
+    },
+    {
+      "t": 1370,
+      "kind": "bank",
+      "tide": "0",
+      "topo": "done_bank",
+      "reason": "goal"
+    }
+  ],
+  "clue_prior": {
+    "force_family": 1.0,
+    "noise_agents": 0.1
+  },
+  "mark_source": "soul_plan",
+  "risk_use_frac": 0.25,
+  "per_trade_cap_pct": 0.2,
+  "mode": "entry_plus_add",
+  "side": "BUY",
+  "t1": 920,
+  "t2": 945,
+  "cleared": true,
+  "breached": false,
+  "plan": {
+    "720": 0,
+    "745": 0,
+    "770": 0,
+    "795": 0,
+    "820": 0,
+    "845": 0,
+    "870": 0,
+    "895": 0,
+    "920": 1,
+    "945": 1,
+    "970": 0,
+    "995": 0,
+    "1020": 0,
+    "1045": 0,
+    "1070": 0,
+    "1095": 0,
+    "1120": 0,
+    "1145": 0,
+    "1170": 0,
+    "1195": 0,
+    "1220": 0,
+    "1245": 0,
+    "1270": 0,
+    "1295": 0,
+    "1320": 0,
+    "1345": 0,
+    "1370": 0
+  },
+  "decision_indices": [
+    720,
+    745,
+    770,
+    795,
+    820,
+    845,
+    870,
+    895,
+    920,
+    945,
+    970,
+    995,
+    1020,
+    1045,
+    1070,
+    1095,
+    1120,
+    1145,
+    1170,
+    1195,
+    1220,
+    1245,
+    1270,
+    1295,
+    1320,
+    1345,
+    1370
+  ]
+}

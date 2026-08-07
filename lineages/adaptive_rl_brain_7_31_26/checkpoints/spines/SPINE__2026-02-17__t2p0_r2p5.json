@@ -1,0 +1,58 @@
+{
+  "day": "2026-02-17",
+  "target_pct": 2.0,
+  "risk_pct": 2.5,
+  "tide_day": "0",
+  "regime_day": "soul_compiled",
+  "events": [
+    {
+      "t": 0,
+      "kind": "wait_loaded",
+      "tide": "0",
+      "topo": "online_fallback",
+      "reason": "no_sparse_plan"
+    }
+  ],
+  "clue_prior": {
+    "force_family": 1.0,
+    "noise_agents": 0.1
+  },
+  "mark_source": "soul_online_fallback",
+  "risk_use_frac": 0.35,
+  "per_trade_cap_pct": 0.25,
+  "mode": "walk",
+  "side": null,
+  "t1": null,
+  "t2": null,
+  "cleared": true,
+  "breached": false,
+  "decision_indices": [
+    720,
+    745,
+    770,
+    795,
+    820,
+    845,
+    870,
+    895,
+    920,
+    945,
+    970,
+    995,
+    1020,
+    1045,
+    1070,
+    1095,
+    1120,
+    1145,
+    1170,
+    1195,
+    1220,
+    1245,
+    1270,
+    1295,
+    1320,
+    1345,
+    1370
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "ts": "2026-08-06T23:27:31.588350+00:00",
+  "decision": "REJECT",
+  "keep": false,
+  "pre": {
+    "same_outcome": 35,
+    "policy_clear": 35,
+    "mark_would_take": 15,
+    "n_breach": 0
+  },
+  "post": {
+    "same_outcome": 15,
+    "policy_clear": 15,
+    "mark_would_take": 35,
+    "n_breach": 0,
+    "miss_class_counts": {
+      "MARK_WOULD_TAKE": 35,
+      "AWARD": 15
+    }
+  },
+  "same_up": false,
+  "breach_ok": true,
+  "is_better": false,
+  "is_safe": false,
+  "labels": {
+    "n": 1639,
+    "n_pos": 1389,
+    "hits_by_set": {
+      "1": 812,
+      "2": 739,
+      "3": 156,
+      "4": 27
+    },
+    "cci_pos": 98,
+    "rsi_pos": 1291
+  },
+  "train": {
+    "epochs": 30,
+    "kl_coef": 0.6,
+    "topo_coef": 0.4,
+    "wait_coef": 0.3,
+    "lr": 0.0004
+  },
+  "ckpt_live": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\mark_clone_full_obs_v1.pt",
+  "ckpt_candidate": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\mark_clone_candidate_strategies_v1.pt",
+  "backup": "C:\\Users\\user\\Fable5_Foundation\\MOMENTUM_ONE\\the-truth\\lineages\\adaptive_rl_brain_7_31_26\\checkpoints\\fable_50d_match\\PRE_CLIMB35_STRATEGY__backup.pt",
+  "proven_touched": false
+}

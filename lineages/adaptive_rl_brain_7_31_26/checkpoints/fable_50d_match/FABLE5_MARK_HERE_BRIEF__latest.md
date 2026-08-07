@@ -2,7 +2,7 @@
 
 **From:** Fable 5 acting as **MARK HERE** (`fable5_mark_here_kag`)
 **Channel:** `MARK HERE!.lnk` → http://127.0.0.1:8000/chat
-**When:** 2026-08-05T22:48:57.966429+00:00
+**When:** 2026-08-07T00:25:05.150250+00:00
 **KAG:** OpenSPG-style mutual index over army + the-truth + pt5 (upstream https://github.com/OpenSPG/KAG.git)
 
 ---
@@ -15,7 +15,7 @@
 
 ## One recommendation
 
-**same≈33/50 (above baseline 27): primary = one-day MWT DAgger + KL; secondary = autopsy dials (MWT miss penalty, soul-side entry, thrash break). KEEP only if full-50d same rises and breach stays 0. Do not crank entry rewards until hold-rate dies. One policy = Mark.**
+**same≈36/50 (above baseline 27): primary = one-day MWT DAgger + KL; secondary = autopsy dials (MWT miss penalty, soul-side entry, thrash break). KEEP only if full-50d same rises and breach stays 0. Do not crank entry rewards until hold-rate dies. One policy = Mark.**
 
 ## MARK HERE answer — why rewards alone do not hit the goal
 
@@ -73,7 +73,7 @@ _Template from autopsy; re-autopsy before mutate; never shell_
 - Mark answer states chart truth + which dials may move.
 - Fable structure: measure gap → propose dial delta OR one-day DAgger → score 50d → KEEP/REJECT.
 - Only KEEP writes embryo; dials that lose are rolled back with the weights.
-- Current: best_same=33 baseline_same=27 gap_to_50=17 — reward dials are secondary; primary is Mark labels on miss days.
+- Current: best_same=36 baseline_same=27 gap_to_50=14 — reward dials are secondary; primary is Mark labels on miss days.
 
 ## Meters (what the lab shows)
 
@@ -82,8 +82,8 @@ _Template from autopsy; re-autopsy before mutate; never shell_
 | Mark clear (baseline 50d) | 50 |
 | Policy clear (baseline) | 27 |
 | same_outcome baseline | 27 |
-| best same (learning) | 33 |
-| gap to 50 | 17 |
+| best same (learning) | 36 |
+| gap to 50 | 14 |
 | last one-day focus | None |
 | last one-day decision | None |
 
@@ -122,22 +122,22 @@ _Template from autopsy; re-autopsy before mutate; never shell_
 
 ## KAG evidence (top retrievals)
 
-- **[the-truth]** score=58.5 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\mark_consistency\CONSISTENCY__latest.md`
-  - _# Mark long-term consistency — soul = policy  **When:** 2026-08-05   **Goal:** hundreds of days, random T/R, no retrain, breach 0, Mark sense    ---  ## What Mark sense means (from HITL + pt5)  | Mark law | Fix in lab | _
-- **[the-truth]** score=55.25 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\LEARNING_50D_MATCH.md`
-  - _# LEARNING — Fable 50-day Mark match loop  **Goal:** policy day outcomes match Mark full-day plans on frozen 50 calendar days.   **Window:** first 50 loadable days `2026-01-20` → `2026-03-30`, seed=42, soft_bias=false.  _
-- **[the-truth]** score=53.625 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\HANDOFF_2026-08-05.md`
-  - _# HANDOFF — 2026-08-05 (saved progress)  **Read first:** `00_MAP_OF_THE_HOUSE.md`   **Long consistency report:** `lineages/adaptive_rl_brain_7_31_26/checkpoints/mark_consistency/CONSISTENCY__latest.md`   **ARMY GSD goal:_
-- **[the-truth]** score=50.375 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\POLICY_EQUALS_MARK_ON_CHART.md`
-  - __31_26/train_mark_clone_bc.py --epochs 40 --max-train-days 50 python lineages/adaptive_rl_brain_7_31_26/compare_mark_clone_attention.py --pair 3.0 3.5 --mode forward --eyes-only --eyes-mode mark_doctrine  # Production me_
-- **[the-truth]** score=48.75 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\KEEP_AFTER_SOUL.md`
-  - _|  ---  ## When to unlock (definition of done for step 1)  Unlock agents/obs into T3 policy only when **all** hold:  | # | Gate | |---|------| | 1 | Mark soul teacher ≥ 9/10 on random-pair 10d, breach 0 | | 2 | Pure poli_
-- **[the-truth]** score=48.75 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\MARK_CLONE_LOOP_PROTOCOL.md`
-  - _clone_policy_ab_hard_soft.json`) | | Hard thrash improved | policy mean_entries &lt; baseline | | PROVEN mtime | unchanged |  ---  ## If Mark would disagree on a day  1. Run day walk: `tutor_day_walk` or `train_mark_clon_
-- **[the-truth]** score=48.75 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\MARK_SOUL_TRANSFER.md`
-  - _# Mark soul → policy (Fable 5 as translator)  **When:** 2026-08-05   **Order:** Mark sees chart + sizes + adds → write day → BC policy → pure policy acts like Mark.  ## What “soul” means here (trading)  Not chat personal_
-- **[the-truth]** score=47.125 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\mark_on_chart_fire_notes.md`
-  - _﻿# mark_on_chart_fire_notes  ## FIRE 2026-08-04T17:49Z (Mark clone BC fire)  **ckpt:** `checkpoints/mark_clone_doctrine_v1.pt`   **eyes:** mark_doctrine | decode: pure greedy policy   **tests:** test_mark_sets_law + oppo_
+- **[the-truth]** score=14.625 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\FABLE5_MARK_HERE_BRIEF__latest.md`
+  - _G closes the loop  - KAG retrieves pt5 + SOUL_MATCH + LEARNING + autopsy + POLICY_EQUALS_MARK. - Mark answer states chart truth + which dials may move. - Fable structure: measure gap → propose dial delta OR one-day DAgge_
+- **[the-truth]** score=14.625 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\MARK_HERE_STUDENT_DIALOGUE__latest.md`
+  - _e **best embryo**. Never multi-MWT thrash BC.  **3. KEEP only if the whole 50 rises (or stays) and breach stays 0**   Convert-and-lose-three is a REJECT. Pack-repair must **graft onto BEST**, not polish the thrash net.  _
+- **[the-truth]** score=13.0 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\CONVERSATION__mark_vs_student_llm__latest.md`
+  - _*Attributes**: - **Class**: Execution / Policy Divergence. - **Symptoms**: Zero award on MWT (0/15), size-lock failure (1/15), inverted triggers at bars 720 and 1145, directional hesitation at bar 995. Total PnL spread o_
+- **[the-truth]** score=13.0 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\KAG_FIX_PLAN__mark_student__latest.md`
+  - _# KAG Fix Plan — Mark × Student × Fable (evidence)  **Issue:** Premature Execution Drift / path-timing desync   **Goal:** same > 35 with breach 0; then toward 50; forward holdout later   **Sources:** KAG index + lab tele_
+- **[the-truth]** score=13.0 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\L2L_DELIBERATION__constitution.md`
+  - _# Learn-to-Learn Deliberation Constitution  **When:** 2026-08-06 (cycle 1)   **Who:** Implementer (Grok) · Dual-Folder KAG Peer · Super Mentor L2L KAG · lab evidence (the-truth) · pt5   **Live floor:** child **35/50** · _
+- **[the-truth]** score=13.0 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\MARK_HERE_ANSWER__why_rewards_alone.md`
+  - _if same stalls with high hold - DAgger focus on policy-path labels for one miss day at a time  ### Must not  - Shell heat / bank / breach floors - Trail + cushion + scale-in package (banned) - PROVEN checkpoints - Second_
+- **[the-truth]** score=13.0 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\PRIME_AGENT_L2L_KAG_MAP.md`
+  - _Continual harness refine** | KAG notes + `L2L_PATH_MEMORY` + WHAT_WORKS + charter | Only evidence-backed law updates | | **Snapshot / rollback** | KEEP/REJECT restore child backup | REJECT → restore embryo | | **Skills (_
+- **[the-truth]** score=13.0 — `C:\Users\user\Fable5_Foundation\MOMENTUM_ONE\the-truth\lineages\adaptive_rl_brain_7_31_26\checkpoints\fable_50d_match\THINKING__spine_shadow_now.md`
+  - _breach 0; KEEP only if not worse | | Forward 100 | dual score, same high + breach 0, leakage audit empty | | Method | spine compile + oracle green already done |  ## Risks I'm watching  - DAgger can thrash (too many fire_
 
 ## Dialogue contract
 

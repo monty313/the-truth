@@ -1,0 +1,16 @@
+﻿{
+    "best_policy":  33,
+    "best_mwt":  17,
+    "last_focus":  "2026-01-27",
+    "best_same":  33,
+    "best_breach":  0,
+    "note":  "Interrupted mid post-score round1; BEST still 33. Continue from this embryo — do not reset.",
+    "ts":  "2026-08-06T02:47:38.4644488Z",
+    "next_focus_hint":  [
+                            "2026-02-13",
+                            "2026-02-20",
+                            "2026-02-05",
+                            "2026-03-11",
+                            "2026-01-29"
+                        ]
+}

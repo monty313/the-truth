@@ -89,6 +89,20 @@ From `meta_tuner.BOUNDS` (and self-heal dials):
 | Reintroduce trail+cushion+scale-in | IRAC kill |
 | Treat signal agents as the policy soul | Agents = sensors |
 | Flip `sets_lock` under a live PROVEN session without cache wipe + retrain | Semantic obs shift |
+| Adopt a candidate because **practice** clear% went up | Forward is the only champion judge (2026-08-05) |
+
+### Meta forward-consistency law (2026-08-05)
+
+| Step | Pool | Role |
+|------|------|------|
+| Probe / short PPO | **Practice** (seen) | Search only |
+| Score champion | **Forward** (unseen) | Sole adopt judge |
+| Practice score | Practice sample | Screen — reject if clear% collapses |
+| Weak forward clear/streak | — | Force-search `CONSISTENCY_FORWARD_KNOBS` + Mark TREND_KNOBS |
+
+**Adopt only if:** forward consistency improves (paired gate) **and** forward breach not worse **and** forward longest day-streak not shorter **and** side veto ok **and** practice screen ok.
+
+Code: `code/training/meta_tuner.py` · Mark dials CLI: `lineages/adaptive_rl_brain_7_31_26/meta_forward_consistency.py`
 
 ---
 

@@ -1,0 +1,28 @@
+{
+  "updated_at": "2026-08-06T05:14:19.802255+00:00",
+  "best_same": 35,
+  "best_mwt": 15,
+  "implication": "TIMING/PATH \u2014 multi-iter DAgger",
+  "cycles": [
+    {
+      "round": 0,
+      "same": 35,
+      "mwt": 15,
+      "breach": 0,
+      "decision": "BASELINE"
+    },
+    {
+      "round": 1,
+      "focus": "2026-02-13",
+      "focus_ok": false,
+      "same": 27,
+      "mwt": 23,
+      "breach": 0,
+      "decision": "REJECT",
+      "best_same": 35
+    }
+  ],
+  "fail": {
+    "2026-02-13": 1
+  }
+}

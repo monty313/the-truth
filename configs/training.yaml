@@ -31,7 +31,18 @@ self_tuner:                       # 2026-07-20 — the autonomous self-tuner (tr
   # collapse to ONE day-vote, so a lucky day can't fake significance. A change is adopted only
   # if it beats the champion on FRESH select days (confirm_z) AND holds on the PERMANENT
   # held-out audit days — two independent fresh hurdles that can't be won on luck.
+  #
+  # 2026-08-05 FORWARD LAW (mandatory):
+  #   probe / PPO fit  → practice (seen) days only
+  #   adopt champion   → FORWARD (unseen) consistency must improve
+  #   also required    → forward breach not worse, forward longest day-streak not shorter
+  #   practice screen  → reject if practice clear% collapses (>5pp) on a forward fluke
+  #   weak forward     → force-search CONSISTENCY_FORWARD_KNOBS (streak/goal/trade_consistency)
+  # Never train on forward. Never overwrite PROVEN. Shell laws locked.
   mode: auto_adopt_lab            # lab self-adopts on a proven, out-of-sample consistency gain; LIVE still gated
+  judge: forward_consistency      # sole champion score = forward holdout clear%
+  require_forward: true
+  practice_probe_only: true
   candidates_per_gen: 24          # K proposals probed each generation
   sel_frac: 0.30                  # each gen this fraction of the WORK pool is the ROTATING select set; the rest trains
   mutate_knobs: 3                 # jitter at most this many knobs per proposal (few-at-a-time; avoids degenerate corners)
@@ -41,6 +52,8 @@ self_tuner:                       # 2026-07-20 — the autonomous self-tuner (tr
   plateau_patience: 3             # no-adopt generations before exploration widens (then sawtooths back small)
   explore_scale: 0.25             # mutation step size; grows to a cap on plateau, resets on an adopt
   eval_episodes: 512              # episodes per score; paired by DAY, so many episodes/day collapse to one day-vote
+  forward_cons_weak: 0.55         # below this forward clear% → force consistency knobs
+  practice_collapse_eps: 0.05     # max practice clear% drop allowed on a forward adopt
 run_limits:
   max_hours_per_run: 3            # Monty's cap before review (legacy CPU bootcamp). The GPU
                                   # self-tuner runs until Colab stops it; champion resumes from Drive.

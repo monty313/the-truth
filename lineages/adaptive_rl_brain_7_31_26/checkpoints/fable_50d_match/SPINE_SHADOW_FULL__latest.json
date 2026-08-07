@@ -1,0 +1,57 @@
+{
+  "updated_at": "2026-08-06T09:48:54.505837+00:00",
+  "best_same": 35,
+  "heads": [
+    "phase",
+    "event",
+    "size",
+    "act",
+    "clue_gate"
+  ],
+  "cycles": [
+    {
+      "round": 1,
+      "focus": "2026-02-13",
+      "focus_ok": false,
+      "decision": "REJECT",
+      "same": 33,
+      "mwt": 17,
+      "breach": 0,
+      "best_same": 35,
+      "metrics": {
+        "act_match": 0.7761194029850746,
+        "event_match": 0.7014925373134329,
+        "phase_match": 0.7014925373134329,
+        "learn_not_copy_pass": true,
+        "copying": false
+      }
+    },
+    {
+      "round": 2,
+      "decision": "REJECT",
+      "reason": "copying",
+      "act_match": 0.8645418326693227,
+      "event_match": 0.22709163346613545,
+      "phase_match": 0.35856573705179284,
+      "learn_not_copy_pass": false,
+      "copying": true
+    },
+    {
+      "round": 3,
+      "focus": "2026-02-20",
+      "focus_ok": true,
+      "decision": "REJECT",
+      "same": 33,
+      "mwt": 17,
+      "breach": 0,
+      "best_same": 35,
+      "metrics": {
+        "act_match": 0.7715355805243446,
+        "event_match": 0.26217228464419473,
+        "phase_match": 0.602996254681648,
+        "learn_not_copy_pass": true,
+        "copying": false
+      }
+    }
+  ]
+}

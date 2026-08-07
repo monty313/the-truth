@@ -25,6 +25,25 @@ Related: `PRINCIPLES_OF_SUCCESS.md` · `agents/MULTI_PAIR_TUTOR_PERSONA.md` · `
 | **Attention** | What to trust / how much (dials, optional policy weights) |
 | **Meta / metaplasticity** | Past clear/breach windows change **how allowed** attention is to rewire |
 
+### Meta forward-adopt law (2026-08-05) — HAVE
+
+| Rule | Detail |
+|------|--------|
+| Probe / train | **Practice** days only |
+| Adopt judge | **Forward** consistency (clear%) must improve |
+| Also required | Forward breach not worse · forward longest day-streak not shorter · side veto · practice screen |
+| Weak forward | Force-search `CONSISTENCY_FORWARD_KNOBS` in `code/training/meta_tuner.py` |
+| Mark dials CLI | `lineages/adaptive_rl_brain_7_31_26/meta_forward_consistency.py` |
+| Config | `configs/training.yaml` → `self_tuner.judge: forward_consistency` |
+
+```powershell
+$env:PYTHONPATH = ".;code"
+# Production meta law lives in code/training/meta_tuner.py (run() practice→forward)
+# Mark streak-dial meta + forward baseline score:
+python lineages/adaptive_rl_brain_7_31_26/meta_forward_consistency.py --dry-score
+python lineages/adaptive_rl_brain_7_31_26/meta_forward_consistency.py --gens 8 --forward-n 40
+```
+
 ---
 
 ## 1) What already exists (HAVE) — don’t rebuild these

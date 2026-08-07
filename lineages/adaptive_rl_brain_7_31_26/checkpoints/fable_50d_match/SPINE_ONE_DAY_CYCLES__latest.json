@@ -1,0 +1,32 @@
+{
+  "updated_at": "2026-08-06T04:55:28.420607+00:00",
+  "best_same": 35,
+  "best_mwt": 15,
+  "best_breach": 0,
+  "cycles": [
+    {
+      "round": 0,
+      "same": 35,
+      "mwt": 15,
+      "breach": 0,
+      "decision": "BASELINE",
+      "top_error": "wrong_size_or_timing"
+    },
+    {
+      "round": 1,
+      "focus": "2026-01-21",
+      "focus_cls": "wrong_size_or_timing",
+      "focus_ok": true,
+      "same": 34,
+      "policy": 34,
+      "mwt": 16,
+      "breach": 0,
+      "decision": "REJECT",
+      "fix": "plan_path_size_timing",
+      "best_same": 35
+    }
+  ],
+  "fail_counts": {
+    "2026-01-21": 1
+  }
+}

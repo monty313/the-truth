@@ -1,0 +1,1 @@
+STOP_GATE_MET same=36>35 method=fable_kag_l2l

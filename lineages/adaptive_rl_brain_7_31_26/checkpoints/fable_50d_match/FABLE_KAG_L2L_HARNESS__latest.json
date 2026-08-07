@@ -1,0 +1,232 @@
+{
+  "updated_at": "2026-08-07T01:54:30.451326+00:00",
+  "best_same": 36,
+  "best_mwt": 14,
+  "best_breach": 0,
+  "method": "fable_kag_l2l",
+  "laws": [
+    "ONE policy = Mark on multi-TF chart",
+    "pt5: HTF gates side; LTF only times",
+    "HOLD is skill; thrash is not edge",
+    "KEEP only if same rises and breach==0",
+    "PROVEN/child floor sacred until KEEP past floor",
+    "Learn principles via pattern transfer \u2014 not calendar day memos",
+    "Rewards/sample weights steer; they do not replace Mark labels"
+  ],
+  "kag_rec": "Train ONE path-family principle (fire_skill or wait_skill) on labels pooled across all MWT days that share that fingerprint; high KL to child; award protect; full 50d KEEP only if same rises and breach==0. Never day-memo as skill id.",
+  "cycles": [
+    {
+      "ts": "2026-08-07T00:44:49.719449+00:00",
+      "round": 1,
+      "family": "fire_skill",
+      "decision": "REJECT",
+      "same": 29,
+      "mwt": 20,
+      "breach": 1,
+      "clear": 29,
+      "best_same": 36,
+      "act_match": 0.8244274809160306,
+      "hold_topo": 0.8244274809160306,
+      "meta": {
+        "target_family": "fire_skill",
+        "n": 262,
+        "laws": {
+          "ltf_continuation_htf_strong": 47,
+          "miss_continuation": 33
+        },
+        "days_touched": 14,
+        "multi_day_fps": 4,
+        "dir": 159,
+        "hold": 103
+      },
+      "method": "fable_kag_l2l"
+    },
+    {
+      "ts": "2026-08-07T00:54:30.767843+00:00",
+      "round": 2,
+      "family": "wait_skill",
+      "decision": "REJECT",
+      "same": 35,
+      "mwt": 15,
+      "breach": 0,
+      "clear": 35,
+      "best_same": 36,
+      "act_match": 0.5178571428571429,
+      "hold_topo": 0.5178571428571429,
+      "meta": {
+        "target_family": "wait_skill",
+        "n": 448,
+        "laws": {
+          "anti_thrash": 240,
+          "ltf_pullback_htf_strong": 26
+        },
+        "days_touched": 14,
+        "multi_day_fps": 5,
+        "dir": 110,
+        "hold": 338
+      },
+      "method": "fable_kag_l2l"
+    },
+    {
+      "ts": "2026-08-07T01:04:15.884914+00:00",
+      "round": 3,
+      "family": "all",
+      "decision": "REJECT",
+      "same": 32,
+      "mwt": 18,
+      "breach": 0,
+      "clear": 32,
+      "best_same": 36,
+      "act_match": 0.6179624664879356,
+      "hold_topo": 0.6179624664879356,
+      "meta": {
+        "target_family": "all",
+        "n": 746,
+        "laws": {
+          "anti_thrash": 240,
+          "htf_not_strong": 218,
+          "ltf_pullback_htf_strong": 26,
+          "ltf_continuation_htf_strong": 47,
+          "miss_continuation": 33
+        },
+        "days_touched": 14,
+        "multi_day_fps": 14,
+        "dir": 165,
+        "hold": 581
+      },
+      "method": "fable_kag_l2l"
+    },
+    {
+      "ts": "2026-08-07T01:14:00.505131+00:00",
+      "round": 4,
+      "family": "no_invent",
+      "decision": "REJECT",
+      "same": 34,
+      "mwt": 16,
+      "breach": 0,
+      "clear": 34,
+      "best_same": 36,
+      "act_match": 0.9725,
+      "hold_topo": 0.9725,
+      "meta": {
+        "target_family": "no_invent",
+        "n": 400,
+        "laws": {
+          "htf_not_strong": 218
+        },
+        "days_touched": 14,
+        "multi_day_fps": 5,
+        "dir": 112,
+        "hold": 288
+      },
+      "method": "fable_kag_l2l"
+    },
+    {
+      "ts": "2026-08-07T01:23:50.170476+00:00",
+      "round": 5,
+      "family": "fire_skill",
+      "decision": "REJECT",
+      "same": 30,
+      "mwt": 19,
+      "breach": 1,
+      "clear": 30,
+      "best_same": 36,
+      "act_match": 0.8244274809160306,
+      "hold_topo": 0.8244274809160306,
+      "meta": {
+        "target_family": "fire_skill",
+        "n": 262,
+        "laws": {
+          "ltf_continuation_htf_strong": 47,
+          "miss_continuation": 33
+        },
+        "days_touched": 14,
+        "multi_day_fps": 4,
+        "dir": 159,
+        "hold": 103
+      },
+      "method": "fable_kag_l2l"
+    },
+    {
+      "ts": "2026-08-07T01:33:48.430494+00:00",
+      "round": 6,
+      "family": "wait_skill",
+      "decision": "REJECT",
+      "same": 35,
+      "mwt": 15,
+      "breach": 0,
+      "clear": 35,
+      "best_same": 36,
+      "act_match": 0.515625,
+      "hold_topo": 0.515625,
+      "meta": {
+        "target_family": "wait_skill",
+        "n": 448,
+        "laws": {
+          "anti_thrash": 240,
+          "ltf_pullback_htf_strong": 26
+        },
+        "days_touched": 14,
+        "multi_day_fps": 5,
+        "dir": 110,
+        "hold": 338
+      },
+      "method": "fable_kag_l2l"
+    },
+    {
+      "ts": "2026-08-07T01:44:04.385054+00:00",
+      "round": 7,
+      "family": "all",
+      "decision": "REJECT",
+      "same": 32,
+      "mwt": 18,
+      "breach": 0,
+      "clear": 32,
+      "best_same": 36,
+      "act_match": 0.6193029490616622,
+      "hold_topo": 0.6193029490616622,
+      "meta": {
+        "target_family": "all",
+        "n": 746,
+        "laws": {
+          "anti_thrash": 240,
+          "htf_not_strong": 218,
+          "ltf_pullback_htf_strong": 26,
+          "ltf_continuation_htf_strong": 47,
+          "miss_continuation": 33
+        },
+        "days_touched": 14,
+        "multi_day_fps": 14,
+        "dir": 165,
+        "hold": 581
+      },
+      "method": "fable_kag_l2l"
+    },
+    {
+      "ts": "2026-08-07T01:54:30.444725+00:00",
+      "round": 8,
+      "family": "no_invent",
+      "decision": "REJECT",
+      "same": 34,
+      "mwt": 16,
+      "breach": 0,
+      "clear": 34,
+      "best_same": 36,
+      "act_match": 0.9725,
+      "hold_topo": 0.9725,
+      "meta": {
+        "target_family": "no_invent",
+        "n": 400,
+        "laws": {
+          "htf_not_strong": 218
+        },
+        "days_touched": 14,
+        "multi_day_fps": 5,
+        "dir": 112,
+        "hold": 288
+      },
+      "method": "fable_kag_l2l"
+    }
+  ],
+  "passed_35": false
+}

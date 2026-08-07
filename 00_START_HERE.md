@@ -59,6 +59,8 @@ pt5 principles (HTF side, LTF time, capital…):
 | **HANDOFF_2026-08-05.md** | Current sit-down |
 | **MARK HERE!.lnk** | Talk to Mark (same ARMY Second Brain) |
 | **SOUL_MATCH.md** | Soul bridge: the-truth ↔ ARMY MarkOS |
+| **PROGRESS_RECREATE__POLICY_EQUALS_MARK__2026-08-05.md** | Full progress + recreate-from-blank bible (cites sources) |
+| **00_TEACH_META_AND_RL_EVERY_DAY.md** | **#1** brutal checklist: teach meta + RL to hit the goal every day |
 | **USE/** | Buttons |
 | **models/** | PROVEN only |
 | **lineages/** | Mark soul experiments |

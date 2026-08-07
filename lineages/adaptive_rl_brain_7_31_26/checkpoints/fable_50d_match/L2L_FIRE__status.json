@@ -1,0 +1,14 @@
+﻿{
+    "growth_method":  "fable_kag_l2l",
+    "updated_at":  "2026-08-07T00:26:58.8703361Z",
+    "mwt":  14,
+    "stop_gate_pass_35":  true,
+    "forbid":  [
+                   "self_climb_l2l dial grid as primary",
+                   "day-memo only BC"
+               ],
+    "best_same":  36,
+    "next_cmd":  "python -u lineages/adaptive_rl_brain_7_31_26/fable_kag_l2l.py --max-rounds 8 --keep-floor 36",
+    "stage":  "teen",
+    "breach":  0
+}

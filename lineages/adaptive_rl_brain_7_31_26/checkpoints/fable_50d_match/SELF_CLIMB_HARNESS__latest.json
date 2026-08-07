@@ -1,0 +1,78 @@
+﻿{
+    "updated_at":  "2026-08-06T23:35:48.469869+00:00",
+    "best_same":  35,
+    "best_mwt":  15,
+    "best_breach":  0,
+    "best_dials":  {
+                       "thrash_gate":  1.0,
+                       "cont_gate":  0.0,
+                       "against_htf_hold":  1.0,
+                       "require_launch_for_cont":  1.0,
+                       "min_force":  0.25,
+                       "use_neural":  0.0,
+                       "note":  "pure_child"
+                   },
+    "goal_same":  36,
+    "keep_floor":  35,
+    "child_sha":  "9BDCEAAE3B282DA1548F6C58E55F5935AED5ECF5720EC95C4913CE17F06FD555",
+    "cycles":  [
+                   {
+                       "ts":  "2026-08-06T23:29:56.313035+00:00",
+                       "round":  1,
+                       "decision":  "REJECT",
+                       "same":  35,
+                       "mwt":  15,
+                       "breach":  0,
+                       "clear":  35,
+                       "best_same":  35,
+                       "dials":  {
+                                     "thrash_gate":  0.0,
+                                     "cont_gate":  0.0,
+                                     "against_htf_hold":  1.0,
+                                     "require_launch_for_cont":  0.0,
+                                     "min_force":  0.25,
+                                     "use_neural":  0.0,
+                                     "note":  "grid_t0.0_c0.0_a1.0_L0.0"
+                                 },
+                       "law_counts":  {
+                                          "htf_not_strong":  427,
+                                          "ltf_continuation_htf_strong":  187,
+                                          "ltf_pullback_htf_strong":  43,
+                                          "against_htf":  2
+                                      },
+                       "method":  "self_climb_path_skill"
+                   },
+                   {
+                       "ts":  "2026-08-06T23:35:48.464491+00:00",
+                       "round":  2,
+                       "decision":  "REJECT",
+                       "same":  35,
+                       "mwt":  15,
+                       "breach":  0,
+                       "clear":  35,
+                       "best_same":  35,
+                       "dials":  {
+                                     "thrash_gate":  0.0,
+                                     "cont_gate":  0.0,
+                                     "against_htf_hold":  1.0,
+                                     "require_launch_for_cont":  1.0,
+                                     "min_force":  0.25,
+                                     "use_neural":  0.0,
+                                     "note":  "grid_t0.0_c0.0_a1.0_L1.0"
+                                 },
+                       "law_counts":  {
+                                          "htf_not_strong":  427,
+                                          "ltf_continuation_htf_strong":  187,
+                                          "ltf_pullback_htf_strong":  43,
+                                          "against_htf":  2
+                                      },
+                       "method":  "self_climb_path_skill"
+                   }
+               ],
+    "method":  "self_climb_path_skill",
+    "passed_35":  false,
+    "superseded_by":  "fable_kag_l2l KEEP36",
+    "live_best_same":  36,
+    "stop_gate_pass_35":  true,
+    "note":  "STALE climb method. Live BEST=36 via fable_kag_l2l. Do not report same=35."
+}

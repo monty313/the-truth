@@ -1,0 +1,201 @@
+# Mark Trading Doctrine — KAG Domain Schema
+# Compatible intent with OpenSPG/KAG schema-constrained extraction.
+# Names are stable IDs for agents and RL teacher code.
+
+version: "1.1.0"  # additive: teaching + novel-indicator types; do not drop 1.0 entities
+domain: mark_trading_doctrine
+description: >
+  Relational physics of multi-timeframe force/velocity trading.
+  Not generic TA. Indicators are sensors with roles; decisions follow a fixed chain.
+  KAG agents teach principles to meta-RL (learn ≠ copy). Novel sensors get roles via relation.
+
+entity_types:
+  TimeframeSet:
+    properties: [set_id, anchor_tf, support_tf_1, support_tf_2, stack_string]
+    description: Official three-TF stack; first is LTF anchor.
+
+  Timeframe:
+    properties: [tf_id, minutes, role_in_set]  # role_in_set: anchor|support
+    description: A single bar clock (1m,5m,15m,30m,1h,4h,1d).
+
+  IndicatorFamily:
+    properties: [family_id, category]  # trend|oscillator|volume|bill_williams
+    description: MT5-native family name (CCI, RSI, BB, SMA, ADX, ...).
+
+  IndicatorInstance:
+    properties: [instance_id, family_id, period, shift, applied_price, timeframe]
+    description: "Concrete sensor: family + period + shift + TF."
+
+  Role:
+    properties: [role_id]  # force|inertia|velocity|equilibrium|regime_gate|expansion|volume_confirm
+    description: Physics job of an indicator instance.
+
+  RoleState:
+    properties: [state_id]  # with_tide|against_tide|flat|stretched|collapsed|inside_tunnel|outside_tunnel
+    description: Discrete state of a role on a TF.
+
+  RegimeState:
+    properties: [regime_id]  # bull_trend|bear_trend|chop|range|expansion|reversal_transition|undefined|vol_shock
+    description: Environment state machine label.
+
+  SetupType:
+    properties: [setup_id]  # slingshot_load|slingshot_release|launch|mean_reversion|reversal|range_fade|no_trade
+    description: Topology class from relations, not single indicator.
+
+  DecisionStep:
+    properties: [step_id, order]  # tide|regime|breath_launch|act|finish
+    description: Fixed Mark decision chain step.
+
+  Action:
+    properties: [action_id]  # fire_buy|fire_sell|wait_loaded|wait_no_trade|kill|hold_manage|size_up|size_down|bank
+    description: Mark-language act (wait = loaded skill, not freeze).
+
+  Topology:
+    properties: [topology_id]
+    description: Named inequality pattern (e.g. dual_cci_max_tension_long).
+
+  Law:
+    properties: [law_id, title]
+    description: Standing law (dominant trends, breath/launch, regime survival, capital, speed vs weight).
+
+  # --- v1.1 additive: teaching / learning / novel sensors (do not remove above) ---
+  Principle:
+    properties: [principle_id, title]
+    description: Transferable rule Mark learns (e.g. dual_period_tension). Not a bar recipe.
+
+  Lesson:
+    properties: [lesson_id, lesson_type, forward_note]
+    description: Teacher emission to meta-RL; type principle_application not copy_answer.
+
+  TeacherAgent:
+    properties: [teacher_id, specialty]
+    description: ARMY tutor role (force, velocity, regime, composition, novel, soul, consistency).
+
+  NovelBinding:
+    properties: [sensor_name, role_id, confidence, day]
+    description: Zero-shot role assignment for never-seen indicator instance.
+
+  GeneralizationGate:
+    properties: [gate_id]
+    description: Hold-out family / forward consistency checks that prove learn≠copy.
+
+relation_types:
+  hasAnchor:
+    domain: TimeframeSet
+    range: Timeframe
+  hasSupport:
+    domain: TimeframeSet
+    range: Timeframe
+  memberOfSet:
+    domain: Timeframe
+    range: TimeframeSet
+
+  ofFamily:
+    domain: IndicatorInstance
+    range: IndicatorFamily
+  onTimeframe:
+    domain: IndicatorInstance
+    range: Timeframe
+  playsRole:
+    domain: IndicatorInstance
+    range: Role
+  hasPeriodRelation:
+    domain: IndicatorInstance
+    range: IndicatorInstance
+    description: fast_of / slow_of same family
+  hasShift:
+    domain: IndicatorInstance
+    range: "integer"
+    description: Forward displacement bars for rail/tunnel purpose
+
+  projectsOnto:
+    domain: RoleState
+    range: Timeframe
+    description: HTF force projected onto LTF children bars
+  relativeTo:
+    domain: RoleState
+    range: RoleState
+    description: with/against/intact relations (tension)
+  impliesSetup:
+    domain: Topology
+    range: SetupType
+  allowsAction:
+    domain: SetupType
+    range: Action
+  requiresRegime:
+    domain: SetupType
+    range: RegimeState
+  invalidates:
+    domain: RegimeState
+    range: SetupType
+    description: e.g. chop invalidates breakout chase
+
+  precedes:
+    domain: DecisionStep
+    range: DecisionStep
+    description: Fixed order only; never reverse
+  stepAllows:
+    domain: DecisionStep
+    range: Action
+
+  governedBy:
+    domain: SetupType
+    range: Law
+  composedWith:
+    domain: Role
+    range: Role
+    description: Mandatory composition edges (force+velocity, etc.)
+
+  # v1.1 relations (additive) — teaching / novel / generalization
+  teaches:
+    domain: TeacherAgent
+    range: Principle
+  emitsLesson:
+    domain: TeacherAgent
+    range: Lesson
+  appliesPrinciple:
+    domain: Lesson
+    range: Principle
+  bindsNovel:
+    domain: Lesson
+    range: NovelBinding
+  novelPlaysRole:
+    domain: NovelBinding
+    range: Role
+  trainsStudent:
+    domain: Lesson
+    range: Action
+  provesLearning:
+    domain: GeneralizationGate
+    range: Principle
+
+constraints:
+  - name: ltf_never_votes_side_against_htf
+    rule: "Action.fire_* requires RoleState(force, HTF) same side; LTF velocity cannot set opposite fire"
+  - name: decision_order_fixed
+    rule: "tide precedes regime precedes breath_launch precedes act precedes finish"
+  - name: sets_immutable
+    rule: "Only four TimeframeSet entities; no invent TF without human rewrite"
+  - name: no_lone_indicator
+    rule: "Every trade SetupType must cite >=1 force Role and >=1 velocity Role"
+  - name: wait_is_loaded
+    rule: "Action.wait_loaded requires SetupType.slingshot_load; not uncertainty"
+  - name: learn_not_copy
+    rule: "Lesson.lesson_type must be principle_application for train; copy_answer alone fails gate"
+  - name: novel_never_defines_tide
+    rule: "NovelBinding with confidence<high cannot set Role.force alone; known force wins"
+  - name: prior_knowledge_preserved
+    rule: "Ingest is union; never delete Law TimeframeSet DecisionStep entities on update"
+
+enums:
+  official_sets:
+    - {set_id: 1, anchor: 1m, support: [15m, 30m]}
+    - {set_id: 2, anchor: 5m, support: [30m, 1h]}
+    - {set_id: 3, anchor: 15m, support: [1h, 4h]}
+    - {set_id: 4, anchor: 30m, support: [4h, 1d]}
+  decision_chain_order:
+    - tide
+    - regime
+    - breath_launch
+    - act
+    - finish

@@ -1,0 +1,130 @@
+{
+  "cycle": 3,
+  "decision": "REJECT",
+  "change": "safe_crater:2026-03-11",
+  "same": 31,
+  "policy_clear": 31,
+  "mwt": 19,
+  "breach": 0,
+  "dominant_spine_error": "unknown_no_spine",
+  "error_class_counts": {
+    "unknown_no_spine": 19
+  },
+  "mwt_details": [
+    {
+      "date": "2026-01-21",
+      "class": "unknown_no_spine",
+      "pnl": -2.0574,
+      "n": 2
+    },
+    {
+      "date": "2026-01-29",
+      "class": "unknown_no_spine",
+      "pnl": -2.7825,
+      "n": 4
+    },
+    {
+      "date": "2026-02-03",
+      "class": "unknown_no_spine",
+      "pnl": -1.3211,
+      "n": 3
+    },
+    {
+      "date": "2026-02-05",
+      "class": "unknown_no_spine",
+      "pnl": -2.1562,
+      "n": 3
+    },
+    {
+      "date": "2026-02-06",
+      "class": "unknown_no_spine",
+      "pnl": -1.6312,
+      "n": 3
+    },
+    {
+      "date": "2026-02-11",
+      "class": "unknown_no_spine",
+      "pnl": -1.3239,
+      "n": 4
+    },
+    {
+      "date": "2026-02-13",
+      "class": "unknown_no_spine",
+      "pnl": -1.9106,
+      "n": 3
+    },
+    {
+      "date": "2026-02-19",
+      "class": "unknown_no_spine",
+      "pnl": -1.3004,
+      "n": 3
+    },
+    {
+      "date": "2026-02-20",
+      "class": "unknown_no_spine",
+      "pnl": -1.8324,
+      "n": 2
+    },
+    {
+      "date": "2026-02-23",
+      "class": "unknown_no_spine",
+      "pnl": -1.8085,
+      "n": 3
+    },
+    {
+      "date": "2026-02-25",
+      "class": "unknown_no_spine",
+      "pnl": -1.4565,
+      "n": 2
+    },
+    {
+      "date": "2026-03-04",
+      "class": "unknown_no_spine",
+      "pnl": -1.1594,
+      "n": 3
+    },
+    {
+      "date": "2026-03-05",
+      "class": "unknown_no_spine",
+      "pnl": -1.1596,
+      "n": 3
+    },
+    {
+      "date": "2026-03-06",
+      "class": "unknown_no_spine",
+      "pnl": -1.1444,
+      "n": 3
+    },
+    {
+      "date": "2026-03-09",
+      "class": "unknown_no_spine",
+      "pnl": -1.6173,
+      "n": 4
+    },
+    {
+      "date": "2026-03-11",
+      "class": "unknown_no_spine",
+      "pnl": -1.666,
+      "n": 2
+    },
+    {
+      "date": "2026-03-24",
+      "class": "unknown_no_spine",
+      "pnl": -1.099,
+      "n": 4
+    },
+    {
+      "date": "2026-03-26",
+      "class": "unknown_no_spine",
+      "pnl": -2.2283,
+      "n": 3
+    },
+    {
+      "date": "2026-03-27",
+      "class": "unknown_no_spine",
+      "pnl": -2.5724,
+      "n": 3
+    }
+  ],
+  "written_at": "2026-08-06T06:05:42.016154+00:00"
+}

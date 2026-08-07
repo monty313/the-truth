@@ -1,0 +1,1 @@
+same=36 mwt=14 breach=0 stage=teen method=fable_kag_l2l stop_gate=MET

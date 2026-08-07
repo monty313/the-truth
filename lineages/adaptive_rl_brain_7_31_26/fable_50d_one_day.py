@@ -84,29 +84,31 @@ def main() -> int:
         print(f"\n===== ONE-DAY {rounds+1} focus {date} T/R={t}/{r} =====", flush=True)
         mark = get_plan(oracle, day_map, date, t, r)
         xs, ys, ws = [], [], []
-        # heavy focus: plan path + DAgger (live states) + anti-thrash HOLD
-        for _ in range(6):
+        # Mid recipe (overnight): convert focus without pack crater.
+        # freeze_trunk: pack safer but never converted. full net: converts then 35→32.
+        # Here: full net + high KL + fewer epochs + more award + less DAgger.
+        for _ in range(5):
             a, b, c = plan_labels(
-                day_map, date, t, r, mark, dir_copy=10, hold_copy=4
+                day_map, date, t, r, mark, dir_copy=8, hold_copy=5
             )
             xs.extend(a)
             ys.extend(b)
             ws.extend(c)
-        for _ in range(4):
+        for _ in range(2):
             a, b, c = dagger_labels(day_map, date, t, r, mark, policy)
             xs.extend(a)
             ys.extend(b)
             ws.extend(c)
-        # protect awards (more HOLD mass)
-        for row in awards[:24]:
+        # protect awards heavily
+        for row in awards[:28]:
             a, b, c = award_self(
                 day_map, row["date"], row["target_pct"], row["risk_pct"], policy
             )
             xs.extend(a)
             ys.extend(b)
-            ws.extend([x * 1.5 for x in c])
-        # mix 2 other MWT lightly
-        for row in mwt[1:3]:
+            ws.extend([x * 2.2 for x in c])
+        # one other MWT light only
+        for row in mwt[1:2]:
             m2 = get_plan(oracle, day_map, row["date"], row["target_pct"], row["risk_pct"])
             a, b, c = plan_labels(
                 day_map,
@@ -114,8 +116,8 @@ def main() -> int:
                 row["target_pct"],
                 row["risk_pct"],
                 m2,
-                dir_copy=3,
-                hold_copy=2,
+                dir_copy=2,
+                hold_copy=3,
             )
             xs.extend(a)
             ys.extend(b)
@@ -128,15 +130,16 @@ def main() -> int:
         pol2, _ = train_bc(
             X,
             y,
-            epochs=35,
+            epochs=20,
             hidden=128,
             seed=400 + rounds,
             warm_state=best_state,
             obs_dim=MARK_FULL_DIM,
-            lr=2.5e-4,
+            lr=2.0e-4,
             sample_weights=w,
             kl_anchor_state=best_state,
-            kl_coef=0.55,  # protect award days / anti-thrash
+            kl_coef=0.72,
+            freeze_trunk=False,
         )
         print(f"  match={match_rate(pol2, X, y)}", flush=True)
         post = score_policy(pol2, day_map, mark_rows)
@@ -156,6 +159,137 @@ def main() -> int:
             f"mwt={post['mark_would_take']} breach={post['n_breach']}",
             flush=True,
         )
+        # Convert-but-pack-drop: re-graft focus plan onto BEST weights (not thrashy pol2).
+        # Overnight lesson: repair-from-pol2 left same stuck at 32; start from best_state.
+        repaired = False
+        if (
+            focus_ok
+            and post["n_breach"] == 0
+            and post["same_outcome"] < best["same_outcome"]
+        ):
+            print(
+                "  PACK-repair from BEST + light focus plan (not thrash embryo)…",
+                flush=True,
+            )
+            hx, hy, hw = [], [], []
+            protect = [
+                r
+                for r in (best.get("rows") or [])
+                if r.get("policy_award") or r.get("miss_class") == "AWARD"
+            ]
+            if not protect:
+                protect = list(awards)[:24]
+            # Award labels from BEST weights (not thrashy pol2)
+            from lineages.adaptive_rl_brain_7_31_26.policy_stub import Channel1Policy
+
+            pol_anchor = Channel1Policy(obs_dim=MARK_FULL_DIM, hidden=128)
+            pol_anchor.load_state_dict(best_state)
+            pol_anchor.eval()
+            for row in protect[:32]:
+                a, b, c = award_self(
+                    day_map,
+                    row["date"],
+                    float(row["target_pct"]),
+                    float(row["risk_pct"]),
+                    pol_anchor,
+                )
+                hx.extend(a)
+                hy.extend(b)
+                hw.extend([x * 2.8 for x in c])
+            # Light focus Mark plan (convert signal without drowning pack)
+            m_focus = get_plan(oracle, day_map, date, t, r)
+            for _ in range(3):
+                a, b, c = plan_labels(
+                    day_map, date, t, r, m_focus, dir_copy=6, hold_copy=5
+                )
+                hx.extend(a)
+                hy.extend(b)
+                hw.extend(c)
+            if len(hy) >= 40:
+                Xh = np.stack(hx)
+                yh = np.asarray(hy, np.int64)
+                wh = np.asarray(hw, np.float32)
+                pol2, _ = train_bc(
+                    Xh,
+                    yh,
+                    epochs=20,
+                    hidden=128,
+                    seed=500 + rounds,
+                    warm_state=best_state,  # graft onto BEST, not thrash
+                    obs_dim=MARK_FULL_DIM,
+                    lr=1.8e-4,
+                    sample_weights=wh,
+                    kl_anchor_state=best_state,
+                    kl_coef=0.72,
+                    freeze_trunk=True,
+                )
+                post = score_policy(pol2, day_map, mark_rows)
+                focus_ok = False
+                for row in post["rows"]:
+                    if row["date"] == date:
+                        focus_ok = bool(row["policy_award"])
+                        break
+                print(
+                    f"  REPAIR same={post['same_outcome']} policy={post['policy_clear']} "
+                    f"mwt={post['mark_would_take']} breach={post['n_breach']} "
+                    f"focus_ok={focus_ok}",
+                    flush=True,
+                )
+                repaired = True
+                # second gentle pass if still below best but focus_ok
+                if (
+                    focus_ok
+                    and post["same_outcome"] < best["same_outcome"]
+                    and post["n_breach"] == 0
+                ):
+                    print("  PACK-repair pass 2 (more award freeze)…", flush=True)
+                    hx2, hy2, hw2 = [], [], []
+                    for row in protect[:32]:
+                        a, b, c = award_self(
+                            day_map,
+                            row["date"],
+                            float(row["target_pct"]),
+                            float(row["risk_pct"]),
+                            pol_anchor,
+                        )
+                        hx2.extend(a)
+                        hy2.extend(b)
+                        hw2.extend([x * 3.0 for x in c])
+                    for _ in range(2):
+                        a, b, c = plan_labels(
+                            day_map, date, t, r, m_focus, dir_copy=4, hold_copy=6
+                        )
+                        hx2.extend(a)
+                        hy2.extend(b)
+                        hw2.extend(c)
+                    if len(hy2) >= 40:
+                        pol2, _ = train_bc(
+                            np.stack(hx2),
+                            np.asarray(hy2, np.int64),
+                            epochs=12,
+                            hidden=128,
+                            seed=600 + rounds,
+                            warm_state={
+                                k: v.detach().clone() for k, v in pol2.state_dict().items()
+                            },
+                            obs_dim=MARK_FULL_DIM,
+                            lr=1.5e-4,
+                            sample_weights=np.asarray(hw2, np.float32),
+                            kl_anchor_state=best_state,
+                            kl_coef=0.78,
+                            freeze_trunk=True,
+                        )
+                        post = score_policy(pol2, day_map, mark_rows)
+                        focus_ok = any(
+                            row["date"] == date and row["policy_award"]
+                            for row in post["rows"]
+                        )
+                        print(
+                            f"  REPAIR2 same={post['same_outcome']} mwt={post['mark_would_take']} "
+                            f"focus_ok={focus_ok}",
+                            flush=True,
+                        )
+
         keep = (
             post["n_breach"] == 0
             and post["policy_clear"] >= floor
@@ -174,13 +308,42 @@ def main() -> int:
                 "policy": post["policy_clear"],
                 "breach": post["n_breach"],
                 "keep": keep,
+                "repaired": repaired,
             }
         )
         if keep:
             best = post
             best_state = {k: v.detach().clone() for k, v in pol2.state_dict().items()}
             save_policy(pol2, note=f"oneday_{date}", dials=dials)
+            # durable best meter for squad
+            try:
+                with open(os.path.join(OUT, "BEST__latest.json"), "w", encoding="utf-8") as bf:
+                    json.dump(
+                        {
+                            "same_outcome": best["same_outcome"],
+                            "policy_clear": best["policy_clear"],
+                            "mwt": best["mark_would_take"],
+                            "breach": best["n_breach"],
+                            "source": f"one_day_KEEP_{date}",
+                            "repaired": repaired,
+                        },
+                        bf,
+                        indent=2,
+                    )
+                    bf.write("\n")
+            except OSError:
+                pass
             print("  KEEP", flush=True)
+            # Goal notes (wins only) for later LLM/KAG
+            try:
+                works = os.path.join(OUT, "WHAT_WORKS__GOAL.md")
+                with open(works, "a", encoding="utf-8") as wf:
+                    wf.write(
+                        f"| KEEP live | **{best['same_outcome']}** | {best['mark_would_take']} | "
+                        f"{best['n_breach']} | one_day_KEEP_{date} repaired={repaired} |\n"
+                    )
+            except OSError:
+                pass
         else:
             print("  REJECT", flush=True)
         rounds += 1

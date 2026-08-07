@@ -37,6 +37,7 @@ from lineages.adaptive_rl_brain_7_31_26.perception.observation_full import MARK_
 from lineages.adaptive_rl_brain_7_31_26.policy_stub import (
     ACTION_HOLD,
     Channel1Policy,
+    policy_from_checkpoint,
 )
 from lineages.adaptive_rl_brain_7_31_26.rewards import (
     apply_autopsy_to_streak_dials,
@@ -60,14 +61,8 @@ WINDOW = "first_50_calendar_loadable"
 
 
 def load_policy(path: str = CKPT) -> Channel1Policy:
-    blob = torch.load(path, map_location="cpu", weights_only=False)
-    pol = Channel1Policy(
-        obs_dim=int(blob.get("obs_dim", MARK_FULL_DIM)),
-        hidden=int(blob.get("hidden", 128)),
-    )
-    pol.load_state_dict(blob["state_dict"])
-    pol.eval()
-    return pol
+    """Load legacy single-head or multi-head physics embryo."""
+    return policy_from_checkpoint(path)
 
 
 def save_policy(policy: Channel1Policy, *, note: str, dials: Dict[str, float]) -> None:
@@ -75,8 +70,9 @@ def save_policy(policy: Channel1Policy, *, note: str, dials: Dict[str, float]) -
         "tag": "mark_clone_full_obs_v1",
         "saved_at": datetime.now(timezone.utc).isoformat(),
         "state_dict": policy.state_dict(),
-        "hidden": 128,
+        "hidden": int(getattr(policy, "hidden", 128) or 128),
         "obs_dim": MARK_FULL_DIM,
+        "multi_head": bool(getattr(policy, "multi_head", False)),
         "eyes_mode": "mark_doctrine",
         "teacher": "fable_50d_mark_match",
         "full_obs": True,

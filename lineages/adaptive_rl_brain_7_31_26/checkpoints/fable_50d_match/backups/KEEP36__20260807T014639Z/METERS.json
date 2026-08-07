@@ -1,0 +1,10 @@
+{
+  "meters": {
+    "same_outcome": 36,
+    "policy_clear": 36,
+    "mark_would_take": 14,
+    "n_breach": 0
+  },
+  "note": "dual_rescore_confirm_same>=36 live BEST",
+  "ts": "2026-08-07T01:46:39.349131+00:00"
+}

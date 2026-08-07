@@ -1,0 +1,106 @@
+{
+  "cycle": 0,
+  "decision": "BASELINE",
+  "change": "safe_one_day_works_recipe",
+  "same": 35,
+  "policy_clear": 35,
+  "mwt": 15,
+  "breach": 0,
+  "dominant_spine_error": "unknown_no_spine",
+  "error_class_counts": {
+    "unknown_no_spine": 15
+  },
+  "mwt_details": [
+    {
+      "date": "2026-01-20",
+      "class": "unknown_no_spine",
+      "pnl": -1.1212,
+      "n": 3
+    },
+    {
+      "date": "2026-01-21",
+      "class": "unknown_no_spine",
+      "pnl": -2.0574,
+      "n": 2
+    },
+    {
+      "date": "2026-02-03",
+      "class": "unknown_no_spine",
+      "pnl": -1.1281,
+      "n": 3
+    },
+    {
+      "date": "2026-02-05",
+      "class": "unknown_no_spine",
+      "pnl": -1.7197,
+      "n": 4
+    },
+    {
+      "date": "2026-02-06",
+      "class": "unknown_no_spine",
+      "pnl": -1.6312,
+      "n": 3
+    },
+    {
+      "date": "2026-02-12",
+      "class": "unknown_no_spine",
+      "pnl": -1.3439,
+      "n": 4
+    },
+    {
+      "date": "2026-02-13",
+      "class": "unknown_no_spine",
+      "pnl": -2.4453,
+      "n": 4
+    },
+    {
+      "date": "2026-02-19",
+      "class": "unknown_no_spine",
+      "pnl": -1.4647,
+      "n": 5
+    },
+    {
+      "date": "2026-02-20",
+      "class": "unknown_no_spine",
+      "pnl": -1.8324,
+      "n": 2
+    },
+    {
+      "date": "2026-02-27",
+      "class": "unknown_no_spine",
+      "pnl": -1.1457,
+      "n": 2
+    },
+    {
+      "date": "2026-03-05",
+      "class": "unknown_no_spine",
+      "pnl": -1.1596,
+      "n": 3
+    },
+    {
+      "date": "2026-03-06",
+      "class": "unknown_no_spine",
+      "pnl": -1.2603,
+      "n": 4
+    },
+    {
+      "date": "2026-03-11",
+      "class": "unknown_no_spine",
+      "pnl": -1.666,
+      "n": 2
+    },
+    {
+      "date": "2026-03-24",
+      "class": "unknown_no_spine",
+      "pnl": 0.9155,
+      "n": 2
+    },
+    {
+      "date": "2026-03-26",
+      "class": "unknown_no_spine",
+      "pnl": -1.6101,
+      "n": 2
+    }
+  ],
+  "written_at": "2026-08-06T06:13:24.642855+00:00"
+}

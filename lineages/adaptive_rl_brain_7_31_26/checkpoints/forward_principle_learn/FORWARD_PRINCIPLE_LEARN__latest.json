@@ -1,0 +1,160 @@
+{
+  "when": "2026-08-06T09:16:45.360766+00:00",
+  "mission": "forward_principle_learn \u2014 derive answers; not clone day oracles",
+  "partner_lane": "CLONE_LLM owns day BC/DAgger; THIS owns principle\u2192forward accuracy",
+  "pt5_laws_in_curriculum": true,
+  "gsd": "execute\u2192verify_gates\u2192ship",
+  "mwt_focus": {
+    "n_mwt": 10,
+    "n_no_opp": 1,
+    "subclasses": {
+      "policy_wrong_size_or_timing": 10
+    },
+    "principle_ids_focus": [
+      "wait_is_skill",
+      "hard_target_quality_over_thrash",
+      "dual_period_tension",
+      "finish_line_goal_heat",
+      "ltf_never_votes_side",
+      "learn_not_copy",
+      "no_opp_hold_not_thrash"
+    ],
+    "training_implication": "Oversample slingshot_load\u2192wait_loaded and slingshot_release\u2192fire under mid/hard tasks; punish thrash act sequences; never force entries on no_opp.",
+    "not": "copy_each_mwt_day_answer",
+    "yes": "learn_size_timing_topology_under_task"
+  },
+  "curriculum": {
+    "n_total": 64,
+    "n_practice": 32,
+    "n_forward": 32,
+    "topologies_practice": [
+      "chop",
+      "collapse",
+      "slingshot_load",
+      "slingshot_release"
+    ],
+    "topologies_forward": [
+      "chop",
+      "collapse",
+      "slingshot_load",
+      "slingshot_release"
+    ],
+    "families_practice": [
+      "CCI",
+      "RSI"
+    ],
+    "families_forward": [
+      "Stochastic",
+      "WPR"
+    ],
+    "feature_dim": 17
+  },
+  "cold_forward": {
+    "n": 32,
+    "act_match": 0.09375,
+    "topology_match": 0.0,
+    "wait_match": 0.03125,
+    "tide_match": 0.3125,
+    "role_map_match": 0.0,
+    "principle_acc": 0.109375
+  },
+  "practice_score": {
+    "n": 32,
+    "act_match": 1.0,
+    "topology_match": 1.0,
+    "wait_match": 1.0,
+    "tide_match": 1.0,
+    "role_map_match": 1.0,
+    "principle_acc": 1.0
+  },
+  "forward_score": {
+    "n": 32,
+    "act_match": 1.0,
+    "topology_match": 1.0,
+    "wait_match": 1.0,
+    "tide_match": 1.0,
+    "role_map_match": 1.0,
+    "principle_acc": 1.0
+  },
+  "hard_forward_score": {
+    "n": 20,
+    "act_match": 1.0,
+    "topology_match": 1.0,
+    "wait_match": 1.0,
+    "tide_match": 1.0,
+    "role_map_match": 1.0,
+    "principle_acc": 1.0
+  },
+  "soft_forward_score": {
+    "n": 32,
+    "act_match": 1.0,
+    "topology_match": 1.0,
+    "wait_match": 1.0,
+    "tide_match": 1.0,
+    "role_map_match": 1.0,
+    "principle_acc": 1.0
+  },
+  "baseline_forward_acc": 0.109375,
+  "act_only_ablation": false,
+  "gates": {
+    "promote": true,
+    "decision": "KEEP",
+    "gates": [
+      {
+        "gate": "learn_not_copy",
+        "passed": true,
+        "metrics": {
+          "act_match": 1.0,
+          "topology_match": 1.0,
+          "role_map_match": 1.0,
+          "wait_match": 1.0,
+          "copying": false,
+          "freeze_copy": false
+        },
+        "reason": "OK principles track with act"
+      },
+      {
+        "gate": "held_out_family_swap",
+        "passed": true,
+        "metrics": {
+          "n": 20,
+          "topology_agree": 1.0,
+          "act_family_agree": 1.0,
+          "agree": 1.0,
+          "min_agree": 0.85
+        },
+        "reason": "OK transfer across families"
+      },
+      {
+        "gate": "forward_accuracy",
+        "passed": true,
+        "metrics": {
+          "practice_acc": 1.0,
+          "forward_acc": 1.0,
+          "baseline_forward_acc": 0.109375,
+          "improved": true,
+          "above_bar": true,
+          "breach_flag": false,
+          "min_forward": 0.7
+        },
+        "reason": "OK forward principle accuracy"
+      },
+      {
+        "gate": "hard_task_accuracy",
+        "passed": true,
+        "metrics": {
+          "hard_forward_acc": 1.0,
+          "soft_forward_acc": 1.0,
+          "gap": 0.0,
+          "min_hard": 0.55,
+          "max_soft_hard_gap": 0.45
+        },
+        "reason": "OK hard-task principles"
+      }
+    ],
+    "law": "forward_is_adopt_judge; learn_not_copy; no_shell_touch"
+  },
+  "decision": "KEEP",
+  "promote": true,
+  "feel": "I don't need the day answer sheet. I need mass vs speed, which clock, with or against, and whether today's target still allows fire."
+}

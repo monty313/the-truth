@@ -1,6 +1,14 @@
 """Self-tuner: rewards/hypers toward consistency. Target% and risk% are RUNTIME inputs only.
 
+LAW (2026-08-05): Meta may PROBE/train on practice days only.
+                 Meta may ADOPT only if FORWARD (unseen) consistency improves.
+                 Practice clear% is a screen, never the sole champion judge.
+
 CHANGE LOG:
+- 2026-08-05  FORWARD consistency is the adopt judge: probe on practice, score
+  adopt on forward holdout; streak/consistency knobs enter force-search when
+  forward clear% or day-streak is weak; practice-collapse veto —
+  WHY: policy/meta progress must hold on unseen days (no retrain costume).
 - 2026-08-04  Mark-on-chart meta: TREND_KNOBS = force/pullback/quick_pull/setup_skip;
   fallbacks aligned to rewards.yaml Mark law starts; search still never freezes
   answers — WHY: policy=Mark on chart (POLICY_EQUALS_MARK_ON_CHART.md).
@@ -105,6 +113,13 @@ def adopt_gate(b: int, c: int, z: float = 2.33, min_disagreements: int = 5) -> b
 
 # Consistency delta below this is "flat" for the secondary WrongSide veto.
 FLAT_CONS_EPS = 1e-3
+# Practice may not collapse more than this absolute clear% vs champion practice
+# when a candidate is adopted on forward (screen, not primary judge).
+PRACTICE_COLLAPSE_EPS = 0.05
+# Forward clear% below this → force consistency/streak knobs into search.
+FORWARD_CONS_WEAK = 0.55
+# Forward longest day-streak below this → same force (relative to window size later).
+FORWARD_STREAK_WEAK = 5
 
 
 def side_adopt_ok(cand_cons: float, champ_cons: float,
@@ -118,6 +133,68 @@ def side_adopt_ok(cand_cons: float, champ_cons: float,
     flat = (float(cand_cons) - float(champ_cons)) < float(flat_eps)
     worse_side = float(cand_wsr) > float(champ_wsr) + 1e-12
     return not (flat and worse_side)
+
+
+def forward_adopt_ok(
+    cand_forward: dict,
+    champ_forward: dict,
+    *,
+    n_forward_days: int,
+    z: float = 2.33,
+    min_disagreements: int = 5,
+) -> tuple[bool, dict]:
+    """PRIMARY adopt judge: FORWARD consistency must improve; breach not worse.
+
+    Returns (ok, detail). Consistency = fraction of forward episodes that clear.
+    """
+    cand_c = float(cand_forward.get("consistency", 0.0) or 0.0)
+    champ_c = float(champ_forward.get("consistency", 0.0) or 0.0)
+    n = max(1, int(n_forward_days))
+    c = int(max(0, round((cand_c - champ_c) * n)))
+    b = int(max(0, round((champ_c - cand_c) * n)))
+    primary = adopt_gate(b, c, z=z, min_disagreements=min_disagreements)
+    cand_br = float(cand_forward.get("breach_rate", 1.0) or 1.0)
+    champ_br = float(champ_forward.get("breach_rate", 1.0) or 1.0)
+    breach_ok = cand_br <= champ_br + 1e-9
+    # Day-after-day streak on forward: must not get shorter on an adopt
+    cand_st = int(cand_forward.get("longest_streak", 0) or 0)
+    champ_st = int(champ_forward.get("longest_streak", 0) or 0)
+    streak_ok = cand_st >= champ_st
+    secondary = side_adopt_ok(
+        cand_c, champ_c,
+        float(cand_forward.get("wrong_side_rate", 0.0) or 0.0),
+        float(champ_forward.get("wrong_side_rate", 0.0) or 0.0),
+    )
+    ok = bool(primary and breach_ok and streak_ok and secondary)
+    detail = {
+        "primary": primary,
+        "breach_ok": breach_ok,
+        "streak_ok": streak_ok,
+        "secondary": secondary,
+        "cand_forward_consistency": cand_c,
+        "champ_forward_consistency": champ_c,
+        "cand_breach_rate": cand_br,
+        "champ_breach_rate": champ_br,
+        "cand_longest_streak": cand_st,
+        "champ_longest_streak": champ_st,
+        "c_days": c,
+        "b_days": b,
+    }
+    return ok, detail
+
+
+def practice_screen_ok(
+    cand_practice: dict | None,
+    champ_practice: dict | None,
+    *,
+    collapse_eps: float = PRACTICE_COLLAPSE_EPS,
+) -> bool:
+    """Reject adopt if practice clear% collapses (leak of a forward-only fluke)."""
+    if not cand_practice or not champ_practice:
+        return True  # screen optional when practice pool empty
+    cand_c = float(cand_practice.get("consistency", 0.0) or 0.0)
+    champ_c = float(champ_practice.get("consistency", 0.0) or 0.0)
+    return cand_c + 1e-12 >= (champ_c - float(collapse_eps))
 
 
 # ---------------------------------------------------------------------------
@@ -137,6 +214,16 @@ TREND_KNOBS = (
     "w_pullback_with_htf",
     "w_quick_pull_close",
     "w_setup_skip",
+)
+# Forward-consistency force group: reward knobs that shape multi-day clear/streak
+# without touching shell physics. Used when FORWARD meters are weak.
+CONSISTENCY_FORWARD_KNOBS = (
+    "w_day_goal_hit",
+    "w_streak_per_day",
+    "w_trade_consistency",
+    "w_did_nothing",
+    "w_death_penalty",
+    "w_net_profit",
 )
 WSR_HOT = 0.15
 SIDE_BIAS_HOT = -0.03
@@ -172,23 +259,66 @@ def mark_chart_disease_hot(res: dict) -> bool:
     return False
 
 
-def search_plan(res: dict, focus_left: int) -> tuple[float, list | None, int, int, bool]:
+def forward_consistency_weak(res: dict, *, n_forward: int = 0) -> bool:
+    """True when FORWARD meters say long consistency is the disease.
+
+    If `consistency` key is absent, do NOT treat as weak (avoids false focus
+    when only side metrics are present, e.g. unit tests / partial res dicts).
+    """
+    if "consistency" not in res and "longest_streak" not in res:
+        return False
+    cons = float(res.get("consistency", 1.0) if "consistency" in res else 1.0)
+    if "consistency" in res and cons < FORWARD_CONS_WEAK:
+        return True
+    streak = int(res.get("longest_streak", 0) or 0)
+    streak_bar = FORWARD_STREAK_WEAK
+    if n_forward > 0:
+        streak_bar = max(3, min(FORWARD_STREAK_WEAK, n_forward // 4))
+    if "longest_streak" in res and streak < streak_bar:
+        return True
+    if "consistency" in res and cons < 0.70 and streak < max(streak_bar, 3):
+        # only if we also have a streak read; else clear% alone already gated above
+        if "longest_streak" in res:
+            return True
+    return False
+
+
+def search_plan(res: dict, focus_left: int,
+                *, n_forward: int = 0) -> tuple[float, list | None, int, int, bool]:
     """Return (scale, force_keys|None, min_force, new_focus_left, focused).
 
-    Adaptive: Mark-on-chart disease (wrong side / policy_hold) → aggressive
-    scale + force Mark TREND_KNOBS; sticky focus_left keeps pressure after.
+    Adaptive:
+      - Mark-on-chart disease → TREND_KNOBS
+      - Weak FORWARD consistency/streak → CONSISTENCY_FORWARD_KNOBS
+      - Both → merge force groups, aggressive scale
     Does not hard-code dial values — only WHERE/HOW HARD to search.
     """
-    hot = mark_chart_disease_hot(res)
+    chart_hot = mark_chart_disease_hot(res)
+    fwd_hot = forward_consistency_weak(res, n_forward=n_forward)
+    hot = chart_hot or fwd_hot
     if hot:
         focus_left = FOCUS_HOLD_GENS
     elif focus_left > 0:
         focus_left -= 1
     focused = hot or focus_left > 0
-    if focused:
-        # Force at least 2 Mark knobs so search cannot ignore force/pullback
-        return (SCALE_AGGRESSIVE, list(TREND_KNOBS), 2, focus_left, True)
-    return (SCALE_NORMAL, None, 0, focus_left, False)
+    if not focused:
+        return (SCALE_NORMAL, None, 0, focus_left, False)
+    force: list[str] = []
+    if chart_hot or (focused and not fwd_hot):
+        force.extend(TREND_KNOBS)
+    if fwd_hot or (focused and not chart_hot):
+        force.extend(CONSISTENCY_FORWARD_KNOBS)
+    if not force:
+        force = list(TREND_KNOBS) + list(CONSISTENCY_FORWARD_KNOBS)
+    # de-dupe preserve order
+    seen = set()
+    force_u = []
+    for k in force:
+        if k not in seen and k in BOUNDS:
+            seen.add(k)
+            force_u.append(k)
+    min_force = 2 if len(force_u) >= 2 else len(force_u)
+    return (SCALE_AGGRESSIVE, force_u, min_force, focus_left, True)
 
 def day_after_day_streak(brain, sim, ordered_days, gen=None, focus_frac=0.6,
                          decide_every=1, ranges=None):
@@ -232,8 +362,60 @@ def probe(brain, sim, work_days, config, *, decide_every=1, steps=32):
         ppo_update(brain, opt, batch, entropy_coef=float(config.get("entropy_coef", 0.01)))
     return brain
 
+def _score_pool(brain, sim, days, *, decide_every, ranges, seed: int = 0,
+                include_streak: bool = True) -> dict:
+    """Common-random evaluate + optional day-after-day streak on the same ordered days."""
+    days = list(days)
+    if not days:
+        return {
+            "consistency": 0.0,
+            "breach_rate": 1.0,
+            "wrong_side_rate": 0.0,
+            "longest_streak": 0,
+            "n_days": 0,
+        }
+    gen = torch.Generator(device="cpu").manual_seed(int(seed))
+    res = evaluate(
+        brain, sim, days, n_episodes=len(days),
+        focus_frac=float(ranges.get("focus_frac", 0.6)),
+        decide_every=decide_every, gen=gen, ranges=ranges,
+    )
+    out = dict(res)
+    out["n_days"] = len(days)
+    if include_streak:
+        gen_s = torch.Generator(device="cpu").manual_seed(int(seed) + 17)
+        st = day_after_day_streak(
+            brain, sim, days, gen=gen_s, decide_every=decide_every, ranges=ranges,
+        )
+        out["longest_streak"] = int(st.get("longest_streak", 0) or 0)
+        out["streak_cleared"] = list(st.get("cleared") or [])
+    else:
+        out["longest_streak"] = int(out.get("longest_streak", 0) or 0)
+    return out
+
+
 def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 60.0,
-        decide_every: int = 1, device: str = "cpu"):
+        decide_every: int = 1, device: str = "cpu",
+        practice_days=None, forward_days=None,
+        require_forward: bool = True,
+        probe_steps: int = 32):
+    """Meta search: train/probe on practice; ADOPT only on FORWARD consistency.
+
+    Args:
+      work_days / practice_days: pool for PPO probe (seen). Prefer practice_days.
+      audit_days / forward_days: holdout for adopt judge (unseen). Prefer forward_days.
+      require_forward: if True (default), champion_score is forward consistency only.
+    """
+    practice = list(practice_days if practice_days is not None else work_days)
+    forward = list(forward_days if forward_days is not None else audit_days)
+    if require_forward and not forward:
+        # Hard fail-closed: never adopt on practice alone under forward law
+        raise ValueError(
+            "meta_tuner.run: forward_days/audit_days required when require_forward=True"
+        )
+    if not practice:
+        practice = list(forward)  # last resort; still score adopt on forward
+
     t_end = time.time() + minutes * 60.0
     champion_cfg = base_config()
     brain = Brain(obs_dim, hidden=policy_hidden()).to(device)
@@ -249,19 +431,29 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 60.0,
                 pass
     gen = torch.Generator(device="cpu").manual_seed(0)
     ranges = auto_ranges()
-    champ_res = evaluate(brain, sim, list(audit_days), n_episodes=len(audit_days),
-        focus_frac=float(ranges.get("focus_frac", 0.6)), decide_every=decide_every, gen=gen, ranges=ranges)
+
+    # Baseline: FORWARD is the true judge; practice is a screen only.
+    apply_config_to_sim(sim, champion_cfg)
+    champ_forward = _score_pool(
+        brain, sim, forward, decide_every=decide_every, ranges=ranges, seed=0,
+    )
+    champ_practice = _score_pool(
+        brain, sim, practice[: min(len(practice), len(forward) or len(practice))],
+        decide_every=decide_every, ranges=ranges, seed=1, include_streak=False,
+    ) if practice else None
+    champ_res = dict(champ_forward)  # backward-compatible name = FORWARD meters
     champion_score = float(champ_res.get("consistency", 0.0))
     history = []
     gen_id = 0
     focus_left = 0  # sticky aggressive generations remaining
     was_focused = False  # for enter/exit history markers
+    n_fwd = len(forward)
+
     while time.time() < t_end:
         gen_id += 1
-        # Adaptive search from champion side metrics (disease of the incumbent).
+        # Adaptive search from FORWARD champion disease (not practice flukes).
         scale, force_keys, min_force, focus_left, focused = search_plan(
-            champ_res, focus_left)
-        # One-line history marker when focused mode enters or exits.
+            champ_res, focus_left, n_forward=n_fwd)
         focus_event = None
         if focused and not was_focused:
             focus_event = "enter_focused"
@@ -272,54 +464,82 @@ def run(sim, obs_dim: int, work_days, audit_days, *, minutes: float = 60.0,
             champion_cfg, scale=scale, gen=gen,
             force_keys=force_keys, min_force=min_force)
         w_snap = dict(getattr(sim, "w", {}) or {})
+        # Snapshot weights for restore if not adopted (probe mutates brain in-place —
+        # restore champion brain weights from best state each reject).
+        brain_snap = {k: v.detach().cpu().clone() for k, v in brain.state_dict().items()}
         try:
-            probe(brain, sim, work_days, cand_cfg, decide_every=decide_every, steps=32)
-            gen2 = torch.Generator(device="cpu").manual_seed(0)
-            res = evaluate(brain, sim, list(audit_days), n_episodes=len(audit_days),
-                focus_frac=float(ranges.get("focus_frac", 0.6)), decide_every=decide_every, gen=gen2, ranges=ranges)
-            c = int(max(0, round((res.get("consistency", 0) - champion_score) * len(audit_days))))
-            b = int(max(0, round((champion_score - res.get("consistency", 0)) * len(audit_days))))
-            primary = (
-                adopt_gate(b, c)
-                and float(res.get("breach_rate", 1))
-                <= float(champ_res.get("breach_rate", 1)) + 1e-9
+            # PROBE only on practice (seen). Never fit PPO on forward.
+            probe(brain, sim, practice, cand_cfg,
+                  decide_every=decide_every, steps=int(probe_steps))
+            cand_forward = _score_pool(
+                brain, sim, forward, decide_every=decide_every, ranges=ranges, seed=0,
             )
-            # evaluate() always returns side_bias_* / wrong_side_rate (Step 1 dict shape)
-            secondary = side_adopt_ok(
-                float(res.get("consistency", 0)), champion_score,
-                float(res.get("wrong_side_rate", 0.0)),
-                float(champ_res.get("wrong_side_rate", 0.0)),
+            cand_practice = _score_pool(
+                brain, sim, practice[: min(len(practice), max(8, n_fwd))],
+                decide_every=decide_every, ranges=ranges, seed=1, include_streak=False,
+            ) if practice else None
+
+            fwd_ok, fwd_detail = forward_adopt_ok(
+                cand_forward, champ_forward, n_forward_days=n_fwd,
             )
+            prac_ok = practice_screen_ok(cand_practice, champ_practice)
+            adopted = bool(fwd_ok and prac_ok)
+
             row = {
                 "gen": gen_id,
-                "consistency": float(res.get("consistency", 0)),
-                "wrong_side_rate": float(res.get("wrong_side_rate", 0.0)),
+                "judge": "forward_consistency",
+                "forward_consistency": float(cand_forward.get("consistency", 0)),
+                "forward_breach_rate": float(cand_forward.get("breach_rate", 1)),
+                "forward_longest_streak": int(cand_forward.get("longest_streak", 0) or 0),
+                "practice_consistency": (
+                    float(cand_practice.get("consistency", 0)) if cand_practice else None
+                ),
+                "wrong_side_rate": float(cand_forward.get("wrong_side_rate", 0.0)),
                 "search": "aggressive" if focused else "normal",
                 "scale": scale,
                 "focus_left": focus_left,
+                "force_keys": list(force_keys or []),
+                "adopted": adopted,
+                "forward_gate": fwd_detail,
+                "practice_screen_ok": prac_ok,
             }
             if focus_event:
                 row["focus_event"] = focus_event
-            if primary and secondary:
-                champion_cfg, champion_score, champ_res = cand_cfg, float(res.get("consistency", 0)), res
-                row.update({
-                    "adopted": True,
-                    "consistency": champion_score,
-                    "side_bias_bull": float(res.get("side_bias_bull", 0.0)),
-                })
+
+            if adopted:
+                champion_cfg = cand_cfg
+                champ_forward = cand_forward
+                champ_practice = cand_practice
+                champ_res = dict(cand_forward)
+                champion_score = float(champ_res.get("consistency", 0.0))
+                row["consistency"] = champion_score  # alias = forward
+                row["side_bias_bull"] = float(cand_forward.get("side_bias_bull", 0.0))
                 history.append(row)
             else:
-                row.update({
-                    "adopted": False,
-                    "primary": primary,
-                    "secondary": secondary,
-                })
+                # Restore brain to champion — reject must not leave a poisoned net
+                brain.load_state_dict(brain_snap, strict=False)
+                apply_config_to_sim(sim, champion_cfg)
+                row["consistency"] = float(cand_forward.get("consistency", 0))
                 history.append(row)
         finally:
             if hasattr(sim, "w") and w_snap:
                 sim.w.update(w_snap)
-    return {"champion_config": champion_cfg, "champion_score": champion_score, "history": history, "champ_res": champ_res}
+
+    return {
+        "champion_config": champion_cfg,
+        "champion_score": champion_score,
+        "champion_score_is": "forward_consistency",
+        "history": history,
+        "champ_res": champ_res,
+        "champ_forward": champ_forward,
+        "champ_practice": champ_practice,
+        "n_practice": len(practice),
+        "n_forward": len(forward),
+        "law": "probe_practice_adopt_forward_only",
+    }
 
 if __name__ == "__main__":
     print("meta_tuner OK", list(BOUNDS.keys()))
+    print("CONSISTENCY_FORWARD_KNOBS", list(CONSISTENCY_FORWARD_KNOBS))
+    print("LAW: probe on practice · adopt only if FORWARD consistency improves")
     print("Target/risk are runtime inputs: prove_it.py <brain> <tgt> <risk>")

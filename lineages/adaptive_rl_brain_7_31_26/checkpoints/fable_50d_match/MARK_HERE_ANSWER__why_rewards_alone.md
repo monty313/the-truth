@@ -1,6 +1,6 @@
 # MARK HERE answer — rewards & penalties vs the goal
 
-**When:** 2026-08-05T22:48:57.970310+00:00
+**When:** 2026-08-07T00:25:05.153244+00:00
 **Channel:** MARK HERE!.lnk · agent `fable5_mark_here_kag` · KAG over army + the-truth + pt5
 
 ## Q
@@ -77,4 +77,4 @@ MARK HERE!.lnk is the soul channel (voice, doctrine, HITL). Reward JSON lives in
 - Mark answer states chart truth + which dials may move.
 - Fable structure: measure gap → propose dial delta OR one-day DAgger → score 50d → KEEP/REJECT.
 - Only KEEP writes embryo; dials that lose are rolled back with the weights.
-- Current: best_same=33 baseline_same=27 gap_to_50=17 — reward dials are secondary; primary is Mark labels on miss days.
+- Current: best_same=36 baseline_same=27 gap_to_50=14 — reward dials are secondary; primary is Mark labels on miss days.

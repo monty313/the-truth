@@ -5,7 +5,8 @@ from __future__ import annotations
 import os
 import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(ROOT, 'src'))
+sys.path.insert(0, os.path.join(ROOT, "code"))
+sys.path.insert(0, os.path.join(ROOT, "src"))
 sys.path.insert(0, ROOT)
 
 from telemetry.mind_probe import (
@@ -16,6 +17,8 @@ from telemetry.ghost_trades import build_ghosts
 from training.meta_tuner import (
     BOUNDS, _FALLBACK, adopt_gate, side_adopt_ok, FLAT_CONS_EPS,
     wrong_side_hot, search_plan, SCALE_NORMAL, SCALE_AGGRESSIVE,
+    forward_adopt_ok, practice_screen_ok, forward_consistency_weak,
+    CONSISTENCY_FORWARD_KNOBS,
     TREND_KNOBS, FOCUS_HOLD_GENS, mutate,
 )
 from training.policy import Brain, N_OPS
@@ -76,7 +79,11 @@ def test_meta_tuner_side_dials_in_bounds():
               "w_quick_pull_close", "w_setup_skip"):
         assert k in BOUNDS, k
         assert k in _FALLBACK, k
-        assert abs(_FALLBACK[k]) < 1e-9, k  # default off
+        lo, hi = BOUNDS[k]
+        assert lo <= _FALLBACK[k] <= hi, k
+    # Mark-on-chart starts (not forced zero); meta still searches within BOUNDS
+    assert _FALLBACK["w_with_trend_close"] >= 0.0
+    assert _FALLBACK["w_against_trend_close"] <= 0.0
     assert BOUNDS["w_with_trend_close"][0] == 0.0
     assert BOUNDS["w_against_trend_close"][1] == 0.0
 
@@ -139,7 +146,7 @@ def test_wrong_side_hot_rulers():
 
 
 def test_search_plan_adaptive():
-    # cool → normal
+    # cool → normal (side-only dict: no false forward-weak)
     scale, fk, mf, fl, foc = search_plan(
         {"wrong_side_rate": 0.05, "side_bias_bull": 0.0, "side_bias_bear": 0.0}, 0)
     assert foc is False and scale == SCALE_NORMAL and fk is None and mf == 0 and fl == 0
@@ -155,6 +162,49 @@ def test_search_plan_adaptive():
     # TREND_KNOBS is the extendable group for future Vector dials
     assert "w_with_trend_close" in TREND_KNOBS
     assert "w_against_trend_close" in TREND_KNOBS
+    # weak FORWARD consistency → force CONSISTENCY_FORWARD_KNOBS
+    scale, fk, mf, fl, foc = search_plan(
+        {
+            "wrong_side_rate": 0.0, "side_bias_bull": 0.0, "side_bias_bear": 0.0,
+            "consistency": 0.30, "longest_streak": 2,
+        },
+        0,
+        n_forward=40,
+    )
+    assert foc is True and scale == SCALE_AGGRESSIVE
+    assert fk is not None and "w_streak_per_day" in fk
+    assert "w_day_goal_hit" in CONSISTENCY_FORWARD_KNOBS
+
+
+def test_forward_adopt_gate():
+    champ = {
+        "consistency": 0.40, "breach_rate": 0.05, "wrong_side_rate": 0.05,
+        "longest_streak": 3,
+    }
+    # big clear% lift, breach ok, streak ok
+    cand = {
+        "consistency": 0.70, "breach_rate": 0.05, "wrong_side_rate": 0.04,
+        "longest_streak": 5,
+    }
+    ok, det = forward_adopt_ok(cand, champ, n_forward_days=40)
+    assert ok is True and det["primary"] is True
+    # breach worse → reject
+    bad = dict(cand, breach_rate=0.20)
+    ok2, det2 = forward_adopt_ok(bad, champ, n_forward_days=40)
+    assert ok2 is False and det2["breach_ok"] is False
+    # streak shorter → reject
+    bad_st = dict(cand, longest_streak=1)
+    ok3, det3 = forward_adopt_ok(bad_st, champ, n_forward_days=40)
+    assert ok3 is False and det3["streak_ok"] is False
+    # practice screen: within collapse eps OK; larger drop fails
+    assert practice_screen_ok(
+        {"consistency": 0.56}, {"consistency": 0.60}, collapse_eps=0.05,
+    ) is True
+    assert practice_screen_ok(
+        {"consistency": 0.40}, {"consistency": 0.60}, collapse_eps=0.05,
+    ) is False
+    assert forward_consistency_weak({"wrong_side_rate": 0.0}) is False
+    assert forward_consistency_weak({"consistency": 0.20}) is True
 
 
 def test_mutate_force_trend_knobs():
@@ -200,6 +250,9 @@ def test_wrong_side_rate_from_side_metrics():
 
 def test_with_trend_reward_default_zero_noop():
     re = RewardEngine()
+    # Explicit off: Mark fallbacks may be non-zero; this test pins dial=0
+    re.w["w_with_trend_close"] = 0.0
+    re.w["w_against_trend_close"] = 0.0
     plain = re.on_step(
         [{"pnl": 0.2, "pnl_pct": 0.2, "adds": 0, "max_adverse": 0.0,
           "stack_green": True, "probe": False, "full": True, "tags": {}, "bars": 5}],
@@ -209,7 +262,7 @@ def test_with_trend_reward_default_zero_noop():
           "stack_green": True, "probe": False, "full": True,
           "tags": {"with_trend": True}, "bars": 5}],
         acted=True, anti_gravity=False, flat=False)
-    # default w_with_trend_close=0 → same
+    # dials zero → same
     assert abs(tagged - plain) < 1e-9
 
 
@@ -271,6 +324,7 @@ if __name__ == "__main__":
     test_side_adopt_ok_secondary_veto()
     test_wrong_side_hot_rulers()
     test_search_plan_adaptive()
+    test_forward_adopt_gate()
     test_mutate_force_trend_knobs()
     test_wrong_side_rate_from_side_metrics()
     test_with_trend_reward_default_zero_noop()

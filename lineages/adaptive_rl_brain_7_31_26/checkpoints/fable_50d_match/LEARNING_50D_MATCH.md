@@ -39,7 +39,11 @@ Interpretation: Mark soul plans clear **every** day in window. All 23 policy mis
 | one_day #3 | 31 | 31 | 19 | 0 | **REJECT** focus 2026-02-20 |
 | one_day #4 | 33 | 33 | 17 | 0 | **REJECT** focus 2026-02-05 (dir high, hold low, no same gain) |
 | one_day #5 | 33 | 33 | 17 | 0 | **REJECT** focus 2026-03-11 |
-| one_day #6 | (runningâ€¦) | | | | focus 2026-01-29 |
+| one_day #6 | 33 | 33 | 17 | 0 | **REJECT** focus 2026-01-29 (prior run; incomplete) |
+| squad-od #1 | 29 | 29 | 21 | 0 | **REJECT** focus 2026-01-27 (pack drop; keep/reject OK) |
+| squad-od #2 | 33 | 33 | 17 | 0 | **REJECT** focus 2026-02-13 (no convert; pack held) |
+| squad-od #3 | 31 | 31 | 19 | 0 | **REJECT** focus 2026-02-20 (converted day, pack 33â†’31) |
+| squad-od #4 | (runningâ€¦) | | | | focus 2026-02-05 Â· **PACK-repair** code armed |
 
 **Best so far:** same_outcome **33**/50 Â· policy_clear **33** Â· mwt **17** Â· breach **0**  
 (â†‘ from baseline 27; Mark still 50/50)
@@ -61,3 +65,60 @@ Cycle 3 of full loop froze on DAgger label collect (CPU flat). Switched to `fabl
 ## Target
 
 `same_outcome == 50` or policy clears all Mark-clear days (all 50) with breach 0, without `policy_clear` below baseline 27.
+
+| spine-shadow 0 | 33 | 33 | 17 | 0 | **BASELINE** (false_fire) |
+
+| spine-shadow 1 | 33 | 33 | 17 | 0 | **REJECT** (wrong_size_or_timing) |
+
+### Pack pipeline one-day (live, additive)
+| Cycle | same | policy | mwt | breach | decision |
+|------:|-----:|-------:|----:|-------:|----------|
+| pack start | 33 | 33 | 17 | 0 | resume embryo |
+| pack-od #1 2026-01-27 | 29 | 29 | 21 | 0 | **REJECT** (pack thrash; dir_match high) |
+| pack-od #2 2026-02-13 | **35** | **35** | **15** | 0 | **KEEP** (collateral pack rise) |
+| pack-od #3 2026-02-20 | 28 | 28 | 22 | 0 | convert+pack-drop; repair… (hold_rate 0.25 disease) |
+
+**Best so far:** same **35**/50 · outside-box pathology triage + HOLD-floor armed for next chain.
+
+| spine-shadow 2 | 33 | 33 | 17 | 0 | **REJECT** (wrong_size_or_timing) |
+
+### Durable recreate (ARMY + KAG) — do not lose the mind
+
+- **Playbook:** `ARMY/kag_mark_doctrine/PLAYBOOK_50D_MARK_MATCH.md`
+- **Machine recipe:** `01_SYSTEM/outputs/army/teachers/pack_50d_bridge/RECREATE_50D__latest.json`
+- **Snapshot 35:** `01_SYSTEM/outputs/army/teachers/pack_50d_bridge/backups/KEEP35__20260806/`
+- **Pattern:** `pack_safe_judgment_v1` in army PATTERN_MEMORY / MEMORY.jsonl
+- **Working:** dir oversample · HOLD floor · KEEP/REJECT · convert?KEEP · collateral KEEP · pathology triage
+- **Feel:** pack still allows fire — not only this day.
+
+
+| pack-od #4 2026-02-05 | 31 | 31 | 18 | **1** | **REJECT** (hold_rate 0.20; breach; dir_match 0.97 useless alone) |
+| pack-od #5 2026-03-11 | … | … | … | … | running · best still 35 |
+
+**Lesson R4:** high dir_match without HOLD floor ? **breach**. KEEP/REJECT saved the 35 embryo.
+
+| spine-shadow 0 | 35 | 35 | 15 | 0 | **BASELINE** (wrong_size_or_timing) |
+
+| spine-shadow 0 | 35 | 35 | 15 | 0 | **BASELINE** (wrong_size_or_timing) |
+
+| spine-shadow 1 | 34 | 34 | 16 | 0 | **REJECT** (wrong_size_or_timing) |
+
+| spine-shadow 0 | 35 | 35 | 15 | 0 | **BASELINE** (wrong_size_or_timing) |
+
+| spine-shadow 1 | 27 | 27 | 23 | 0 | **REJECT** (wrong_size_or_timing) |
+
+| spine-shadow 0 | 35 | 35 | 15 | 0 | **BASELINE** (wrong_size_or_timing) |
+
+| spine-shadow 0 | 35 | 35 | 15 | 0 | **BASELINE** (unknown_no_spine) |
+
+| spine-shadow 1 | 31 | 31 | 19 | 0 | **REJECT** (unknown_no_spine) |
+
+| spine-shadow 2 | 30 | 30 | 20 | 0 | **REJECT** (unknown_no_spine) |
+
+| spine-shadow 3 | 31 | 31 | 19 | 0 | **REJECT** (unknown_no_spine) |
+
+| spine-shadow 0 | 35 | 35 | 15 | 0 | **BASELINE** (unknown_no_spine) |
+
+| spine-shadow 1 | 31 | 31 | 19 | 0 | **REJECT** (unknown_no_spine) |
+
+| spine-shadow 2 | 30 | 30 | 20 | 0 | **REJECT** (unknown_no_spine) |

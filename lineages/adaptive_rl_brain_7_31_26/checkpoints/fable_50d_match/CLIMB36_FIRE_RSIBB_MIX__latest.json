@@ -1,0 +1,100 @@
+{
+  "updated_at": "2026-08-07T05:40:44.731079+00:00",
+  "best_same": 36,
+  "best_mwt": 14,
+  "best_breach": 0,
+  "method": "climb36_fire_rsi_bb_mix",
+  "mix": {
+    "fire_weight": 1.0,
+    "rsi_cont_weight": 0.45,
+    "rsi_pull_weight": 0.18
+  },
+  "rsi_meta": {
+    "cont": {
+      "principle_ids": [
+        "htf_price_bb_mass",
+        "ltf_rsi_bb_geometry",
+        "pullback_load_then_release",
+        "ltf_never_defines_side",
+        "learn_not_copy"
+      ],
+      "strategy": "rsi_bb_pullback_continuation_v1",
+      "kind_filter": "continuation",
+      "n_raw": 2017,
+      "n_pos": 1929,
+      "n_pull": 1474,
+      "n_cont": 455,
+      "hits_by_set": {
+        "1": 1061,
+        "2": 1081,
+        "3": 674,
+        "4": 0
+      },
+      "sets_with_hits": [
+        1,
+        2,
+        3
+      ],
+      "concurrence_n": 0,
+      "n_keep": 455
+    },
+    "pull": {
+      "principle_ids": [
+        "htf_price_bb_mass",
+        "ltf_rsi_bb_geometry",
+        "pullback_load_then_release",
+        "ltf_never_defines_side",
+        "learn_not_copy"
+      ],
+      "strategy": "rsi_bb_pullback_continuation_v1",
+      "kind_filter": "pullback",
+      "n_raw": 2018,
+      "n_pos": 1929,
+      "n_pull": 1474,
+      "n_cont": 455,
+      "hits_by_set": {
+        "1": 1061,
+        "2": 1081,
+        "3": 674,
+        "4": 0
+      },
+      "sets_with_hits": [
+        1,
+        2,
+        3
+      ],
+      "concurrence_n": 0,
+      "n_keep": 1474
+    }
+  },
+  "cycles": [
+    {
+      "ts": "2026-08-07T05:40:44.729218+00:00",
+      "round": 1,
+      "recipe": "fire+rsi_cont",
+      "sources": [
+        "mark_fire_skill_multiday",
+        "rsi_bb_continuation_ltf"
+      ],
+      "decision": "REJECT",
+      "same": 29,
+      "mwt": 20,
+      "breach": 1,
+      "best_same": 36,
+      "act_match": 0.5493300852618758,
+      "fire_meta": {
+        "target_family": "fire_skill",
+        "n": 262,
+        "laws": {
+          "ltf_continuation_htf_strong": 47,
+          "miss_continuation": 33
+        },
+        "days_touched": 14,
+        "multi_day_fps": 4,
+        "dir": 159,
+        "hold": 103
+      },
+      "method": "climb36_fire_rsi_bb_mix"
+    }
+  ]
+}

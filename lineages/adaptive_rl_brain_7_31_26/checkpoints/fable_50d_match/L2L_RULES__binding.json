@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "cycle": 1,
+  "when": "2026-08-06",
+  "stage": "child",
+  "floor": {
+    "same_outcome_min": 35,
+    "breach_max": 0,
+    "child_sha256": "9BDCEAAE3B282DA1548F6C58E55F5935AED5ECF5720EC95C4913CE17F06FD555",
+    "child_backup": "CHILD_STAGE_same35_mark_clone_full_obs.pt"
+  },
+  "doctrine": "Long-lasting consistency is a student that keeps the child floor, learns to learn to identify pullbacks and continuations on LTF while HTF is strong bull or bear, obeys HTF gravity and low-entropy gates, and KEEPs weights that still work when the calendar changes.",
+  "charter": "L2L_JOINT_CONSISTENCY__charter.md",
+  "core_skill": "HTF strong bull|bear + LTF pullback(wait) vs LTF continuation(fire with tide)",
+  "mark_sets_law": {
+    "rule": "LTF=first (pullback/continuation/add); HTF=last two (trend confirm); scan all 4",
+    "source": "perception/sets.py MARK_SETS_LAW",
+    "sets": [
+      {"id": 1, "name": "micro", "ltf": "1m", "htf": ["15m", "30m"]},
+      {"id": 2, "name": "intraday", "ltf": "5m", "htf": ["30m", "1h"]},
+      {"id": 3, "name": "swing", "ltf": "15m", "htf": ["1h", "4h"]},
+      {"id": 4, "name": "macro", "ltf": "30m", "htf": ["4h", "1d"]}
+    ]
+  },
+  "problem": "Learn HTF+LTF path laws on own trajectory without killing child floor or day-memo copy.",
+  "path_laws": [
+    "ltf_pullback_htf_strong",
+    "ltf_continuation_htf_strong",
+    "htf_not_strong",
+    "anti_thrash",
+    "miss_continuation",
+    "hold_on_spine"
+  ],
+  "problems": ["P1_path_timing", "P2_day_memo_thrash", "P3_copy_without_structure", "P4_offline_online_gap", "P5_premature_fire", "P6_no_class_memory", "P7_floor_violation", "P8_pullback_impatience", "P9_missed_continuation"],
+  "methods": ["M1_spine_heads", "M2_path_classes", "M3_dagger", "M4_kl_anchor", "M5_freeze_trunk", "M6_learn_not_copy", "M7_keep_reject", "M8_pattern_memory", "M9_award_protect", "M10_mark_align", "M11_walk_forward_mindset", "M12_pathmask_phaseB", "M13_htf_gravity", "M14_entropy_hold"],
+  "attributes": ["A1_class_over_calendar", "A2_trajectory_aware", "A3_structure_gated", "A4_conservative_growth", "A5_falsifiable", "A6_failure_memory", "A7_principle_led", "A8_research_mapped", "A9_pullback_continuation"],
+  "rules": {
+    "R1_floor": "same>=35 and breach==0; restore child on violation",
+    "R2_learn_not_copy": "copying or learn_not_copy FAIL => REJECT without pack thrash",
+    "R3_class_not_memo": "label PATH CLASS on every disagree before gradient",
+    "R4_dagger_path": "collect labels on policy trajectory",
+    "R5_surgical": "freeze_trunk preferred; kl_coef>=0.60 to child",
+    "R6_award_protect": "mix AWARD self-imitate with MWT lessons",
+    "R7_keep_strict": "KEEP only breach0 same>=floor and (same up or focus+same>=best)",
+    "R8_memory": "append L2L_PATH_MEMORY; boost failing class",
+    "R9_forward_virginity": "never train on holdout exam windows",
+    "R10_one_primary": "one primary method per cycle"
+  },
+  "primary_recipe_cycle_1": {
+    "method": "learn_to_learn_path",
+    "settings": {
+      "freeze_trunk": true,
+      "kl_coef": 0.72,
+      "class_coef": 0.65,
+      "keep_floor": 35,
+      "epochs": 22
+    },
+    "deliberators": [
+      "implementer",
+      "dual_folder_kag_peer",
+      "super_mentor_l2l_kag",
+      "physics_super_agent_kag"
+    ],
+    "physics_additive": {
+      "role_id": "physics_super_agent_kag",
+      "doctrine": "physics.md",
+      "mode": "ADD_ONLY_never_strip",
+      "pillars": [
+        "PINN_tide_penalty",
+        "kinematic_derivatives",
+        "dimensionless_tensors",
+        "entropy_regime_mask"
+      ]
+    }
+  },
+  "stop_when": {
+    "same_outcome_gt": 35,
+    "breach": 0,
+    "learn_not_copy_pass": true
+  }
+}

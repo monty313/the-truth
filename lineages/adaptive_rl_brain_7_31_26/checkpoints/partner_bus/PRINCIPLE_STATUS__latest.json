@@ -1,0 +1,30 @@
+{
+  "when": "2026-08-06T09:16:45.365648+00:00",
+  "from": "forward_principle_learn",
+  "speech_act": "SHIPPED",
+  "decision": "KEEP",
+  "forward_principle_acc": 1.0,
+  "hard_forward_acc": 1.0,
+  "soft_forward_acc": 1.0,
+  "learn_not_copy_pass": true,
+  "family_swap_pass": true,
+  "sample_weights_hint": {
+    "slingshot_load": 2.5,
+    "slingshot_release": 2.0,
+    "wait_loaded": 2.5,
+    "hard_task": 3.0,
+    "mwt_size_timing": 3.0
+  },
+  "principle_ids_focus": [
+    "wait_is_skill",
+    "hard_target_quality_over_thrash",
+    "dual_period_tension",
+    "finish_line_goal_heat",
+    "ltf_never_votes_side",
+    "learn_not_copy",
+    "no_opp_hold_not_thrash"
+  ],
+  "request_to_clone": "When BC/DAgger on MWT days: attach topology+wait labels; oversample hard-task load/release; never thrash NO_OPPORTUNITY. Do not act-only train.",
+  "student_path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/forward_principle_learn/PRINCIPLE_STUDENT__latest.json",
+  "report_path": "C:/Users/user/Fable5_Foundation/MOMENTUM_ONE/the-truth/lineages/adaptive_rl_brain_7_31_26/checkpoints/forward_principle_learn/FORWARD_PRINCIPLE_LEARN__latest.json"
+}

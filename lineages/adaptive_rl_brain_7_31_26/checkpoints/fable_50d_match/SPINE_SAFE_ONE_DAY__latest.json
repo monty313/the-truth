@@ -1,0 +1,40 @@
+{
+  "updated_at": "2026-08-06T06:29:01.910516+00:00",
+  "best_same": 35,
+  "best_mwt": 15,
+  "cycles": [
+    {
+      "round": 0,
+      "same": 35,
+      "mwt": 15,
+      "breach": 0,
+      "decision": "BASELINE"
+    },
+    {
+      "round": 1,
+      "focus": "2026-02-13",
+      "focus_ok": false,
+      "same": 31,
+      "mwt": 19,
+      "breach": 0,
+      "decision": "REJECT",
+      "best_same": 35,
+      "note": "crater"
+    },
+    {
+      "round": 2,
+      "focus": "2026-02-20",
+      "focus_ok": false,
+      "same": 30,
+      "mwt": 20,
+      "breach": 0,
+      "decision": "REJECT",
+      "best_same": 35,
+      "note": "crater"
+    }
+  ],
+  "fail": {
+    "2026-02-13": 1,
+    "2026-02-20": 1
+  }
+}

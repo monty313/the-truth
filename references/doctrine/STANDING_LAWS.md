@@ -6,6 +6,7 @@ INTERCONNECTED WITH: configs/*, training/meta_tuner.py, telemetry/*, evaluation/
 features/*, doctrine/flea-jar/*, MASTER_PLAN.md -->
 
 CHANGE LOG (newest first):
+- 2026-08-05  additive — KAG teachers → meta-RL student layer (`lineages/.../kag_teachers/`, pack at `references/doctrine/kag_mark_doctrine/`). Learn principles ≠ copy answers. Does not rewrite PROVEN or sets.
 - 2026-07-24  created — WHY: Monty refined Laws 0–2, TF sets, bread-and-butter, Perception requirement, and SkillOpt emergence while authorizing autonomous self-heal execution.
 # NEXT EDITOR: append dated WHY; keep this line.
 
@@ -174,3 +175,20 @@ Treat the reward surface + evolving skill document as the trainable parameters o
 ---
 
 *These laws are standing. Every reward proposal, every mind-probe diagnosis, and every self-tuner generation is judged against them.*
+
+---
+
+## v1.1 additive � KAG teachers / meta-RL (2026-08-05)
+
+Does **not** replace Laws 0�N above. Teaching layer only:
+
+- Pack: `references/doctrine/kag_mark_doctrine/`
+- Code: `lineages/adaptive_rl_brain_7_31_26/kag_teachers/`
+- Official sets remain pinned in `perception/sets.py` + `MARK_SETS_LAW.md`
+- Decision chain order: tide ? regime ? breath/launch ? act ? finish
+- Wait = loaded skill, not freeze
+- Novel sensors: role via TF/period/shape; never sole tide over known force
+- Student must train aux heads (topology, role_map, wait_subtype), not act-only
+- Meta may retune attention/trust only; never overwrite PROVEN / shell / sets without human order
+- ARMY twin: `markos_core.kag_mark` + `docs/09_trading_lab/KAG_TEACHER_META_RL.md`
+

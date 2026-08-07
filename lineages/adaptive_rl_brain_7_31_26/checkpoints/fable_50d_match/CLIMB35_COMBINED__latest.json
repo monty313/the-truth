@@ -1,0 +1,32 @@
+{
+  "path": "climb_35_combined_knowledge via distill_teen",
+  "source_tag": "climb_35_combined_knowledge_KEEP_distill_teen",
+  "pre": {
+    "same_outcome": 35,
+    "policy_clear": 35,
+    "mark_would_take": 15,
+    "n_breach": 0
+  },
+  "teen_ref": {
+    "same_outcome": 36,
+    "policy_clear": 36,
+    "mark_would_take": 14,
+    "n_breach": 0
+  },
+  "post": {
+    "same_outcome": 35,
+    "policy_clear": 35,
+    "mark_would_take": 15,
+    "n_breach": 0
+  },
+  "kept": false,
+  "reason": "crater_restore",
+  "ts": "2026-08-07T06:14:45.321932+00:00",
+  "sources": [
+    "child_pack_floor_35",
+    "teen_fire_skill_KEEP_36",
+    "distill_teacher_greedy_acts",
+    "kl_anchor_child"
+  ],
+  "ban": "strategy_only_multi_head_full_replace"
+}
